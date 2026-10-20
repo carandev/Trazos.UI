@@ -29,6 +29,13 @@
                         @Brand
                     </div>
                 }
+
+                @if (Options.IsDevelopment && Options.ShowEnvironmentBadge)
+                {
+                    <span class="trazos-env-badge" title="Running in @(Options.EnvironmentName ?? "Development") mode">
+                        @(Options.EnvironmentName ?? "DEV")
+                    </span>
+                }
             </div>
 
             <div class="trazos-shell-topbar-right">

@@ -4,6 +4,9 @@ namespace Trazos.UI.Layout;
 
 public partial class AppShell
 {
+    [Inject]
+    private TrazosUIOptions Options { get; set; } = default!;
+
     private bool _isDrawerOpen;
 
     [Parameter]

@@ -1,13 +1,26 @@
+using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Trazos.UI.Services;
 
 namespace Trazos.UI.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddTrazosUI(this IServiceCollection services)
+    /// <summary>
+    /// Registers Trazos.UI services, including dialogs and configuration options.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <param name="configure">Optional configuration action for TrazosUIOptions.</param>
+    /// <returns>The service collection for chaining.</returns>
+    public static IServiceCollection AddTrazosUI(this IServiceCollection services, Action<TrazosUIOptions>? configure = null)
     {
-        services.AddScoped<IDialogService, DialogService>();
+        var options = new TrazosUIOptions();
+        configure?.Invoke(options);
+
+        services.TryAddSingleton(options);
+        services.TryAddScoped<IDialogService, DialogService>();
+
         return services;
     }
 }

@@ -102,3 +102,21 @@
         padding: 1rem;
     }
 }
+
+/* Environment Badge (Dev / Staging) */
+.trazos-env-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background-color: #FDF4DC;
+    color: #92400E;
+    border: 1.5px dashed #F59E0B;
+    border-radius: 9999px;
+    box-shadow: 0 1px 2px rgba(44, 34, 30, 0.06);
+    user-select: none;
+    margin-left: 0.25rem;
+}
