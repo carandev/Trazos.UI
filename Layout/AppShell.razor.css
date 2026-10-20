@@ -1,0 +1,104 @@
+/* ========================================
+   APP SHELL - Trazos UI (Calidez y Bordes Vivos)
+   ======================================== */
+
+.trazos-app-shell {
+    position: relative;
+    display: flex;
+    min-height: 100vh;
+    background-color: #FAF7F2;
+    color: #2C221E;
+}
+
+/* Sidebar Desktop */
+.trazos-shell-sidebar {
+    width: 260px;
+    background-color: #FAF7F2;
+    border-right: 1.5px solid #E8DECE;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.trazos-shell-main-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+/* Topbar */
+.trazos-shell-topbar {
+    background-color: #FAF7F2;
+    border-bottom: 1.5px solid #E8DECE;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.trazos-shell-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.trazos-shell-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.trazos-hamburger-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    background: #ffffff;
+    border: 1.5px solid #DCD5C6;
+    border-radius: 8px 10px 7px 9px / 9px 7px 10px 8px;
+    color: #5A4C46;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.trazos-hamburger-btn:hover {
+    background: #F4EFE6;
+    color: #2C221E;
+}
+
+/* Contenido Principal */
+.trazos-shell-content {
+    flex: 1;
+    padding: 1.5rem;
+}
+
+.trazos-shell-container {
+    max-width: 72rem; /* max-w-6xl */
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .trazos-shell-sidebar {
+        display: none;
+    }
+
+    .trazos-hamburger-btn {
+        display: inline-flex;
+    }
+
+    .trazos-shell-topbar {
+        padding: 0 1rem;
+    }
+
+    .trazos-shell-content {
+        padding: 1rem;
+    }
+}

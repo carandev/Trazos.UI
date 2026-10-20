@@ -1,0 +1,13 @@
+@namespace Trazos.UI.Components
+
+<div class="loading-spinner @(Overlay ? "loading-overlay" : "")">
+    <div class="spinner-container">
+        <div class="spinner">
+            <div class="spinner-inner"></div>
+        </div>
+        @if (!string.IsNullOrEmpty(Message))
+        {
+            <p class="loading-message">@Message</p>
+        }
+    </div>
+</div>

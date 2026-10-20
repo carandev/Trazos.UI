@@ -1,0 +1,55 @@
+@namespace Trazos.UI.Components
+
+<CascadingValue Value="this" IsFixed="true">
+    <div style="display: none;" aria-hidden="true">
+        @ChildContent
+    </div>
+
+    <div class="trazos-tabs trazos-tabs-@VariantClass @Class" @attributes="AdditionalAttributes">
+        <div class="trazos-tabs-nav" role="tablist">
+            @for (int i = 0; i < _tabs.Count; i++)
+            {
+                var tab = _tabs[i];
+                var index = i;
+                var isActive = IsTabActive(tab, index);
+
+                <button type="button"
+                        role="tab"
+                        id="@GetTabHeaderId(tab, index)"
+                        aria-selected="@(isActive ? "true" : "false")"
+                        aria-controls="@GetTabPanelId(tab, index)"
+                        tabindex="@(isActive ? 0 : -1)"
+                        class="trazos-tab-btn @(isActive ? "trazos-tab-btn--active" : "") @(tab.Disabled ? "trazos-tab-btn--disabled" : "")"
+                        disabled="@tab.Disabled"
+                        @onclick="() => SelectTabAsync(tab, index)">
+                    @if (tab.HeaderTemplate != null)
+                    {
+                        @tab.HeaderTemplate
+                    }
+                    else
+                    {
+                        @if (tab.Icon != null)
+                        {
+                            <span class="trazos-tab-icon">@tab.Icon</span>
+                        }
+                        <span class="trazos-tab-title">@tab.Title</span>
+                        @if (tab.Badge != null)
+                        {
+                            <span class="trazos-tab-badge">@tab.Badge</span>
+                        }
+                    }
+                </button>
+            }
+        </div>
+
+        @if (ActiveTab != null)
+        {
+            <div class="trazos-tabs-panel"
+                 role="tabpanel"
+                 id="@GetActivePanelId()"
+                 aria-labelledby="@GetActiveHeaderId()">
+                @ActiveTab.ChildContent
+            </div>
+        }
+    </div>
+</CascadingValue>

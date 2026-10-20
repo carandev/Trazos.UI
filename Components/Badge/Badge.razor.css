@@ -1,0 +1,64 @@
+/* ========================================
+   BADGE - Trazos UI (Calidez y Bordes Vivos)
+   ======================================== */
+
+.trazos-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid transparent;
+    border-radius: 12px 14px 10px 12px / 12px 10px 14px 12px;
+    box-shadow: 1px 1px 0px rgba(44, 34, 30, 0.04);
+}
+
+.trazos-badge-icon {
+    display: inline-flex;
+    align-items: center;
+}
+
+.trazos-badge-success {
+    background-color: #F3F8F5;
+    color: #2D5843;
+    border-color: #C7E0D1;
+}
+
+.trazos-badge-warning {
+    background-color: #FEFBF3;
+    color: #92400E;
+    border-color: #F9E5B3;
+}
+
+.trazos-badge-error {
+    background-color: #FDF2F4;
+    color: #851D41;
+    border-color: #F5BAC5;
+}
+
+.trazos-badge-info {
+    background-color: #F5F8FC;
+    color: #3B5270;
+    border-color: #C5D4E8;
+}
+
+.trazos-badge-lavender {
+    background-color: #F3F0F9;
+    color: #5D4378;
+    border-color: #D4C5E8;
+}
+
+.trazos-badge-cream {
+    background-color: #FAF7F2;
+    color: #78350F;
+    border-color: #E8DECE;
+}
+
+.trazos-badge-neutral {
+    background-color: #ffffff;
+    color: #5A4C46;
+    border-color: #DCD5C6;
+}

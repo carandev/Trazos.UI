@@ -1,0 +1,23 @@
+@namespace Trazos.UI.Components
+
+<div class="trazos-card-box trazos-card-@VariantClass @Class"
+     @onclick="OnClick"
+     @attributes="AdditionalAttributes">
+    @if (Header != null)
+    {
+        <div class="trazos-card-header">
+            @Header
+        </div>
+    }
+
+    <div class="trazos-card-body">
+        @ChildContent
+    </div>
+
+    @if (Footer != null)
+    {
+        <div class="trazos-card-footer">
+            @Footer
+        </div>
+    }
+</div>

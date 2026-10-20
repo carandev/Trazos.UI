@@ -1,0 +1,10 @@
+@namespace Trazos.UI.Components
+
+<span class="trazos-badge trazos-badge-@VariantClass @Class"
+      @attributes="AdditionalAttributes">
+    @if (LeadingIcon != null)
+    {
+        <span class="trazos-badge-icon">@LeadingIcon</span>
+    }
+    <span>@ChildContent</span>
+</span>

@@ -1,0 +1,38 @@
+@namespace Trazos.UI.Components
+@implements IDisposable
+
+<div class="trazos-touch-area"
+     @ontouchstart="OnTouchStart"
+     @ontouchmove="OnTouchMove"
+     @ontouchend="OnTouchEnd">
+    @if (IsOpen)
+    {
+        <div class="trazos-drawer-overlay" @onclick="CloseAsync"></div>
+    }
+
+    <aside class="trazos-drawer @(IsOpen ? "open" : "")" aria-hidden="@(!IsOpen)">
+        <div class="trazos-drawer-header">
+            @if (Header != null)
+            {
+                @Header
+            }
+            else if (!string.IsNullOrEmpty(Title))
+            {
+                <h2 class="trazos-drawer-title">@Title</h2>
+            }
+
+            @if (ShowCloseButton)
+            {
+                <button type="button" class="trazos-drawer-close" @onclick="CloseAsync" aria-label="@CloseButtonAriaLabel">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="trazos-close-icon">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            }
+        </div>
+
+        <div class="trazos-drawer-body">
+            @ChildContent
+        </div>
+    </aside>
+</div>

@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- NuGet Package Properties -->
+    <PackageId>Trazos.UI</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>carandev</Authors>
+    <Description>A warm, artisanal, hand-crafted Blazor component library and design system with organic sketch borders, warm paper/parchment tones, and accessible primitives.</Description>
+    <PackageTags>blazor;ui;components;design-system;sketch;hand-crafted;razor-components</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/carandev/FaithHub</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.2" />
+  </ItemGroup>
+
+</Project>

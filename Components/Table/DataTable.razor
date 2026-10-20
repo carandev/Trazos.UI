@@ -1,0 +1,56 @@
+@namespace Trazos.UI.Components
+@typeparam TItem
+
+<div class="trazos-table-wrapper @Class">
+    <div class="trazos-table-container">
+        <table class="trazos-table">
+            @if (TableHeader != null)
+            {
+                <thead class="trazos-table-head">
+                    <tr>
+                        @TableHeader
+                    </tr>
+                </thead>
+            }
+
+            <tbody class="trazos-table-body">
+                @if (Loading)
+                {
+                    @for (int i = 0; i < LoadingRows; i++)
+                    {
+                        <tr class="trazos-table-loading-row">
+                            <td colspan="100">
+                                <Skeleton Variant="SkeletonVariant.Text" Height="1.25rem" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else if (Items == null || !Items.Any())
+                {
+                    <tr>
+                        <td colspan="100" class="trazos-table-empty">
+                            @if (EmptyContent != null)
+                            {
+                                @EmptyContent
+                            }
+                            else
+                            {
+                                <p class="trazos-table-empty-text">@EmptyMessage</p>
+                            }
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Items)
+                    {
+                        <tr class="trazos-table-row @(OnRowClick.HasDelegate ? "interactive" : "")"
+                            @onclick="() => HandleRowClick(item)">
+                            @RowTemplate(item)
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+/* ========================================
+   DATA TABLE - Trazos UI (Calidez y Bordes Vivos)
+   ======================================== */
+
+.trazos-table-wrapper {
+    background: #ffffff;
+    border: 1.5px solid #E5DACB;
+    border-radius: 20px 24px 18px 22px / 22px 18px 24px 20px;
+    box-shadow: 2px 3px 0px rgba(44, 34, 30, 0.04), 0 6px 20px -4px rgba(62, 47, 40, 0.05);
+    overflow: hidden;
+}
+
+.trazos-table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.trazos-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.trazos-table-head {
+    background-color: #FAF7F2;
+    border-bottom: 1.5px solid #E8DECE;
+}
+
+.trazos-table-head th {
+    padding: 0.875rem 1.25rem;
+    font-family: 'Marcellus', serif;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #5A4C46;
+}
+
+.trazos-table-body td {
+    padding: 1rem 1.25rem;
+    font-size: 0.875rem;
+    color: #2C221E;
+    border-bottom: 1px solid #F4ECE0;
+}
+
+.trazos-table-row {
+    transition: background-color 0.15s ease;
+}
+
+.trazos-table-row:last-child td {
+    border-bottom: none;
+}
+
+.trazos-table-row:hover {
+    background-color: #FAF7F2;
+}
+
+.trazos-table-row.interactive {
+    cursor: pointer;
+}
+
+.trazos-table-empty {
+    text-align: center;
+    padding: 3rem 1.5rem !important;
+}
+
+.trazos-table-empty-text {
+    margin: 0;
+    color: #786B65;
+    font-size: 0.875rem;
+}
+
+.trazos-table-loading-row td {
+    padding: 1.25rem;
+}

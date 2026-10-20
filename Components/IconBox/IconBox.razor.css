@@ -1,0 +1,73 @@
+/* ========================================
+   ICON BOX - Trazos UI (Calidez y Bordes Vivos)
+   ======================================== */
+
+.trazos-icon-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1.5px solid transparent;
+    border-radius: 14px 18px 12px 16px / 16px 12px 18px 14px;
+    box-shadow: 1px 2px 0px rgba(44, 34, 30, 0.05);
+    transition: transform 0.15s ease;
+}
+
+/* Tamaños */
+.trazos-icon-box-sm {
+    width: 2rem;
+    height: 2rem;
+}
+.trazos-icon-box-sm :deep(svg) {
+    width: 1.125rem;
+    height: 1.125rem;
+}
+
+.trazos-icon-box-md {
+    width: 3rem;
+    height: 3rem;
+}
+.trazos-icon-box-md :deep(svg) {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.trazos-icon-box-lg {
+    width: 3.5rem;
+    height: 3.5rem;
+}
+.trazos-icon-box-lg :deep(svg) {
+    width: 1.875rem;
+    height: 1.875rem;
+}
+
+/* Variantes */
+.trazos-icon-box-primary {
+    background-color: #E8F0EA;
+    color: #2D5843;
+    border-color: #C5DCCB;
+}
+
+.trazos-icon-box-lavender {
+    background-color: #E7E1F3;
+    color: #5D4378;
+    border-color: #D4C5E8;
+}
+
+.trazos-icon-box-cream {
+    background-color: #FDF4DC;
+    color: #78350F;
+    border-color: #F5D384;
+}
+
+.trazos-icon-box-wine {
+    background-color: #FBE4E8;
+    color: #851D41;
+    border-color: #F5BAC5;
+}
+
+.trazos-icon-box-neutral {
+    background-color: #ffffff;
+    color: #5A4C46;
+    border-color: #DCD5C6;
+}

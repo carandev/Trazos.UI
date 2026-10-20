@@ -1,0 +1,52 @@
+@namespace Trazos.UI.Components
+
+<div class="trazos-input-group @Class">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="trazos-input-label" for="@Id">
+            @Label
+            @if (Required)
+            {
+                <span class="trazos-input-required" aria-hidden="true">*</span>
+            }
+        </label>
+    }
+
+    <div class="trazos-select-wrapper @(HasError ? "has-error" : "") @(Disabled ? "disabled" : "")">
+        @if (LeadingIcon != null)
+        {
+            <div class="trazos-input-icon leading">
+                @LeadingIcon
+            </div>
+        }
+
+        <select id="@Id"
+                class="trazos-select-control"
+                disabled="@Disabled"
+                value="@Value"
+                @onchange="OnSelectionChanged"
+                @attributes="AdditionalAttributes">
+            @if (!string.IsNullOrEmpty(Placeholder))
+            {
+                <option value="" disabled selected="@(string.IsNullOrEmpty(Value))">@Placeholder</option>
+            }
+            @ChildContent
+        </select>
+
+        <div class="trazos-select-arrow" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(HelperText) && !HasError)
+    {
+        <p class="trazos-input-helper">@HelperText</p>
+    }
+
+    @if (HasError)
+    {
+        <p class="trazos-input-error" role="alert">@Error</p>
+    }
+</div>

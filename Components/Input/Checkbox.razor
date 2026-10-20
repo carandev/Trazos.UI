@@ -1,0 +1,43 @@
+@namespace Trazos.UI.Components
+
+<div class="trazos-checkbox-group @Class">
+    <label class="trazos-checkbox-container @(Disabled ? "disabled" : "")" for="@Id">
+        <input id="@Id"
+               type="checkbox"
+               class="trazos-checkbox-control"
+               checked="@Value"
+               disabled="@Disabled"
+               @onchange="OnCheckboxChanged"
+               @attributes="AdditionalAttributes" />
+
+        <span class="trazos-checkbox-box @(Value ? "checked" : "") @(HasError ? "has-error" : "")" aria-hidden="true">
+            <svg class="trazos-checkbox-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        </span>
+
+        @if (!string.IsNullOrEmpty(Label) || ChildContent != null)
+        {
+            <span class="trazos-checkbox-label">
+                @if (ChildContent != null)
+                {
+                    @ChildContent
+                }
+                else
+                {
+                    @Label
+                }
+            </span>
+        }
+    </label>
+
+    @if (!string.IsNullOrEmpty(HelperText) && !HasError)
+    {
+        <p class="trazos-checkbox-helper">@HelperText</p>
+    }
+
+    @if (HasError)
+    {
+        <p class="trazos-checkbox-error" role="alert">@Error</p>
+    }
+</div>

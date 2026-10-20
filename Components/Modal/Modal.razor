@@ -1,0 +1,29 @@
+@namespace Trazos.UI.Components
+
+@if (IsOpen)
+{
+    <div class="modal-backdrop" @onclick="OnBackdropClick">
+        <div class="modal-container @SizeClass" @onclick:stopPropagation="true">
+            <div class="modal-header">
+                <h3 class="modal-title">@Title</h3>
+                @if (ShowCloseButton)
+                {
+                    <button type="button" class="modal-close" @onclick="Close">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                }
+            </div>
+            <div class="modal-body">
+                @ChildContent
+            </div>
+            @if (Footer != null)
+            {
+                <div class="modal-footer">
+                    @Footer
+                </div>
+            }
+        </div>
+    </div>
+}

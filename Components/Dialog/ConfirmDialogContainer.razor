@@ -1,0 +1,26 @@
+@namespace Trazos.UI.Components
+@using Trazos.UI.Services
+@inject IDialogService DialogService
+@implements IDisposable
+
+@if (_currentOptions != null)
+{
+    <Modal IsOpen="_isOpen"
+           Title="@_currentOptions.Title"
+           Size="@_currentOptions.Size"
+           CloseOnBackdropClick="false"
+           ShowCloseButton="true"
+           OnClose="Cancel">
+        <ChildContent>
+            <p class="trazos-confirm-message">@_currentOptions.Message</p>
+        </ChildContent>
+        <Footer>
+            <Button Variant="ButtonVariant.Outline" OnClick="Cancel">
+                @_currentOptions.CancelText
+            </Button>
+            <Button Variant="@_currentOptions.ConfirmVariant" OnClick="Confirm">
+                @_currentOptions.ConfirmText
+            </Button>
+        </Footer>
+    </Modal>
+}

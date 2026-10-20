@@ -1,0 +1,152 @@
+/* ========================================
+   BUTTON - Trazos UI (Calidez y Bordes Vivos)
+   ======================================== */
+
+.trazos-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    border: 1.5px solid transparent;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    user-select: none;
+}
+
+/* Tamaños */
+.trazos-btn-sm {
+    padding: 0.375rem 0.875rem;
+    font-size: 0.75rem;
+}
+
+.trazos-btn-md {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+}
+
+.trazos-btn-lg {
+    padding: 0.875rem 1.75rem;
+    font-size: 1rem;
+}
+
+/* Variantes */
+.trazos-btn-primary {
+    background-color: #386F54;
+    color: #ffffff;
+    border-color: #1F3B2D;
+    box-shadow: 2px 3px 0px #1F3B2D;
+}
+.trazos-btn-primary:hover:not(:disabled) {
+    background-color: #2D5843;
+    transform: translateY(-1px);
+    box-shadow: 3px 4px 0px #1F3B2D;
+}
+.trazos-btn-primary:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 1px 1px 0px #1F3B2D;
+}
+
+.trazos-btn-wine {
+    background-color: #9B1D43;
+    color: #ffffff;
+    border-color: #4D1026;
+    box-shadow: 2px 3px 0px #4D1026;
+}
+.trazos-btn-wine:hover:not(:disabled) {
+    background-color: #851D41;
+    transform: translateY(-1px);
+    box-shadow: 3px 4px 0px #4D1026;
+}
+.trazos-btn-wine:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 1px 1px 0px #4D1026;
+}
+
+.trazos-btn-secondary {
+    background-color: #2C221E;
+    color: #ffffff;
+    border-color: #15100E;
+    box-shadow: 2px 3px 0px #15100E;
+}
+.trazos-btn-secondary:hover:not(:disabled) {
+    background-color: #000000;
+    transform: translateY(-1px);
+    box-shadow: 3px 4px 0px #15100E;
+}
+.trazos-btn-secondary:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 1px 1px 0px #15100E;
+}
+
+.trazos-btn-outline {
+    background-color: #ffffff;
+    color: #2C221E;
+    border-color: #D8CBB7;
+    border-radius: 14px 18px 12px 16px / 16px 12px 18px 14px;
+    box-shadow: 2px 2px 0px rgba(44, 34, 30, 0.06);
+}
+.trazos-btn-outline:hover:not(:disabled) {
+    background-color: #F4ECE0;
+    border-color: #C4B49D;
+    transform: translateY(-1px);
+}
+.trazos-btn-outline:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.trazos-btn-cream {
+    background-color: #FDF4DC;
+    color: #78350F;
+    border-color: #F5D384;
+    box-shadow: 2px 2px 0px rgba(180, 83, 9, 0.15);
+}
+.trazos-btn-cream:hover:not(:disabled) {
+    background-color: #F9E5B3;
+    transform: translateY(-1px);
+}
+
+.trazos-btn-lavender {
+    background-color: #E7E1F3;
+    color: #3E2C50;
+    border-color: #D4C5E8;
+    box-shadow: 2px 2px 0px rgba(93, 67, 120, 0.12);
+}
+.trazos-btn-lavender:hover:not(:disabled) {
+    background-color: #D4C5E8;
+    transform: translateY(-1px);
+}
+
+.trazos-btn-ghost {
+    background-color: transparent;
+    color: #2C221E;
+    border-color: transparent;
+    box-shadow: none;
+}
+.trazos-btn-ghost:hover:not(:disabled) {
+    background-color: #F4ECE0;
+}
+
+/* Deshabilitado */
+.trazos-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Mini spinner */
+.trazos-btn-spinner {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    animation: trazosBtnSpin 0.75s linear infinite;
+}
+
+@keyframes trazosBtnSpin {
+    to { transform: rotate(360deg); }
+}

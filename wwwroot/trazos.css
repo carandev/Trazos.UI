@@ -1,0 +1,88 @@
+/* ==========================================================================
+   TRAZOS UI - Design Tokens & Foundation
+   Estética de calidez, trazos vivos y diseño artesanal orgánico
+   ========================================================================== */
+
+:root {
+    /* Tipografía */
+    --trazos-font-display: 'Marcellus', serif;
+    --trazos-font-hand: 'Caveat', cursive;
+    --trazos-font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+
+    /* Tinta y Textos */
+    --trazos-color-ink: #2C221E;
+    --trazos-color-ink-light: #5A4C46;
+    --trazos-color-ink-muted: #8C7E77;
+
+    /* Pergamino y Fondos */
+    --trazos-color-parchment-50: #FDFBF7;
+    --trazos-color-parchment-100: #FAF7F2;
+    --trazos-color-parchment-200: #F4ECE0;
+    --trazos-color-parchment-300: #E8DECE;
+    --trazos-color-parchment-border: #E5DACB;
+
+    /* Acentos Vivos */
+    --trazos-color-olive-500: #4A8A6B;
+    --trazos-color-olive-600: #386F54;
+    --trazos-color-wine-500: #C0335C;
+    --trazos-color-wine-600: #9B1D43;
+    --trazos-color-gold-500: #D97706;
+    --trazos-color-gold-600: #B45309;
+
+    /* Curvas Orgánicas / Trazo Manual */
+    --trazos-radius-sketch: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    --trazos-radius-sketch-card: 20px 24px 18px 22px / 22px 18px 24px 20px;
+    --trazos-radius-sketch-sm: 14px 18px 12px 16px / 16px 12px 18px 14px;
+    --trazos-radius-sketch-btn: 12px 14px 10px 12px / 12px 10px 14px 12px;
+
+    /* Sombras Cálidas */
+    --trazos-shadow-sketch: 2px 3px 0px rgba(44, 34, 30, 0.08);
+    --trazos-shadow-sketch-lg: 3px 4px 0px rgba(44, 34, 30, 0.12);
+    --trazos-shadow-soft: 0 4px 20px -2px rgba(44, 34, 30, 0.06);
+    --trazos-shadow-deep: 0 10px 30px -5px rgba(44, 34, 30, 0.12);
+}
+
+/* ==========================================================================
+   Clases Utilitarias Base
+   ========================================================================== */
+
+.trazos-card {
+    background-color: var(--trazos-color-parchment-100);
+    border: 1.5px solid var(--trazos-color-parchment-border);
+    border-radius: var(--trazos-radius-sketch-card);
+    box-shadow: var(--trazos-shadow-soft);
+    padding: 1.25rem 1.5rem;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.trazos-card:hover {
+    box-shadow: var(--trazos-shadow-deep);
+}
+
+.trazos-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.65rem;
+    font-family: var(--trazos-font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    border: 1px solid var(--trazos-color-parchment-300);
+    border-radius: var(--trazos-radius-sketch-sm);
+    background-color: #FFFFFF;
+    color: var(--trazos-color-ink);
+    box-shadow: 1px 1px 0px rgba(44, 34, 30, 0.04);
+}
+
+.trazos-heading {
+    font-family: var(--trazos-font-display);
+    color: var(--trazos-color-ink);
+    letter-spacing: 0.02em;
+    margin: 0;
+}
+
+.trazos-handwriting {
+    font-family: var(--trazos-font-hand);
+    font-size: 1.25rem;
+    line-height: 1;
+}

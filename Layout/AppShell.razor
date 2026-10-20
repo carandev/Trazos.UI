@@ -1,0 +1,81 @@
+@namespace Trazos.UI.Layout
+@using Trazos.UI.Components
+
+<div class="trazos-app-shell">
+    @* Sidebar - Desktop *@
+    <aside class="trazos-shell-sidebar" aria-label="Navegación principal">
+        @if (Sidebar != null)
+        {
+            @Sidebar
+        }
+    </aside>
+
+    <div class="trazos-shell-main-wrapper">
+        @* Top Row / Header Bar *@
+        <header class="trazos-shell-topbar">
+            <div class="trazos-shell-topbar-left">
+                <button type="button"
+                        class="trazos-hamburger-btn"
+                        @onclick="ToggleDrawer"
+                        aria-label="Abrir menú de navegación">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                </button>
+
+                @if (Brand != null)
+                {
+                    <div class="trazos-shell-brand">
+                        @Brand
+                    </div>
+                }
+            </div>
+
+            <div class="trazos-shell-topbar-right">
+                @if (TopBar != null)
+                {
+                    @TopBar
+                }
+            </div>
+        </header>
+
+        @* Content Article *@
+        <main class="trazos-shell-content">
+            <div class="trazos-shell-container @ContainerClass">
+                @Body
+            </div>
+        </main>
+    </div>
+
+    @* Mobile Drawer *@
+    <Drawer IsOpen="_isDrawerOpen" OnClose="CloseDrawer">
+        <Header>
+            @if (DrawerHeader != null)
+            {
+                @DrawerHeader
+            }
+            else if (Brand != null)
+            {
+                <div class="trazos-shell-brand">
+                    @Brand
+                </div>
+            }
+        </Header>
+        <ChildContent>
+            @if (DrawerContent != null)
+            {
+                @DrawerContent
+            }
+            else if (Sidebar != null)
+            {
+                @Sidebar
+            }
+        </ChildContent>
+    </Drawer>
+
+    @* Global Toast Container Slot *@
+    <Toast />
+
+    @* Global Confirm Dialog Slot *@
+    <ConfirmDialogContainer />
+</div>
