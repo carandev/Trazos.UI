@@ -1,0 +1,119 @@
+@namespace Trazos.UI.Components
+@typeparam TItem
+
+<div class="trazos-autocomplete @Class" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="trazos-autocomplete-label" for="@Id">
+            @Label
+            @if (Required)
+            {
+                <span class="trazos-autocomplete-required" aria-hidden="true">*</span>
+            }
+        </label>
+    }
+
+    @if (SelectedItem is not null && !ClearOnSelect)
+    {
+        <div class="trazos-autocomplete-selected">
+            <span class="trazos-autocomplete-selected-content">
+                @if (ItemTemplate != null)
+                {
+                    @ItemTemplate(SelectedItem)
+                }
+                else
+                {
+                    @ItemText(SelectedItem)
+                }
+            </span>
+            <button type="button"
+                    class="trazos-autocomplete-clear"
+                    disabled="@Disabled"
+                    @onclick="ClearSelectionAsync"
+                    aria-label="@ClearText"
+                    title="@ClearText">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="trazos-autocomplete-field @(HasError ? "has-error" : "") @(Disabled ? "disabled" : "")">
+            <span class="trazos-autocomplete-icon" aria-hidden="true">
+                @if (_isSearching)
+                {
+                    <span class="trazos-autocomplete-spinner"></span>
+                }
+                else
+                {
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+                }
+            </span>
+            <input id="@Id"
+                   type="text"
+                   class="trazos-autocomplete-input"
+                   role="combobox"
+                   autocomplete="off"
+                   aria-autocomplete="list"
+                   aria-expanded="@(IsOpen ? "true" : "false")"
+                   aria-controls="@ListId"
+                   aria-activedescendant="@(IsOpen && _activeIndex >= 0 ? GetOptionId(_activeIndex) : null)"
+                   placeholder="@Placeholder"
+                   disabled="@Disabled"
+                   value="@_query"
+                   @oninput="OnInputAsync"
+                   @onkeydown="OnKeyDownAsync"
+                   @onfocus="OnFocus"
+                   @onblur="OnBlur" />
+        </div>
+
+        @if (IsOpen)
+        {
+            <ul id="@ListId" class="trazos-autocomplete-list" role="listbox">
+                @if (_results.Count == 0)
+                {
+                    <li class="trazos-autocomplete-empty" role="presentation">
+                        @(_isSearching ? SearchingText : NoResultsText)
+                    </li>
+                }
+                else
+                {
+                    @for (var i = 0; i < _results.Count; i++)
+                    {
+                        var index = i;
+                        var item = _results[i];
+                        <li id="@GetOptionId(index)"
+                            role="option"
+                            aria-selected="@(index == _activeIndex ? "true" : "false")"
+                            class="trazos-autocomplete-option @(index == _activeIndex ? "is-active" : "")"
+                            @onmousedown="() => SelectAsync(item)"
+                            @onmousedown:preventDefault="true"
+                            @onmouseenter="() => _activeIndex = index">
+                            @if (ItemTemplate != null)
+                            {
+                                @ItemTemplate(item)
+                            }
+                            else
+                            {
+                                @ItemText(item)
+                            }
+                        </li>
+                    }
+                }
+            </ul>
+        }
+    }
+
+    @if (HasError)
+    {
+        <p class="trazos-autocomplete-error" role="alert">@Error</p>
+    }
+    else if (!string.IsNullOrEmpty(HelperText))
+    {
+        <p class="trazos-autocomplete-helper">@HelperText</p>
+    }
+</div>

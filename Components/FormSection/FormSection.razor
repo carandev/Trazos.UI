@@ -1,0 +1,20 @@
+@namespace Trazos.UI.Components
+
+<section class="trazos-form-section @Class" aria-labelledby="@_titleId" @attributes="AdditionalAttributes">
+    <header class="trazos-form-section-header">
+        @if (Step.HasValue)
+        {
+            <span class="trazos-form-section-step" aria-hidden="true">@Step</span>
+        }
+        <div class="trazos-form-section-heading">
+            <h4 id="@_titleId" class="trazos-form-section-title">@Title</h4>
+            @if (!string.IsNullOrEmpty(Description))
+            {
+                <p class="trazos-form-section-description">@Description</p>
+            }
+        </div>
+    </header>
+    <div class="trazos-form-section-body @(Step.HasValue ? "has-step" : "")">
+        @ChildContent
+    </div>
+</section>

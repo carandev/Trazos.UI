@@ -1,0 +1,164 @@
+/* ========================================
+   RADIO CARD GROUP - Trazos UI (Calidez y Bordes Vivos)
+   ======================================== */
+
+.trazos-radio-cards {
+    margin: 0;
+    padding: 0;
+    border: none;
+    min-width: 0;
+}
+
+.trazos-radio-cards-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    padding: 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #5A4C46;
+}
+
+.trazos-radio-cards-required {
+    color: #9B1D43;
+    margin-left: 0.15rem;
+}
+
+.trazos-radio-cards-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.6rem;
+}
+
+@media (min-width: 640px) {
+    .trazos-radio-cards-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.trazos-radio-card {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.8rem 0.9rem;
+    background: #ffffff;
+    border: 1.5px solid #E5DACB;
+    border-radius: 14px 18px 12px 16px / 16px 12px 18px 14px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.trazos-radio-card:hover:not(.is-disabled) {
+    border-color: #A2C8AC;
+    background: #FDFBF7;
+}
+
+.trazos-radio-card.is-checked {
+    border-color: #4A8A6B;
+    background: #F3F8F5;
+    box-shadow: 0 0 0 3px rgba(74, 138, 107, 0.12);
+}
+
+.trazos-radio-card.is-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Radio nativo: visualmente oculto pero accesible */
+.trazos-radio-card-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.trazos-radio-card:has(.trazos-radio-card-input:focus-visible) {
+    outline: 2px solid #4A8A6B;
+    outline-offset: 2px;
+}
+
+.trazos-radio-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2.25rem;
+    height: 2.25rem;
+    color: #5A4C46;
+    background: #FAF7F2;
+    border: 1px solid #E8DECE;
+    border-radius: 10px;
+}
+
+.trazos-radio-card.is-checked .trazos-radio-card-icon {
+    color: #2D5843;
+    background: #E8F0EA;
+    border-color: #C5DCCB;
+}
+
+.trazos-radio-card-icon :deep(svg) {
+    width: 1.15rem;
+    height: 1.15rem;
+}
+
+.trazos-radio-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.trazos-radio-card-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #2C221E;
+}
+
+.trazos-radio-card-description {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: #786B65;
+}
+
+.trazos-radio-card-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 1.5px solid #D5CEC0;
+    border-radius: 9999px;
+    background: #ffffff;
+}
+
+.trazos-radio-card.is-checked .trazos-radio-card-check {
+    background: #2D5843;
+    border-color: #2D5843;
+    color: #ffffff;
+}
+
+.trazos-radio-card-check svg {
+    width: 0.75rem;
+    height: 0.75rem;
+}
+
+.trazos-radio-cards-helper {
+    margin: 0.4rem 0 0 0;
+    font-size: 0.75rem;
+    color: #786B65;
+}
+
+.trazos-radio-cards-error {
+    margin: 0.4rem 0 0 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #9B1D43;
+}

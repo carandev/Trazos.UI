@@ -1,0 +1,102 @@
+@namespace Trazos.UI.Components
+@typeparam TItem
+
+<div class="trazos-calendar @(Loading ? "trazos-calendar--loading" : "") @Class" @attributes="AdditionalAttributes">
+    <div class="trazos-calendar-toolbar">
+        <h2 class="trazos-calendar-title" aria-live="polite">@MonthTitle</h2>
+
+        <div class="trazos-calendar-nav">
+            @if (ToolbarContent != null)
+            {
+                <div class="trazos-calendar-extra">@ToolbarContent</div>
+            }
+            <button type="button" class="trazos-calendar-today" @onclick="GoToTodayAsync" disabled="@IsCurrentMonthAndTodaySelected">
+                @TodayText
+            </button>
+            <div class="trazos-calendar-arrows">
+                <button type="button" class="trazos-calendar-arrow" @onclick="() => ShiftMonthAsync(-1)" aria-label="@PreviousMonthText" title="@PreviousMonthText">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>
+                </button>
+                <button type="button" class="trazos-calendar-arrow" @onclick="() => ShiftMonthAsync(1)" aria-label="@NextMonthText" title="@NextMonthText">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="trazos-calendar-grid" role="grid" aria-label="@MonthTitle">
+        <div class="trazos-calendar-weekdays" role="row">
+            @foreach (var dayName in OrderedDayNames)
+            {
+                <div class="trazos-calendar-weekday" role="columnheader">@dayName</div>
+            }
+        </div>
+
+        @foreach (var week in _weeks)
+        {
+            <div class="trazos-calendar-week" role="row">
+                @foreach (var day in week)
+                {
+                    var dayItems = GetItemsForDay(day);
+                    var isOutside = day.Month != Month.Month;
+                    var isToday = day == Today;
+                    var isSelected = SelectedDate == day;
+
+                    <div class="trazos-calendar-day @(isOutside ? "is-outside" : "") @(isToday ? "is-today" : "") @(isSelected ? "is-selected" : "")"
+                         role="gridcell"
+                         aria-selected="@(isSelected ? "true" : "false")">
+                        <button type="button"
+                                class="trazos-calendar-day-btn"
+                                aria-label="@GetDayAriaLabel(day, dayItems.Count)"
+                                @onclick="() => SelectDayAsync(day)">
+                            <span class="trazos-calendar-day-number">@day.Day</span>
+                            @if (dayItems.Count > 0)
+                            {
+                                <span class="trazos-calendar-dots" aria-hidden="true">
+                                    @foreach (var item in dayItems.Take(3))
+                                    {
+                                        <span class="trazos-calendar-dot tone-@GetToneClass(item)"></span>
+                                    }
+                                </span>
+                            }
+                        </button>
+
+                        @if (dayItems.Count > 0)
+                        {
+                            <ul class="trazos-calendar-chips">
+                                @foreach (var item in dayItems.Take(MaxItemsPerDay))
+                                {
+                                    <li>
+                                        <button type="button"
+                                                class="trazos-calendar-chip tone-@GetToneClass(item)"
+                                                title="@TitleSelector(item)"
+                                                @onclick="() => OnItemClick.InvokeAsync(item)"
+                                                @onclick:stopPropagation="true">
+                                            @if (ShowTime(item, day))
+                                            {
+                                                <span class="trazos-calendar-chip-time">@FormatTime(StartSelector(item))</span>
+                                            }
+                                            <span class="trazos-calendar-chip-title">@TitleSelector(item)</span>
+                                        </button>
+                                    </li>
+                                }
+                                @if (dayItems.Count > MaxItemsPerDay)
+                                {
+                                    <li>
+                                        <button type="button" class="trazos-calendar-more" @onclick="() => SelectDayAsync(day)">
+                                            @string.Format(MoreTextFormat, dayItems.Count - MaxItemsPerDay)
+                                        </button>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

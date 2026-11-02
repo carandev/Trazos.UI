@@ -1,0 +1,22 @@
+@namespace Trazos.UI.Components
+
+<div class="trazos-empty-state @(Compact ? "is-compact" : "") @Class" @attributes="AdditionalAttributes">
+    @if (Icon != null)
+    {
+        <IconBox Variant="IconVariant" Size="@(Compact ? IconBoxSize.Medium : IconBoxSize.Large)" Class="trazos-empty-state-icon">
+            @Icon
+        </IconBox>
+    }
+
+    <h3 class="trazos-empty-state-title">@Title</h3>
+
+    @if (!string.IsNullOrEmpty(Description))
+    {
+        <p class="trazos-empty-state-description">@Description</p>
+    }
+
+    @if (Actions != null)
+    {
+        <div class="trazos-empty-state-actions">@Actions</div>
+    }
+</div>

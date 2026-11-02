@@ -1,0 +1,65 @@
+@namespace Trazos.UI.Components
+@typeparam TValue
+
+<fieldset class="trazos-radio-cards @Class" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <legend class="trazos-radio-cards-label">
+            @Label
+            @if (Required)
+            {
+                <span class="trazos-radio-cards-required" aria-hidden="true">*</span>
+            }
+        </legend>
+    }
+
+    <div class="trazos-radio-cards-grid trazos-radio-cards-cols-@Columns">
+        @for (var i = 0; i < Options.Count; i++)
+        {
+            var option = Options[i];
+            var isChecked = IsSelected(option);
+            var inputId = $"{_name}-{i}";
+
+            <label for="@inputId" class="trazos-radio-card @(isChecked ? "is-checked" : "") @(Disabled ? "is-disabled" : "")">
+                <input type="radio"
+                       id="@inputId"
+                       name="@_name"
+                       class="trazos-radio-card-input"
+                       checked="@isChecked"
+                       disabled="@Disabled"
+                       @onchange="() => SelectAsync(option)" />
+
+                @if (option.Icon != null)
+                {
+                    <span class="trazos-radio-card-icon" aria-hidden="true">@option.Icon</span>
+                }
+
+                <span class="trazos-radio-card-text">
+                    <span class="trazos-radio-card-title">@option.Title</span>
+                    @if (!string.IsNullOrEmpty(option.Description))
+                    {
+                        <span class="trazos-radio-card-description">@option.Description</span>
+                    }
+                </span>
+
+                <span class="trazos-radio-card-check" aria-hidden="true">
+                    @if (isChecked)
+                    {
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                    }
+                </span>
+            </label>
+        }
+    </div>
+
+    @if (!string.IsNullOrEmpty(Error))
+    {
+        <p class="trazos-radio-cards-error" role="alert">@Error</p>
+    }
+    else if (!string.IsNullOrEmpty(HelperText))
+    {
+        <p class="trazos-radio-cards-helper">@HelperText</p>
+    }
+</fieldset>

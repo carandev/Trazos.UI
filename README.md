@@ -16,6 +16,28 @@
   - `Toast`: Global notification toast system.
   - `LoadingSpinner`: Artisanal dual-ring spinning halo with overlay and message support.
   - `AppShell`: Ready-to-use application layout with desktop sidebar, topbar, and mobile drawer.
+  - `MonthCalendar<TItem>`: Generic month grid with day selection, month navigation and colored item chips (`CalendarItemTone`). On small screens items collapse into colored dots.
+  - `RadioCardGroup<TValue>`: Mutually exclusive options rendered as cards with title, description and icon. Uses native radios (keyboard and screen-reader friendly).
+  - `Autocomplete<TItem>`: Debounced async search with keyboard navigation, custom item templates, and either a "selected" chip or clear-on-select mode.
+  - `FormSection`: Numbered section heading to split long forms into simple steps.
+  - `EmptyState`: Friendly empty view with icon, explanation and next-step actions.
+
+## Calendar Example
+
+```razor
+<MonthCalendar TItem="EventDto"
+               Items="_events"
+               StartSelector="e => e.Start"
+               EndSelector="e => e.End"
+               TitleSelector="e => e.Title"
+               ToneSelector="e => e.IsPublic ? CalendarItemTone.Olive : CalendarItemTone.Lavender"
+               Month="_month"
+               MonthChanged="LoadMonthAsync"
+               @bind-SelectedDate="_selectedDay"
+               OnItemClick="OpenEvent" />
+```
+
+Use `MonthCalendar<TItem>.GetGridStart(month)` and `GetGridEndExclusive(month)` to request only the visible date range from your API.
 
 ## Installation
 

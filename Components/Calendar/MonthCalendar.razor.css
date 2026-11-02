@@ -1,0 +1,340 @@
+/* ========================================
+   MONTH CALENDAR - Trazos UI (Calidez y Bordes Vivos)
+   ======================================== */
+
+.trazos-calendar {
+    background: #ffffff;
+    border: 1.5px solid #E5DACB;
+    border-radius: 20px 24px 18px 22px / 22px 18px 24px 20px;
+    box-shadow: 2px 3px 0px rgba(44, 34, 30, 0.04), 0 6px 20px -4px rgba(62, 47, 40, 0.05);
+    padding: 1rem;
+    transition: opacity 0.2s ease;
+}
+
+.trazos-calendar--loading .trazos-calendar-grid {
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+/* Barra superior */
+.trazos-calendar-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.trazos-calendar-title {
+    margin: 0;
+    font-family: var(--trazos-font-display, 'Marcellus', serif);
+    font-size: 1.375rem;
+    color: #2C221E;
+    letter-spacing: 0.02em;
+}
+
+.trazos-calendar-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.trazos-calendar-extra {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.trazos-calendar-today {
+    padding: 0.45rem 0.9rem;
+    font-family: inherit;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: #2D5843;
+    background: #F3F8F5;
+    border: 1.5px solid #C7E0D1;
+    border-radius: 12px 14px 10px 12px / 12px 10px 14px 12px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.trazos-calendar-today:hover:not(:disabled) {
+    background: #E8F0EA;
+}
+
+.trazos-calendar-today:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.trazos-calendar-arrows {
+    display: inline-flex;
+    border: 1.5px solid #E5DACB;
+    border-radius: 12px 14px 10px 12px / 12px 10px 14px 12px;
+    overflow: hidden;
+}
+
+.trazos-calendar-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.1rem;
+    color: #5A4C46;
+    background: #ffffff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.trazos-calendar-arrow + .trazos-calendar-arrow {
+    border-left: 1.5px solid #E5DACB;
+}
+
+.trazos-calendar-arrow:hover {
+    background: #FAF7F2;
+    color: #2C221E;
+}
+
+.trazos-calendar-arrow svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.trazos-calendar-today:focus-visible,
+.trazos-calendar-arrow:focus-visible,
+.trazos-calendar-day-btn:focus-visible,
+.trazos-calendar-chip:focus-visible,
+.trazos-calendar-more:focus-visible {
+    outline: 2px solid #4A8A6B;
+    outline-offset: 2px;
+}
+
+/* Cuadrícula */
+.trazos-calendar-grid {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #EFE7DA;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: opacity 0.2s ease;
+}
+
+.trazos-calendar-weekdays,
+.trazos-calendar-week {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.trazos-calendar-weekdays {
+    background: #FAF7F2;
+    border-bottom: 1px solid #EFE7DA;
+}
+
+.trazos-calendar-weekday {
+    padding: 0.5rem 0.25rem;
+    text-align: center;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #8C7E77;
+}
+
+.trazos-calendar-week + .trazos-calendar-week {
+    border-top: 1px solid #EFE7DA;
+}
+
+.trazos-calendar-day {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 6.5rem;
+    padding: 0.25rem;
+    background: #ffffff;
+    min-width: 0;
+}
+
+.trazos-calendar-day + .trazos-calendar-day {
+    border-left: 1px solid #EFE7DA;
+}
+
+.trazos-calendar-day.is-outside {
+    background: #FDFBF7;
+}
+
+.trazos-calendar-day.is-outside .trazos-calendar-day-number {
+    color: #BDB2A8;
+}
+
+.trazos-calendar-day.is-selected {
+    background: #F3F8F5;
+    box-shadow: inset 0 0 0 2px #4A8A6B;
+}
+
+/* Botón del día: ocupa toda la celda para que sea fácil de tocar */
+.trazos-calendar-day-btn {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.35rem 0.45rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    border-radius: 0;
+}
+
+.trazos-calendar-day-btn:hover {
+    background: rgba(232, 222, 206, 0.25);
+}
+
+.trazos-calendar-day-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.75rem;
+    height: 1.75rem;
+    padding: 0 0.25rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: #2C221E;
+    border-radius: 9999px;
+}
+
+.trazos-calendar-day.is-today .trazos-calendar-day-number {
+    background: #2D5843;
+    color: #ffffff;
+}
+
+.trazos-calendar-dots {
+    display: none;
+    gap: 0.2rem;
+    margin-top: auto;
+    padding-bottom: 0.15rem;
+}
+
+.trazos-calendar-dot {
+    width: 0.4rem;
+    height: 0.4rem;
+    border: none;
+    border-radius: 9999px;
+}
+
+/* Chips de eventos */
+.trazos-calendar-chips {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin: 2rem 0 0 0;
+    padding: 0;
+    list-style: none;
+    pointer-events: none;
+}
+
+.trazos-calendar-chips li {
+    min-width: 0;
+}
+
+.trazos-calendar-chip,
+.trazos-calendar-more {
+    pointer-events: auto;
+}
+
+.trazos-calendar-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    width: 100%;
+    padding: 0.15rem 0.4rem;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: left;
+    border: 1px solid transparent;
+    border-left-width: 3px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.trazos-calendar-chip:hover {
+    filter: brightness(0.96);
+    transform: translateY(-1px);
+}
+
+.trazos-calendar-chip-time {
+    flex-shrink: 0;
+    font-weight: 800;
+    opacity: 0.8;
+}
+
+.trazos-calendar-chip-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.trazos-calendar-more {
+    padding: 0.1rem 0.4rem;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: #5A4C46;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+/* Tonos */
+.tone-olive { background-color: #F3F8F5; color: #2D5843; border-color: #C7E0D1; border-left-color: #4A8A6B; }
+.tone-lavender { background-color: #F3F0F9; color: #5D4378; border-color: #D4C5E8; border-left-color: #7C5AA0; }
+.tone-gold { background-color: #FEFBF3; color: #92400E; border-color: #F9E5B3; border-left-color: #D97706; }
+.tone-wine { background-color: #FDF2F4; color: #851D41; border-color: #F5BAC5; border-left-color: #C0335C; }
+.tone-sky { background-color: #F5F8FC; color: #3B5270; border-color: #C5D4E8; border-left-color: #4E6D96; }
+.tone-neutral { background-color: #FAF7F2; color: #5A4C46; border-color: #DCD5C6; border-left-color: #8C7E77; }
+
+.trazos-calendar-dot.tone-olive { background-color: #4A8A6B; }
+.trazos-calendar-dot.tone-lavender { background-color: #7C5AA0; }
+.trazos-calendar-dot.tone-gold { background-color: #D97706; }
+.trazos-calendar-dot.tone-wine { background-color: #C0335C; }
+.trazos-calendar-dot.tone-sky { background-color: #4E6D96; }
+.trazos-calendar-dot.tone-neutral { background-color: #8C7E77; }
+
+/* Móvil: la cuadrícula se compacta y los eventos se resumen como puntos */
+@media (max-width: 640px) {
+    .trazos-calendar {
+        padding: 0.75rem;
+    }
+
+    .trazos-calendar-title {
+        font-size: 1.2rem;
+    }
+
+    .trazos-calendar-day {
+        min-height: 3.25rem;
+    }
+
+    .trazos-calendar-day-btn {
+        align-items: center;
+        padding: 0.3rem 0.1rem;
+    }
+
+    .trazos-calendar-chips {
+        display: none;
+    }
+
+    .trazos-calendar-dots {
+        display: inline-flex;
+    }
+}
