@@ -7,7 +7,7 @@
 
     <!-- NuGet Package Properties -->
     <PackageId>Trazos.UI</PackageId>
-    <VersionPrefix>1.1.0</VersionPrefix>
+    <VersionPrefix>1.1.1</VersionPrefix>
     <Authors>carandev</Authors>
     <Description>A warm, artisanal, hand-crafted Blazor component library and design system with organic sketch borders, warm paper/parchment tones, and accessible primitives.</Description>
     <PackageTags>blazor;ui;components;design-system;sketch;hand-crafted;razor-components</PackageTags>
