@@ -13,7 +13,7 @@
     <PackageTags>blazor;ui;components;design-system;sketch;hand-crafted;razor-components</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/carandev/FaithHub</RepositoryUrl>
+    <RepositoryUrl>https://github.com/carandev/Trazos.UI</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 

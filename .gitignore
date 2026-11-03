@@ -1,0 +1,104 @@
+## .NET
+bin/
+obj/
+*.user
+*.userosscache
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+*.log
+
+## Visual Studio
+.vs/
+*.sln.docstates
+*.rsuser
+
+## JetBrains Rider
+.idea/
+*.sln.iml
+
+## VS Code
+.vscode/
+
+## User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]uild/
+bld/
+
+## NuGet
+*.nupkg
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## ASP.NET
+ScaffoldingReadMe.txt
+
+## Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+## macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+## MAUI / Xamarin
+*.mdb
+*.opendb
+*.db-shm
+*.db-wal
+
+## Secrets
+appsettings.Local.json
+appsettings.*.local.json
+*.pfx
+*.p12
+*.keystore
+*.jks
+
+## Test Results
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+## Publish
+publish/
+
+## Docker
+.env
+.env.local
+.env.prod
+.env.dev
+docker/nginx/ssl/*.pem
+docker/nginx/ssl/*.key
+docker/nginx/ssl/*.crt
+!docker/nginx/ssl/.gitkeep
+
+## Secrets (additional)
+*.env.local
+secrets/
+
+## Node.js / npm
+node_modules/
+npm-debug.log*
+
+## Tailwind CSS (generated)
+**/tailwind.output.css

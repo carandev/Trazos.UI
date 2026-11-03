@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Trazos.UI/Trazos.UI.csproj" />
+  </Folder>
+</Solution>
