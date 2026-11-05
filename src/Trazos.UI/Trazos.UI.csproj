@@ -29,4 +29,38 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.2" />
   </ItemGroup>
 
+  <!--
+    wwwroot/trazos.css is generated, not committed. The design tokens live in
+    packages/tokens/tokens.css (the single source shared with the npm packages);
+    the Razor-only utility classes live in Styles/trazos.base.css.
+    This target concatenates both, byte for byte, before the static web assets
+    are resolved, so the published asset is identical to the hand-written file.
+  -->
+  <PropertyGroup>
+    <TrazosTokensCss>$(MSBuildThisFileDirectory)../../packages/tokens/tokens.css</TrazosTokensCss>
+    <TrazosBaseCss>$(MSBuildThisFileDirectory)Styles/trazos.base.css</TrazosBaseCss>
+    <TrazosGeneratedCss>$(MSBuildThisFileDirectory)wwwroot/trazos.css</TrazosGeneratedCss>
+  </PropertyGroup>
+
+  <Target Name="TrazosGenerateCss" BeforeTargets="BeforeBuild;ResolveProjectStaticWebAssets"
+          Inputs="$(TrazosTokensCss);$(TrazosBaseCss)" Outputs="$(TrazosGeneratedCss)">
+    <Error Condition="!Exists('$(TrazosTokensCss)')"
+           Text="Design tokens not found at $(TrazosTokensCss). Trazos.UI must be built from the monorepo checkout." />
+    <PropertyGroup>
+      <_TrazosCss>$([System.IO.File]::ReadAllText('$(TrazosTokensCss)'))$([System.IO.File]::ReadAllText('$(TrazosBaseCss)'))</_TrazosCss>
+    </PropertyGroup>
+    <MakeDir Directories="$(MSBuildThisFileDirectory)wwwroot" />
+    <!-- WriteLinesToFile appends the final newline itself, so trim the trailing one. -->
+    <WriteLinesToFile File="$(TrazosGeneratedCss)" Lines="$([MSBuild]::Escape($(_TrazosCss.TrimEnd())))"
+                      Overwrite="true" WriteOnlyWhenDifferent="true" />
+  </Target>
+
+  <!-- On a clean checkout the file does not exist at evaluation time, so the wwwroot glob misses it. -->
+  <Target Name="TrazosIncludeGeneratedCss" AfterTargets="TrazosGenerateCss" BeforeTargets="ResolveProjectStaticWebAssets">
+    <ItemGroup>
+      <Content Remove="wwwroot/trazos.css" />
+      <Content Include="wwwroot/trazos.css" />
+    </ItemGroup>
+  </Target>
+
 </Project>

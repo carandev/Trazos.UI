@@ -1,0 +1,44 @@
+/* ==========================================================================
+   Base utility classes
+   ========================================================================== */
+
+.trazos-card {
+    background-color: var(--trazos-color-parchment-100);
+    border: 1.5px solid var(--trazos-color-parchment-border);
+    border-radius: var(--trazos-radius-sketch-card);
+    box-shadow: var(--trazos-shadow-soft);
+    padding: 1.25rem 1.5rem;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.trazos-card:hover {
+    box-shadow: var(--trazos-shadow-deep);
+}
+
+.trazos-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.65rem;
+    font-family: var(--trazos-font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    border: 1px solid var(--trazos-color-parchment-300);
+    border-radius: var(--trazos-radius-sketch-sm);
+    background-color: var(--trazos-surface);
+    color: var(--trazos-color-ink);
+    box-shadow: 1px 1px 0px rgb(var(--trazos-shadow-rgb) / calc(0.04 * var(--trazos-shadow-strength)));
+}
+
+.trazos-heading {
+    font-family: var(--trazos-font-display);
+    color: var(--trazos-color-ink);
+    letter-spacing: 0.02em;
+    margin: 0;
+}
+
+.trazos-handwriting {
+    font-family: var(--trazos-font-hand);
+    font-size: 1.25rem;
+    line-height: 1;
+}
