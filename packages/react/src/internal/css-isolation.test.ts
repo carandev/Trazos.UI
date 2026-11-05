@@ -45,4 +45,22 @@ describe('component stylesheets', () => {
       .map(([cls, components]) => `${cls}: ${components.join(', ')}`);
     expect(shared).toEqual([]);
   });
+
+  it('do not reuse @keyframes names (Razor scoped them per component too)', () => {
+    const owners = new Map<string, string[]>();
+    for (const [path, css] of Object.entries(sheets)) {
+      const component = path.split('/')[2] ?? path;
+      for (const match of css.matchAll(/@keyframes\s+([\w-]+)/g)) {
+        const name = match[1];
+        if (name === undefined) continue;
+        const list = owners.get(name) ?? [];
+        if (!list.includes(component)) list.push(component);
+        owners.set(name, list);
+      }
+    }
+    const shared = [...owners.entries()]
+      .filter(([, components]) => components.length > 1)
+      .map(([name, components]) => `${name}: ${components.join(', ')}`);
+    expect(shared).toEqual([]);
+  });
 });

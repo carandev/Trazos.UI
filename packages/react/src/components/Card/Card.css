@@ -1,0 +1,43 @@
+/* ========================================
+   CARD - Trazos UI (ported from Components/Card/Card.razor.css)
+   ======================================== */
+
+.trazos-card-box {
+    background: var(--trazos-surface);
+    border: 1.5px solid var(--trazos-border);
+    border-radius: 20px 24px 18px 22px / 22px 18px 24px 20px;
+    box-shadow: 2px 3px 0px rgb(var(--trazos-shadow-rgb) / calc(0.04 * var(--trazos-shadow-strength))), 0 6px 20px -4px rgb(var(--trazos-shadow-warm-rgb) / calc(0.05 * var(--trazos-shadow-strength)));
+    padding: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.trazos-card-lavender {
+    background: linear-gradient(135deg, var(--trazos-lavender-card-start) 0%, var(--trazos-lavender-soft) 60%, var(--trazos-lavender-card-end) 100%);
+    border-color: var(--trazos-lavender-card-border);
+    box-shadow: 2px 3px 0px var(--trazos-lavender-shadow-sm), 0 6px 20px -4px var(--trazos-lavender-shadow-md);
+}
+
+.trazos-card-interactive {
+    cursor: pointer;
+}
+.trazos-card-interactive:hover {
+    border-color: var(--trazos-border-highlight);
+    transform: translateY(-2px);
+    box-shadow: 3px 5px 0px rgb(var(--trazos-shadow-rgb) / calc(0.07 * var(--trazos-shadow-strength))), 0 10px 25px -5px rgb(var(--trazos-shadow-warm-rgb) / calc(0.08 * var(--trazos-shadow-strength)));
+}
+
+.trazos-card-header {
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1.5px solid var(--trazos-border-soft);
+}
+
+.trazos-card-body {
+    width: 100%;
+}
+
+.trazos-card-footer {
+    margin-top: 1.25rem;
+    padding-top: 0.75rem;
+    border-top: 1.5px solid var(--trazos-border-soft);
+}
