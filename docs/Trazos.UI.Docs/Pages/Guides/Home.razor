@@ -1,0 +1,99 @@
+@page "/"
+
+<PageTitle>@L.T("Trazos.UI · Hand-crafted Blazor components", "Trazos.UI · Componentes Blazor hechos a mano")</PageTitle>
+
+<article class="docs-page">
+    <section class="docs-hero">
+        <span class="docs-eyebrow">@L.T("Blazor component library", "Biblioteca de componentes Blazor")</span>
+        <h1 class="docs-hero-title trazos-heading" tabindex="-1">
+            <Tr>
+                <En>Interfaces with a <span class="trazos-handwriting">human</span> stroke.</En>
+                <Es>Interfaces con un trazo <span class="trazos-handwriting">humano</span>.</Es>
+            </Tr>
+        </h1>
+        <p class="docs-lead">
+            @L.T("Trazos.UI is a warm, artisanal design system for Blazor: organic sketch borders, parchment tones, editorial serif type and accessible primitives. Pure Razor components with scoped CSS, no JavaScript runtime and no CSS framework required.",
+                 "Trazos.UI es un sistema de diseño cálido y artesanal para Blazor: bordes orgánicos de boceto, tonos de pergamino, tipografía serif editorial y primitivas accesibles. Componentes Razor puros con CSS aislado, sin runtime de JavaScript ni framework de CSS.")
+        </p>
+        <div class="docs-hero-actions">
+            <a href="installation" class="docs-link-button">@L.T("Get started", "Comenzar")</a>
+            <a href="components/button" class="docs-link-button is-outline">@L.T("Browse components", "Ver componentes")</a>
+        </div>
+    </section>
+
+    <div class="docs-feature-grid">
+        <Card>
+            <IconBox Variant="IconBoxVariant.Primary">@Icons.Pen</IconBox>
+            <h2 class="docs-feature-title">@L.T("Artisanal by default", "Artesanal por defecto")</h2>
+            <p class="docs-feature-text">@L.T("Uneven radii, warm shadows and ink accents give every screen a hand-drawn feel.", "Radios irregulares, sombras cálidas y acentos de tinta le dan a cada pantalla un aire dibujado a mano.")</p>
+        </Card>
+        <Card Variant="CardVariant.Lavender">
+            <IconBox Variant="IconBoxVariant.Lavender">@Icons.Check</IconBox>
+            <h2 class="docs-feature-title">@L.T("Accessible primitives", "Primitivas accesibles")</h2>
+            <p class="docs-feature-text">@L.T("Native inputs and radios, labelled controls, keyboard navigation and focus states.", "Campos y botones de opción nativos, controles con etiqueta, navegación por teclado y estados de foco.")</p>
+        </Card>
+        <Card Variant="CardVariant.White">
+            <IconBox Variant="IconBoxVariant.Wine">@Icons.Layers</IconBox>
+            <h2 class="docs-feature-title">@L.T("Zero heavy dependencies", "Cero dependencias pesadas")</h2>
+            <p class="docs-feature-text">@L.T("Only Blazor. Each component ships its own scoped stylesheet.", "Solo Blazor. Cada componente trae su propia hoja de estilos aislada.")</p>
+        </Card>
+    </div>
+
+    <h2 class="docs-h2">@L.T("A quick taste", "Una muestra rápida")</h2>
+    <DemoBlock Code="@TasteCode">
+        <Card Class="docs-taste">
+            <Header>
+                <div class="docs-row">
+                    <h3 class="trazos-heading">@L.T("Project kickoff", "Inicio del proyecto")</h3>
+                    <Badge Variant="BadgeVariant.Success">@L.T("Open", "Abierta")</Badge>
+                </div>
+            </Header>
+            <ChildContent>
+                <TextInput Label="@L.T("Your name", "Tu nombre")" Placeholder="@L.T("Write your full name…", "Escribe tu nombre completo…")" @bind-Value="_name" />
+            </ChildContent>
+            <Footer>
+                <Button Variant="ButtonVariant.Primary" OnClick="Save">@L.T("Save", "Guardar")</Button>
+                <Button Variant="ButtonVariant.Ghost" OnClick="() => _name = null">@L.T("Clear", "Limpiar")</Button>
+            </Footer>
+        </Card>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("Explore", "Explora")</h2>
+    <div class="docs-grid-2">
+        @foreach (var section in DocsNav.Sections.Skip(1))
+        {
+            <Card Variant="CardVariant.Interactive" OnClick="() => Navigation.NavigateTo(section.Items[0].Href)">
+                <h3 class="docs-feature-title">@L.T(section.Title, section.TitleEs)</h3>
+                <p class="docs-feature-text">@string.Join(", ", section.Items.Select(i => L.T(i.Title, i.TitleEs ?? i.Title)))</p>
+            </Card>
+        }
+    </div>
+</article>
+
+@code {
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
+
+    private string? _name;
+
+    private void Save() => Toast.ShowSuccess(
+        string.IsNullOrWhiteSpace(_name)
+            ? L.T("Saved without a name.", "Guardado sin nombre.")
+            : L.T($"Saved, {_name}.", $"Guardado, {_name}."),
+        L.T("Done", "Listo"));
+
+    private const string TasteCode = """
+        <Card>
+            <Header>
+                <h3 class="trazos-heading">Project kickoff</h3>
+                <Badge Variant="BadgeVariant.Success">Open</Badge>
+            </Header>
+            <ChildContent>
+                <TextInput Label="Your name" Placeholder="Write your full name…" @bind-Value="_name" />
+            </ChildContent>
+            <Footer>
+                <Button Variant="ButtonVariant.Primary" OnClick="Save">Save</Button>
+                <Button Variant="ButtonVariant.Ghost" OnClick="() => _name = null">Clear</Button>
+            </Footer>
+        </Card>
+        """;
+}

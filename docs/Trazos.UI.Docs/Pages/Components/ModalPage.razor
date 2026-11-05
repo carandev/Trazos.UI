@@ -1,0 +1,87 @@
+@page "/components/modal"
+
+<DocPage Title="Modal" Category="@L.T("Overlays & feedback", "Superposiciones y avisos")"
+         Lead="@L.T("A focused dialog with a title, body and footer actions, in three sizes.", "Un diálogo enfocado con título, cuerpo y acciones en el pie, en tres tamaños.")">
+
+    <DemoBlock Code="@Code">
+        @foreach (var size in Sizes)
+        {
+            <Button Variant="ButtonVariant.Outline" OnClick="() => Open(size)">@L.T("Open", "Abrir") @SizeLabel(size)</Button>
+        }
+
+        <Modal @bind-IsOpen="_open" Title="@L.T("Edit event", "Editar evento")" Size="@_size">
+            <ChildContent>
+                <div class="docs-stack">
+                    <TextInput Label="@L.T("Name", "Nombre")" @bind-Value="_name" />
+                    <TextArea Label="@L.T("Description", "Descripción")" Rows="3" @bind-Value="_description" />
+                </div>
+            </ChildContent>
+            <Footer>
+                <Button Variant="ButtonVariant.Ghost" OnClick="() => _open = false">@L.T("Cancel", "Cancelar")</Button>
+                <Button OnClick="Save">@L.T("Save", "Guardar")</Button>
+            </Footer>
+        </Modal>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private static readonly string[] Sizes = ["small", "medium", "large"];
+
+    private bool _open;
+    private string _size = "medium";
+    private string? _name;
+    private string? _description;
+
+    protected override void OnInitialized()
+    {
+        _name = L.T("Team meeting", "Reunión de equipo");
+    }
+
+    private string SizeLabel(string size) => size switch
+    {
+        "small" => L.T("small", "pequeño"),
+        "large" => L.T("large", "grande"),
+        _ => L.T("medium", "mediano"),
+    };
+
+    private void Open(string size)
+    {
+        _size = size;
+        _open = true;
+    }
+
+    private void Save()
+    {
+        _open = false;
+        Toast.ShowSuccess(L.T("The event was updated.", "El evento se actualizó."), L.T("Saved", "Guardado"));
+    }
+
+    private const string Code = """
+        <Button OnClick="() => _open = true">Edit</Button>
+
+        <Modal @bind-IsOpen="_open" Title="Edit event" Size="medium">
+            <ChildContent>
+                <TextInput Label="Name" @bind-Value="_name" />
+            </ChildContent>
+            <Footer>
+                <Button Variant="ButtonVariant.Ghost" OnClick="() => _open = false">Cancel</Button>
+                <Button OnClick="Save">Save</Button>
+            </Footer>
+        </Modal>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("IsOpen", "bool", "false", L.T("Whether the modal is visible. Supports @bind-IsOpen.", "Indica si el modal está visible. Admite @bind-IsOpen.")),
+        new("IsOpenChanged", "EventCallback<bool>", null, L.T("Raised when the modal opens or closes.", "Se dispara cuando el modal se abre o se cierra.")),
+        new("Title", "string", "\"\"", L.T("Dialog title.", "Título del diálogo.")),
+        new("ChildContent", "RenderFragment?", null, L.T("Dialog body.", "Cuerpo del diálogo.")),
+        new("Footer", "RenderFragment?", null, L.T("Actions at the bottom.", "Acciones en la parte inferior.")),
+        new("Size", "string", "\"medium\"", L.T("\"small\", \"medium\" or \"large\".", "\"small\", \"medium\" o \"large\".")),
+        new("ShowCloseButton", "bool", "true", L.T("Shows the close button in the header.", "Muestra el botón de cerrar en el encabezado.")),
+        new("CloseOnBackdropClick", "bool", "true", L.T("Closes the modal when the backdrop is clicked.", "Cierra el modal al hacer clic en el fondo.")),
+        new("OnClose", "EventCallback", null, L.T("Raised after the modal closes.", "Se dispara después de que el modal se cierra.")),
+    ];
+}

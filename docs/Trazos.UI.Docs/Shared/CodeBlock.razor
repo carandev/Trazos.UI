@@ -1,0 +1,34 @@
+@inject IJSRuntime JS
+
+<div class="docs-code">
+    <div class="docs-code-bar">
+        <span class="docs-code-lang">@Language</span>
+        <button type="button" class="docs-code-copy" @onclick="CopyAsync">
+            @(_copied ? L.T("Copied", "Copiado") : L.T("Copy", "Copiar"))
+        </button>
+    </div>
+    <pre><code>@Code.Trim()</code></pre>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public string Code { get; set; } = string.Empty;
+    [Parameter] public string Language { get; set; } = "razor";
+
+    private bool _copied;
+
+    private async Task CopyAsync()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("navigator.clipboard.writeText", Code.Trim());
+            _copied = true;
+            StateHasChanged();
+            await Task.Delay(1500);
+            _copied = false;
+        }
+        catch (JSException)
+        {
+            // Clipboard can be unavailable (insecure context or denied permission); the code stays selectable.
+        }
+    }
+}

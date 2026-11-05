@@ -1,0 +1,50 @@
+@page "/components/drawer"
+
+<DocPage Title="Drawer" Category="@L.T("Navigation", "Navegación")"
+         Lead="@L.T("A slide-out side panel with backdrop, swipe-to-close on touch devices and body scroll lock.", "Un panel lateral deslizable con fondo oscurecido, cierre por deslizamiento en pantallas táctiles y bloqueo del desplazamiento de la página.")">
+
+    <DemoBlock Code="@Code">
+        <Button Variant="ButtonVariant.Outline" OnClick="() => _open = true">@L.T("Open drawer", "Abrir panel")</Button>
+
+        <Drawer @bind-IsOpen="_open" Title="@L.T("Filters", "Filtros")">
+            <div class="docs-stack">
+                <SelectInput Label="@L.T("Team", "Equipo")" Placeholder="@L.T("Any", "Cualquiera")" @bind-Value="_team">
+                    <option value="design">@L.T("Design", "Diseño")</option>
+                    <option value="engineering">@L.T("Engineering", "Ingeniería")</option>
+                </SelectInput>
+                <Checkbox Label="@L.T("Only upcoming events", "Solo próximos eventos")" @bind-Value="_upcoming" />
+                <Button OnClick="() => _open = false">@L.T("Apply", "Aplicar")</Button>
+            </div>
+        </Drawer>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private bool _open;
+    private string? _team;
+    private bool _upcoming = true;
+
+    private const string Code = """
+        <Button OnClick="() => _open = true">Open drawer</Button>
+
+        <Drawer @bind-IsOpen="_open" Title="Filters">
+            <SelectInput Label="Team" @bind-Value="_team">…</SelectInput>
+            <Checkbox Label="Only upcoming events" @bind-Value="_upcoming" />
+            <Button OnClick="() => _open = false">Apply</Button>
+        </Drawer>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("IsOpen", "bool", "false", L.T("Whether the drawer is visible. Supports @bind-IsOpen.", "Indica si el panel está visible. Admite @bind-IsOpen.")),
+        new("IsOpenChanged", "EventCallback<bool>", null, L.T("Raised when the drawer opens or closes.", "Se dispara cuando el panel se abre o se cierra.")),
+        new("OnClose", "EventCallback", null, L.T("Raised after the drawer closes.", "Se dispara después de que el panel se cierra.")),
+        new("Title", "string?", null, L.T("Header text.", "Texto del encabezado.")),
+        new("Header", "RenderFragment?", null, L.T("Custom header. Replaces Title.", "Encabezado personalizado. Reemplaza a Title.")),
+        new("ChildContent", "RenderFragment?", null, L.T("Drawer body.", "Cuerpo del panel.")),
+        new("ShowCloseButton", "bool", "true", L.T("Shows the close button.", "Muestra el botón de cierre.")),
+        new("CloseButtonAriaLabel", "string", "\"Cerrar menú\"", L.T("Accessible label of the close button.", "Etiqueta accesible del botón de cierre.")),
+    ];
+}

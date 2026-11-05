@@ -1,0 +1,170 @@
+@page "/theming"
+
+<DocPage Title="@L.T("Theming and dark mode", "Temas y modo oscuro")" Category="@L.T("Getting started", "Primeros pasos")"
+         Lead="@L.T("Every color is a CSS variable named by its role. Light is the default; dark mode is one attribute away.", "Cada color es una variable CSS nombrada por su función. El tema claro es el predeterminado; el modo oscuro está a un atributo de distancia.")">
+
+    <h2 class="docs-h2">@L.T("Turn on dark mode", "Activa el modo oscuro")</h2>
+    <p>
+        <Tr>
+            <En>Dark mode is opt-in. Add <code>data-theme="dark"</code> to <code>&lt;html&gt;</code>. Nothing changes until you do,
+                so existing apps keep their look.</En>
+            <Es>El modo oscuro es opcional. Agrega <code>data-theme="dark"</code> a <code>&lt;html&gt;</code>. Nada cambia hasta que lo hagas,
+                así que las apps existentes conservan su aspecto.</Es>
+        </Tr>
+    </p>
+    <CodeBlock Language="html" Code="@HtmlCode" />
+
+    <DemoBlock Title="@L.T("Any ancestor works", "Funciona en cualquier ancestro")"
+               Description="@L.T("The attribute can also wrap a single region, like this preview.", "El atributo también puede envolver una sola región, como esta vista previa.")"
+               Code="@IslandCode">
+        <div data-theme="dark" class="docs-theme-island">
+            <div class="docs-row">
+                <Button Variant="ButtonVariant.Primary">@L.T("Save", "Guardar")</Button>
+                <Button Variant="ButtonVariant.Outline">@L.T("Cancel", "Cancelar")</Button>
+                <Badge Variant="BadgeVariant.Success">@L.T("Active", "Activo")</Badge>
+                <Badge Variant="BadgeVariant.Warning">@L.T("Pending", "Pendiente")</Badge>
+            </div>
+            <TextInput Label="@L.T("Email", "Correo")" Placeholder="@EmailPlaceholder" />
+        </div>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("Follow the system and remember the choice", "Sigue al sistema y recuerda la elección")</h2>
+    <p>
+        <Tr>
+            <En>The library does not read <code>prefers-color-scheme</code> on its own: your app decides. Run this script in
+                <code>&lt;head&gt;</code>, before Blazor starts, so the page never flashes the wrong theme.</En>
+            <Es>La librería no lee <code>prefers-color-scheme</code> por sí sola: tu app decide. Ejecuta este script en
+                <code>&lt;head&gt;</code>, antes de que arranque Blazor, para que la página nunca muestre el tema equivocado.</Es>
+        </Tr>
+    </p>
+    <CodeBlock Language="html" Code="@ScriptCode" />
+    <p>@L.T("Then switch it from a component through JS interop:", "Luego cámbialo desde un componente con JS interop:")</p>
+    <CodeBlock Language="csharp" Code="@ToggleCode" />
+
+    <h2 class="docs-h2">@L.T("Customize the palette", "Personaliza la paleta")</h2>
+    <p>
+        <Tr>
+            <En>Override any token after <code>trazos.css</code>. Put light values in <code>:root</code> and dark values in
+                <code>[data-theme="dark"]</code>.</En>
+            <Es>Sobrescribe cualquier token después de <code>trazos.css</code>. Pon los valores claros en <code>:root</code> y los oscuros en
+                <code>[data-theme="dark"]</code>.</Es>
+        </Tr>
+    </p>
+    <CodeBlock Language="css" Code="@OverrideCode" />
+
+    <section class="docs-api">
+        <h2 class="docs-h2">@L.T("Main tokens", "Tokens principales")</h2>
+        <p>
+            <Tr>
+                <En>Each accent (<code>olive</code>, <code>wine</code>, <code>gold</code>, <code>lavender</code>, <code>sky</code>) also has
+                    <code>-soft</code>, <code>-border</code> and <code>-text</code> variants. The full list, with comments, is in <code>trazos.css</code>.</En>
+                <Es>Cada acento (<code>olive</code>, <code>wine</code>, <code>gold</code>, <code>lavender</code>, <code>sky</code>) también tiene
+                    variantes <code>-soft</code>, <code>-border</code> y <code>-text</code>. La lista completa, con comentarios, está en <code>trazos.css</code>.</Es>
+            </Tr>
+        </p>
+        <div class="docs-api-scroll">
+            <table class="docs-api-table">
+                <thead>
+                    <tr>
+                        <th>@L.T("Token", "Token")</th>
+                        <th>@L.T("Light", "Claro")</th>
+                        <th>@L.T("Dark", "Oscuro")</th>
+                        <th>@L.T("Used for", "Uso")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var t in Tokens)
+                    {
+                        <tr>
+                            <td><code>@t.Name</code></td>
+                            <td><span class="docs-token-dot" style="background:@t.Light"></span><code>@t.Light</code></td>
+                            <td><span class="docs-token-dot" style="background:@t.Dark"></span><code>@t.Dark</code></td>
+                            <td>@t.Use</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <div class="docs-note">
+        @L.T("WhatsAppButton keeps the WhatsApp brand colors in both themes.", "WhatsAppButton conserva los colores de marca de WhatsApp en ambos temas.")
+    </div>
+</DocPage>
+
+@code {
+    private sealed record TokenRow(string Name, string Light, string Dark, string Use);
+
+    private string EmailPlaceholder => L.T("name@example.com", "nombre@ejemplo.com");
+
+    private IReadOnlyList<TokenRow> Tokens =>
+    [
+        new("--trazos-page", "#FAF7F2", "#1A1512", L.T("App background, sidebar and top bar.", "Fondo de la app, barra lateral y barra superior.")),
+        new("--trazos-surface", "#FFFFFF", "#231C18", L.T("Cards, tables, lists, toasts.", "Tarjetas, tablas, listas, toasts.")),
+        new("--trazos-field", "#FFFFFF", "#1E1814", L.T("Input backgrounds.", "Fondo de los campos.")),
+        new("--trazos-border", "#E5DACB", "#463B34", L.T("Outer border of containers.", "Borde exterior de los contenedores.")),
+        new("--trazos-text", "#2C221E", "#F1E9DD", L.T("Body text and headings.", "Texto y títulos.")),
+        new("--trazos-text-muted", "#786B65", "#B3A497", L.T("Secondary text and hints.", "Texto secundario y ayudas.")),
+        new("--trazos-on-accent", "#FFFFFF", "#1A1512", L.T("Text on solid accent fills.", "Texto sobre rellenos de acento.")),
+        new("--trazos-focus", "#4A8A6B", "#6FB08F", L.T("Focus rings and active borders.", "Anillos de foco y bordes activos.")),
+        new("--trazos-danger", "#9B1D43", "#E0668A", L.T("Errors and required marks.", "Errores y marcas de obligatorio.")),
+        new("--trazos-olive", "#4A8A6B", "#6FB08F", L.T("Success and primary accent.", "Éxito y acento principal.")),
+        new("--trazos-wine", "#C0335C", "#E0668A", L.T("Destructive and brand accent.", "Acento destructivo y de marca.")),
+        new("--trazos-gold", "#D97706", "#F2A541", L.T("Warnings.", "Advertencias.")),
+        new("--trazos-lavender", "#7C5AA0", "#B9A3D9", L.T("Highlights and calendar tone.", "Resaltados y tono del calendario.")),
+        new("--trazos-sky", "#4E6D96", "#8FB3DE", L.T("Information.", "Información.")),
+    ];
+
+    private const string HtmlCode = """
+        <html lang="en" data-theme="dark">
+        """;
+
+    private const string IslandCode = """
+        <div data-theme="dark">
+            <Button Variant="ButtonVariant.Primary">Save</Button>
+            <Badge Variant="BadgeVariant.Success">Active</Badge>
+            <TextInput Label="Email" />
+        </div>
+        """;
+
+    private const string ScriptCode = """
+        <script>
+            window.theme = {
+                get: function () {
+                    var saved = localStorage.getItem('theme');
+                    if (saved === 'light' || saved === 'dark') return saved;
+                    return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                },
+                set: function (theme) {
+                    document.documentElement.dataset.theme = theme;
+                    localStorage.setItem('theme', theme);
+                }
+            };
+            document.documentElement.dataset.theme = window.theme.get();
+        </script>
+        """;
+
+    private const string ToggleCode = """
+        @inject IJSRuntime JS
+
+        <Button Variant="ButtonVariant.Ghost" OnClick="ToggleAsync">Toggle theme</Button>
+
+        @code {
+            private async Task ToggleAsync()
+            {
+                var current = await JS.InvokeAsync<string>("theme.get");
+                await JS.InvokeVoidAsync("theme.set", current == "dark" ? "light" : "dark");
+            }
+        }
+        """;
+
+    private const string OverrideCode = """
+        :root {
+            --trazos-olive: #3F7D5E;
+        }
+
+        [data-theme="dark"] {
+            --trazos-olive: #7CC09D;
+        }
+        """;
+}

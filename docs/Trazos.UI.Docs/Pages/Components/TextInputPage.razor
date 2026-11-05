@@ -1,0 +1,87 @@
+@page "/components/text-input"
+
+<DocPage Title="TextInput" Category="@L.T("Forms", "Formularios")"
+         Lead="@L.T("A labelled single-line input with helper text, validation errors and optional icons. Supports two-way binding with bind-Value.", "Un campo de una sola línea con etiqueta, texto de ayuda, errores de validación e íconos opcionales. Admite enlace bidireccional (binding) con bind-Value.")">
+
+    <DemoBlock Title="@L.T("Basic", "Básico")" Code="@BasicCode">
+        <div class="docs-stack">
+            <TextInput Label="@L.T("Full name", "Nombre completo")" Placeholder="Ana María Restrepo" HelperText="@L.T("As it appears on your ID.", "Tal como aparece en tu documento de identidad.")" @bind-Value="_name" />
+            <p class="docs-demo-output">@L.T("Value:", "Valor:") <strong>@(_name ?? "null")</strong></p>
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Validation", "Validación")" Description="@L.T("Error replaces the helper text and marks the field as invalid.", "Error reemplaza el texto de ayuda y marca el campo como inválido.")" Code="@ErrorCode">
+        <div class="docs-stack">
+            <TextInput Label="@L.T("Email", "Correo electrónico")" Type="email" Required="true" Placeholder="@EmailPlaceholder"
+                       @bind-Value="_email"
+                       Error="@EmailError">
+                <LeadingIcon>@Icons.Mail</LeadingIcon>
+            </TextInput>
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Disabled and read-only", "Deshabilitado y de solo lectura")" Code="@StatesCode">
+        <div class="docs-grid-2">
+            <TextInput Label="@L.T("Disabled", "Deshabilitado")" Value="@L.T("Not editable", "No editable")" Disabled="true" />
+            <TextInput Label="@L.T("Read-only", "Solo lectura")" Value="@L.T("Selectable, not editable", "Seleccionable, no editable")" ReadOnly="true" />
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private string? _name;
+    private string? _email = "not-an-email";
+
+    private string EmailPlaceholder => L.T("name@example.com", "nombre@ejemplo.com");
+
+    private string? EmailError =>
+        string.IsNullOrEmpty(_email) || _email.Contains('@') ? null : L.T("Enter a valid email address.", "Ingresa un correo electrónico válido.");
+
+    private const string BasicCode = """
+        <TextInput Label="Full name"
+                   Placeholder="Ana María Restrepo"
+                   HelperText="As it appears on your ID."
+                   @bind-Value="_name" />
+        """;
+
+    private const string ErrorCode = """
+        <TextInput Label="Email" Type="email" Required="true"
+                   @bind-Value="_email"
+                   Error="@EmailError">
+            <LeadingIcon><svg>…</svg></LeadingIcon>
+        </TextInput>
+
+        @code {
+            private string? _email;
+
+            private string? EmailError =>
+                string.IsNullOrEmpty(_email) || _email.Contains('@') ? null : "Enter a valid email address.";
+        }
+        """;
+
+    private const string StatesCode = """
+        <TextInput Label="Disabled" Value="Not editable" Disabled="true" />
+        <TextInput Label="Read-only" Value="Selectable, not editable" ReadOnly="true" />
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Value", "string?", null, L.T("Current value. Supports @bind-Value.", "Valor actual. Admite @bind-Value.")),
+        new("ValueChanged", "EventCallback<string?>", null, L.T("Raised when the value changes.", "Se dispara cuando cambia el valor.")),
+        new("Label", "string?", null, L.T("Visible label linked to the input.", "Etiqueta visible vinculada al campo.")),
+        new("Type", "string", "\"text\"", L.T("Native input type: text, email, password, number, date…", "Tipo nativo del input: text, email, password, number, date…")),
+        new("Placeholder", "string?", null, L.T("Placeholder text.", "Texto de marcador de posición.")),
+        new("HelperText", "string?", null, L.T("Hint below the field. Hidden while there is an error.", "Ayuda debajo del campo. Se oculta mientras haya un error.")),
+        new("Error", "string?", null, L.T("Error message. Marks the field as invalid.", "Mensaje de error. Marca el campo como inválido.")),
+        new("Required", "bool", "false", L.T("Shows an asterisk next to the label. It does not add the native required attribute.", "Muestra un asterisco junto a la etiqueta. No agrega el atributo nativo required.")),
+        new("Disabled", "bool", "false", L.T("Disables the field.", "Deshabilita el campo.")),
+        new("ReadOnly", "bool", "false", L.T("Makes the field read-only.", "Hace que el campo sea de solo lectura.")),
+        new("LeadingIcon", "RenderFragment?", null, L.T("Icon inside the field, on the left.", "Ícono dentro del campo, a la izquierda.")),
+        new("TrailingIcon", "RenderFragment?", null, L.T("Icon inside the field, on the right.", "Ícono dentro del campo, a la derecha.")),
+        new("Id", "string", "generated", L.T("Id of the input, used by the label.", "Id del input, usado por la etiqueta.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra attributes for the <input>.", "Atributos adicionales para el <input>.")),
+    ];
+}

@@ -1,0 +1,126 @@
+@page "/components/data-table"
+
+<DocPage Title="DataTable" Category="@L.T("Display", "Visualización")"
+         Lead="@L.T("A generic, responsive table with loading skeletons, an empty state and optional row clicks.", "Una tabla genérica y adaptable con esqueletos de carga, un estado vacío y clic opcional en las filas.")">
+
+    <DemoBlock Title="@L.T("Rows and row clicks", "Filas y clic en filas")" Code="@BasicCode">
+        <div class="docs-stack">
+            <div class="docs-row">
+                <Button Size="ButtonSize.Small" Variant="ButtonVariant.Outline" OnClick="ReloadAsync">@L.T("Simulate loading", "Simular carga")</Button>
+                <Button Size="ButtonSize.Small" Variant="ButtonVariant.Ghost" OnClick="ToggleEmpty">
+                    @(_people.Count == 0 ? L.T("Restore rows", "Restaurar filas") : L.T("Clear rows", "Vaciar filas"))
+                </Button>
+            </div>
+
+            <DataTable TItem="Person" Items="_people" Loading="_loading" OnRowClick="p => _selected = p">
+                <TableHeader>
+                    <th>@L.T("Name", "Nombre")</th>
+                    <th>@L.T("Team", "Equipo")</th>
+                    <th>@L.T("Status", "Estado")</th>
+                </TableHeader>
+                <RowTemplate Context="person">
+                    <td>@person.Name</td>
+                    <td>@person.Group</td>
+                    <td>
+                        <Badge Variant="@(person.Active ? BadgeVariant.Success : BadgeVariant.Neutral)">
+                            @(person.Active ? L.T("Active", "Activo") : L.T("Inactive", "Inactivo"))
+                        </Badge>
+                    </td>
+                </RowTemplate>
+            </DataTable>
+
+            <p class="docs-demo-output">@L.T("Selected row:", "Fila seleccionada:") <strong>@(_selected?.Name ?? L.T("none", "ninguna"))</strong></p>
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Custom empty content", "Contenido vacío personalizado")" Code="@EmptyCode">
+        <div class="docs-stack">
+            <DataTable TItem="Person" Items="Array.Empty<Person>()">
+                <TableHeader>
+                    <th>@L.T("Name", "Nombre")</th>
+                    <th>@L.T("Team", "Equipo")</th>
+                </TableHeader>
+                <RowTemplate Context="person">
+                    <td>@person.Name</td>
+                    <td>@person.Group</td>
+                </RowTemplate>
+                <EmptyContent>
+                    <EmptyState Compact="true" Title="@L.T("No members found", "No se encontraron miembros")" Description="@L.T("Try another filter.", "Prueba con otro filtro.")">
+                        <Icon>@Icons.User</Icon>
+                    </EmptyState>
+                </EmptyContent>
+            </DataTable>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private sealed record Person(string Name, string Group, bool Active);
+
+    private List<Person> Seed =>
+    [
+        new("Ana María Restrepo", L.T("Design", "Diseño"), true),
+        new("Julián Ospina", L.T("Engineering", "Ingeniería"), true),
+        new("Luisa Fernanda Gil", L.T("Marketing", "Marketing"), false),
+        new("Tomás Arango", L.T("Design", "Diseño"), true),
+    ];
+
+    private List<Person> _people = [];
+    private bool _loading;
+    private Person? _selected;
+
+    protected override void OnInitialized() => _people = Seed;
+
+    private async Task ReloadAsync()
+    {
+        _loading = true;
+        await Task.Delay(1200);
+        _loading = false;
+    }
+
+    private void ToggleEmpty() => _people = _people.Count == 0 ? [.. Seed] : [];
+
+    private const string BasicCode = """
+        <DataTable TItem="Person" Items="_people" Loading="_loading" OnRowClick="p => _selected = p">
+            <TableHeader>
+                <th>Name</th>
+                <th>Team</th>
+                <th>Status</th>
+            </TableHeader>
+            <RowTemplate Context="person">
+                <td>@person.Name</td>
+                <td>@person.Group</td>
+                <td>
+                    <Badge Variant="@(person.Active ? BadgeVariant.Success : BadgeVariant.Neutral)">
+                        @(person.Active ? "Active" : "Inactive")
+                    </Badge>
+                </td>
+            </RowTemplate>
+        </DataTable>
+        """;
+
+    private const string EmptyCode = """
+        <DataTable TItem="Person" Items="_people">
+            <TableHeader>…</TableHeader>
+            <RowTemplate Context="person">…</RowTemplate>
+            <EmptyContent>
+                <EmptyState Compact="true" Title="No members found" Description="Try another filter." />
+            </EmptyContent>
+        </DataTable>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Items", "IEnumerable<TItem>?", null, L.T("Rows to render. Null or empty shows the empty state.", "Filas a renderizar. Si es null o está vacío, muestra el estado vacío.")),
+        new("TableHeader", "RenderFragment?", null, L.T("Header cells (<th>). The <tr> is provided.", "Celdas de encabezado (<th>). El <tr> ya se incluye.")),
+        new("RowTemplate", "RenderFragment<TItem>", "required", L.T("Cells (<td>) for one row. The <tr> is provided.", "Celdas (<td>) de una fila. El <tr> ya se incluye.")),
+        new("EmptyContent", "RenderFragment?", null, L.T("Replaces the default empty message.", "Reemplaza el mensaje vacío predeterminado.")),
+        new("EmptyMessage", "string", "\"No hay registros disponibles.\"", L.T("Default empty message.", "Mensaje vacío predeterminado.")),
+        new("Loading", "bool", "false", L.T("Shows skeleton rows instead of data.", "Muestra filas esqueleto en lugar de datos.")),
+        new("LoadingRows", "int", "3", L.T("Number of skeleton rows while loading.", "Cantidad de filas esqueleto mientras carga.")),
+        new("OnRowClick", "EventCallback<TItem>", null, L.T("Makes rows interactive and reports the clicked item.", "Hace las filas interactivas e informa el elemento en el que se hizo clic.")),
+        new("Class", "string?", null, L.T("Extra CSS classes on the wrapper.", "Clases CSS adicionales en el contenedor.")),
+    ];
+}

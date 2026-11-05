@@ -1,0 +1,29 @@
+@page "/components/whatsapp-button"
+
+<DocPage Title="WhatsAppButton" Category="@L.T("Actions", "Acciones")"
+         Lead="@L.T("Opens a WhatsApp chat in a new tab. Only the digits of the number are used, a leading 0 is dropped and DefaultCountryCode is prepended when the number does not already start with it.", "Abre un chat de WhatsApp en una pestaña nueva. Solo se usan los dígitos del número, se elimina un 0 inicial y se antepone DefaultCountryCode cuando el número no empieza ya con él.")">
+
+    <DemoBlock Title="@L.T("Icon only", "Solo ícono")" Code="@IconCode">
+        <WhatsAppButton PhoneNumber="300 123 4567" />
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("With the number", "Con el número")" Code="@PhoneCode">
+        <WhatsAppButton PhoneNumber="+57 300 123 4567" ShowPhone="true" />
+    </DemoBlock>
+
+    <div class="docs-note"><Tr><En>Nothing is rendered when <code>PhoneNumber</code> is null or empty.</En><Es>No se renderiza nada cuando <code>PhoneNumber</code> es null o está vacío.</Es></Tr></div>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private const string IconCode = """<WhatsAppButton PhoneNumber="300 123 4567" />""";
+    private const string PhoneCode = """<WhatsAppButton PhoneNumber="+57 300 123 4567" ShowPhone="true" />""";
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("PhoneNumber", "string", "required", L.T("Phone number in any format. Only its digits are used.", "Número de teléfono en cualquier formato. Solo se usan sus dígitos.")),
+        new("DefaultCountryCode", "string", "\"57\"", L.T("Prefix added to numbers without a country code.", "Prefijo que se agrega a los números sin código de país.")),
+        new("ShowPhone", "bool", "false", L.T("Shows the number next to the icon.", "Muestra el número junto al ícono.")),
+    ];
+}

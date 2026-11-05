@@ -1,0 +1,53 @@
+@page "/components/badge"
+
+<DocPage Title="Badge" Category="@L.T("Display", "Visualización")"
+         Lead="@L.T("A small status tag for states, categories and counts.", "Una pequeña etiqueta para estados, categorías y conteos.")">
+
+    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@VariantsCode">
+        @foreach (var variant in Enum.GetValues<BadgeVariant>())
+        {
+            <Badge Variant="variant">@variant</Badge>
+        }
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("With an icon", "Con un ícono")" Code="@IconCode">
+        <Badge Variant="BadgeVariant.Success">
+            <LeadingIcon>@Icons.Check</LeadingIcon>
+            <ChildContent>@L.T("Confirmed", "Confirmado")</ChildContent>
+        </Badge>
+        <Badge Variant="BadgeVariant.Lavender">
+            <LeadingIcon>@Icons.Calendar</LeadingIcon>
+            <ChildContent>@L.T("Weekly", "Semanal")</ChildContent>
+        </Badge>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private const string VariantsCode = """
+        <Badge Variant="BadgeVariant.Success">Success</Badge>
+        <Badge Variant="BadgeVariant.Warning">Warning</Badge>
+        <Badge Variant="BadgeVariant.Error">Error</Badge>
+        <Badge Variant="BadgeVariant.Info">Info</Badge>
+        <Badge Variant="BadgeVariant.Lavender">Lavender</Badge>
+        <Badge Variant="BadgeVariant.Cream">Cream</Badge>
+        <Badge Variant="BadgeVariant.Neutral">Neutral</Badge>
+        """;
+
+    private const string IconCode = """
+        <Badge Variant="BadgeVariant.Success">
+            <LeadingIcon><svg>…</svg></LeadingIcon>
+            <ChildContent>Confirmed</ChildContent>
+        </Badge>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Variant", "BadgeVariant", "Neutral", L.T("Success, Warning, Error, Info, Lavender, Cream or Neutral.", "Success, Warning, Error, Info, Lavender, Cream o Neutral.")),
+        new("LeadingIcon", "RenderFragment?", null, L.T("Icon rendered before the text.", "Ícono que se renderiza antes del texto.")),
+        new("ChildContent", "RenderFragment?", null, L.T("Badge text.", "Texto de la insignia.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+}

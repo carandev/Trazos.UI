@@ -1,0 +1,48 @@
+@page "/components/text-area"
+
+<DocPage Title="TextArea" Category="@L.T("Forms", "Formularios")"
+         Lead="@L.T("A labelled multi-line input with the same helper and error behavior as TextInput.", "Un campo de varias líneas con etiqueta, con el mismo comportamiento de ayuda y error que TextInput.")">
+
+    <DemoBlock Code="@Code">
+        <div class="docs-stack">
+            <TextArea Label="@L.T("Feedback", "Comentarios")"
+                      Placeholder="@L.T("Tell us what you think…", "Cuéntanos qué opinas…")"
+                      Rows="4"
+                      HelperText="@L.T($"{_text?.Length ?? 0} / 280 characters", $"{_text?.Length ?? 0} / 280 caracteres")"
+                      Error="@(_text?.Length > 280 ? L.T("Keep it under 280 characters.", "Mantenlo por debajo de 280 caracteres.") : null)"
+                      @bind-Value="_text" />
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private string? _text;
+
+    private const string Code = """
+        <TextArea Label="Feedback"
+                  Placeholder="Tell us what you think…"
+                  Rows="4"
+                  HelperText="@($"{_text?.Length ?? 0} / 280 characters")"
+                  Error="@(_text?.Length > 280 ? "Keep it under 280 characters." : null)"
+                  @bind-Value="_text" />
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Value", "string?", null, L.T("Current value. Supports @bind-Value.", "Valor actual. Admite @bind-Value.")),
+        new("ValueChanged", "EventCallback<string?>", null, L.T("Raised when the value changes.", "Se dispara cuando cambia el valor.")),
+        new("Rows", "int", "4", L.T("Visible text lines.", "Líneas de texto visibles.")),
+        new("Label", "string?", null, L.T("Visible label.", "Etiqueta visible.")),
+        new("Placeholder", "string?", null, L.T("Placeholder text.", "Texto de marcador de posición.")),
+        new("HelperText", "string?", null, L.T("Hint below the field.", "Ayuda debajo del campo.")),
+        new("Error", "string?", null, L.T("Error message.", "Mensaje de error.")),
+        new("Required", "bool", "false", L.T("Shows an asterisk next to the label. It does not add the native required attribute.", "Muestra un asterisco junto a la etiqueta. No agrega el atributo nativo required.")),
+        new("Disabled", "bool", "false", L.T("Disables the field.", "Deshabilita el campo.")),
+        new("ReadOnly", "bool", "false", L.T("Makes the field read-only.", "Hace que el campo sea de solo lectura.")),
+        new("Id", "string", "generated", L.T("Id of the textarea.", "Id del textarea.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra attributes for the <textarea>.", "Atributos adicionales para el <textarea>.")),
+    ];
+}

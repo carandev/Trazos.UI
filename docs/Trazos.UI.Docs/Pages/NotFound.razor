@@ -1,0 +1,12 @@
+@page "/not-found"
+@layout MainLayout
+
+<DocPage Title="@L.T("Page not found", "Página no encontrada")"
+         Lead="@L.T("The page you are looking for does not exist or was moved.", "La página que buscas no existe o se movió.")">
+    <EmptyState Title="@L.T("Nothing here yet", "Aquí no hay nada todavía")"
+                Description="@L.T("Pick a component from the sidebar or go back to the introduction.", "Elige un componente en la barra lateral o vuelve a la introducción.")">
+        <Actions>
+            <a href="" class="docs-link-button">@L.T("Back to introduction", "Volver a la introducción")</a>
+        </Actions>
+    </EmptyState>
+</DocPage>

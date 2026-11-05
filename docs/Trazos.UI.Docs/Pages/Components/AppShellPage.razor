@@ -1,0 +1,71 @@
+@page "/components/app-shell"
+
+<DocPage Title="AppShell" Category="@L.T("Navigation", "Navegación")"
+         Lead="@L.T("A ready-made application layout: desktop sidebar, top bar, and a mobile drawer that reuses the sidebar. It also hosts the global Toast and confirm dialog slots.", "Un layout de aplicación listo para usar: barra lateral en escritorio, barra superior y un panel lateral móvil que reutiliza la barra lateral. También aloja los contenedores globales de Toast y del diálogo de confirmación.")">
+
+    <div class="docs-note">
+        <Tr>
+            <En>You are looking at it: this documentation site is built with <code>AppShell</code>.
+                Resize the window below 768px to see the sidebar move into the drawer.</En>
+            <Es>Lo estás viendo: este sitio de documentación está construido con <code>AppShell</code>.
+                Reduce la ventana a menos de 768px para ver cómo la barra lateral pasa al panel lateral.</Es>
+        </Tr>
+    </div>
+
+    <h2 class="docs-h2">@L.T("Usage", "Uso")</h2>
+    <p><Tr><En>Use it as the root of your <code>MainLayout</code>:</En><Es>Úsalo como raíz de tu <code>MainLayout</code>:</Es></Tr></p>
+    <CodeBlock Code="@LayoutCode" />
+
+    <h2 class="docs-h2">@L.T("Environment badge", "Insignia del entorno")</h2>
+    <p>
+        <Tr>
+            <En>When <code>TrazosUIOptions.IsDevelopment</code> is true, a badge with the environment name appears next to
+                the brand. Configure it with <a href="installation">AddTrazosUI</a>.</En>
+            <Es>Cuando <code>TrazosUIOptions.IsDevelopment</code> es true, aparece una insignia con el nombre del entorno junto a
+                la marca. Configúrala con <a href="installation">AddTrazosUI</a>.</Es>
+        </Tr>
+    </p>
+
+    <ApiTable Params="Params" />
+    <ApiTable Title="@L.T("Methods", "Métodos")" Params="Methods" />
+</DocPage>
+
+@code {
+    private const string LayoutCode = """
+        @inherits LayoutComponentBase
+
+        <AppShell>
+            <Brand>
+                <a href="/" class="brand">My app</a>
+            </Brand>
+            <TopBar>
+                <UserMenu />
+            </TopBar>
+            <Sidebar>
+                <NavLink href="/">Home</NavLink>
+                <NavLink href="/events">Events</NavLink>
+            </Sidebar>
+            <Body>
+                @Body
+            </Body>
+        </AppShell>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Brand", "RenderFragment?", null, L.T("Logo or name in the top bar. Also used as the drawer header.", "Logo o nombre en la barra superior. También se usa como encabezado del panel lateral.")),
+        new("Sidebar", "RenderFragment?", null, L.T("Navigation shown on desktop and, by default, inside the mobile drawer.", "Navegación que se muestra en escritorio y, por defecto, dentro del panel lateral móvil.")),
+        new("TopBar", "RenderFragment?", null, L.T("Content on the right side of the top bar.", "Contenido del lado derecho de la barra superior.")),
+        new("DrawerHeader", "RenderFragment?", null, L.T("Overrides Brand in the drawer header.", "Reemplaza a Brand en el encabezado del panel lateral.")),
+        new("DrawerContent", "RenderFragment?", null, L.T("Overrides Sidebar inside the drawer.", "Reemplaza a Sidebar dentro del panel lateral.")),
+        new("Body", "RenderFragment?", null, L.T("Page content.", "Contenido de la página.")),
+        new("ContainerClass", "string", "\"\"", L.T("Extra classes for the content container (max width 72rem).", "Clases adicionales para el contenedor del contenido (ancho máximo de 72rem).")),
+    ];
+
+    private IReadOnlyList<ApiParam> Methods =>
+    [
+        new("OpenDrawer()", "void", null, L.T("Opens the mobile drawer.", "Abre el panel lateral móvil.")),
+        new("CloseDrawer()", "void", null, L.T("Closes the mobile drawer, for example after navigating.", "Cierra el panel lateral móvil, por ejemplo después de navegar.")),
+        new("ToggleDrawer()", "void", null, L.T("Toggles the mobile drawer.", "Abre o cierra el panel lateral móvil.")),
+    ];
+}

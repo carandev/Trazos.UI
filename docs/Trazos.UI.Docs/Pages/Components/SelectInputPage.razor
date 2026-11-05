@@ -1,0 +1,65 @@
+@page "/components/select-input"
+
+<DocPage Title="SelectInput" Category="@L.T("Forms", "Formularios")"
+         Lead="@L.T("A styled native select. Options are plain <option> elements, so keyboard and mobile pickers work out of the box.", "Un select nativo con estilos. Las opciones son elementos <option> comunes, así que el teclado y los selectores móviles funcionan sin configuración adicional.")">
+
+    <DemoBlock Code="@Code">
+        <div class="docs-stack">
+            <SelectInput Label="@L.T("Team", "Equipo")" Placeholder="@L.T("Choose a team", "Elige un equipo")" Required="true" @bind-Value="_team">
+                <option value="design">@L.T("Design", "Diseño")</option>
+                <option value="engineering">@L.T("Engineering", "Ingeniería")</option>
+                <option value="marketing">@L.T("Marketing", "Marketing")</option>
+            </SelectInput>
+            <p class="docs-demo-output">@L.T("Value:", "Valor:") <strong>@(_team ?? "null")</strong></p>
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Error and disabled", "Error y deshabilitado")" Code="@StatesCode">
+        <div class="docs-grid-2">
+            <SelectInput Label="@L.T("Shift", "Turno")" Placeholder="@L.T("Pick a shift", "Elige un turno")" Error="@L.T("Choose a shift to continue.", "Elige un turno para continuar.")">
+                <option value="am">@L.T("Morning", "Mañana")</option>
+                <option value="pm">@L.T("Afternoon", "Tarde")</option>
+            </SelectInput>
+            <SelectInput Label="@L.T("Disabled", "Deshabilitado")" Placeholder="@L.T("Unavailable", "No disponible")" Disabled="true" />
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private string? _team;
+
+    private const string Code = """
+        <SelectInput Label="Team" Placeholder="Choose a team" Required="true" @bind-Value="_team">
+            <option value="design">Design</option>
+            <option value="engineering">Engineering</option>
+            <option value="marketing">Marketing</option>
+        </SelectInput>
+        """;
+
+    private const string StatesCode = """
+        <SelectInput Label="Shift" Placeholder="Pick a shift" Error="Choose a shift to continue.">
+            <option value="am">Morning</option>
+            <option value="pm">Afternoon</option>
+        </SelectInput>
+        <SelectInput Label="Disabled" Placeholder="Unavailable" Disabled="true" />
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Value", "string?", null, L.T("Selected option value. Supports @bind-Value.", "Valor de la opción seleccionada. Admite @bind-Value.")),
+        new("ValueChanged", "EventCallback<string?>", null, L.T("Raised when the selection changes.", "Se dispara cuando cambia la selección.")),
+        new("ChildContent", "RenderFragment?", null, L.T("The <option> elements.", "Los elementos <option>.")),
+        new("Placeholder", "string?", null, L.T("Disabled first option shown while nothing is selected.", "Primera opción deshabilitada que se muestra mientras no hay nada seleccionado.")),
+        new("Label", "string?", null, L.T("Visible label.", "Etiqueta visible.")),
+        new("HelperText", "string?", null, L.T("Hint below the field.", "Ayuda debajo del campo.")),
+        new("Error", "string?", null, L.T("Error message.", "Mensaje de error.")),
+        new("Required", "bool", "false", L.T("Shows an asterisk next to the label. It does not add the native required attribute.", "Muestra un asterisco junto a la etiqueta. No agrega el atributo nativo required.")),
+        new("Disabled", "bool", "false", L.T("Disables the field.", "Deshabilita el campo.")),
+        new("LeadingIcon", "RenderFragment?", null, L.T("Icon inside the field, on the left.", "Ícono dentro del campo, a la izquierda.")),
+        new("Id", "string", "generated", L.T("Id of the select.", "Id del select.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra attributes for the <select>.", "Atributos adicionales para el <select>.")),
+    ];
+}

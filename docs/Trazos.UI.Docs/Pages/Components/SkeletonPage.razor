@@ -1,0 +1,59 @@
+@page "/components/skeleton"
+
+<DocPage Title="Skeleton" Category="@L.T("Overlays & feedback", "Superposiciones y avisos")"
+         Lead="@L.T("Animated placeholders that preserve layout while content loads.", "Marcadores animados que conservan el layout mientras carga el contenido.")">
+
+    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@VariantsCode">
+        <div class="docs-stack">
+            <Skeleton Variant="SkeletonVariant.Text" Count="3" />
+            <div class="docs-row">
+                <Skeleton Variant="SkeletonVariant.Circular" Width="3rem" Height="3rem" />
+                <Skeleton Variant="SkeletonVariant.Rounded" Width="8rem" Height="2.5rem" />
+            </div>
+            <Skeleton Variant="SkeletonVariant.Card" Height="8rem" />
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Composing a placeholder", "Componer un marcador")" Code="@ComposeCode">
+        <div class="docs-grid-2">
+            @for (var i = 0; i < 2; i++)
+            {
+                <Card>
+                    <div class="docs-row">
+                        <Skeleton Variant="SkeletonVariant.Circular" Width="2.5rem" Height="2.5rem" />
+                        <Skeleton Variant="SkeletonVariant.Text" Width="60%" />
+                    </div>
+                    <Skeleton Variant="SkeletonVariant.Text" Count="2" Class="docs-skeleton-gap" />
+                </Card>
+            }
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private const string VariantsCode = """
+        <Skeleton Variant="SkeletonVariant.Text" Count="3" />
+        <Skeleton Variant="SkeletonVariant.Circular" Width="3rem" Height="3rem" />
+        <Skeleton Variant="SkeletonVariant.Rounded" Width="8rem" Height="2.5rem" />
+        <Skeleton Variant="SkeletonVariant.Card" Height="8rem" />
+        """;
+
+    private const string ComposeCode = """
+        <Card>
+            <Skeleton Variant="SkeletonVariant.Circular" Width="2.5rem" Height="2.5rem" />
+            <Skeleton Variant="SkeletonVariant.Text" Width="60%" />
+            <Skeleton Variant="SkeletonVariant.Text" Count="2" />
+        </Card>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Variant", "SkeletonVariant", "Text", L.T("Text, Circular, Card or Rounded.", "Text, Circular, Card o Rounded.")),
+        new("Width", "string?", null, L.T("Any CSS width, such as \"60%\" or \"8rem\".", "Cualquier ancho CSS, como \"60%\" o \"8rem\".")),
+        new("Height", "string?", null, L.T("Any CSS height.", "Cualquier alto CSS.")),
+        new("Count", "int", "1", L.T("Number of placeholders to repeat.", "Cantidad de marcadores a repetir.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+    ];
+}

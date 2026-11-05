@@ -1,0 +1,117 @@
+@page "/components/button"
+
+<DocPage Title="Button" Category="@L.T("Actions", "Acciones")"
+         Lead="@L.T("Triggers an action. Seven variants, three sizes, optional icons and a built-in loading state.", "Dispara una acción. Siete variantes, tres tamaños, íconos opcionales y un estado de carga integrado.")">
+
+    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@VariantsCode">
+        @foreach (var variant in Enum.GetValues<ButtonVariant>())
+        {
+            <Button Variant="variant">@variant</Button>
+        }
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Sizes", "Tamaños")" Code="@SizesCode">
+        <Button Size="ButtonSize.Small">@L.T("Small", "Pequeño")</Button>
+        <Button Size="ButtonSize.Medium">@L.T("Medium", "Mediano")</Button>
+        <Button Size="ButtonSize.Large">@L.T("Large", "Grande")</Button>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Icons", "Íconos")" Description="@L.T("LeadingIcon and TrailingIcon accept any markup, usually an inline SVG.", "LeadingIcon y TrailingIcon aceptan cualquier marcado, normalmente un SVG en línea.")" Code="@IconsCode">
+        <Button Variant="ButtonVariant.Primary">
+            <LeadingIcon>@Icons.Plus</LeadingIcon>
+            <ChildContent>@L.T("New event", "Nuevo evento")</ChildContent>
+        </Button>
+        <Button Variant="ButtonVariant.Outline">
+            <ChildContent>@L.T("Continue", "Continuar")</ChildContent>
+            <TrailingIcon>@Icons.Arrow</TrailingIcon>
+        </Button>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Loading and disabled", "Carga y deshabilitado")" Description="@L.T("Loading shows a spinner and blocks clicks until the work finishes.", "Loading muestra un indicador de carga y bloquea los clics hasta que termina el trabajo.")" Code="@LoadingCode">
+        <Button Variant="ButtonVariant.Wine" Loading="_saving" OnClick="SaveAsync">
+            @(_saving ? L.T("Saving…", "Guardando…") : L.T("Save changes", "Guardar cambios"))
+        </Button>
+        <Button Disabled="true">@L.T("Disabled", "Deshabilitado")</Button>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+    <ApiTable Title="@L.T("Enums", "Enumeraciones")" Params="Enums" />
+</DocPage>
+
+@code {
+    private bool _saving;
+
+    private async Task SaveAsync()
+    {
+        _saving = true;
+        await Task.Delay(1500);
+        _saving = false;
+    }
+
+    private const string VariantsCode = """
+        <Button Variant="ButtonVariant.Primary">Primary</Button>
+        <Button Variant="ButtonVariant.Wine">Wine</Button>
+        <Button Variant="ButtonVariant.Secondary">Secondary</Button>
+        <Button Variant="ButtonVariant.Outline">Outline</Button>
+        <Button Variant="ButtonVariant.Cream">Cream</Button>
+        <Button Variant="ButtonVariant.Lavender">Lavender</Button>
+        <Button Variant="ButtonVariant.Ghost">Ghost</Button>
+        """;
+
+    private const string SizesCode = """
+        <Button Size="ButtonSize.Small">Small</Button>
+        <Button Size="ButtonSize.Medium">Medium</Button>
+        <Button Size="ButtonSize.Large">Large</Button>
+        """;
+
+    private const string IconsCode = """
+        <Button Variant="ButtonVariant.Primary">
+            <LeadingIcon><svg>…</svg></LeadingIcon>
+            <ChildContent>New event</ChildContent>
+        </Button>
+
+        <Button Variant="ButtonVariant.Outline">
+            <ChildContent>Continue</ChildContent>
+            <TrailingIcon><svg>…</svg></TrailingIcon>
+        </Button>
+        """;
+
+    private const string LoadingCode = """
+        <Button Variant="ButtonVariant.Wine" Loading="_saving" OnClick="SaveAsync">
+            @(_saving ? "Saving…" : "Save changes")
+        </Button>
+        <Button Disabled="true">Disabled</Button>
+
+        @code {
+            private bool _saving;
+
+            private async Task SaveAsync()
+            {
+                _saving = true;
+                await Api.SaveAsync();
+                _saving = false;
+            }
+        }
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Variant", "ButtonVariant", "Primary", L.T("Visual style of the button.", "Estilo visual del botón.")),
+        new("Size", "ButtonSize", "Medium", L.T("Height, padding and font size.", "Altura, relleno y tamaño de fuente.")),
+        new("Type", "string", "\"button\"", L.T("Native type attribute: button, submit or reset.", "Atributo type nativo: button, submit o reset.")),
+        new("Disabled", "bool", "false", L.T("Disables the button.", "Deshabilita el botón.")),
+        new("Loading", "bool", "false", L.T("Shows a spinner and disables the button.", "Muestra un indicador de carga y deshabilita el botón.")),
+        new("OnClick", "EventCallback<MouseEventArgs>", null, L.T("Raised when the button is clicked.", "Se dispara al hacer clic en el botón.")),
+        new("LeadingIcon", "RenderFragment?", null, L.T("Content rendered before the label.", "Contenido que se renderiza antes de la etiqueta.")),
+        new("TrailingIcon", "RenderFragment?", null, L.T("Content rendered after the label.", "Contenido que se renderiza después de la etiqueta.")),
+        new("ChildContent", "RenderFragment?", null, L.T("Button label.", "Etiqueta del botón.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Any other attribute is splatted onto the <button>.", "Cualquier otro atributo se aplica directamente al <button>.")),
+    ];
+
+    private IReadOnlyList<ApiParam> Enums =>
+    [
+        new("ButtonVariant", "enum", null, "Primary, Wine, Secondary, Outline, Cream, Lavender, Ghost."),
+        new("ButtonSize", "enum", null, "Small, Medium, Large."),
+    ];
+}

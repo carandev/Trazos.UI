@@ -1,0 +1,41 @@
+@page "/components/toast"
+
+<DocPage Title="Toast" Category="@L.T("Overlays & feedback", "Superposiciones y avisos")"
+         Lead="@L.T("Short, non-blocking notifications. Call the static helpers from anywhere; each toast closes on its own after five seconds.", "Notificaciones breves que no bloquean la interfaz (toasts). Llama a los métodos estáticos desde cualquier lugar; cada toast se cierra solo después de cinco segundos.")">
+
+    <DemoBlock Code="@Code">
+        <Button Variant="ButtonVariant.Primary" OnClick="@(() => Toast.ShowSuccess(L.T("Your sign-up was saved.", "Tu inscripción se guardó."), L.T("Done", "Listo")))">@L.T("Success", "Éxito")</Button>
+        <Button Variant="ButtonVariant.Wine" OnClick="@(() => Toast.ShowError(L.T("We could not reach the server.", "No pudimos conectar con el servidor."), L.T("Error", "Error")))">@L.T("Error", "Error")</Button>
+        <Button Variant="ButtonVariant.Cream" OnClick="@(() => Toast.ShowWarning(L.T("Only two seats left.", "Solo quedan dos lugares.")))">@L.T("Warning", "Advertencia")</Button>
+        <Button Variant="ButtonVariant.Lavender" OnClick="@(() => Toast.ShowInfo(L.T("The meeting starts at 9:00 am.", "La reunión comienza a las 9:00 a. m.")))">@L.T("Info", "Información")</Button>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("Setup", "Configuración")</h2>
+    <p>
+        <Tr>
+            <En>Toasts render in a single <code>&lt;Toast /&gt;</code> container. <code>AppShell</code> already includes it;
+                with a custom layout, render it once. The helpers use the most recently rendered container.</En>
+            <Es>Los toasts se renderizan en un único contenedor <code>&lt;Toast /&gt;</code>. <code>AppShell</code> ya lo incluye;
+                con un layout propio, renderízalo una sola vez. Los métodos usan el contenedor renderizado más recientemente.</Es>
+        </Tr>
+    </p>
+
+    <ApiTable Title="@L.T("Static methods", "Métodos estáticos")" Params="Params" />
+</DocPage>
+
+@code {
+    private const string Code = """
+        Toast.ShowSuccess("Your sign-up was saved.", "Done");
+        Toast.ShowError("We could not reach the server.", "Error");
+        Toast.ShowWarning("Only two seats left.");
+        Toast.ShowInfo("The meeting starts at 9:00 am.");
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("ShowSuccess(message, title?)", "void", null, L.T("Green confirmation.", "Confirmación en verde.")),
+        new("ShowError(message, title?)", "void", null, L.T("Red error.", "Error en rojo.")),
+        new("ShowWarning(message, title?)", "void", null, L.T("Amber warning.", "Advertencia en ámbar.")),
+        new("ShowInfo(message, title?)", "void", null, L.T("Neutral information.", "Información neutral.")),
+    ];
+}

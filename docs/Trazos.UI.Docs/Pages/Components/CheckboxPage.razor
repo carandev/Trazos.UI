@@ -1,0 +1,50 @@
+@page "/components/checkbox"
+
+<DocPage Title="Checkbox" Category="@L.T("Forms", "Formularios")"
+         Lead="@L.T("A native checkbox with a hand-drawn look. Use Label for plain text or ChildContent for rich content such as links.", "Una casilla nativa con aspecto dibujado a mano. Usa Label para texto simple o ChildContent para contenido enriquecido, como enlaces.")">
+
+    <DemoBlock Code="@Code">
+        <div class="docs-stack">
+            <Checkbox Label="@L.T("Send me reminders before each event", "Envíame recordatorios antes de cada evento")" @bind-Value="_reminders" />
+            <Checkbox @bind-Value="_terms" Error="@(_terms ? null : L.T("You must accept to continue.", "Debes aceptar para continuar."))">
+                <Tr>
+                    <En>I accept the <a href="installation">community guidelines</a></En>
+                    <Es>Acepto las <a href="installation">normas de la comunidad</a></Es>
+                </Tr>
+            </Checkbox>
+            <Checkbox Label="@L.T("Disabled option", "Opción deshabilitada")" Disabled="true" Value="true" />
+            <p class="docs-demo-output">@L.T("Reminders:", "Recordatorios:") <strong>@_reminders</strong> · @L.T("Terms:", "Términos:") <strong>@_terms</strong></p>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private bool _reminders = true;
+    private bool _terms;
+
+    private const string Code = """
+        <Checkbox Label="Send me reminders before each event" @bind-Value="_reminders" />
+
+        <Checkbox @bind-Value="_terms" Error="@(_terms ? null : "You must accept to continue.")">
+            I accept the <a href="/guidelines">community guidelines</a>
+        </Checkbox>
+
+        <Checkbox Label="Disabled option" Disabled="true" Value="true" />
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Value", "bool", "false", L.T("Checked state. Supports @bind-Value.", "Estado marcado. Admite @bind-Value.")),
+        new("ValueChanged", "EventCallback<bool>", null, L.T("Raised when the state changes.", "Se dispara cuando cambia el estado.")),
+        new("Label", "string?", null, L.T("Plain text label.", "Etiqueta de texto simple.")),
+        new("ChildContent", "RenderFragment?", null, L.T("Rich label. Takes precedence over Label.", "Etiqueta enriquecida. Tiene prioridad sobre Label.")),
+        new("HelperText", "string?", null, L.T("Hint below the checkbox.", "Ayuda debajo de la casilla.")),
+        new("Error", "string?", null, L.T("Error message.", "Mensaje de error.")),
+        new("Disabled", "bool", "false", L.T("Disables the checkbox.", "Deshabilita la casilla.")),
+        new("Id", "string", "generated", L.T("Id of the input.", "Id del input.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra attributes for the <input>.", "Atributos adicionales para el <input>.")),
+    ];
+}

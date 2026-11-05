@@ -1,0 +1,117 @@
+@page "/tokens"
+
+<DocPage Title="@L.T("Design tokens", "Tokens de diseño")" Category="@L.T("Getting started", "Primeros pasos")"
+         Lead="@L.T("Every component reads from the same CSS custom properties declared in trazos.css. Use them in your own styles to stay on-brand.", "Todos los componentes leen las mismas propiedades personalizadas de CSS declaradas en trazos.css. Úsalas en tus propios estilos para mantener la identidad visual.")">
+
+    @foreach (var group in ColorGroups)
+    {
+        <h2 class="docs-h2">@group.Title</h2>
+        <div class="docs-swatches">
+            @foreach (var token in group.Tokens)
+            {
+                <div class="docs-swatch">
+                    <div class="docs-swatch-color" style="background-color: var(@token.Name)"></div>
+                    <div class="docs-swatch-meta">
+                        <code title="@token.Name">@token.Name</code>
+                        <span class="docs-muted">@token.Value</span>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <h2 class="docs-h2">@L.T("Typography", "Tipografía")</h2>
+    <div class="docs-stack">
+        @foreach (var font in Fonts)
+        {
+            <Card Variant="CardVariant.White">
+                <p class="docs-type-sample" style="font-family: var(@font.Name)">@font.Sample</p>
+                <p class="docs-muted"><code>@font.Name</code> · @font.Usage</p>
+            </Card>
+        }
+    </div>
+
+    <h2 class="docs-h2">@L.T("Sketch radii", "Radios de boceto")</h2>
+    <p>@L.T("Asymmetric border radii are what make the shapes look hand-drawn.", "Los radios de borde asimétricos son los que hacen que las formas parezcan dibujadas a mano.")</p>
+    <div class="docs-grid-2">
+        @foreach (var radius in Radii)
+        {
+            <div class="docs-token-box" style="border-radius: var(@radius)"><code>@radius</code></div>
+        }
+    </div>
+
+    <h2 class="docs-h2">@L.T("Warm shadows", "Sombras cálidas")</h2>
+    <div class="docs-grid-2">
+        @foreach (var shadow in Shadows)
+        {
+            <div class="docs-token-box" style="border: none; border-radius: var(--trazos-radius-sketch-card); box-shadow: var(@shadow)"><code>@shadow</code></div>
+        }
+    </div>
+
+    <h2 class="docs-h2">@L.T("Using the tokens", "Uso de los tokens")</h2>
+    <CodeBlock Language="css" Code="@UsageCode" />
+</DocPage>
+
+@code {
+    private sealed record Token(string Name, string Value);
+    private sealed record ColorGroup(string Title, IReadOnlyList<Token> Tokens);
+    private sealed record FontToken(string Name, string Sample, string Usage);
+
+    private IReadOnlyList<ColorGroup> ColorGroups =>
+    [
+        new(L.T("Ink", "Tinta"), [
+            new("--trazos-color-ink", "#2C221E"),
+            new("--trazos-color-ink-light", "#5A4C46"),
+            new("--trazos-color-ink-muted", "#8C7E77"),
+        ]),
+        new(L.T("Parchment", "Pergamino"), [
+            new("--trazos-color-parchment-50", "#FDFBF7"),
+            new("--trazos-color-parchment-100", "#FAF7F2"),
+            new("--trazos-color-parchment-200", "#F4ECE0"),
+            new("--trazos-color-parchment-300", "#E8DECE"),
+            new("--trazos-color-parchment-border", "#E5DACB"),
+        ]),
+        new(L.T("Accents", "Acentos"), [
+            new("--trazos-color-olive-500", "#4A8A6B"),
+            new("--trazos-color-olive-600", "#386F54"),
+            new("--trazos-color-wine-500", "#C0335C"),
+            new("--trazos-color-wine-600", "#9B1D43"),
+            new("--trazos-color-gold-500", "#D97706"),
+            new("--trazos-color-gold-600", "#B45309"),
+        ]),
+    ];
+
+    private IReadOnlyList<FontToken> Fonts =>
+    [
+        new("--trazos-font-display", L.T("Marcellus for headings", "Marcellus para encabezados"), L.T("Headings, badges and titles. Also available as the .trazos-heading class.", "Encabezados, insignias y títulos. También disponible como la clase .trazos-heading.")),
+        new("--trazos-font-hand", L.T("Caveat, a handwritten note", "Caveat, una nota escrita a mano"), L.T("Accents and annotations. Also available as the .trazos-handwriting class.", "Acentos y anotaciones. También disponible como la clase .trazos-handwriting.")),
+        new("--trazos-font-sans", L.T("Plus Jakarta Sans for reading", "Plus Jakarta Sans para la lectura"), L.T("Body text, inputs and buttons.", "Texto de cuerpo, campos y botones.")),
+    ];
+
+    private static readonly IReadOnlyList<string> Radii =
+    [
+        "--trazos-radius-sketch",
+        "--trazos-radius-sketch-card",
+        "--trazos-radius-sketch-sm",
+        "--trazos-radius-sketch-btn",
+    ];
+
+    private static readonly IReadOnlyList<string> Shadows =
+    [
+        "--trazos-shadow-sketch",
+        "--trazos-shadow-sketch-lg",
+        "--trazos-shadow-soft",
+        "--trazos-shadow-deep",
+    ];
+
+    private const string UsageCode = """
+        .my-panel {
+            background-color: var(--trazos-color-parchment-50);
+            border: 1.5px solid var(--trazos-color-parchment-border);
+            border-radius: var(--trazos-radius-sketch-card);
+            box-shadow: var(--trazos-shadow-soft);
+            color: var(--trazos-color-ink);
+            font-family: var(--trazos-font-sans);
+        }
+        """;
+}

@@ -1,0 +1,62 @@
+@page "/components/empty-state"
+
+<DocPage Title="EmptyState" Category="@L.T("Display", "Visualización")"
+         Lead="@L.T("A friendly placeholder for screens without data: what happened, why, and what to do next.", "Un marcador amigable para pantallas sin datos: qué pasó, por qué y qué hacer a continuación.")">
+
+    <DemoBlock Title="@L.T("Default", "Predeterminado")" Code="@DefaultCode">
+        <EmptyState Title="@L.T("No events yet", "Aún no hay eventos")"
+                    Description="@L.T("Create the first event of the month so your community can sign up.", "Crea el primer evento del mes para que tu comunidad pueda inscribirse.")">
+            <Icon>@Icons.Calendar</Icon>
+            <Actions>
+                <Button>
+                    <LeadingIcon>@Icons.Plus</LeadingIcon>
+                    <ChildContent>@L.T("Create event", "Crear evento")</ChildContent>
+                </Button>
+            </Actions>
+        </EmptyState>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Compact", "Compacto")" Description="@L.T("A tighter version for panels, tables and side columns.", "Una versión más ajustada para paneles, tablas y columnas laterales.")" Code="@CompactCode">
+        <EmptyState Compact="true"
+                    IconVariant="IconBoxVariant.Lavender"
+                    Title="@L.T("Inbox is clear", "La bandeja está vacía")"
+                    Description="@L.T("New messages will appear here.", "Los mensajes nuevos aparecerán aquí.")">
+            <Icon>@Icons.Inbox</Icon>
+        </EmptyState>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private const string DefaultCode = """
+        <EmptyState Title="No events yet"
+                    Description="Create the first event of the month so your community can sign up.">
+            <Icon><svg>…</svg></Icon>
+            <Actions>
+                <Button>Create event</Button>
+            </Actions>
+        </EmptyState>
+        """;
+
+    private const string CompactCode = """
+        <EmptyState Compact="true"
+                    IconVariant="IconBoxVariant.Lavender"
+                    Title="Inbox is clear"
+                    Description="New messages will appear here.">
+            <Icon><svg>…</svg></Icon>
+        </EmptyState>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Title", "string", "\"\"", L.T("Main message.", "Mensaje principal.")),
+        new("Description", "string?", null, L.T("Explanation shown below the title.", "Explicación que se muestra debajo del título.")),
+        new("Icon", "RenderFragment?", null, L.T("Icon rendered inside an IconBox.", "Ícono que se renderiza dentro de un IconBox.")),
+        new("IconVariant", "IconBoxVariant", "Cream", L.T("Variant of the IconBox that frames the icon.", "Variante del IconBox que enmarca el ícono.")),
+        new("Actions", "RenderFragment?", null, L.T("Next-step buttons or links.", "Botones o enlaces con los siguientes pasos.")),
+        new("Compact", "bool", "false", L.T("Smaller spacing and icon.", "Espaciado e ícono más pequeños.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+}

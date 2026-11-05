@@ -1,0 +1,98 @@
+@page "/components/radio-card-group"
+
+<DocPage Title="RadioCardGroup" Category="@L.T("Forms", "Formularios")"
+         Lead="@L.T("Mutually exclusive options rendered as cards with a title, a description and an icon. Built on native radios, so it is keyboard and screen-reader friendly.", "Opciones mutuamente excluyentes que se muestran como tarjetas con título, descripción e ícono. Usa radios nativos, así que funciona bien con teclado y lectores de pantalla.")">
+
+    <DemoBlock Code="@Code">
+        <div class="docs-stack">
+            <RadioCardGroup TValue="string"
+                            Label="@L.T("Event visibility", "Visibilidad del evento")"
+                            HelperText="@L.T("You can change it later.", "Puedes cambiarla más adelante.")"
+                            Options="_options"
+                            @bind-Value="_visibility" />
+            <p class="docs-demo-output">@L.T("Value:", "Valor:") <strong>@(_visibility ?? "null")</strong></p>
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Enum values", "Valores de enum")" Code="@EnumCode">
+        <div class="docs-stack">
+            <RadioCardGroup TValue="Frequency" Label="@L.T("Frequency", "Frecuencia")" Options="_frequencies" @bind-Value="_frequency" />
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+    <ApiTable Title="RadioCardOption<TValue>" Params="OptionParams" />
+</DocPage>
+
+@code {
+    private enum Frequency { Once, Weekly, Monthly }
+
+    private string? _visibility = "public";
+    private Frequency _frequency = Frequency.Weekly;
+
+    // Initialized in OnInitialized because field initializers cannot use L.
+    private List<RadioCardOption<string>> _options = [];
+    private List<RadioCardOption<Frequency>> _frequencies = [];
+
+    protected override void OnInitialized()
+    {
+        _options =
+        [
+            new("public", L.T("Public", "Público"), L.T("Anyone can see it on the shared calendar.", "Cualquier persona puede verlo en el calendario compartido."), Icons.Home),
+            new("members", L.T("Members only", "Solo miembros"), L.T("Only registered members can see it.", "Solo los miembros registrados pueden verlo."), Icons.User),
+        ];
+
+        _frequencies =
+        [
+            new(Frequency.Once, L.T("Once", "Una vez"), L.T("A single date.", "Una sola fecha.")),
+            new(Frequency.Weekly, L.T("Weekly", "Semanal"), L.T("Same day every week.", "El mismo día cada semana.")),
+            new(Frequency.Monthly, L.T("Monthly", "Mensual"), L.T("Same day every month.", "El mismo día cada mes.")),
+        ];
+    }
+
+    private const string Code = """
+        <RadioCardGroup TValue="string"
+                        Label="Event visibility"
+                        HelperText="You can change it later."
+                        Options="_options"
+                        @bind-Value="_visibility" />
+
+        @code {
+            private string? _visibility = "public";
+
+            private readonly List<RadioCardOption<string>> _options =
+            [
+                new("public", "Public", "Anyone can see it on the shared calendar.", HomeIcon),
+                new("members", "Members only", "Only registered members can see it.", UserIcon),
+            ];
+        }
+        """;
+
+    private const string EnumCode = """
+        <RadioCardGroup TValue="Frequency" Label="Frequency"
+                        Options="_frequencies" @bind-Value="_frequency" />
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Options", "List<RadioCardOption<TValue>>", "[]", L.T("Options to render.", "Opciones que se van a mostrar.")),
+        new("Value", "TValue?", null, L.T("Selected value. Supports @bind-Value.", "Valor seleccionado. Admite @bind-Value.")),
+        new("ValueChanged", "EventCallback<TValue>", null, L.T("Raised when the selection changes.", "Se dispara cuando cambia la selección.")),
+        new("Columns", "int", "2", L.T("Columns from 640px up. Only 2 is styled today; other values render a single column.", "Columnas a partir de 640px. Por ahora solo 2 tiene estilos; otros valores muestran una sola columna.")),
+        new("Label", "string?", null, L.T("Group legend.", "Leyenda del grupo.")),
+        new("HelperText", "string?", null, L.T("Hint below the group.", "Ayuda debajo del grupo.")),
+        new("Error", "string?", null, L.T("Error message.", "Mensaje de error.")),
+        new("Required", "bool", "false", L.T("Shows an asterisk next to the legend.", "Muestra un asterisco junto a la leyenda.")),
+        new("Disabled", "bool", "false", L.T("Disables every option.", "Deshabilita todas las opciones.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> OptionParams =>
+    [
+        new("Value", "TValue", "required", L.T("Value represented by the option.", "Valor que representa la opción.")),
+        new("Title", "string", "required", L.T("Main text.", "Texto principal.")),
+        new("Description", "string?", "null", L.T("Short explanation of the choice.", "Breve explicación de la opción.")),
+        new("Icon", "RenderFragment?", "null", L.T("Icon shown on the left.", "Ícono que se muestra a la izquierda.")),
+    ];
+}

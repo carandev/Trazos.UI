@@ -1,0 +1,20 @@
+<nav class="docs-sidebar" aria-label="@L.T("Documentation", "Documentación")">
+    @foreach (var section in DocsNav.Sections)
+    {
+        <div class="docs-sidebar-section">
+            <p class="docs-sidebar-title">@L.T(section.Title, section.TitleEs)</p>
+            <ul>
+                @foreach (var item in section.Items)
+                {
+                    <li>
+                        <NavLink href="@item.Href"
+                                 class="docs-sidebar-link"
+                                 Match="@(item.Href == string.Empty ? NavLinkMatch.All : NavLinkMatch.Prefix)">
+                            @L.T(item.Title, item.TitleEs ?? item.Title)
+                        </NavLink>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+</nav>

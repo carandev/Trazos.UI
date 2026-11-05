@@ -2,4 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/Trazos.UI/Trazos.UI.csproj" />
   </Folder>
+  <Folder Name="/docs/">
+    <Project Path="docs/Trazos.UI.Docs/Trazos.UI.Docs.csproj" />
+  </Folder>
 </Solution>

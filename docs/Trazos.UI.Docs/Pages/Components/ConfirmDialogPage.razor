@@ -1,0 +1,93 @@
+@page "/components/confirm-dialog"
+@inject IDialogService Dialogs
+
+<DocPage Title="@L.T("Confirm dialog", "Diálogo de confirmación")" Category="@L.T("Overlays & feedback", "Superposiciones y avisos")"
+         Lead="@L.T("Ask for confirmation from code with IDialogService and await the answer. No markup per page: the container lives in AppShell.", "Pide confirmación desde el código con IDialogService y espera la respuesta. Sin markup en cada página: el contenedor vive en AppShell.")">
+
+    <DemoBlock Code="@Code">
+        <div class="docs-stack">
+            <div class="docs-row">
+                <Button Variant="ButtonVariant.Wine" OnClick="DeleteAsync">
+                    <LeadingIcon>@Icons.Trash</LeadingIcon>
+                    <ChildContent>@L.T("Delete event", "Eliminar evento")</ChildContent>
+                </Button>
+            </div>
+            <p class="docs-demo-output">@L.T("Last answer:", "Última respuesta:") <strong>@AnswerLabel</strong></p>
+        </div>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("Setup", "Configuración")</h2>
+    <p>
+        <Tr>
+            <En><code>AddTrazosUI()</code> registers the service. <code>AppShell</code> already renders
+                <code>&lt;ConfirmDialogContainer /&gt;</code>; with a custom layout, add it once.</En>
+            <Es><code>AddTrazosUI()</code> registra el servicio. <code>AppShell</code> ya renderiza
+                <code>&lt;ConfirmDialogContainer /&gt;</code>; con un layout propio, agrégalo una sola vez.</Es>
+        </Tr>
+    </p>
+
+    <ApiTable Title="IDialogService.ConfirmAsync" Params="Params" />
+    <ApiTable Title="ConfirmDialogOptions" Params="OptionParams" />
+</DocPage>
+
+@code {
+    private string _answer = "none";
+
+    private string AnswerLabel => _answer switch
+    {
+        "confirmed" => L.T("confirmed", "confirmado"),
+        "cancelled" => L.T("cancelled", "cancelado"),
+        _ => L.T("none", "ninguna"),
+    };
+
+    private async Task DeleteAsync()
+    {
+        var confirmed = await Dialogs.ConfirmAsync(new ConfirmDialogOptions(
+            Message: L.T("This removes the event and its sign-ups. It cannot be undone.", "Esto elimina el evento y sus inscripciones. No se puede deshacer."),
+            Title: L.T("Delete event?", "¿Eliminar evento?"),
+            ConfirmText: L.T("Delete", "Eliminar"),
+            CancelText: L.T("Keep it", "Conservarlo"),
+            ConfirmVariant: ButtonVariant.Wine));
+
+        _answer = confirmed ? "confirmed" : "cancelled";
+    }
+
+    private const string Code = """
+        @inject IDialogService Dialogs
+
+        <Button Variant="ButtonVariant.Wine" OnClick="DeleteAsync">Delete event</Button>
+
+        @code {
+            private async Task DeleteAsync()
+            {
+                var confirmed = await Dialogs.ConfirmAsync(new ConfirmDialogOptions(
+                    Message: "This removes the event and its sign-ups. It cannot be undone.",
+                    Title: "Delete event?",
+                    ConfirmText: "Delete",
+                    CancelText: "Keep it",
+                    ConfirmVariant: ButtonVariant.Wine));
+
+                if (confirmed)
+                {
+                    await Api.DeleteEventAsync(_eventId);
+                }
+            }
+        }
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("ConfirmAsync(options)", "Task<bool>", null, L.T("Shows the dialog. True when confirmed, false when cancelled.", "Muestra el diálogo. Devuelve true si se confirma y false si se cancela.")),
+        new("ConfirmAsync(message, title, confirmText, cancelText, confirmVariant)", "Task<bool>", null, L.T("Shortcut with the same defaults as ConfirmDialogOptions.", "Atajo con los mismos valores predeterminados que ConfirmDialogOptions.")),
+    ];
+
+    private IReadOnlyList<ApiParam> OptionParams =>
+    [
+        new("Message", "string", "required", L.T("Question or explanation.", "Pregunta o explicación.")),
+        new("Title", "string", "\"Confirmar acción\"", L.T("Dialog title.", "Título del diálogo.")),
+        new("ConfirmText", "string", "\"Confirmar\"", L.T("Label of the confirm button.", "Texto del botón de confirmar.")),
+        new("CancelText", "string", "\"Cancelar\"", L.T("Label of the cancel button.", "Texto del botón de cancelar.")),
+        new("ConfirmVariant", "ButtonVariant", "Primary", L.T("Use Wine for destructive actions.", "Usa Wine para acciones destructivas.")),
+        new("Size", "string", "\"small\"", L.T("Modal size.", "Tamaño del modal.")),
+    ];
+}

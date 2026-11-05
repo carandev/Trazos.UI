@@ -1,0 +1,24 @@
+<PageTitle>@Title · Trazos.UI</PageTitle>
+
+<article class="docs-page">
+    <header class="docs-page-header">
+        @if (!string.IsNullOrEmpty(Category))
+        {
+            <span class="docs-eyebrow">@Category</span>
+        }
+        <h1 class="docs-h1 trazos-heading" tabindex="-1">@Title</h1>
+        @if (!string.IsNullOrEmpty(Lead))
+        {
+            <p class="docs-lead">@Lead</p>
+        }
+    </header>
+
+    @ChildContent
+</article>
+
+@code {
+    [Parameter, EditorRequired] public string Title { get; set; } = string.Empty;
+    [Parameter] public string? Category { get; set; }
+    [Parameter] public string? Lead { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

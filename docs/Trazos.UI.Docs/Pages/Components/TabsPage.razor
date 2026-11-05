@@ -1,0 +1,98 @@
+@page "/components/tabs"
+
+<DocPage Title="Tabs" Category="@L.T("Navigation", "Navegación")"
+         Lead="@L.T("Switches between related views. Three visual variants, icons and badges, and binding by index or by key.", "Alterna entre vistas relacionadas. Tres variantes visuales, íconos e insignias, y binding por índice o por clave.")">
+
+    @foreach (var variant in Enum.GetValues<TabsVariant>())
+    {
+        <DemoBlock Title="@variant.ToString()" Code="@CodeFor(variant)">
+            <div class="docs-stack">
+                <Tabs Variant="variant">
+                    <TabItem Title="@L.T("Overview", "Resumen")">
+                        <p>@L.T("General information about the event.", "Información general del evento.")</p>
+                    </TabItem>
+                    <TabItem Title="@L.T("Attendees", "Asistentes")">
+                        <Badge>
+                            <Badge Variant="BadgeVariant.Lavender">24</Badge>
+                        </Badge>
+                        <ChildContent>
+                            <p>@L.T("Twenty-four people signed up.", "Se inscribieron veinticuatro personas.")</p>
+                        </ChildContent>
+                    </TabItem>
+                    <TabItem Title="@L.T("Archived", "Archivado")" Disabled="true">
+                        <p>@L.T("Unavailable.", "No disponible.")</p>
+                    </TabItem>
+                </Tabs>
+            </div>
+        </DemoBlock>
+    }
+
+    <DemoBlock Title="@L.T("Binding by key", "Binding por clave")" Description="@L.T("Keys are stable even when tabs are added or reordered, so they work well with query strings.", "Las claves se mantienen estables aunque agregues o reordenes pestañas, así que funcionan bien con parámetros de consulta (query strings).")" Code="@KeyCode">
+        <div class="docs-stack">
+            <Tabs @bind-ActiveKey="_activeKey">
+                <TabItem Key="calendar" Title="@L.T("Calendar", "Calendario")">
+                    <Icon>@Icons.Calendar</Icon>
+                    <ChildContent><p>@L.T("Calendar view.", "Vista de calendario.")</p></ChildContent>
+                </TabItem>
+                <TabItem Key="members" Title="@L.T("Members", "Miembros")">
+                    <Icon>@Icons.User</Icon>
+                    <ChildContent><p>@L.T("Members view.", "Vista de miembros.")</p></ChildContent>
+                </TabItem>
+            </Tabs>
+            <p class="docs-demo-output">ActiveKey: <strong>@_activeKey</strong></p>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Title="@L.T("Tabs parameters", "Parámetros de Tabs")" Params="TabsParams" />
+    <ApiTable Title="@L.T("TabItem parameters", "Parámetros de TabItem")" Params="TabItemParams" />
+</DocPage>
+
+@code {
+    private string? _activeKey = "members";
+
+    private static string CodeFor(TabsVariant variant) => $$"""
+        <Tabs Variant="TabsVariant.{{variant}}">
+            <TabItem Title="Overview">…</TabItem>
+            <TabItem Title="Attendees">
+                <Badge>
+                    <Badge Variant="BadgeVariant.Lavender">24</Badge>
+                </Badge>
+                <ChildContent>…</ChildContent>
+            </TabItem>
+            <TabItem Title="Archived" Disabled="true">…</TabItem>
+        </Tabs>
+        """;
+
+    private const string KeyCode = """
+        <Tabs @bind-ActiveKey="_activeKey">
+            <TabItem Key="calendar" Title="Calendar">
+                <Icon><svg>…</svg></Icon>
+                <ChildContent>…</ChildContent>
+            </TabItem>
+            <TabItem Key="members" Title="Members">…</TabItem>
+        </Tabs>
+        """;
+
+    private IReadOnlyList<ApiParam> TabsParams =>
+    [
+        new("Variant", "TabsVariant", "Underline", L.T("Underline, Pills or Contained.", "Underline, Pills o Contained.")),
+        new("ActiveIndex", "int", "0", L.T("Active tab by position. Supports @bind-ActiveIndex.", "Pestaña activa por posición. Admite @bind-ActiveIndex.")),
+        new("ActiveIndexChanged", "EventCallback<int>", null, L.T("Raised when the active tab changes.", "Se dispara cuando cambia la pestaña activa.")),
+        new("ActiveKey", "string?", null, L.T("Active tab by Key. Takes precedence over ActiveIndex. Supports @bind-ActiveKey.", "Pestaña activa por Key. Tiene prioridad sobre ActiveIndex. Admite @bind-ActiveKey.")),
+        new("ActiveKeyChanged", "EventCallback<string?>", null, L.T("Raised with the Key of the new tab.", "Se dispara con la Key de la nueva pestaña.")),
+        new("ChildContent", "RenderFragment?", null, L.T("TabItem components.", "Componentes TabItem.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> TabItemParams =>
+    [
+        new("Title", "string", "\"\"", L.T("Tab label.", "Etiqueta de la pestaña.")),
+        new("Key", "string?", null, L.T("Stable identifier used by ActiveKey (case-insensitive).", "Identificador estable que usa ActiveKey (no distingue mayúsculas de minúsculas).")),
+        new("Icon", "RenderFragment?", null, L.T("Icon before the label.", "Ícono antes de la etiqueta.")),
+        new("Badge", "RenderFragment?", null, L.T("Content after the label, such as a counter.", "Contenido después de la etiqueta, como un contador.")),
+        new("HeaderTemplate", "RenderFragment?", null, L.T("Replaces the whole tab header.", "Reemplaza todo el encabezado de la pestaña.")),
+        new("Disabled", "bool", "false", L.T("Prevents selecting the tab.", "Impide seleccionar la pestaña.")),
+        new("ChildContent", "RenderFragment?", null, L.T("Panel content.", "Contenido del panel.")),
+    ];
+}

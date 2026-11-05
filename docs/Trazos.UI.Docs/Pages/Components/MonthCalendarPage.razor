@@ -1,0 +1,151 @@
+@page "/components/month-calendar"
+
+<DocPage Title="MonthCalendar" Category="@L.T("Display", "Visualización")"
+         Lead="@L.T("A generic month grid with day selection, month navigation and colored item chips. On small screens the chips collapse into dots.", "Una cuadrícula mensual genérica con selección de día, navegación entre meses y etiquetas de colores para los elementos. En pantallas pequeñas, las etiquetas se convierten en puntos.")">
+
+    <DemoBlock Code="@CalendarCode">
+        <div class="docs-stack">
+            <MonthCalendar TItem="CalendarEvent"
+                           Items="_events"
+                           StartSelector="e => e.Start"
+                           EndSelector="e => e.End"
+                           TitleSelector="e => e.Title"
+                           ToneSelector="e => e.Tone"
+                           Month="_month"
+                           MonthChanged="OnMonthChanged"
+                           @bind-SelectedDate="_selectedDay"
+                           OnItemClick="e => _clicked = e"
+                           MonthNames="MonthNames"
+                           DayNames="DayNames"
+                           TodayText="@L.T("Today", "Hoy")"
+                           PreviousMonthText="@L.T("Previous month", "Mes anterior")"
+                           NextMonthText="@L.T("Next month", "Mes siguiente")"
+                           MoreTextFormat="@L.T("+{0} more", "+{0} más")" />
+
+            <p class="docs-demo-output">
+                @L.T("Selected day:", "Día seleccionado:") <strong>@(_selectedDay?.ToString("yyyy-MM-dd") ?? L.T("none", "ninguno"))</strong>
+                · @L.T("Clicked item:", "Elemento con clic:") <strong>@(_clicked?.Title ?? L.T("none", "ninguno"))</strong>
+            </p>
+        </div>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("Loading only the visible range", "Cargar solo el rango visible")</h2>
+    <p>
+        <Tr>
+            <En>The grid always shows whole weeks, so it starts before the 1st and ends after the last day of the month.
+                Use the static helpers to request exactly that range from your API.</En>
+            <Es>La cuadrícula siempre muestra semanas completas, así que empieza antes del día 1 y termina después del último día del mes.
+                Usa los métodos estáticos auxiliares para pedirle a tu API exactamente ese rango.</Es>
+        </Tr>
+    </p>
+    <CodeBlock Language="csharp" Code="@RangeCode" />
+
+    <h2 class="docs-h2">@L.T("Tones", "Tonos")</h2>
+    <div class="docs-row">
+        @foreach (var tone in Enum.GetValues<CalendarItemTone>())
+        {
+            <code>CalendarItemTone.@tone</code>
+        }
+    </div>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private sealed record CalendarEvent(string Title, DateTime Start, DateTime End, CalendarItemTone Tone);
+
+    private static readonly string[] EnglishMonthNames =
+        ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    private static readonly string[] SpanishMonthNames =
+        ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+    // Indexed by DayOfWeek, so the lists start on Sunday.
+    private static readonly string[] EnglishDayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    private static readonly string[] SpanishDayNames = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+
+    private string[] MonthNames => L.IsSpanish ? SpanishMonthNames : EnglishMonthNames;
+    private string[] DayNames => L.IsSpanish ? SpanishDayNames : EnglishDayNames;
+
+    private DateOnly _month = MonthCalendar<CalendarEvent>.FirstOfMonth(DateOnly.FromDateTime(DateTime.Today));
+    private DateOnly? _selectedDay;
+    private CalendarEvent? _clicked;
+    private List<CalendarEvent> _events = [];
+
+    protected override void OnInitialized() => _events = BuildEvents(_month);
+
+    private void OnMonthChanged(DateOnly month)
+    {
+        _month = month;
+        _events = BuildEvents(month);
+    }
+
+    // Sample data relative to the displayed month, so the demo always has content.
+    private List<CalendarEvent> BuildEvents(DateOnly month)
+    {
+        DateTime At(int day, int hour) => month.AddDays(day - 1).ToDateTime(new TimeOnly(hour, 0));
+
+        return
+        [
+            new(L.T("Team sync", "Reunión de equipo"), At(3, 9), At(3, 10), CalendarItemTone.Olive),
+            new(L.T("Design review", "Revisión de diseño"), At(5, 18), At(5, 20), CalendarItemTone.Lavender),
+            new(L.T("Team offsite", "Jornada de equipo"), At(9, 8), At(11, 17), CalendarItemTone.Gold),
+            new(L.T("Team sync", "Reunión de equipo"), At(10, 9), At(10, 10), CalendarItemTone.Olive),
+            new(L.T("Budget review", "Revisión de presupuesto"), At(10, 15), At(10, 16), CalendarItemTone.Wine),
+            new(L.T("Customer call", "Llamada con cliente"), At(10, 16), At(10, 18), CalendarItemTone.Sky),
+            new(L.T("Workshop", "Taller"), At(10, 19), At(10, 20), CalendarItemTone.Neutral),
+            new(L.T("Team sync", "Reunión de equipo"), At(17, 9), At(17, 10), CalendarItemTone.Olive),
+            new(L.T("Product demo", "Demo de producto"), At(21, 17), At(21, 18), CalendarItemTone.Lavender),
+            new(L.T("Team sync", "Reunión de equipo"), At(24, 9), At(24, 10), CalendarItemTone.Olive),
+        ];
+    }
+
+    private const string CalendarCode = """
+        <MonthCalendar TItem="EventDto"
+                       Items="_events"
+                       StartSelector="e => e.Start"
+                       EndSelector="e => e.End"
+                       TitleSelector="e => e.Title"
+                       ToneSelector="e => e.IsPublic ? CalendarItemTone.Olive : CalendarItemTone.Lavender"
+                       Month="_month"
+                       MonthChanged="LoadMonthAsync"
+                       @bind-SelectedDate="_selectedDay"
+                       OnItemClick="OpenEvent" />
+        """;
+
+    private const string RangeCode = """
+        private async Task LoadMonthAsync(DateOnly month)
+        {
+            _month = month;
+            var from = MonthCalendar<EventDto>.GetGridStart(month);
+            var to = MonthCalendar<EventDto>.GetGridEndExclusive(month);
+            _events = await Api.GetEventsAsync(from, to);
+        }
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Items", "IEnumerable<TItem>", "[]", L.T("Items to place on the grid.", "Elementos que se ubican en la cuadrícula.")),
+        new("StartSelector", "Func<TItem, DateTime>", "required", L.T("Start of the item.", "Inicio del elemento.")),
+        new("EndSelector", "Func<TItem, DateTime>", "required", L.T("End of the item. Multi-day items appear on every day they span.", "Fin del elemento. Los elementos de varios días aparecen en cada día que abarcan.")),
+        new("TitleSelector", "Func<TItem, string>", "required", L.T("Text of the chip.", "Texto de la etiqueta.")),
+        new("ToneSelector", "Func<TItem, CalendarItemTone>?", null, L.T("Color of the chip.", "Color de la etiqueta.")),
+        new("Month", "DateOnly", L.T("current month", "mes actual"), L.T("Displayed month. Any day is normalized to the 1st.", "Mes mostrado. Cualquier día se normaliza al día 1.")),
+        new("MonthChanged", "EventCallback<DateOnly>", null, L.T("Raised by the previous, next and today buttons.", "Se dispara con los botones de mes anterior, mes siguiente y hoy.")),
+        new("SelectedDate", "DateOnly?", null, L.T("Selected day. Supports @bind-SelectedDate.", "Día seleccionado. Admite @bind-SelectedDate.")),
+        new("SelectedDateChanged", "EventCallback<DateOnly?>", null, L.T("Raised when a day is selected.", "Se dispara al seleccionar un día.")),
+        new("OnItemClick", "EventCallback<TItem>", null, L.T("Raised when a chip is clicked.", "Se dispara al hacer clic en una etiqueta.")),
+        new("FirstDayOfWeek", "DayOfWeek", "Monday", L.T("First column of the grid.", "Primera columna de la cuadrícula.")),
+        new("MaxItemsPerDay", "int", "3", L.T("Chips per day before the \"+N more\" link.", "Etiquetas por día antes del enlace \"+N más\".")),
+        new("Loading", "bool", "false", L.T("Shows a loading state over the grid.", "Muestra un estado de carga sobre la cuadrícula.")),
+        new("ToolbarContent", "RenderFragment?", null, L.T("Extra content in the toolbar, such as filters.", "Contenido adicional en la barra de herramientas, como filtros.")),
+        new("MonthNames", "IReadOnlyList<string>", L.T("Spanish names", "nombres en español"), L.T("Twelve month names.", "Los doce nombres de los meses.")),
+        new("DayNames", "IReadOnlyList<string>", L.T("Spanish names", "nombres en español"), L.T("Seven day names indexed by DayOfWeek, so the list starts on Sunday.", "Siete nombres de días indexados por DayOfWeek, así que la lista empieza en domingo.")),
+        new("TodayText", "string", "\"Hoy\"", L.T("Label of the today button.", "Etiqueta del botón de hoy.")),
+        new("PreviousMonthText", "string", "\"Mes anterior\"", L.T("Accessible label of the previous button.", "Etiqueta accesible del botón de mes anterior.")),
+        new("NextMonthText", "string", "\"Mes siguiente\"", L.T("Accessible label of the next button.", "Etiqueta accesible del botón de mes siguiente.")),
+        new("MoreTextFormat", "string", "\"+{0} más\"", L.T("Format of the overflow link.", "Formato del enlace de desbordamiento.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+}

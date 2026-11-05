@@ -1,0 +1,45 @@
+@page "/components/icon-box"
+
+<DocPage Title="IconBox" Category="@L.T("Display", "Visualización")"
+         Lead="@L.T("A tinted, sketch-shaped frame that gives an icon visual weight in cards, lists and empty states.", "Un marco teñido con forma de boceto que le da peso visual a un ícono en tarjetas, listas y estados vacíos.")">
+
+    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@VariantsCode">
+        @foreach (var variant in Enum.GetValues<IconBoxVariant>())
+        {
+            <IconBox Variant="variant" title="@variant.ToString()">@Icons.Heart</IconBox>
+        }
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Sizes", "Tamaños")" Code="@SizesCode">
+        <IconBox Size="IconBoxSize.Small">@Icons.Calendar</IconBox>
+        <IconBox Size="IconBoxSize.Medium">@Icons.Calendar</IconBox>
+        <IconBox Size="IconBoxSize.Large">@Icons.Calendar</IconBox>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private const string VariantsCode = """
+        <IconBox Variant="IconBoxVariant.Primary"><svg>…</svg></IconBox>
+        <IconBox Variant="IconBoxVariant.Lavender"><svg>…</svg></IconBox>
+        <IconBox Variant="IconBoxVariant.Cream"><svg>…</svg></IconBox>
+        <IconBox Variant="IconBoxVariant.Wine"><svg>…</svg></IconBox>
+        <IconBox Variant="IconBoxVariant.Neutral"><svg>…</svg></IconBox>
+        """;
+
+    private const string SizesCode = """
+        <IconBox Size="IconBoxSize.Small"><svg>…</svg></IconBox>
+        <IconBox Size="IconBoxSize.Medium"><svg>…</svg></IconBox>
+        <IconBox Size="IconBoxSize.Large"><svg>…</svg></IconBox>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Variant", "IconBoxVariant", "Primary", L.T("Primary, Lavender, Cream, Wine or Neutral.", "Primary, Lavender, Cream, Wine o Neutral.")),
+        new("Size", "IconBoxSize", "Medium", L.T("Small, Medium or Large. The inner SVG is resized to match.", "Small, Medium o Large. El SVG interno se redimensiona en consecuencia.")),
+        new("ChildContent", "RenderFragment?", null, L.T("The icon, usually an inline SVG.", "El ícono, normalmente un SVG en línea.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+}

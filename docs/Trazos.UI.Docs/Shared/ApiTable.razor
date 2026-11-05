@@ -1,0 +1,31 @@
+<section class="docs-api">
+    <h2 class="docs-h2">@(Title ?? L.T("Parameters", "Parámetros"))</h2>
+    <div class="docs-api-scroll">
+        <table class="docs-api-table">
+            <thead>
+                <tr>
+                    <th>@L.T("Name", "Nombre")</th>
+                    <th>@L.T("Type", "Tipo")</th>
+                    <th>@L.T("Default", "Predeterminado")</th>
+                    <th>@L.T("Description", "Descripción")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Params)
+                {
+                    <tr>
+                        <td><code>@p.Name</code></td>
+                        <td><code class="docs-type">@p.Type</code></td>
+                        <td>@if (p.Default is not null) { <code>@p.Default</code> } else { <span class="docs-muted">—</span> }</td>
+                        <td>@p.Description</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+@code {
+    [Parameter] public string? Title { get; set; }
+    [Parameter, EditorRequired] public IReadOnlyList<ApiParam> Params { get; set; } = [];
+}

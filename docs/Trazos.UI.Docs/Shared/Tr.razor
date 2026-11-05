@@ -1,0 +1,7 @@
+@* Renders the fragment for the current language. Use it for text that contains markup. *@
+@(L.IsSpanish ? Es : En)
+
+@code {
+    [Parameter, EditorRequired] public RenderFragment? En { get; set; }
+    [Parameter, EditorRequired] public RenderFragment? Es { get; set; }
+}

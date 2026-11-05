@@ -1,0 +1,52 @@
+@page "/components/form-section"
+
+<DocPage Title="FormSection" Category="@L.T("Forms", "Formularios")"
+         Lead="@L.T("A numbered heading that splits long forms into simple, scannable steps.", "Un encabezado numerado que divide los formularios largos en pasos simples y fáciles de recorrer.")">
+
+    <DemoBlock Code="@Code">
+        <div class="docs-stack">
+            <FormSection Step="1" Title="@L.T("About you", "Sobre ti")" Description="@L.T("We use this to identify you at the door.", "Lo usamos para identificarte en la entrada.")">
+                <div class="docs-grid-2">
+                    <TextInput Label="@L.T("First name", "Nombre")" @bind-Value="_first" />
+                    <TextInput Label="@L.T("Last name", "Apellido")" @bind-Value="_last" />
+                </div>
+            </FormSection>
+            <FormSection Step="2" Title="@L.T("Contact", "Contacto")" Description="@L.T("Only used for event reminders.", "Solo se usa para recordatorios de eventos.")">
+                <TextInput Label="@L.T("Email", "Correo electrónico")" Type="email" @bind-Value="_email" />
+            </FormSection>
+            <FormSection Title="@L.T("Without a number", "Sin número")">
+                <Checkbox Label="@L.T("Subscribe to the newsletter", "Suscribirme al boletín")" @bind-Value="_newsletter" />
+            </FormSection>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private string? _first;
+    private string? _last;
+    private string? _email;
+    private bool _newsletter;
+
+    private const string Code = """
+        <FormSection Step="1" Title="About you" Description="We use this to identify you at the door.">
+            <TextInput Label="First name" @bind-Value="_first" />
+            <TextInput Label="Last name" @bind-Value="_last" />
+        </FormSection>
+
+        <FormSection Step="2" Title="Contact" Description="Only used for event reminders.">
+            <TextInput Label="Email" Type="email" @bind-Value="_email" />
+        </FormSection>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Title", "string", "\"\"", L.T("Section heading.", "Encabezado de la sección.")),
+        new("Description", "string?", null, L.T("Text below the heading.", "Texto debajo del encabezado.")),
+        new("Step", "int?", null, L.T("Step number shown next to the heading. Omit for an unnumbered section.", "Número de paso que se muestra junto al encabezado. Omítelo para una sección sin número.")),
+        new("ChildContent", "RenderFragment?", null, L.T("Fields of the section.", "Campos de la sección.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+}

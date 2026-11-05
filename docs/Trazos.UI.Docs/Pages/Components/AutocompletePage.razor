@@ -1,0 +1,146 @@
+@page "/components/autocomplete"
+
+<DocPage Title="Autocomplete" Category="@L.T("Forms", "Formularios")"
+         Lead="@L.T("Debounced async search with keyboard navigation and custom item templates. Keep the choice as a chip, or clear the field after each pick.", "Búsqueda asíncrona con debounce, navegación con teclado y plantillas personalizadas para cada resultado. Conserva la elección como un chip o limpia el campo después de cada selección.")">
+
+    <DemoBlock Title="@L.T("Single selection", "Selección única")" Description="@L.T("Type at least two letters. Arrow keys move, Enter selects, Escape closes.", "Escribe al menos dos letras. Las flechas te mueven, Enter selecciona y Escape cierra.")" Code="@SingleCode">
+        <div class="docs-stack">
+            <Autocomplete TItem="Member"
+                          Label="@L.T("Member", "Miembro")"
+                          Placeholder="@L.T("Search by name…", "Busca por nombre…")"
+                          SearchFunc="SearchAsync"
+                          ItemText="m => m.Name"
+                          @bind-SelectedItem="_member"
+                          NoResultsText="@L.T("No results", "Sin resultados")"
+                          SearchingText="@L.T("Searching…", "Buscando…")"
+                          ClearText="@L.T("Clear selection", "Quitar selección")">
+                <ItemTemplate Context="m">
+                    <strong>@m.Name</strong> <span class="docs-muted">· @m.Group</span>
+                </ItemTemplate>
+            </Autocomplete>
+            <p class="docs-demo-output">@L.T("Selected:", "Seleccionado:") <strong>@(_member?.Name ?? L.T("none", "ninguno"))</strong></p>
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Clear on select", "Limpiar al seleccionar")" Description="@L.T("Useful to add several items to a list.", "Útil para agregar varios elementos a una lista.")" Code="@MultiCode">
+        <div class="docs-stack">
+            <Autocomplete TItem="Member"
+                          Label="@L.T("Add participants", "Agregar participantes")"
+                          Placeholder="@L.T("Search by name…", "Busca por nombre…")"
+                          SearchFunc="SearchAsync"
+                          ItemText="m => m.Name"
+                          ClearOnSelect="true"
+                          SelectedItemChanged="Add"
+                          NoResultsText="@L.T("No results", "Sin resultados")"
+                          SearchingText="@L.T("Searching…", "Buscando…")" />
+            <div class="docs-row">
+                @foreach (var m in _participants)
+                {
+                    <Badge Variant="BadgeVariant.Lavender">@m.Name</Badge>
+                }
+            </div>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private sealed record Member(string Name, string Group);
+
+    // Initialized in OnInitialized so the group names can use L; the layout rebuilds the page when the language changes.
+    private Member[] Members = [];
+
+    protected override void OnInitialized()
+    {
+        var design = L.T("Design", "Diseño");
+        var engineering = L.T("Engineering", "Ingeniería");
+        var marketing = L.T("Marketing", "Marketing");
+        var missions = L.T("Missions", "Misiones");
+
+        Members =
+        [
+            new("Ana María Restrepo", design),
+            new("Andrés Felipe Mejía", engineering),
+            new("Beatriz Londoño", marketing),
+            new("Camilo Henao", design),
+            new("Daniela Zapata", missions),
+            new("Juan Pablo Gómez", engineering),
+            new("Julián Ospina", missions),
+            new("Luisa Fernanda Gil", marketing),
+            new("Mariana Duque", design),
+            new("Tomás Arango", engineering),
+        ];
+    }
+
+    private Member? _member;
+    private readonly List<Member> _participants = [];
+
+    // Simulates a remote API call.
+    private async Task<IEnumerable<Member>> SearchAsync(string query, CancellationToken cancellationToken)
+    {
+        await Task.Delay(350, cancellationToken);
+        return Members.Where(m => m.Name.Contains(query, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private void Add(Member? member)
+    {
+        if (member is not null && !_participants.Contains(member))
+        {
+            _participants.Add(member);
+        }
+    }
+
+    private const string SingleCode = """
+        <Autocomplete TItem="Member"
+                      Label="Member"
+                      Placeholder="Search by name…"
+                      SearchFunc="SearchAsync"
+                      ItemText="m => m.Name"
+                      @bind-SelectedItem="_member">
+            <ItemTemplate Context="m">
+                <strong>@m.Name</strong> · @m.Group
+            </ItemTemplate>
+        </Autocomplete>
+
+        @code {
+            private Member? _member;
+
+            private Task<IEnumerable<Member>> SearchAsync(string query, CancellationToken ct)
+                => Api.SearchMembersAsync(query, ct);
+        }
+        """;
+
+    private const string MultiCode = """
+        <Autocomplete TItem="Member"
+                      Label="Add participants"
+                      SearchFunc="SearchAsync"
+                      ItemText="m => m.Name"
+                      ClearOnSelect="true"
+                      SelectedItemChanged="Add" />
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("SearchFunc", "Func<string, CancellationToken, Task<IEnumerable<TItem>>>", "required", L.T("Runs the search. The token is cancelled when a newer query starts.", "Ejecuta la búsqueda. El token se cancela cuando empieza una consulta más reciente.")),
+        new("ItemText", "Func<TItem, string>", "required", L.T("Text for an item in the list and in the chip.", "Texto de un elemento en la lista y en el chip.")),
+        new("ItemTemplate", "RenderFragment<TItem>?", null, L.T("Custom markup for each result.", "Marcado personalizado para cada resultado.")),
+        new("SelectedItem", "TItem?", null, L.T("Selected item. Supports @bind-SelectedItem.", "Elemento seleccionado. Admite @bind-SelectedItem.")),
+        new("SelectedItemChanged", "EventCallback<TItem?>", null, L.T("Raised on select and on clear.", "Se dispara al seleccionar y al limpiar.")),
+        new("ClearOnSelect", "bool", "false", L.T("Empties the field after each pick instead of showing a chip.", "Vacía el campo después de cada selección en lugar de mostrar un chip.")),
+        new("MinChars", "int", "2", L.T("Characters required before searching.", "Caracteres necesarios antes de buscar.")),
+        new("DebounceMs", "int", "300", L.T("Delay after the last keystroke before searching.", "Espera tras la última pulsación de tecla antes de buscar.")),
+        new("NoResultsText", "string", "\"Sin resultados\"", L.T("Text when the search returns nothing.", "Texto cuando la búsqueda no devuelve nada.")),
+        new("SearchingText", "string", "\"Buscando…\"", L.T("Text while searching.", "Texto mientras se busca.")),
+        new("ClearText", "string", "\"Quitar selección\"", L.T("Accessible label of the clear button.", "Etiqueta accesible del botón para limpiar.")),
+        new("Label", "string?", null, L.T("Visible label.", "Etiqueta visible.")),
+        new("Placeholder", "string?", null, L.T("Placeholder text.", "Texto de marcador de posición.")),
+        new("HelperText", "string?", null, L.T("Hint below the field.", "Ayuda debajo del campo.")),
+        new("Error", "string?", null, L.T("Error message.", "Mensaje de error.")),
+        new("Required", "bool", "false", L.T("Shows an asterisk next to the label. It does not add the native required attribute.", "Muestra un asterisco junto a la etiqueta. No agrega el atributo nativo required.")),
+        new("Disabled", "bool", "false", L.T("Disables the field.", "Deshabilita el campo.")),
+        new("Id", "string", "generated", L.T("Id of the input.", "Id del campo.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+}

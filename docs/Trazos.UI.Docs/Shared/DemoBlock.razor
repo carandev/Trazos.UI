@@ -1,0 +1,30 @@
+<section class="docs-demo">
+    @if (!string.IsNullOrEmpty(Title))
+    {
+        <h3 class="docs-demo-title">@Title</h3>
+    }
+    @if (!string.IsNullOrEmpty(Description))
+    {
+        <p class="docs-demo-description">@Description</p>
+    }
+
+    <div class="docs-demo-preview">
+        @ChildContent
+    </div>
+
+    @if (!string.IsNullOrEmpty(Code))
+    {
+        <details class="docs-demo-source" open="@ShowCode">
+            <summary>@L.T("Show code", "Ver código")</summary>
+            <CodeBlock Code="@Code" />
+        </details>
+    }
+</section>
+
+@code {
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public string? Description { get; set; }
+    [Parameter] public string? Code { get; set; }
+    [Parameter] public bool ShowCode { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

@@ -1,0 +1,114 @@
+@page "/installation"
+
+<DocPage Title="@L.T("Installation", "Instalación")" Category="@L.T("Getting started", "Primeros pasos")"
+         Lead="@L.T("Add the package, register the services and load the stylesheet. Three steps and you are drawing.", "Agrega el paquete, registra los servicios y carga la hoja de estilos. Tres pasos y ya estás dibujando.")">
+
+    <h2 class="docs-h2">@L.T("1. Install the package", "1. Instala el paquete")</h2>
+    <p>
+        <Tr>
+            <En>Trazos.UI targets <code>net10.0</code> and works with Blazor Web App, Blazor WebAssembly and .NET MAUI Blazor Hybrid.</En>
+            <Es>Trazos.UI apunta a <code>net10.0</code> y funciona con Blazor Web App, Blazor WebAssembly y .NET MAUI Blazor Hybrid.</Es>
+        </Tr>
+    </p>
+    <CodeBlock Language="bash" Code="dotnet add package Trazos.UI" />
+
+    <h2 class="docs-h2">@L.T("2. Register the services", "2. Registra los servicios")</h2>
+    <p>
+        <Tr>
+            <En><code>AddTrazosUI</code> registers <code>IDialogService</code> and the <code>TrazosUIOptions</code> singleton
+                that <code>AppShell</code> reads to show the environment badge.</En>
+            <Es><code>AddTrazosUI</code> registra <code>IDialogService</code> y el singleton <code>TrazosUIOptions</code>,
+                que <code>AppShell</code> lee para mostrar la insignia del entorno.</Es>
+        </Tr>
+    </p>
+    <CodeBlock Language="csharp" Code="@ProgramCode" />
+
+    <ApiTable Title="TrazosUIOptions" Params="OptionsParams" />
+
+    <h2 class="docs-h2">@L.T("3. Import the namespaces", "3. Importa los espacios de nombres")</h2>
+    <p><Tr><En>Add them to your <code>_Imports.razor</code>:</En><Es>Agrégalos a tu <code>_Imports.razor</code>:</Es></Tr></p>
+    <CodeBlock Code="@ImportsCode" />
+
+    <h2 class="docs-h2">@L.T("4. Load the styles and fonts", "4. Carga los estilos y las fuentes")</h2>
+    <p>
+        <Tr>
+            <En>The global tokens live in <code>trazos.css</code>. Component styles are scoped and travel inside your
+                app bundle (<code>{YourApp}.styles.css</code>), which Blazor templates already reference.
+                The design uses Marcellus, Caveat and Plus Jakarta Sans from Google Fonts.</En>
+            <Es>Los tokens globales están en <code>trazos.css</code>. Los estilos de los componentes son aislados y viajan
+                dentro del paquete de tu app (<code>{YourApp}.styles.css</code>), que las plantillas de Blazor ya referencian.
+                El diseño usa Marcellus, Caveat y Plus Jakarta Sans de Google Fonts.</Es>
+        </Tr>
+    </p>
+    <CodeBlock Language="html" Code="@HeadCode" />
+
+    <div class="docs-note">
+        <Tr>
+            <En>Without Tailwind CSS, add the snippet below to your stylesheet: a few components size their icons with
+                <code>w-4</code>/<code>h-5</code>-style utility classes, and buttons and inputs need to inherit the page font.</En>
+            <Es>Sin Tailwind CSS, agrega este fragmento a tu hoja de estilos: algunos componentes dimensionan sus íconos con
+                clases utilitarias como <code>w-4</code>/<code>h-5</code>, y los botones y campos necesitan heredar la fuente de la página.</Es>
+        </Tr>
+    </div>
+    <CodeBlock Language="css" Code="@IconSizesCode" />
+
+    <h2 class="docs-h2">@L.T("5. Add the global slots", "5. Agrega los contenedores globales")</h2>
+    <p>
+        <Tr>
+            <En><code>Toast</code> and the confirm dialog render from a single container. <code>AppShell</code> already
+                includes both. If you build your own layout, place them once:</En>
+            <Es><code>Toast</code> y el diálogo de confirmación se renderizan desde un único contenedor. <code>AppShell</code> ya
+                incluye ambos. Si armas tu propio layout, colócalos una sola vez:</Es>
+        </Tr>
+    </p>
+    <CodeBlock Code="@SlotsCode" />
+</DocPage>
+
+@code {
+    private const string ProgramCode = """
+        using Trazos.UI.Extensions;
+
+        builder.Services.AddTrazosUI(options =>
+        {
+            options.IsDevelopment = builder.Environment.IsDevelopment();
+            options.EnvironmentName = builder.Environment.EnvironmentName;
+        });
+        """;
+
+    private const string ImportsCode = """
+        @using Trazos.UI
+        @using Trazos.UI.Components
+        @using Trazos.UI.Layout
+        @using Trazos.UI.Services
+        """;
+
+    private const string HeadCode = """
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Marcellus&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
+        <link rel="stylesheet" href="_content/Trazos.UI/trazos.css" />
+        <link rel="stylesheet" href="YourApp.styles.css" />
+        """;
+
+    private const string IconSizesCode = """
+        svg.w-4 { width: 1rem; }    svg.h-4 { height: 1rem; }
+        svg.w-5 { width: 1.25rem; } svg.h-5 { height: 1.25rem; }
+        svg.w-6 { width: 1.5rem; }  svg.h-6 { height: 1.5rem; }
+
+        button, input, select, textarea { font: inherit; }
+        """;
+
+    private const string SlotsCode = """
+        @inherits LayoutComponentBase
+
+        <main>@Body</main>
+
+        <Toast />
+        <ConfirmDialogContainer />
+        """;
+
+    private IReadOnlyList<ApiParam> OptionsParams =>
+    [
+        new("IsDevelopment", "bool", "false", L.T("When true, AppShell shows an environment badge next to the brand.", "Si es true, AppShell muestra una insignia del entorno junto a la marca.")),
+        new("EnvironmentName", "string?", "null", L.T("Text of the badge. Falls back to \"DEV\".", "Texto de la insignia. Si falta, usa \"DEV\".")),
+        new("ShowEnvironmentBadge", "bool", "true", L.T("Hides the badge even in development when set to false.", "Si es false, oculta la insignia incluso en desarrollo.")),
+    ];
+}

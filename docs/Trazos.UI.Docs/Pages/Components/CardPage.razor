@@ -1,0 +1,85 @@
+@page "/components/card"
+
+<DocPage Title="Card" Category="@L.T("Display", "Visualización")"
+         Lead="@L.T("A sketch-bordered surface that groups related content, with optional header and footer slots.", "Una superficie con borde de boceto que agrupa contenido relacionado, con espacios opcionales de encabezado y pie.")">
+
+    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@VariantsCode">
+        <div class="docs-grid-2">
+            @foreach (var variant in Enum.GetValues<CardVariant>())
+            {
+                <Card Variant="variant">
+                    <h3 class="trazos-heading">@variant</h3>
+                    <p class="docs-muted">CardVariant.@variant</p>
+                </Card>
+            }
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Header and footer", "Encabezado y pie")" Code="@SlotsCode">
+        <Card Class="docs-card-demo">
+            <Header>
+                <h3 class="trazos-heading">@L.T("Design team", "Equipo de diseño")</h3>
+            </Header>
+            <ChildContent>
+                <p>@L.T("Reviews new work every Friday at 4:00 pm.", "Revisa el trabajo nuevo todos los viernes a las 4:00 p. m.")</p>
+            </ChildContent>
+            <Footer>
+                <Button Size="ButtonSize.Small">@L.T("Join", "Unirme")</Button>
+                <Button Size="ButtonSize.Small" Variant="ButtonVariant.Ghost">@L.T("Details", "Detalles")</Button>
+            </Footer>
+        </Card>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Clickable", "Clicable")" Description="@L.T("Interactive lifts on hover. Pair it with OnClick.", "Interactive se eleva al pasar el cursor. Combínalo con OnClick.")" Code="@ClickCode">
+        <Card Variant="CardVariant.Interactive" OnClick="() => _clicks++">
+            <h3 class="trazos-heading">@L.T("Click me", "Haz clic aquí")</h3>
+            <p class="docs-muted"><Tr><En>Clicked @_clicks time(s).</En><Es>Clics: @(_clicks).</Es></Tr></p>
+        </Card>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private int _clicks;
+
+    private const string VariantsCode = """
+        <Card Variant="CardVariant.Default">…</Card>
+        <Card Variant="CardVariant.White">…</Card>
+        <Card Variant="CardVariant.Lavender">…</Card>
+        <Card Variant="CardVariant.Interactive">…</Card>
+        """;
+
+    private const string SlotsCode = """
+        <Card>
+            <Header>
+                <h3 class="trazos-heading">Design team</h3>
+            </Header>
+            <ChildContent>
+                <p>Reviews new work every Friday at 4:00 pm.</p>
+            </ChildContent>
+            <Footer>
+                <Button Size="ButtonSize.Small">Join</Button>
+                <Button Size="ButtonSize.Small" Variant="ButtonVariant.Ghost">Details</Button>
+            </Footer>
+        </Card>
+        """;
+
+    private const string ClickCode = """
+        <Card Variant="CardVariant.Interactive" OnClick="() => _clicks++">
+            <h3 class="trazos-heading">Click me</h3>
+            <p>Clicked @_clicks time(s).</p>
+        </Card>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Variant", "CardVariant", "Default", L.T("Default, White, Lavender or Interactive.", "Default, White, Lavender o Interactive.")),
+        new("Header", "RenderFragment?", null, L.T("Content above the body, separated by a rule.", "Contenido sobre el cuerpo, separado por una línea.")),
+        new("ChildContent", "RenderFragment?", null, L.T("Card body.", "Cuerpo de la tarjeta.")),
+        new("Footer", "RenderFragment?", null, L.T("Content below the body, usually actions.", "Contenido bajo el cuerpo, normalmente acciones.")),
+        new("OnClick", "EventCallback<MouseEventArgs>", null, L.T("Raised when the card is clicked.", "Se dispara al hacer clic en la tarjeta.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+}

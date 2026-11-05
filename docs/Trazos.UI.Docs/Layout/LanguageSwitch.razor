@@ -1,0 +1,4 @@
+<div class="docs-lang" role="group" aria-label="@L.T("Language", "Idioma")">
+    <button type="button" class="docs-lang-option" aria-pressed="@(L.IsSpanish ? "false" : "true")" @onclick="() => L.SetAsync(DocsLang.En)" lang="en">EN</button>
+    <button type="button" class="docs-lang-option" aria-pressed="@(L.IsSpanish ? "true" : "false")" @onclick="() => L.SetAsync(DocsLang.Es)" lang="es">ES</button>
+</div>

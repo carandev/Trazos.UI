@@ -1,0 +1,49 @@
+@page "/components/loading-spinner"
+
+<DocPage Title="LoadingSpinner" Category="@L.T("Overlays & feedback", "Superposiciones y avisos")"
+         Lead="@L.T("A dual-ring halo for loading states, inline or as a full-screen overlay.", "Un halo de doble anillo para estados de carga, en línea o como superposición de pantalla completa.")">
+
+    <DemoBlock Title="@L.T("Inline", "En línea")" Code="@InlineCode">
+        <LoadingSpinner />
+        <LoadingSpinner Message="@L.T("Loading events…", "Cargando eventos…")" />
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Overlay", "Superposición")" Description="@L.T("Covers the whole viewport and blocks interaction. The demo closes it after two seconds.", "Cubre toda la ventana y bloquea la interacción. La demo la cierra después de dos segundos.")" Code="@OverlayCode">
+        <Button Variant="ButtonVariant.Outline" OnClick="ShowOverlayAsync">@L.T("Show overlay", "Mostrar superposición")</Button>
+        @if (_overlay)
+        {
+            <LoadingSpinner Overlay="true" Message="@L.T("Saving…", "Guardando…")" />
+        }
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private bool _overlay;
+
+    private async Task ShowOverlayAsync()
+    {
+        _overlay = true;
+        await Task.Delay(2000);
+        _overlay = false;
+    }
+
+    private const string InlineCode = """
+        <LoadingSpinner />
+        <LoadingSpinner Message="Loading events…" />
+        """;
+
+    private const string OverlayCode = """
+        @if (_saving)
+        {
+            <LoadingSpinner Overlay="true" Message="Saving…" />
+        }
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Message", "string?", null, L.T("Text below the spinner.", "Texto debajo del indicador.")),
+        new("Overlay", "bool", "false", L.T("Renders a fixed, full-screen overlay.", "Renderiza una superposición fija de pantalla completa.")),
+    ];
+}

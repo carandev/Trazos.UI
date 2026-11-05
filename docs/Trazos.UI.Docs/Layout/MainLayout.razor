@@ -1,0 +1,54 @@
+@inherits LayoutComponentBase
+@implements IDisposable
+@inject NavigationManager Navigation
+
+@* Keyed by language: switching it rebuilds the shell and the current page in the new language. *@
+<AppShell @key="L.Current" @ref="_shell" ContainerClass="docs-container">
+    <Brand>
+        <a href="" class="docs-brand">
+            <span class="docs-brand-mark" aria-hidden="true">T</span>
+            <span class="docs-brand-name trazos-heading">Trazos.UI</span>
+        </a>
+    </Brand>
+
+    <TopBar>
+        <div class="docs-topbar">
+            <nav class="docs-topbar-links" aria-label="@L.T("Project links", "Enlaces del proyecto")">
+                <a href="@DocsLinks.NuGet" target="_blank" rel="noopener noreferrer">NuGet</a>
+                <a href="@DocsLinks.GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </nav>
+            <ThemeSwitch />
+            <LanguageSwitch />
+        </div>
+    </TopBar>
+
+    <Sidebar>
+        <DocsSidebar />
+    </Sidebar>
+
+    <Body>
+        @Body
+    </Body>
+</AppShell>
+
+@code {
+    private AppShell? _shell;
+
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += OnLocationChanged;
+        L.Changed += OnLanguageChanged;
+    }
+
+    // The mobile drawer reuses the sidebar, so it must close after a navigation link is followed.
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+        => _shell?.CloseDrawer();
+
+    private void OnLanguageChanged() => StateHasChanged();
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+        L.Changed -= OnLanguageChanged;
+    }
+}
