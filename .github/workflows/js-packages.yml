@@ -121,10 +121,15 @@ jobs:
         run: |
           for pkg in @carandev/trazos-tokens @carandev/trazos-ui; do
             version=$(npm pkg get version -w "$pkg" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>console.log(Object.values(JSON.parse(s))[0]))')
-            if npm view "$pkg@$version" version >/dev/null 2>&1; then
+            if out=$(npm view "$pkg@$version" version 2>&1); then
               echo "$pkg@$version is already published, skipping."
-            else
+            elif grep -q E404 <<<"$out"; then
               echo "Publishing $pkg@$version"
               npm publish -w "$pkg"
+            else
+              # Network or auth problem: do not guess, fail with the reason.
+              echo "$out"
+              echo "::error::Could not check whether $pkg@$version is published."
+              exit 1
             fi
           done
