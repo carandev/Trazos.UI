@@ -1,0 +1,130 @@
+name: JS Packages (tokens + React)
+
+# Checks every pull request that touches the JS workspaces, and publishes
+# @carandev/trazos-tokens and @carandev/trazos-ui to npm with the same
+# triggers as the NuGet workflow: pushes to main, v* tags, or a manual run.
+# A version that is already on npm is skipped, like `--skip-duplicate`.
+#
+# Publishing uses npm Trusted Publishing (OIDC): no token is stored. Each
+# package must list this repository and the workflow file `js-packages.yml`
+# as its trusted publisher on npmjs.com.
+
+on:
+  pull_request:
+    paths:
+      - 'packages/**'
+      - 'apps/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'src/Trazos.UI/Trazos.UI.csproj'
+      - '.github/workflows/js-packages.yml'
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+    paths:
+      - 'packages/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/js-packages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: js-packages-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  check:
+    name: Lint, type-check, test, build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Check package contents
+        run: |
+          npm pack --dry-run -w @carandev/trazos-tokens
+          npm pack --dry-run -w @carandev/trazos-ui
+
+  razor:
+    # The Razor library generates wwwroot/trazos.css from packages/tokens,
+    # so token changes must keep it building.
+    name: Razor library still builds
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Build Trazos.UI
+        run: dotnet build src/Trazos.UI/Trazos.UI.csproj -c Release
+
+  publish:
+    name: Publish to npm
+    needs: [check, razor]
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # npm Trusted Publishing (OIDC) and provenance
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+
+      - name: Use an npm with Trusted Publishing support (>= 11.5.1)
+        run: npm install -g npm@11.20.0
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Publish new versions
+        # Tokens first: the React package depends on the exact tokens version.
+        run: |
+          for pkg in @carandev/trazos-tokens @carandev/trazos-ui; do
+            version=$(npm pkg get version -w "$pkg" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>console.log(Object.values(JSON.parse(s))[0]))')
+            if npm view "$pkg@$version" version >/dev/null 2>&1; then
+              echo "$pkg@$version is already published, skipping."
+            else
+              echo "Publishing $pkg@$version"
+              npm publish -w "$pkg"
+            fi
+          done
