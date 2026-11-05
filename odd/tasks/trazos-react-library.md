@@ -21,19 +21,28 @@ Branch: `feat/react-library` (worktree `/home/carandev/Work/Trazos.UI-worktrees/
 
 | ID | Specs | Task | Route | Status | Commit |
 |----|-------|------|-------|--------|--------|
-| T1 | S1, S2, S4 | npm workspaces root + `packages/tokens` + Razor build consumes tokens; wwwroot equivalence check | inline | pending | |
-| T2 | S3, S5, S7 | `packages/react` scaffold (Vite lib build, tsc types, ESLint, Vitest) + Button, Badge | inline | pending | |
-| T3 | S6, S7 | Display: Card, IconBox, EmptyState, FormSection, Skeleton, LoadingSpinner, WhatsAppButton | tbd | pending | |
-| T4 | S6, S7 | Inputs: TextInput, TextArea, SelectInput, Checkbox, RadioCardGroup | tbd | pending | |
-| T5 | S6, S7 | Overlays/services: Modal, Drawer, ConfirmDialog provider+hook, Toast provider+hook | tbd | pending | |
-| T6 | S6, S7 | Data/nav: Tabs, DataTable, Autocomplete, MonthCalendar | tbd | pending | |
-| T7 | S6, S7 | Layout: AppShell | tbd | pending | |
-| T8 | S8 | Docs/playground (choice confirmed with user) | tbd | pending | |
-| T9 | S9 | JS CI + npm publish workflow; NuGet workflow path filter includes tokens | inline | pending | |
-| T10 | S8 | READMEs root + packages | inline | pending | |
+| T1 | S1, S2, S4 | npm workspaces root + `packages/tokens` + Razor build consumes tokens; wwwroot equivalence check | inline | done | f1cf388 |
+| T2 | S3, S5, S7 | `packages/react` scaffold (Vite lib build, tsc types, ESLint, Vitest, axe) + Button, Badge; utilities.css shared | inline | done | 26c40ae |
+| T3 | S6, S7 | Display: Card, IconBox, EmptyState, FormSection, LoadingSpinner, WhatsAppButton | delegated (parallel W1) | done | 56a0ed7 |
+| T4 | S6, S7 | Inputs: TextInput, TextArea, SelectInput, Checkbox, RadioCardGroup | delegated (parallel W2) | done | a11444f |
+| T5 | S6, S7 | Overlays/services/layout: Modal, Drawer, ConfirmDialog provider+hook, Toast provider+hook, AppShell | delegated (parallel W3) | done | 2f2ea03 |
+| T6 | S6, S7 | Tabs, DataTable, Skeleton | delegated (parallel W4) | done | e6b337c |
+| T7 | S6, S7 | Autocomplete, MonthCalendar | delegated (parallel W5) | done | 34bd482 |
+| T8 | S8 | Vite playground `apps/playground` (user choice) | inline | done | 69cd49a |
+| T9 | S9 | JS CI + npm Trusted Publishing workflow; NuGet path filter + pinned actions | inline | done | bb49789 |
+| T10 | S8 | READMEs root + packages; package index exports | inline | done | (docs commit) |
 
 ## Log
 
 - L1 (2026-11-04) Original request: see the Specs section; quoted verbatim from the user's task brief (goal: "add a React + TypeScript version of Trazos.UI to this repository, turning it into a monorepo that ships both the existing Blazor/Razor library (NuGet) and a new React library (npm) from ONE shared design-token source").
 - L2 (2026-11-04) Decision: npm workspaces (matches `carandev.me`). Node v26.12.0, npm 11.20.0, .NET 10.0.403 available locally.
 - L3 (2026-11-04) Plan: tokens move out of `wwwroot/trazos.css` into `packages/tokens`; `trazos.css` is assembled at build time from tokens + Razor base utilities; NuGet workflow path filter must add `packages/tokens/**`.
+- L4 (2026-11-04) User decision: npm names `@carandev/trazos-tokens` and `@carandev/trazos-ui` (scope @carandev).
+- L5 (2026-11-04) T1 evidence: generated `wwwroot/trazos.css` is byte identical to the old file (`cmp`); repacked nupkg has the same file list, same staticwebassets/trazos.css bytes and same ETags; only Last-Modified timestamps differ. Docs project builds (0 warnings). Tokens tests 3/3 pass (characterization tests, GREEN on first run since the content was extracted, not new behavior). `.gitignore` `**/packages/*` (NuGet rule) needed `!/packages/*`.
+- L6 (2026-11-04) Decision: trazos.css defines no spacing tokens, so none were extracted (adding new ones would change the published CSS). React components use the same literal spacing as the Razor CSS for parity. Flag to user.
+- L7 (2026-11-04) T2 decisions: TypeScript ~6.0.3 and ESLint 9 (typescript-eslint 8.72 peer is TS <6.1; jsx-a11y does not support ESLint 10). Vite 8 lib mode, `preserveModules`, CSS transformer postcss + no CSS minify (Lightning CSS rewrote `color-scheme` into `--lightningcss-*` hacks). Single `dist/styles.css` = tokens + utilities + component CSS. `npm audit`: 7 moderate (minimatch ReDoS via typescript-eslint, dev-only lint tooling); accepted. Vitest `css: true` is required: with `css: false` the `?raw` imports used by the CSS isolation guard are empty (guard proven RED with a real collision).
+- L8 (2026-11-04) Route: T3-T7 delegated as 5 parallel writers (Writer trigger (a): independent component groups, disjoint edit surfaces, several hundred lines each). Parent owns git, `src/index.ts`, package.json/lock and configs; seam check = full suite once at the end.
+- L9 (2026-11-04) User decisions: playground = Vite playground (`apps/playground`); npm auth = Trusted Publishing (OIDC). Docs: npm CLI >= 11.5.1, Node >= 22.14, `id-token: write`, provenance automatic; trusted publisher = org/user, repo, workflow filename.
+- L10 (2026-11-04) Writer findings: 8 `:deep(...)` rules in the Razor CSS (IconBox, EmptyState, RadioCard, Tabs, Modal) compile to invalid selectors (`:deep(svg)[b-…]`, confirmed in obj scoped bundle) and never applied; copied verbatim for parity (Modal footer `> :deep(*)` became `> *`). Pre-existing Razor bug, left for the user. Renames for global CSS: `trazos-select-icon`, `trazos-autocomplete-has-error`, `trazos-autocomplete-disabled`, component-prefixed @keyframes in Modal/Drawer/Toast. Razor bugs fixed in the React port only: drawer swipe left AppShell state stale; a second confirm left the first unresolved.
+- L11 (2026-11-04) Seam check: 24 files / 272 tests pass; lint, typecheck, build (all workspaces) exit 0; tokens tests 3/3; `npm ci` OK; each component commit typechecks and tests in isolation (84/134/171/211/272). dist/styles.css contains tokens.css and utilities.css verbatim, before component CSS. Tree-shaking: consumer importing only Button bundles 1.1 kB with no Modal/Calendar/Autocomplete/Toast code. Razor Release build 0 warnings, generated trazos.css identical to baseline; docs build 0 warnings. Playground screenshots (light + dark) render correctly after fixing the barrel CSS drop (sideEffects only CSS). Pixel comparison against the Blazor docs not done: headless Chromium did not load the WASM app.
+- L12 (2026-11-04) Next: user review; push/PR/npm publish need explicit approval. Before the first npm release: configure trusted publishers (first publish may need to be manual).
