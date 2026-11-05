@@ -23,3 +23,12 @@ export * from './components/Autocomplete';
 export * from './components/DataTable';
 export * from './components/Tabs';
 export * from './components/MonthCalendar';
+
+// Overlays and services
+export * from './components/Modal';
+export * from './components/Drawer';
+export * from './components/ConfirmDialog';
+export * from './components/Toast';
+
+// Layout
+export * from './components/AppShell';

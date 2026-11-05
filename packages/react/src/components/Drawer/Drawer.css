@@ -1,0 +1,122 @@
+/* ========================================
+   DRAWER - Trazos UI (Warmth and Lively Borders)
+   ======================================== */
+
+.trazos-touch-area {
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .trazos-touch-area {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 16px;
+        height: 100vh;
+        z-index: 30;
+        pointer-events: auto;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+}
+
+.trazos-drawer-overlay,
+.trazos-drawer {
+    pointer-events: auto;
+}
+
+/* Overlay with a soft blur */
+.trazos-drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--trazos-backdrop);
+    backdrop-filter: blur(2px);
+    z-index: 40;
+    animation: trazosDrawerFadeIn 0.2s ease-out;
+}
+
+@keyframes trazosDrawerFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Drawer container */
+.trazos-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background-color: var(--trazos-panel);
+    border-right: 1.5px solid var(--trazos-border-soft);
+    box-shadow: 4px 0 24px rgb(var(--trazos-shadow-rgb) / calc(0.08 * var(--trazos-shadow-strength)));
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.trazos-drawer.open {
+    transform: translateX(0);
+}
+
+/* Drawer header */
+.trazos-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1rem;
+    border-bottom: 1.5px solid var(--trazos-border-soft);
+    background-color: var(--trazos-panel);
+}
+
+.trazos-drawer-title {
+    margin: 0;
+    font-family: 'Marcellus', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--trazos-text);
+}
+
+.trazos-drawer-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    background: var(--trazos-surface-raised);
+    border: 1.5px solid var(--trazos-border-control);
+    border-radius: 10px 12px 9px 11px / 11px 9px 12px 10px;
+    color: var(--trazos-text-light);
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: 1px 2px 0px rgb(var(--trazos-shadow-rgb) / calc(0.04 * var(--trazos-shadow-strength)));
+}
+
+.trazos-drawer-close:hover {
+    background: var(--trazos-surface-raised-hover);
+    border-color: var(--trazos-border-control-hover);
+    color: var(--trazos-text);
+}
+
+.trazos-drawer-close:active {
+    transform: scale(0.96);
+}
+
+.trazos-close-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.trazos-drawer-body {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0.75rem;
+    gap: 0.35rem;
+    background-color: var(--trazos-panel);
+}

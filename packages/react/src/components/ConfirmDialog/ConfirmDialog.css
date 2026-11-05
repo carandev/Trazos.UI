@@ -1,0 +1,6 @@
+.trazos-confirm-message {
+    color: var(--trazos-text);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    margin: 0;
+}
