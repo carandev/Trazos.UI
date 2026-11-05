@@ -1,0 +1,3 @@
+/* Shared design tokens and utility classes: the same files the Razor library ships. */
+@import '@carandev/trazos-tokens/tokens.css';
+@import '@carandev/trazos-tokens/utilities.css';

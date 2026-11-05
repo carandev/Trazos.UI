@@ -1,0 +1,152 @@
+/* ========================================
+   BUTTON - Trazos UI (ported from Components/Button/Button.razor.css)
+   ======================================== */
+
+.trazos-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    border: 1.5px solid transparent;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    user-select: none;
+}
+
+/* Sizes */
+.trazos-btn-sm {
+    padding: 0.375rem 0.875rem;
+    font-size: 0.75rem;
+}
+
+.trazos-btn-md {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+}
+
+.trazos-btn-lg {
+    padding: 0.875rem 1.75rem;
+    font-size: 1rem;
+}
+
+/* Variants */
+.trazos-btn-primary {
+    background-color: var(--trazos-olive-solid);
+    color: var(--trazos-on-accent);
+    border-color: var(--trazos-olive-edge);
+    box-shadow: 2px 3px 0px var(--trazos-olive-edge);
+}
+.trazos-btn-primary:hover:not(:disabled) {
+    background-color: var(--trazos-olive-solid-hover);
+    transform: translateY(-1px);
+    box-shadow: 3px 4px 0px var(--trazos-olive-edge);
+}
+.trazos-btn-primary:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 1px 1px 0px var(--trazos-olive-edge);
+}
+
+.trazos-btn-wine {
+    background-color: var(--trazos-wine-solid);
+    color: var(--trazos-on-accent);
+    border-color: var(--trazos-wine-edge);
+    box-shadow: 2px 3px 0px var(--trazos-wine-edge);
+}
+.trazos-btn-wine:hover:not(:disabled) {
+    background-color: var(--trazos-wine-solid-hover);
+    transform: translateY(-1px);
+    box-shadow: 3px 4px 0px var(--trazos-wine-edge);
+}
+.trazos-btn-wine:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 1px 1px 0px var(--trazos-wine-edge);
+}
+
+.trazos-btn-secondary {
+    background-color: var(--trazos-ink-solid);
+    color: var(--trazos-on-accent);
+    border-color: var(--trazos-ink-edge);
+    box-shadow: 2px 3px 0px var(--trazos-ink-edge);
+}
+.trazos-btn-secondary:hover:not(:disabled) {
+    background-color: var(--trazos-ink-solid-hover);
+    transform: translateY(-1px);
+    box-shadow: 3px 4px 0px var(--trazos-ink-edge);
+}
+.trazos-btn-secondary:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 1px 1px 0px var(--trazos-ink-edge);
+}
+
+.trazos-btn-outline {
+    background-color: var(--trazos-surface-raised);
+    color: var(--trazos-text);
+    border-color: var(--trazos-border-strong);
+    border-radius: 14px 18px 12px 16px / 16px 12px 18px 14px;
+    box-shadow: 2px 2px 0px rgb(var(--trazos-shadow-rgb) / calc(0.06 * var(--trazos-shadow-strength)));
+}
+.trazos-btn-outline:hover:not(:disabled) {
+    background-color: var(--trazos-hover);
+    border-color: var(--trazos-border-strong-hover);
+    transform: translateY(-1px);
+}
+.trazos-btn-outline:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.trazos-btn-cream {
+    background-color: var(--trazos-gold-tint);
+    color: var(--trazos-gold-text-strong);
+    border-color: var(--trazos-gold-tint-border);
+    box-shadow: 2px 2px 0px var(--trazos-gold-shadow);
+}
+.trazos-btn-cream:hover:not(:disabled) {
+    background-color: var(--trazos-gold-tint-hover);
+    transform: translateY(-1px);
+}
+
+.trazos-btn-lavender {
+    background-color: var(--trazos-lavender-tint);
+    color: var(--trazos-lavender-text-strong);
+    border-color: var(--trazos-lavender-border);
+    box-shadow: 2px 2px 0px var(--trazos-lavender-shadow);
+}
+.trazos-btn-lavender:hover:not(:disabled) {
+    background-color: var(--trazos-lavender-tint-hover);
+    transform: translateY(-1px);
+}
+
+.trazos-btn-ghost {
+    background-color: transparent;
+    color: var(--trazos-text);
+    border-color: transparent;
+    box-shadow: none;
+}
+.trazos-btn-ghost:hover:not(:disabled) {
+    background-color: var(--trazos-hover);
+}
+
+/* Disabled */
+.trazos-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Mini spinner */
+.trazos-btn-spinner {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    animation: trazosBtnSpin 0.75s linear infinite;
+}
+
+@keyframes trazosBtnSpin {
+    to { transform: rotate(360deg); }
+}
