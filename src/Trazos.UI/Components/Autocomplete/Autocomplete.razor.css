@@ -16,35 +16,35 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: #5A4C46;
+    color: var(--trazos-text-light);
 }
 
 .trazos-autocomplete-required {
-    color: #9B1D43;
+    color: var(--trazos-danger);
     margin-left: 0.15rem;
 }
 
 .trazos-autocomplete-field {
     display: flex;
     align-items: center;
-    background: #ffffff;
-    border: 1.5px solid #D5CEC0;
+    background: var(--trazos-field);
+    border: 1.5px solid var(--trazos-border-input);
     border-radius: 14px 18px 12px 16px / 16px 12px 18px 14px;
-    box-shadow: 1px 1px 0px rgba(44, 34, 30, 0.04);
+    box-shadow: 1px 1px 0px rgb(var(--trazos-shadow-rgb) / calc(0.04 * var(--trazos-shadow-strength)));
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .trazos-autocomplete-field:focus-within {
-    border-color: #4A8A6B;
-    box-shadow: 0 0 0 3px rgba(74, 138, 107, 0.15);
+    border-color: var(--trazos-focus);
+    box-shadow: 0 0 0 3px var(--trazos-focus-ring);
 }
 
 .trazos-autocomplete-field.has-error {
-    border-color: #9B1D43;
+    border-color: var(--trazos-danger);
 }
 
 .trazos-autocomplete-field.disabled {
-    background: #FAF7F2;
+    background: var(--trazos-field-disabled);
     opacity: 0.65;
 }
 
@@ -53,7 +53,7 @@
     align-items: center;
     justify-content: center;
     padding-left: 0.75rem;
-    color: #786B65;
+    color: var(--trazos-text-muted);
 }
 
 .trazos-autocomplete-icon svg {
@@ -64,8 +64,8 @@
 .trazos-autocomplete-spinner {
     width: 1rem;
     height: 1rem;
-    border: 2px solid #E5DACB;
-    border-top-color: #4A8A6B;
+    border: 2px solid var(--trazos-border);
+    border-top-color: var(--trazos-olive);
     border-radius: 9999px;
     animation: trazos-autocomplete-spin 0.7s linear infinite;
 }
@@ -80,14 +80,14 @@
     padding: 0.65rem 0.875rem 0.65rem 0.6rem;
     font-size: 0.875rem;
     font-family: inherit;
-    color: #2C221E;
+    color: var(--trazos-text);
     background: transparent;
     border: none;
     outline: none;
 }
 
 .trazos-autocomplete-input::placeholder {
-    color: #A89D96;
+    color: var(--trazos-text-placeholder);
 }
 
 .trazos-autocomplete-list {
@@ -101,29 +101,29 @@
     padding: 0.35rem;
     overflow-y: auto;
     list-style: none;
-    background: #ffffff;
-    border: 1.5px solid #E5DACB;
+    background: var(--trazos-surface);
+    border: 1.5px solid var(--trazos-border);
     border-radius: 14px;
-    box-shadow: 0 10px 30px -5px rgba(44, 34, 30, 0.15);
+    box-shadow: 0 10px 30px -5px rgb(var(--trazos-shadow-rgb) / calc(0.15 * var(--trazos-shadow-strength)));
 }
 
 .trazos-autocomplete-option {
     padding: 0.55rem 0.7rem;
     font-size: 0.875rem;
-    color: #2C221E;
+    color: var(--trazos-text);
     border-radius: 10px;
     cursor: pointer;
 }
 
 .trazos-autocomplete-option.is-active {
-    background: #F3F8F5;
-    color: #1E3F2E;
+    background: var(--trazos-olive-soft);
+    color: var(--trazos-olive-text-strong);
 }
 
 .trazos-autocomplete-empty {
     padding: 0.75rem;
     font-size: 0.8125rem;
-    color: #786B65;
+    color: var(--trazos-text-muted);
     text-align: center;
 }
 
@@ -132,8 +132,8 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 0.5rem 0.5rem 0.875rem;
-    background: #F3F8F5;
-    border: 1.5px solid #C7E0D1;
+    background: var(--trazos-olive-soft);
+    border: 1.5px solid var(--trazos-olive-border);
     border-radius: 14px 18px 12px 16px / 16px 12px 18px 14px;
 }
 
@@ -141,7 +141,7 @@
     flex: 1;
     min-width: 0;
     font-size: 0.875rem;
-    color: #1E3F2E;
+    color: var(--trazos-olive-text-strong);
 }
 
 .trazos-autocomplete-clear {
@@ -151,16 +151,16 @@
     width: 1.9rem;
     height: 1.9rem;
     flex-shrink: 0;
-    color: #5A4C46;
-    background: #ffffff;
-    border: 1px solid #DCD5C6;
+    color: var(--trazos-text-light);
+    background: var(--trazos-surface-raised);
+    border: 1px solid var(--trazos-border-control);
     border-radius: 9999px;
     cursor: pointer;
 }
 
 .trazos-autocomplete-clear:hover:not(:disabled) {
-    color: #9B1D43;
-    border-color: #F5BAC5;
+    color: var(--trazos-danger);
+    border-color: var(--trazos-wine-border);
 }
 
 .trazos-autocomplete-clear svg {
@@ -171,12 +171,12 @@
 .trazos-autocomplete-helper {
     margin: 0;
     font-size: 0.75rem;
-    color: #786B65;
+    color: var(--trazos-text-muted);
 }
 
 .trazos-autocomplete-error {
     margin: 0;
     font-size: 0.75rem;
     font-weight: 600;
-    color: #9B1D43;
+    color: var(--trazos-danger);
 }

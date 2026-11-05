@@ -13,7 +13,7 @@
     letter-spacing: 0.05em;
     border: 1px solid transparent;
     border-radius: 12px 14px 10px 12px / 12px 10px 14px 12px;
-    box-shadow: 1px 1px 0px rgba(44, 34, 30, 0.04);
+    box-shadow: 1px 1px 0px rgb(var(--trazos-shadow-rgb) / calc(0.04 * var(--trazos-shadow-strength)));
 }
 
 .trazos-badge-icon {
@@ -22,43 +22,43 @@
 }
 
 .trazos-badge-success {
-    background-color: #F3F8F5;
-    color: #2D5843;
-    border-color: #C7E0D1;
+    background-color: var(--trazos-olive-soft);
+    color: var(--trazos-olive-text);
+    border-color: var(--trazos-olive-border);
 }
 
 .trazos-badge-warning {
-    background-color: #FEFBF3;
-    color: #92400E;
-    border-color: #F9E5B3;
+    background-color: var(--trazos-gold-soft);
+    color: var(--trazos-gold-text);
+    border-color: var(--trazos-gold-border);
 }
 
 .trazos-badge-error {
-    background-color: #FDF2F4;
-    color: #851D41;
-    border-color: #F5BAC5;
+    background-color: var(--trazos-wine-soft);
+    color: var(--trazos-wine-text);
+    border-color: var(--trazos-wine-border);
 }
 
 .trazos-badge-info {
-    background-color: #F5F8FC;
-    color: #3B5270;
-    border-color: #C5D4E8;
+    background-color: var(--trazos-sky-soft);
+    color: var(--trazos-sky-text);
+    border-color: var(--trazos-sky-border);
 }
 
 .trazos-badge-lavender {
-    background-color: #F3F0F9;
-    color: #5D4378;
-    border-color: #D4C5E8;
+    background-color: var(--trazos-lavender-soft);
+    color: var(--trazos-lavender-text);
+    border-color: var(--trazos-lavender-border);
 }
 
 .trazos-badge-cream {
-    background-color: #FAF7F2;
-    color: #78350F;
-    border-color: #E8DECE;
+    background-color: var(--trazos-cream-soft);
+    color: var(--trazos-gold-text-strong);
+    border-color: var(--trazos-cream-border);
 }
 
 .trazos-badge-neutral {
-    background-color: #ffffff;
-    color: #5A4C46;
-    border-color: #DCD5C6;
+    background-color: var(--trazos-surface);
+    color: var(--trazos-text-light);
+    border-color: var(--trazos-border-control);
 }

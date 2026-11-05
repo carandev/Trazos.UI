@@ -5,7 +5,8 @@
 ## Features
 
 - **Artisanal Aesthetics**: Organic border-radii (`sketch-card`, `sketch-sm`), warm parchment backgrounds (`#FAF7F2`), ink accents (`#2C221E`), and soft shadows.
-- **Zero Heavy Dependencies**: Pure Blazor components (`.razor` + scoped `.razor.css`). Works with or without Tailwind CSS.
+- **Zero Heavy Dependencies**: Pure Blazor components (`.razor` + scoped `.razor.css`). Without Tailwind CSS, add the small icon-size snippet from the installation guide.
+- **Dark Mode**: Every color is a role-based CSS variable (`--trazos-*`). Light is the default; add `data-theme="dark"` to `<html>` (or any ancestor) for the dark theme.
 - **Atomic Primitives**:
   - `Button`: Primary, Wine, Secondary, Outline, Cream, Lavender, Ghost variants with loading spinners.
   - `Card`: Default, Lavender, and Interactive variants with header/footer support.
@@ -66,6 +67,23 @@ In your `index.html` or `App.razor`:
 ```html
 <link href="_content/Trazos.UI/trazos.css" rel="stylesheet" />
 ```
+
+## Dark Mode
+
+Dark mode is opt-in, so existing apps keep their look:
+
+```html
+<html data-theme="dark">
+```
+
+The library never reads `prefers-color-scheme` on its own; your app decides (for example, with a small script in `<head>` that reads the system preference and a saved choice). Customize the palette by overriding tokens after `trazos.css`:
+
+```css
+:root { --trazos-olive: #3F7D5E; }
+[data-theme="dark"] { --trazos-olive: #7CC09D; }
+```
+
+See `wwwroot/trazos.css` for the full token list.
 
 ## Quick Example
 

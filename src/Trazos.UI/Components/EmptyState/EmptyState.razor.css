@@ -27,7 +27,7 @@
     font-family: var(--trazos-font-display, 'Marcellus', serif);
     font-size: 1.125rem;
     font-weight: 700;
-    color: #2C221E;
+    color: var(--trazos-text);
 }
 
 .trazos-empty-state.is-compact .trazos-empty-state-title {
@@ -39,7 +39,7 @@
     max-width: 28rem;
     font-size: 0.875rem;
     line-height: 1.5;
-    color: #786B65;
+    color: var(--trazos-text-muted);
 }
 
 .trazos-empty-state-actions {

@@ -1,5 +1,5 @@
 .trazos-confirm-message {
-    color: #2C221E;
+    color: var(--trazos-text);
     font-size: 0.9375rem;
     line-height: 1.5;
     margin: 0;

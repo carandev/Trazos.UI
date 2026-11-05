@@ -3,10 +3,10 @@
    ======================================== */
 
 .trazos-table-wrapper {
-    background: #ffffff;
-    border: 1.5px solid #E5DACB;
+    background: var(--trazos-surface);
+    border: 1.5px solid var(--trazos-border);
     border-radius: 20px 24px 18px 22px / 22px 18px 24px 20px;
-    box-shadow: 2px 3px 0px rgba(44, 34, 30, 0.04), 0 6px 20px -4px rgba(62, 47, 40, 0.05);
+    box-shadow: 2px 3px 0px rgb(var(--trazos-shadow-rgb) / calc(0.04 * var(--trazos-shadow-strength))), 0 6px 20px -4px rgb(var(--trazos-shadow-warm-rgb) / calc(0.05 * var(--trazos-shadow-strength)));
     overflow: hidden;
 }
 
@@ -22,8 +22,8 @@
 }
 
 .trazos-table-head {
-    background-color: #FAF7F2;
-    border-bottom: 1.5px solid #E8DECE;
+    background-color: var(--trazos-surface-muted);
+    border-bottom: 1.5px solid var(--trazos-border-soft);
 }
 
 .trazos-table-head th {
@@ -33,14 +33,14 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: #5A4C46;
+    color: var(--trazos-text-light);
 }
 
 .trazos-table-body td {
     padding: 1rem 1.25rem;
     font-size: 0.875rem;
-    color: #2C221E;
-    border-bottom: 1px solid #F4ECE0;
+    color: var(--trazos-text);
+    border-bottom: 1px solid var(--trazos-divider);
 }
 
 .trazos-table-row {
@@ -52,7 +52,7 @@
 }
 
 .trazos-table-row:hover {
-    background-color: #FAF7F2;
+    background-color: var(--trazos-surface-muted);
 }
 
 .trazos-table-row.interactive {
@@ -66,7 +66,7 @@
 
 .trazos-table-empty-text {
     margin: 0;
-    color: #786B65;
+    color: var(--trazos-text-muted);
     font-size: 0.875rem;
 }
 

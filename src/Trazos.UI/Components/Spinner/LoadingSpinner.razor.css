@@ -15,7 +15,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(250, 247, 242, 0.88);
+    background-color: var(--trazos-overlay-veil);
     backdrop-filter: blur(4px);
     z-index: 9999;
 }
@@ -32,12 +32,12 @@
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    border: 3px solid #E8DECE;
-    border-top-color: #2D6A4F; /* Verde esperanza */
-    border-right-color: #D97706; /* Oro cálido luz */
+    border: 3px solid var(--trazos-border-soft);
+    border-top-color: var(--trazos-olive-bar); /* Verde esperanza */
+    border-right-color: var(--trazos-gold); /* Oro cálido luz */
     position: relative;
     animation: spinLiturgical 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
-    box-shadow: 0 4px 12px -2px rgba(45, 106, 79, 0.15);
+    box-shadow: 0 4px 12px -2px var(--trazos-olive-glow);
 }
 
 .spinner-inner {
@@ -49,23 +49,23 @@
     margin-top: -10px;
     margin-left: -10px;
     border-radius: 50%;
-    border: 2px solid #E8DECE;
-    border-bottom-color: #851D41; /* Vino vivo */
+    border: 2px solid var(--trazos-border-soft);
+    border-bottom-color: var(--trazos-wine-text); /* Vino vivo */
     animation: spinInnerLiturgical 1.4s ease-in-out infinite reverse;
 }
 
 .loading-message {
-    color: #2C221E;
+    color: var(--trazos-text);
     font-family: 'Marcellus', serif;
     font-size: 0.875rem;
     font-weight: 600;
     letter-spacing: 0.03em;
     margin: 0;
     padding: 0.5rem 1.25rem;
-    border: 1.5px solid #E5DACB;
-    background: #FFFFFF;
+    border: 1.5px solid var(--trazos-border);
+    background: var(--trazos-surface);
     border-radius: 16px 20px 14px 18px / 18px 14px 20px 16px;
-    box-shadow: 2px 3px 0px rgba(44, 34, 30, 0.05);
+    box-shadow: 2px 3px 0px rgb(var(--trazos-shadow-rgb) / calc(0.05 * var(--trazos-shadow-strength)));
 }
 
 @keyframes spinLiturgical {

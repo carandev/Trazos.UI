@@ -5,7 +5,7 @@
 .trazos-form-section + .trazos-form-section {
     margin-top: 1.75rem;
     padding-top: 1.5rem;
-    border-top: 1.5px dashed #E8DECE;
+    border-top: 1.5px dashed var(--trazos-border-soft);
 }
 
 .trazos-form-section-header {
@@ -24,9 +24,9 @@
     height: 1.75rem;
     font-size: 0.8125rem;
     font-weight: 800;
-    color: #2D5843;
-    background: #E8F0EA;
-    border: 1.5px solid #C5DCCB;
+    color: var(--trazos-olive-text);
+    background: var(--trazos-olive-tint);
+    border: 1.5px solid var(--trazos-olive-tint-border);
     border-radius: 9999px;
 }
 
@@ -41,13 +41,13 @@
     font-size: 1.05rem;
     font-weight: 700;
     line-height: 1.3;
-    color: #2C221E;
+    color: var(--trazos-text);
 }
 
 .trazos-form-section-description {
     margin: 0.15rem 0 0 0;
     font-size: 0.8125rem;
-    color: #786B65;
+    color: var(--trazos-text-muted);
 }
 
 .trazos-form-section-body {

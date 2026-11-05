@@ -1,27 +1,55 @@
 /* ==========================================================================
    TRAZOS UI - Design Tokens & Foundation
-   Estética de calidez, trazos vivos y diseño artesanal orgánico
+   Warm, hand-drawn, organic "parchment & ink" aesthetic.
+
+   How the tokens work
+   -------------------
+   - Component styles never use color literals. They read ROLE tokens
+     (what a color is for, not what it looks like): surfaces, borders,
+     text, focus, overlays, shadows and one family per accent
+     (olive, wine, gold, lavender, sky, plus WhatsApp green).
+     One hex can back several roles: #FFFFFF is both `--trazos-surface`
+     (card background) and `--trazos-on-accent` (text on a solid button),
+     because each role changes differently in dark mode.
+   - `:root` holds the light defaults. They are the original Trazos UI
+     colors, so light mode looks exactly as before.
+   - The legacy public tokens (`--trazos-color-ink`, `--trazos-color-parchment-*`,
+     `--trazos-color-olive-500`, ...) keep their values and keep working.
+   - Ink-based shadows are written as
+     `rgb(var(--trazos-shadow-rgb) / calc(<alpha> * var(--trazos-shadow-strength)))`
+     so a theme can change the shadow color and scale its opacity at once.
+
+   Dark mode
+   ---------
+   Dark mode is opt-in. Set the attribute on any ancestor, normally <html>:
+
+       <html data-theme="dark">
+
+   Every token below is redefined under `[data-theme="dark"]`. There is no
+   automatic switch from `prefers-color-scheme`; the host app decides.
    ========================================================================== */
 
 :root {
-    /* Tipografía */
+    color-scheme: light;
+
+    /* Typography */
     --trazos-font-display: 'Marcellus', serif;
     --trazos-font-hand: 'Caveat', cursive;
     --trazos-font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
 
-    /* Tinta y Textos */
+    /* Legacy public tokens: ink and text */
     --trazos-color-ink: #2C221E;
     --trazos-color-ink-light: #5A4C46;
     --trazos-color-ink-muted: #8C7E77;
 
-    /* Pergamino y Fondos */
+    /* Legacy public tokens: parchment and backgrounds */
     --trazos-color-parchment-50: #FDFBF7;
     --trazos-color-parchment-100: #FAF7F2;
     --trazos-color-parchment-200: #F4ECE0;
     --trazos-color-parchment-300: #E8DECE;
     --trazos-color-parchment-border: #E5DACB;
 
-    /* Acentos Vivos */
+    /* Legacy public tokens: accents */
     --trazos-color-olive-500: #4A8A6B;
     --trazos-color-olive-600: #386F54;
     --trazos-color-wine-500: #C0335C;
@@ -29,21 +57,317 @@
     --trazos-color-gold-500: #D97706;
     --trazos-color-gold-600: #B45309;
 
-    /* Curvas Orgánicas / Trazo Manual */
+    /* Hand-drawn organic curves */
     --trazos-radius-sketch: 255px 15px 225px 15px / 15px 225px 15px 255px;
     --trazos-radius-sketch-card: 20px 24px 18px 22px / 22px 18px 24px 20px;
     --trazos-radius-sketch-sm: 14px 18px 12px 16px / 16px 12px 18px 14px;
     --trazos-radius-sketch-btn: 12px 14px 10px 12px / 12px 10px 14px 12px;
 
-    /* Sombras Cálidas */
-    --trazos-shadow-sketch: 2px 3px 0px rgba(44, 34, 30, 0.08);
-    --trazos-shadow-sketch-lg: 3px 4px 0px rgba(44, 34, 30, 0.12);
-    --trazos-shadow-soft: 0 4px 20px -2px rgba(44, 34, 30, 0.06);
-    --trazos-shadow-deep: 0 10px 30px -5px rgba(44, 34, 30, 0.12);
+    /* ---- Surfaces ---- */
+    --trazos-page: #FAF7F2;                 /* app shell, sidebar, top bar */
+    --trazos-panel: #FAF7F2;                /* modal and drawer frames, headers, footers */
+    --trazos-surface: #FFFFFF;              /* cards, tables, lists, calendar, toasts */
+    --trazos-surface-raised: #FFFFFF;       /* small controls: close, arrows, outline button, active tab */
+    --trazos-surface-raised-hover: #F4EFE6; /* hover of small icon buttons */
+    --trazos-surface-muted: #FAF7F2;        /* table head, weekday row, row hover, icon wells */
+    --trazos-surface-dim: #FDFBF7;          /* de-emphasized cells (days outside the month) */
+    --trazos-surface-hover: #FDFBF7;        /* hover of selectable cards */
+    --trazos-surface-inset: #F9F6F0;        /* contained tabs nav strip */
+    --trazos-track: #F3ECE1;                /* pill tabs track */
+    --trazos-hover: #F4ECE0;                /* hover of outline and ghost buttons */
+    --trazos-hover-tint: rgba(232, 222, 206, 0.25);
+    --trazos-hover-tint-strong: rgba(232, 222, 206, 0.35);
+    --trazos-tag: #E8DECE;                  /* neutral count badge in tabs */
+    --trazos-field: #FFFFFF;                /* text inputs, selects, textareas */
+    --trazos-field-disabled: #FAF7F2;
+    --trazos-skeleton-base: #F4ECE0;
+    --trazos-skeleton-highlight: #FAF7F2;
+
+    /* ---- Borders ---- */
+    --trazos-border: #E5DACB;               /* outer border of cards and containers */
+    --trazos-border-soft: #E8DECE;          /* dividers inside containers */
+    --trazos-border-grid: #EFE7DA;          /* calendar grid lines */
+    --trazos-divider: #F4ECE0;              /* table row separators */
+    --trazos-border-control: #DCD5C6;       /* small buttons and neutral chips */
+    --trazos-border-control-hover: #CDC4B2;
+    --trazos-border-input: #D5CEC0;         /* form fields */
+    --trazos-border-strong: #D8CBB7;        /* outline button */
+    --trazos-border-strong-hover: #C4B49D;
+    --trazos-border-highlight: #D4A373;     /* interactive card hover */
+
+    /* ---- Text ---- */
+    --trazos-text: #2C221E;
+    --trazos-text-light: #5A4C46;           /* labels, secondary headings */
+    --trazos-text-muted: #786B65;           /* helper text, descriptions */
+    --trazos-text-secondary: #726258;       /* inactive tabs */
+    --trazos-text-subtle: #8C7E77;          /* placeholders, weekday names */
+    --trazos-text-placeholder: #A89D96;
+    --trazos-text-disabled: #BDB2A8;
+    --trazos-on-accent: #FFFFFF;            /* text and icons on solid accent fills */
+
+    /* ---- Focus, status and overlays ---- */
+    --trazos-focus: #4A8A6B;
+    --trazos-focus-ring: rgba(74, 138, 107, 0.15);
+    --trazos-danger: #9B1D43;               /* error text, error borders, required marks */
+    --trazos-danger-ring: rgba(155, 29, 67, 0.15);
+    --trazos-backdrop: rgba(44, 34, 30, 0.45);
+    --trazos-overlay-veil: rgba(250, 247, 242, 0.88); /* loading overlay */
+
+    /* ---- Shadows ---- */
+    --trazos-shadow-rgb: 44 34 30;
+    --trazos-shadow-warm-rgb: 62 47 40;
+    --trazos-shadow-strength: 1;
+    --trazos-shadow-sketch: 2px 3px 0px rgb(var(--trazos-shadow-rgb) / calc(0.08 * var(--trazos-shadow-strength)));
+    --trazos-shadow-sketch-lg: 3px 4px 0px rgb(var(--trazos-shadow-rgb) / calc(0.12 * var(--trazos-shadow-strength)));
+    --trazos-shadow-soft: 0 4px 20px -2px rgb(var(--trazos-shadow-rgb) / calc(0.06 * var(--trazos-shadow-strength)));
+    --trazos-shadow-deep: 0 10px 30px -5px rgb(var(--trazos-shadow-rgb) / calc(0.12 * var(--trazos-shadow-strength)));
+
+    /* ---- Ink (dark solid button) ---- */
+    --trazos-ink-solid: #2C221E;
+    --trazos-ink-solid-hover: #000000;
+    --trazos-ink-edge: #15100E;
+
+    /* ---- Neutral accent (calendar neutral tone) ---- */
+    --trazos-neutral: #8C7E77;
+
+    /* ---- Olive ---- */
+    --trazos-olive: #4A8A6B;                /* accent strokes, dots, selection outlines */
+    --trazos-olive-solid: #386F54;          /* primary button, checked checkbox */
+    --trazos-olive-solid-hover: #2D5843;
+    --trazos-olive-edge: #1F3B2D;           /* solid button border and offset shadow */
+    --trazos-olive-strong: #2D5843;         /* filled indicators: today, radio check, active tab bar */
+    --trazos-olive-bar: #2D6A4F;            /* success toast bar, spinner */
+    --trazos-olive-glow: rgba(45, 106, 79, 0.15);
+    --trazos-olive-ring: rgba(74, 138, 107, 0.12);
+    --trazos-olive-soft: #F3F8F5;           /* light tint background */
+    --trazos-olive-border: #C7E0D1;
+    --trazos-olive-border-hover: #A2C8AC;
+    --trazos-olive-tint: #E8F0EA;           /* stronger tint background */
+    --trazos-olive-tint-alt: #E4F0E8;       /* success toast icon */
+    --trazos-olive-tint-border: #C5DCCB;
+    --trazos-olive-text: #2D5843;           /* text on olive tints */
+    --trazos-olive-text-strong: #1E3F2E;    /* selected / active text */
+
+    /* ---- Wine ---- */
+    --trazos-wine: #C0335C;
+    --trazos-wine-solid: #9B1D43;
+    --trazos-wine-solid-hover: #851D41;
+    --trazos-wine-edge: #4D1026;
+    --trazos-wine-soft: #FDF2F4;
+    --trazos-wine-tint: #FBE4E8;
+    --trazos-wine-border: #F5BAC5;
+    --trazos-wine-text: #851D41;
+
+    /* ---- Gold ---- */
+    --trazos-gold: #D97706;
+    --trazos-gold-bright: #F59E0B;          /* environment badge dashed border */
+    --trazos-gold-shadow: rgba(180, 83, 9, 0.15);
+    --trazos-gold-soft: #FEFBF3;
+    --trazos-gold-border: #F9E5B3;
+    --trazos-gold-tint: #FDF4DC;            /* cream button, cream icon box */
+    --trazos-gold-tint-hover: #F9E5B3;
+    --trazos-gold-tint-border: #F5D384;
+    --trazos-gold-text: #92400E;
+    --trazos-gold-text-strong: #78350F;
+    --trazos-cream-soft: #FAF7F2;           /* cream badge */
+    --trazos-cream-border: #E8DECE;
+
+    /* ---- Lavender ---- */
+    --trazos-lavender: #7C5AA0;
+    --trazos-lavender-soft: #F3F0F9;
+    --trazos-lavender-tint: #E7E1F3;
+    --trazos-lavender-tint-hover: #D4C5E8;
+    --trazos-lavender-border: #D4C5E8;
+    --trazos-lavender-text: #5D4378;
+    --trazos-lavender-text-strong: #3E2C50;
+    --trazos-lavender-shadow: rgba(93, 67, 120, 0.12);
+    --trazos-lavender-shadow-sm: rgba(93, 67, 120, 0.06);
+    --trazos-lavender-shadow-md: rgba(93, 67, 120, 0.08);
+    --trazos-lavender-card-start: rgba(231, 225, 243, 0.9);
+    --trazos-lavender-card-end: rgba(250, 248, 244, 0.6);
+    --trazos-lavender-card-border: rgba(212, 197, 232, 0.85);
+
+    /* ---- Sky ---- */
+    --trazos-sky: #4E6D96;
+    --trazos-sky-soft: #F5F8FC;
+    --trazos-sky-tint: #EDF2F9;
+    --trazos-sky-border: #C5D4E8;
+    --trazos-sky-text: #3B5270;
+
+    /* ---- WhatsApp (brand colors, same in every theme) ---- */
+    --trazos-whatsapp: #25D366;
+    --trazos-whatsapp-hover: #1DA851;
+    --trazos-whatsapp-border: #1EA952;
+    --trazos-whatsapp-text: white;
+    --trazos-whatsapp-shadow: rgba(29, 168, 81, 0.25);
+    --trazos-whatsapp-shadow-hover: rgba(29, 168, 81, 0.3);
+    --trazos-whatsapp-shadow-active: rgba(29, 168, 81, 0.2);
 }
 
 /* ==========================================================================
-   Clases Utilitarias Base
+   Dark theme (opt-in): <html data-theme="dark">
+   Warm dark parchment with bright ink. Solid accent fills are bright and
+   carry dark text (`--trazos-on-accent`), so every solid keeps >= 4.5:1.
+   ========================================================================== */
+
+[data-theme="dark"] {
+    color-scheme: dark;
+
+    /* Legacy public tokens */
+    --trazos-color-ink: #F1E9DD;
+    --trazos-color-ink-light: #D9CCBE;
+    --trazos-color-ink-muted: #A0918A;
+    --trazos-color-parchment-50: #1E1814;
+    --trazos-color-parchment-100: #2A221D;
+    --trazos-color-parchment-200: #2C241F;
+    --trazos-color-parchment-300: #3D332D;
+    --trazos-color-parchment-border: #463B34;
+    --trazos-color-olive-500: #6FB08F;
+    --trazos-color-olive-600: #5E9E7E;
+    --trazos-color-wine-500: #E0668A;
+    --trazos-color-wine-600: #CC5277;
+    --trazos-color-gold-500: #F2A541;
+    --trazos-color-gold-600: #DB8B26;
+
+    /* Surfaces */
+    --trazos-page: #1A1512;
+    --trazos-panel: #2A221D;
+    --trazos-surface: #231C18;
+    --trazos-surface-raised: #2F2621;
+    --trazos-surface-raised-hover: #3A302A;
+    --trazos-surface-muted: #2A221E;
+    --trazos-surface-dim: #1E1814;
+    --trazos-surface-hover: #2A221E;
+    --trazos-surface-inset: #1E1814;
+    --trazos-track: #1E1814;
+    --trazos-hover: #3A302A;
+    --trazos-hover-tint: rgba(241, 233, 221, 0.05);
+    --trazos-hover-tint-strong: rgba(241, 233, 221, 0.08);
+    --trazos-tag: #3D332D;
+    --trazos-field: #1E1814;
+    --trazos-field-disabled: #2A221E;
+    --trazos-skeleton-base: #2C241F;
+    --trazos-skeleton-highlight: #3A302A;
+
+    /* Borders */
+    --trazos-border: #463B34;
+    --trazos-border-soft: #3D332D;
+    --trazos-border-grid: #342B26;
+    --trazos-divider: #2F2722;
+    --trazos-border-control: #4A3F37;
+    --trazos-border-control-hover: #625449;
+    --trazos-border-input: #54473F;
+    --trazos-border-strong: #54473F;
+    --trazos-border-strong-hover: #6A5B50;
+    --trazos-border-highlight: #C9925A;
+
+    /* Text */
+    --trazos-text: #F1E9DD;
+    --trazos-text-light: #D9CCBE;
+    --trazos-text-muted: #B3A497;
+    --trazos-text-secondary: #A89A8D;
+    --trazos-text-subtle: #A0918A;
+    --trazos-text-placeholder: #857870;
+    --trazos-text-disabled: #64584F;
+    --trazos-on-accent: #1A1512;
+
+    /* Focus, status and overlays */
+    --trazos-focus: #6FB08F;
+    --trazos-focus-ring: rgba(111, 176, 143, 0.28);
+    --trazos-danger: #E0668A;
+    --trazos-danger-ring: rgba(224, 102, 138, 0.28);
+    --trazos-backdrop: rgba(0, 0, 0, 0.62);
+    --trazos-overlay-veil: rgba(26, 21, 18, 0.85);
+
+    /* Shadows: black-based, stronger */
+    --trazos-shadow-rgb: 0 0 0;
+    --trazos-shadow-warm-rgb: 0 0 0;
+    --trazos-shadow-strength: 3.5;
+    /* Re-declared so they also resolve dark when data-theme sits below <html> */
+    --trazos-shadow-sketch: 2px 3px 0px rgb(var(--trazos-shadow-rgb) / calc(0.08 * var(--trazos-shadow-strength)));
+    --trazos-shadow-sketch-lg: 3px 4px 0px rgb(var(--trazos-shadow-rgb) / calc(0.12 * var(--trazos-shadow-strength)));
+    --trazos-shadow-soft: 0 4px 20px -2px rgb(var(--trazos-shadow-rgb) / calc(0.06 * var(--trazos-shadow-strength)));
+    --trazos-shadow-deep: 0 10px 30px -5px rgb(var(--trazos-shadow-rgb) / calc(0.12 * var(--trazos-shadow-strength)));
+
+    /* Ink (inverted: light solid with dark text) */
+    --trazos-ink-solid: #F1E9DD;
+    --trazos-ink-solid-hover: #FFFFFF;
+    --trazos-ink-edge: #8C7E77;
+
+    --trazos-neutral: #A0918A;
+
+    /* Olive */
+    --trazos-olive: #6FB08F;
+    --trazos-olive-solid: #6FB08F;
+    --trazos-olive-solid-hover: #85C2A3;
+    --trazos-olive-edge: #2F5A45;
+    --trazos-olive-strong: #6FB08F;
+    --trazos-olive-bar: #6FB08F;
+    --trazos-olive-glow: rgba(111, 176, 143, 0.2);
+    --trazos-olive-ring: rgba(111, 176, 143, 0.22);
+    --trazos-olive-soft: rgba(111, 176, 143, 0.12);
+    --trazos-olive-border: rgba(111, 176, 143, 0.35);
+    --trazos-olive-border-hover: rgba(111, 176, 143, 0.6);
+    --trazos-olive-tint: rgba(111, 176, 143, 0.2);
+    --trazos-olive-tint-alt: rgba(111, 176, 143, 0.2);
+    --trazos-olive-tint-border: rgba(111, 176, 143, 0.4);
+    --trazos-olive-text: #8CC7A8;
+    --trazos-olive-text-strong: #A6D6BC;
+
+    /* Wine */
+    --trazos-wine: #E0668A;
+    --trazos-wine-solid: #E0668A;
+    --trazos-wine-solid-hover: #EA86A3;
+    --trazos-wine-edge: #7A2440;
+    --trazos-wine-soft: rgba(224, 102, 138, 0.12);
+    --trazos-wine-tint: rgba(224, 102, 138, 0.2);
+    --trazos-wine-border: rgba(224, 102, 138, 0.38);
+    --trazos-wine-text: #EE93AD;
+
+    /* Gold */
+    --trazos-gold: #F2A541;
+    --trazos-gold-bright: #F2A541;
+    --trazos-gold-shadow: rgba(0, 0, 0, 0.35);
+    --trazos-gold-soft: rgba(242, 165, 65, 0.1);
+    --trazos-gold-border: rgba(242, 165, 65, 0.35);
+    --trazos-gold-tint: rgba(242, 165, 65, 0.16);
+    --trazos-gold-tint-hover: rgba(242, 165, 65, 0.26);
+    --trazos-gold-tint-border: rgba(242, 165, 65, 0.42);
+    --trazos-gold-text: #F5B867;
+    --trazos-gold-text-strong: #F7C886;
+    --trazos-cream-soft: rgba(242, 165, 65, 0.08);
+    --trazos-cream-border: #4A3F37;
+
+    /* Lavender */
+    --trazos-lavender: #B9A3D9;
+    --trazos-lavender-soft: rgba(185, 163, 217, 0.12);
+    --trazos-lavender-tint: rgba(185, 163, 217, 0.18);
+    --trazos-lavender-tint-hover: rgba(185, 163, 217, 0.28);
+    --trazos-lavender-border: rgba(185, 163, 217, 0.38);
+    --trazos-lavender-text: #CBB9E6;
+    --trazos-lavender-text-strong: #DCCDF0;
+    --trazos-lavender-shadow: rgba(0, 0, 0, 0.35);
+    --trazos-lavender-shadow-sm: rgba(0, 0, 0, 0.2);
+    --trazos-lavender-shadow-md: rgba(0, 0, 0, 0.3);
+    --trazos-lavender-card-start: rgba(185, 163, 217, 0.16);
+    --trazos-lavender-card-end: rgba(35, 28, 24, 0.6);
+    --trazos-lavender-card-border: rgba(185, 163, 217, 0.32);
+
+    /* Sky */
+    --trazos-sky: #8FB3DE;
+    --trazos-sky-soft: rgba(143, 179, 222, 0.12);
+    --trazos-sky-tint: rgba(143, 179, 222, 0.18);
+    --trazos-sky-border: rgba(143, 179, 222, 0.38);
+    --trazos-sky-text: #A9C6E8;
+
+    /* WhatsApp keeps its brand colors; only the shadow darkens */
+    --trazos-whatsapp-shadow: rgba(0, 0, 0, 0.35);
+    --trazos-whatsapp-shadow-hover: rgba(0, 0, 0, 0.45);
+    --trazos-whatsapp-shadow-active: rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================================================
+   Base utility classes
    ========================================================================== */
 
 .trazos-card {
@@ -69,9 +393,9 @@
     letter-spacing: 0.02em;
     border: 1px solid var(--trazos-color-parchment-300);
     border-radius: var(--trazos-radius-sketch-sm);
-    background-color: #FFFFFF;
+    background-color: var(--trazos-surface);
     color: var(--trazos-color-ink);
-    box-shadow: 1px 1px 0px rgba(44, 34, 30, 0.04);
+    box-shadow: 1px 1px 0px rgb(var(--trazos-shadow-rgb) / calc(0.04 * var(--trazos-shadow-strength)));
 }
 
 .trazos-heading {

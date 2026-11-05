@@ -34,63 +34,63 @@
 
 /* Variantes */
 .trazos-btn-primary {
-    background-color: #386F54;
-    color: #ffffff;
-    border-color: #1F3B2D;
-    box-shadow: 2px 3px 0px #1F3B2D;
+    background-color: var(--trazos-olive-solid);
+    color: var(--trazos-on-accent);
+    border-color: var(--trazos-olive-edge);
+    box-shadow: 2px 3px 0px var(--trazos-olive-edge);
 }
 .trazos-btn-primary:hover:not(:disabled) {
-    background-color: #2D5843;
+    background-color: var(--trazos-olive-solid-hover);
     transform: translateY(-1px);
-    box-shadow: 3px 4px 0px #1F3B2D;
+    box-shadow: 3px 4px 0px var(--trazos-olive-edge);
 }
 .trazos-btn-primary:active:not(:disabled) {
     transform: translateY(1px);
-    box-shadow: 1px 1px 0px #1F3B2D;
+    box-shadow: 1px 1px 0px var(--trazos-olive-edge);
 }
 
 .trazos-btn-wine {
-    background-color: #9B1D43;
-    color: #ffffff;
-    border-color: #4D1026;
-    box-shadow: 2px 3px 0px #4D1026;
+    background-color: var(--trazos-wine-solid);
+    color: var(--trazos-on-accent);
+    border-color: var(--trazos-wine-edge);
+    box-shadow: 2px 3px 0px var(--trazos-wine-edge);
 }
 .trazos-btn-wine:hover:not(:disabled) {
-    background-color: #851D41;
+    background-color: var(--trazos-wine-solid-hover);
     transform: translateY(-1px);
-    box-shadow: 3px 4px 0px #4D1026;
+    box-shadow: 3px 4px 0px var(--trazos-wine-edge);
 }
 .trazos-btn-wine:active:not(:disabled) {
     transform: translateY(1px);
-    box-shadow: 1px 1px 0px #4D1026;
+    box-shadow: 1px 1px 0px var(--trazos-wine-edge);
 }
 
 .trazos-btn-secondary {
-    background-color: #2C221E;
-    color: #ffffff;
-    border-color: #15100E;
-    box-shadow: 2px 3px 0px #15100E;
+    background-color: var(--trazos-ink-solid);
+    color: var(--trazos-on-accent);
+    border-color: var(--trazos-ink-edge);
+    box-shadow: 2px 3px 0px var(--trazos-ink-edge);
 }
 .trazos-btn-secondary:hover:not(:disabled) {
-    background-color: #000000;
+    background-color: var(--trazos-ink-solid-hover);
     transform: translateY(-1px);
-    box-shadow: 3px 4px 0px #15100E;
+    box-shadow: 3px 4px 0px var(--trazos-ink-edge);
 }
 .trazos-btn-secondary:active:not(:disabled) {
     transform: translateY(1px);
-    box-shadow: 1px 1px 0px #15100E;
+    box-shadow: 1px 1px 0px var(--trazos-ink-edge);
 }
 
 .trazos-btn-outline {
-    background-color: #ffffff;
-    color: #2C221E;
-    border-color: #D8CBB7;
+    background-color: var(--trazos-surface-raised);
+    color: var(--trazos-text);
+    border-color: var(--trazos-border-strong);
     border-radius: 14px 18px 12px 16px / 16px 12px 18px 14px;
-    box-shadow: 2px 2px 0px rgba(44, 34, 30, 0.06);
+    box-shadow: 2px 2px 0px rgb(var(--trazos-shadow-rgb) / calc(0.06 * var(--trazos-shadow-strength)));
 }
 .trazos-btn-outline:hover:not(:disabled) {
-    background-color: #F4ECE0;
-    border-color: #C4B49D;
+    background-color: var(--trazos-hover);
+    border-color: var(--trazos-border-strong-hover);
     transform: translateY(-1px);
 }
 .trazos-btn-outline:active:not(:disabled) {
@@ -98,35 +98,35 @@
 }
 
 .trazos-btn-cream {
-    background-color: #FDF4DC;
-    color: #78350F;
-    border-color: #F5D384;
-    box-shadow: 2px 2px 0px rgba(180, 83, 9, 0.15);
+    background-color: var(--trazos-gold-tint);
+    color: var(--trazos-gold-text-strong);
+    border-color: var(--trazos-gold-tint-border);
+    box-shadow: 2px 2px 0px var(--trazos-gold-shadow);
 }
 .trazos-btn-cream:hover:not(:disabled) {
-    background-color: #F9E5B3;
+    background-color: var(--trazos-gold-tint-hover);
     transform: translateY(-1px);
 }
 
 .trazos-btn-lavender {
-    background-color: #E7E1F3;
-    color: #3E2C50;
-    border-color: #D4C5E8;
-    box-shadow: 2px 2px 0px rgba(93, 67, 120, 0.12);
+    background-color: var(--trazos-lavender-tint);
+    color: var(--trazos-lavender-text-strong);
+    border-color: var(--trazos-lavender-border);
+    box-shadow: 2px 2px 0px var(--trazos-lavender-shadow);
 }
 .trazos-btn-lavender:hover:not(:disabled) {
-    background-color: #D4C5E8;
+    background-color: var(--trazos-lavender-tint-hover);
     transform: translateY(-1px);
 }
 
 .trazos-btn-ghost {
     background-color: transparent;
-    color: #2C221E;
+    color: var(--trazos-text);
     border-color: transparent;
     box-shadow: none;
 }
 .trazos-btn-ghost:hover:not(:disabled) {
-    background-color: #F4ECE0;
+    background-color: var(--trazos-hover);
 }
 
 /* Deshabilitado */

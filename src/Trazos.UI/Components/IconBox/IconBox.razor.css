@@ -9,7 +9,7 @@
     flex-shrink: 0;
     border: 1.5px solid transparent;
     border-radius: 14px 18px 12px 16px / 16px 12px 18px 14px;
-    box-shadow: 1px 2px 0px rgba(44, 34, 30, 0.05);
+    box-shadow: 1px 2px 0px rgb(var(--trazos-shadow-rgb) / calc(0.05 * var(--trazos-shadow-strength)));
     transition: transform 0.15s ease;
 }
 
@@ -43,31 +43,31 @@
 
 /* Variantes */
 .trazos-icon-box-primary {
-    background-color: #E8F0EA;
-    color: #2D5843;
-    border-color: #C5DCCB;
+    background-color: var(--trazos-olive-tint);
+    color: var(--trazos-olive-text);
+    border-color: var(--trazos-olive-tint-border);
 }
 
 .trazos-icon-box-lavender {
-    background-color: #E7E1F3;
-    color: #5D4378;
-    border-color: #D4C5E8;
+    background-color: var(--trazos-lavender-tint);
+    color: var(--trazos-lavender-text);
+    border-color: var(--trazos-lavender-border);
 }
 
 .trazos-icon-box-cream {
-    background-color: #FDF4DC;
-    color: #78350F;
-    border-color: #F5D384;
+    background-color: var(--trazos-gold-tint);
+    color: var(--trazos-gold-text-strong);
+    border-color: var(--trazos-gold-tint-border);
 }
 
 .trazos-icon-box-wine {
-    background-color: #FBE4E8;
-    color: #851D41;
-    border-color: #F5BAC5;
+    background-color: var(--trazos-wine-tint);
+    color: var(--trazos-wine-text);
+    border-color: var(--trazos-wine-border);
 }
 
 .trazos-icon-box-neutral {
-    background-color: #ffffff;
-    color: #5A4C46;
-    border-color: #DCD5C6;
+    background-color: var(--trazos-surface);
+    color: var(--trazos-text-light);
+    border-color: var(--trazos-border-control);
 }

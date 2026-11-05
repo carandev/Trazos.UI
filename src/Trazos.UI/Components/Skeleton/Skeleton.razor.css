@@ -3,7 +3,7 @@
    ======================================== */
 
 .trazos-skeleton {
-    background: linear-gradient(90deg, #F4ECE0 25%, #FAF7F2 50%, #F4ECE0 75%);
+    background: linear-gradient(90deg, var(--trazos-skeleton-base) 25%, var(--trazos-skeleton-highlight) 50%, var(--trazos-skeleton-base) 75%);
     background-size: 200% 100%;
     animation: trazosShimmer 1.6s ease-in-out infinite;
     display: block;
@@ -32,7 +32,7 @@
     height: 10rem;
     width: 100%;
     border-radius: 20px 24px 18px 22px / 22px 18px 24px 20px;
-    border: 1.5px solid #E8DECE;
+    border: 1.5px solid var(--trazos-border-soft);
 }
 
 @keyframes trazosShimmer {
