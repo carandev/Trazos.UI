@@ -1,0 +1,45 @@
+/* ========================================
+   SKELETON - Trazos UI (Warm Shimmer, ported from Components/Skeleton/Skeleton.razor.css)
+   ======================================== */
+
+.trazos-skeleton {
+    background: linear-gradient(90deg, var(--trazos-skeleton-base) 25%, var(--trazos-skeleton-highlight) 50%, var(--trazos-skeleton-base) 75%);
+    background-size: 200% 100%;
+    animation: trazosShimmer 1.6s ease-in-out infinite;
+    display: block;
+}
+
+.trazos-skeleton-text {
+    height: 1rem;
+    width: 100%;
+    border-radius: 6px 8px 6px 7px / 7px 6px 8px 6px;
+    margin-bottom: 0.5rem;
+}
+
+.trazos-skeleton-circular {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+}
+
+.trazos-skeleton-rounded {
+    height: 2.5rem;
+    width: 100%;
+    border-radius: 12px 14px 10px 12px / 12px 10px 14px 12px;
+}
+
+.trazos-skeleton-card {
+    height: 10rem;
+    width: 100%;
+    border-radius: 20px 24px 18px 22px / 22px 18px 24px 20px;
+    border: 1.5px solid var(--trazos-border-soft);
+}
+
+@keyframes trazosShimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}

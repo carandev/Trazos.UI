@@ -1,0 +1,75 @@
+/* ========================================
+   DATA TABLE - Trazos UI (Warmth and Living Borders, ported from Components/Table/DataTable.razor.css)
+   ======================================== */
+
+.trazos-table-wrapper {
+    background: var(--trazos-surface);
+    border: 1.5px solid var(--trazos-border);
+    border-radius: 20px 24px 18px 22px / 22px 18px 24px 20px;
+    box-shadow: 2px 3px 0px rgb(var(--trazos-shadow-rgb) / calc(0.04 * var(--trazos-shadow-strength))), 0 6px 20px -4px rgb(var(--trazos-shadow-warm-rgb) / calc(0.05 * var(--trazos-shadow-strength)));
+    overflow: hidden;
+}
+
+.trazos-table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.trazos-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.trazos-table-head {
+    background-color: var(--trazos-surface-muted);
+    border-bottom: 1.5px solid var(--trazos-border-soft);
+}
+
+.trazos-table-head th {
+    padding: 0.875rem 1.25rem;
+    font-family: 'Marcellus', serif;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--trazos-text-light);
+}
+
+.trazos-table-body td {
+    padding: 1rem 1.25rem;
+    font-size: 0.875rem;
+    color: var(--trazos-text);
+    border-bottom: 1px solid var(--trazos-divider);
+}
+
+.trazos-table-row {
+    transition: background-color 0.15s ease;
+}
+
+.trazos-table-row:last-child td {
+    border-bottom: none;
+}
+
+.trazos-table-row:hover {
+    background-color: var(--trazos-surface-muted);
+}
+
+.trazos-table-row.interactive {
+    cursor: pointer;
+}
+
+.trazos-table-empty {
+    text-align: center;
+    padding: 3rem 1.5rem !important;
+}
+
+.trazos-table-empty-text {
+    margin: 0;
+    color: var(--trazos-text-muted);
+    font-size: 0.875rem;
+}
+
+.trazos-table-loading-row td {
+    padding: 1.25rem;
+}
