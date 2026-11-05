@@ -120,3 +120,9 @@
     user-select: none;
     margin-left: 0.25rem;
 }
+
+/* Built-in icon size (matches Tailwind w-6/h-6, so it does not depend on Tailwind) */
+.trazos-hamburger-btn svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}

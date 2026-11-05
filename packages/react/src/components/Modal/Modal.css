@@ -144,3 +144,9 @@
         width: 100%;
     }
 }
+
+/* Built-in icon size (matches Tailwind w-5/h-5, so it does not depend on Tailwind) */
+.modal-close svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}

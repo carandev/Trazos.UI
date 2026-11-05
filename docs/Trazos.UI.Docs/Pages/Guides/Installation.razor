@@ -44,13 +44,13 @@
 
     <div class="docs-note">
         <Tr>
-            <En>Without Tailwind CSS, add the snippet below to your stylesheet: a few components size their icons with
-                <code>w-4</code>/<code>h-5</code>-style utility classes, and buttons and inputs need to inherit the page font.</En>
-            <Es>Sin Tailwind CSS, agrega este fragmento a tu hoja de estilos: algunos componentes dimensionan sus íconos con
-                clases utilitarias como <code>w-4</code>/<code>h-5</code>, y los botones y campos necesitan heredar la fuente de la página.</Es>
+            <En>Buttons and inputs do not inherit the page font by default. If your app has no CSS reset that does it,
+                add the snippet below to your stylesheet.</En>
+            <Es>Los botones y campos no heredan la fuente de la página por defecto. Si tu app no tiene un reset de CSS que lo haga,
+                agrega este fragmento a tu hoja de estilos.</Es>
         </Tr>
     </div>
-    <CodeBlock Language="css" Code="@IconSizesCode" />
+    <CodeBlock Language="css" Code="@FontInheritCode" />
 
     <h2 class="docs-h2">@L.T("5. Add the global slots", "5. Agrega los contenedores globales")</h2>
     <p>
@@ -88,11 +88,7 @@
         <link rel="stylesheet" href="YourApp.styles.css" />
         """;
 
-    private const string IconSizesCode = """
-        svg.w-4 { width: 1rem; }    svg.h-4 { height: 1rem; }
-        svg.w-5 { width: 1.25rem; } svg.h-5 { height: 1.25rem; }
-        svg.w-6 { width: 1.5rem; }  svg.h-6 { height: 1.5rem; }
-
+    private const string FontInheritCode = """
         button, input, select, textarea { font: inherit; }
         """;
 
