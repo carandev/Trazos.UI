@@ -1,0 +1,103 @@
+/* ========================================
+   LoadingSpinner - Trazos UI (ported from Components/Spinner/LoadingSpinner.razor.css)
+   ======================================== */
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2.5rem 1rem;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--trazos-overlay-veil);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+}
+
+.spinner-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+/* Handcrafted spinning halo */
+.spinner {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 3px solid var(--trazos-border-soft);
+    border-top-color: var(--trazos-olive-bar); /* Hopeful green */
+    border-right-color: var(--trazos-gold); /* Warm light gold */
+    position: relative;
+    animation: spinLiturgical 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+    box-shadow: 0 4px 12px -2px var(--trazos-olive-glow);
+}
+
+.spinner-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    border-radius: 50%;
+    border: 2px solid var(--trazos-border-soft);
+    border-bottom-color: var(--trazos-wine-text); /* Vivid wine */
+    animation: spinInnerLiturgical 1.4s ease-in-out infinite reverse;
+}
+
+.loading-message {
+    color: var(--trazos-text);
+    font-family: 'Marcellus', serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    margin: 0;
+    padding: 0.5rem 1.25rem;
+    border: 1.5px solid var(--trazos-border);
+    background: var(--trazos-surface);
+    border-radius: 16px 20px 14px 18px / 18px 14px 20px 16px;
+    box-shadow: 2px 3px 0px rgb(var(--trazos-shadow-rgb) / calc(0.05 * var(--trazos-shadow-strength)));
+}
+
+@keyframes spinLiturgical {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spinInnerLiturgical {
+    0% {
+        transform: rotate(0deg) scale(0.9);
+    }
+    50% {
+        transform: rotate(180deg) scale(1.1);
+    }
+    100% {
+        transform: rotate(360deg) scale(0.9);
+    }
+}
+
+/* Smaller inline variant */
+.loading-spinner:not(.loading-overlay) .spinner {
+    width: 40px;
+    height: 40px;
+}
+
+.loading-spinner:not(.loading-overlay) .spinner-inner {
+    width: 16px;
+    height: 16px;
+    margin-top: -8px;
+    margin-left: -8px;
+}
