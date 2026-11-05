@@ -1,27 +1,29 @@
-# @carandev/trazos-tokens
+# Trazos UI tokens (`packages/tokens`)
 
 Design tokens for **Trazos UI**, the warm, hand-drawn "Cuaderno" style: parchment surfaces, ink text, organic sketch borders.
 Everything is plain CSS custom properties. No build step, no JavaScript.
 
-This file is the single source of truth: the React package (`@carandev/trazos-ui`) and the Blazor package (`Trazos.UI` on NuGet) both ship these exact tokens.
+This folder is the single source of truth: the React package (`@carandev/trazos-ui` on npm) and the Blazor package (`Trazos.UI` on NuGet) both ship these exact tokens. Change a token here and both libraries pick it up.
 
-## Install
-
-```bash
-npm install @carandev/trazos-tokens
-```
+It is a private workspace and is not published on its own. `tokens.css` ships inside the React package.
 
 ## Use
 
-Import once, before your own styles:
+To get only the tokens (no components), install the React package and import its copy of this file:
+
+```bash
+npm install @carandev/trazos-ui
+```
 
 ```js
-import '@carandev/trazos-tokens';            // bundlers (Vite, webpack, Next.js)
+import '@carandev/trazos-ui/tokens.css';            // bundlers (Vite, webpack, Next.js)
 ```
 
 ```css
-@import '@carandev/trazos-tokens/tokens.css'; /* plain CSS */
+@import '@carandev/trazos-ui/tokens.css'; /* plain CSS through a bundler */
 ```
+
+If you already import `@carandev/trazos-ui/styles.css`, do not import `tokens.css` too: `styles.css` already contains it.
 
 Then read the tokens in your styles:
 
