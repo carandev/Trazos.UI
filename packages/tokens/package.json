@@ -1,0 +1,28 @@
+{
+  "name": "@carandev/trazos-tokens",
+  "version": "1.2.0",
+  "description": "Design tokens for Trazos UI: the warm, hand-drawn \"Cuaderno\" parchment-and-ink style, as plain CSS custom properties with an opt-in dark theme.",
+  "license": "MIT",
+  "author": "carandev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carandev/Trazos.UI.git",
+    "directory": "packages/tokens"
+  },
+  "keywords": ["design-tokens", "css", "css-custom-properties", "design-system", "trazos", "sketch"],
+  "type": "module",
+  "style": "./tokens.css",
+  "exports": {
+    ".": "./tokens.css",
+    "./tokens.css": "./tokens.css",
+    "./package.json": "./package.json"
+  },
+  "files": ["tokens.css", "README.md"],
+  "sideEffects": ["*.css"],
+  "scripts": {
+    "test": "node --test test/"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
