@@ -16,6 +16,7 @@ Branch: `feat/react-library` (worktree `/home/carandev/Work/Trazos.UI-worktrees/
 - **S9 CI/CD.** "add a GitHub Actions workflow that builds, type-checks, lints, and tests the JS packages on PRs, and publishes `packages/tokens` and `packages/react` to npm on release, mirroring how the NuGet workflow is triggered. Keep the existing NuGet workflow working. Pin action versions."
 - **S10 User decisions.** Ask ONE at a time when it matters: npm package names/scope (suggested `@carandev/trazos-tokens`, `@carandev/trazos-ui`) and npm publish credentials; docs/playground choice.
 - **S12 Fix nested-content rules.** User decision (2026-11-05): "A" = fix the 8 `:deep(...)` rules in both libraries (Razor `::deep`, React plain descendant selectors), accepting the visual change; new minor version.
+- **S13 One npm package.** User decision (2026-11-05): "Si" to publishing a single npm package. `packages/tokens` stays the single token source but becomes a private workspace; `@carandev/trazos-ui` ships it as `@carandev/trazos-ui/tokens.css`. Supersedes the "publishable to npm" part of S2.
 - **S11 Working rules.** Work-unit Conventional Commits, no AI attribution / no Co-Authored-By. "Do not push, open a PR, publish to npm, or merge without the user's explicit approval." "Run the Razor build, the JS build, type-check, lint, and tests before reporting a task done, and report real results including failures."
 
 ## Tasks
@@ -32,6 +33,7 @@ Branch: `feat/react-library` (worktree `/home/carandev/Work/Trazos.UI-worktrees/
 | T8 | S8 | Vite playground `apps/playground` (user choice) | inline | done | 69cd49a |
 | T9 | S9 | JS CI + npm Trusted Publishing workflow; NuGet path filter + pinned actions | inline | done | bb49789 |
 | T10 | S8 | READMEs root + packages; package index exports | inline | done | (docs commit) |
+| T12 | S13 | Tokens private, `dist/tokens.css` export, workflow publishes only trazos-ui, READMEs | inline | done | (build commit) |
 | T11 | S12 | Fix `:deep()` rules (IconBox, EmptyState, RadioCard, Tabs, Modal) in Razor + React; versions 1.3.0 | inline | done | (fix commit) |
 
 ## Log
@@ -50,3 +52,4 @@ Branch: `feat/react-library` (worktree `/home/carandev/Work/Trazos.UI-worktrees/
 - L12 (2026-11-05) Verifier: no blockers (S1, S4, S9 pass). Advisory fixed: publish loop now publishes only on E404 and fails on network/auth errors (checked: existing version skip, missing version and missing package publish, unreachable registry error). Other advisories left: checkout/setup-dotnet major versions differ between workflows; no PR Razor build on src-only changes (pre-existing); OIDC with registry-url only provable in a real run.
 - L13 (2026-11-05) Next: user review; push/PR/npm publish need explicit approval. Before the first npm release: configure trusted publishers (first publish may need to be manual).
 - L14 (2026-11-05) User: "A, además por qué trazos.ui son dos paquetes en npm? no puede ser uno?" T11: RED 8/8 (new `src/internal/nested-content-styles.test.tsx`), GREEN 280/280. Razor scoped bundle now emits `.trazos-icon-box-sm[b-…]  svg`, `.modal-footer[b-…] >  *`. Versions bumped to 1.3.0 (NuGet + both npm packages, kept aligned). lint/typecheck/build/npm ci exit 0, tokens 3/3, Razor + docs builds 0 warnings. One-vs-two npm packages: question open with the user.
+- L15 (2026-11-05) User: "Si" (one npm package). T12: RED = packed trazos-ui tarball failed to install in a scratch dir (E404 on @carandev/trazos-tokens). GREEN = same install succeeds, `@carandev/trazos-ui/tokens.css` resolves and is byte identical to packages/tokens/tokens.css; `npm publish --dry-run` skips the private tokens workspace. lint/typecheck/build/npm ci exit 0, 280/280 + tokens 3/3, Razor build 0 warnings. Next: user review; push/PR/first manual npm publish need explicit approval.

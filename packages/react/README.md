@@ -1,7 +1,7 @@
 # @carandev/trazos-ui
 
 Trazos UI for React: a warm, hand-drawn component library ("Cuaderno" style) with organic sketch borders, parchment tones and accessible primitives.
-It is the React twin of the [`Trazos.UI`](https://www.nuget.org/packages/Trazos.UI) Blazor library: same markup, same class names, same CSS and the same design tokens ([`@carandev/trazos-tokens`](../tokens/README.md)).
+It is the React twin of the [`Trazos.UI`](https://www.nuget.org/packages/Trazos.UI) Blazor library: same markup, same class names, same CSS and the same design tokens ([`packages/tokens`](../tokens/README.md)).
 
 - React 19, TypeScript strict, ESM with `.d.ts` types
 - Tree-shakeable: one module per component, `sideEffects` limited to CSS
@@ -19,7 +19,7 @@ npm install @carandev/trazos-ui
 
 ## Set up
 
-Import the stylesheet once, at the root of your app. It contains the tokens, the utility classes and every component's styles.
+Import the stylesheet once, at the root of your app. It contains the tokens, the utility classes and every component's styles. To use only the CSS variables, without components, import `@carandev/trazos-ui/tokens.css` instead.
 
 ```tsx
 // main.tsx
@@ -124,7 +124,7 @@ Every token switches; nothing in the components changes. There is no automatic `
 
 ## Theming
 
-Override any `--trazos-*` token after importing `styles.css`. Light values go in `:root`, dark values in `[data-theme="dark"]`. See [`@carandev/trazos-tokens`](../tokens/README.md) for the full list.
+Override any `--trazos-*` token after importing `styles.css`. Light values go in `:root`, dark values in `[data-theme="dark"]`. See [`packages/tokens`](../tokens/README.md) for the full list.
 
 ## License
 
