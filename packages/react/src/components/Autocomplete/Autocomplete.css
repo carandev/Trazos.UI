@@ -1,0 +1,182 @@
+/* ========================================
+   AUTOCOMPLETE - Trazos UI (ported from Components/Autocomplete/Autocomplete.razor.css)
+   ======================================== */
+
+.trazos-autocomplete {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    width: 100%;
+}
+
+.trazos-autocomplete-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--trazos-text-light);
+}
+
+.trazos-autocomplete-required {
+    color: var(--trazos-danger);
+    margin-left: 0.15rem;
+}
+
+.trazos-autocomplete-field {
+    display: flex;
+    align-items: center;
+    background: var(--trazos-field);
+    border: 1.5px solid var(--trazos-border-input);
+    border-radius: 14px 18px 12px 16px / 16px 12px 18px 14px;
+    box-shadow: 1px 1px 0px rgb(var(--trazos-shadow-rgb) / calc(0.04 * var(--trazos-shadow-strength)));
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.trazos-autocomplete-field:focus-within {
+    border-color: var(--trazos-focus);
+    box-shadow: 0 0 0 3px var(--trazos-focus-ring);
+}
+
+.trazos-autocomplete-field.trazos-autocomplete-has-error {
+    border-color: var(--trazos-danger);
+}
+
+.trazos-autocomplete-field.trazos-autocomplete-disabled {
+    background: var(--trazos-field-disabled);
+    opacity: 0.65;
+}
+
+.trazos-autocomplete-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 0.75rem;
+    color: var(--trazos-text-muted);
+}
+
+.trazos-autocomplete-icon svg {
+    width: 1.1rem;
+    height: 1.1rem;
+}
+
+.trazos-autocomplete-spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--trazos-border);
+    border-top-color: var(--trazos-olive);
+    border-radius: 9999px;
+    animation: trazos-autocomplete-spin 0.7s linear infinite;
+}
+
+@keyframes trazos-autocomplete-spin {
+    to { transform: rotate(360deg); }
+}
+
+.trazos-autocomplete-input {
+    flex: 1;
+    width: 100%;
+    padding: 0.65rem 0.875rem 0.65rem 0.6rem;
+    font-size: 0.875rem;
+    font-family: inherit;
+    color: var(--trazos-text);
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+.trazos-autocomplete-input::placeholder {
+    color: var(--trazos-text-placeholder);
+}
+
+.trazos-autocomplete-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 60;
+    max-height: 16rem;
+    margin: 0.35rem 0 0 0;
+    padding: 0.35rem;
+    overflow-y: auto;
+    list-style: none;
+    background: var(--trazos-surface);
+    border: 1.5px solid var(--trazos-border);
+    border-radius: 14px;
+    box-shadow: 0 10px 30px -5px rgb(var(--trazos-shadow-rgb) / calc(0.15 * var(--trazos-shadow-strength)));
+}
+
+.trazos-autocomplete-option {
+    padding: 0.55rem 0.7rem;
+    font-size: 0.875rem;
+    color: var(--trazos-text);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.trazos-autocomplete-option.is-active {
+    background: var(--trazos-olive-soft);
+    color: var(--trazos-olive-text-strong);
+}
+
+.trazos-autocomplete-empty {
+    padding: 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--trazos-text-muted);
+    text-align: center;
+}
+
+.trazos-autocomplete-selected {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.875rem;
+    background: var(--trazos-olive-soft);
+    border: 1.5px solid var(--trazos-olive-border);
+    border-radius: 14px 18px 12px 16px / 16px 12px 18px 14px;
+}
+
+.trazos-autocomplete-selected-content {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.875rem;
+    color: var(--trazos-olive-text-strong);
+}
+
+.trazos-autocomplete-clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    flex-shrink: 0;
+    color: var(--trazos-text-light);
+    background: var(--trazos-surface-raised);
+    border: 1px solid var(--trazos-border-control);
+    border-radius: 9999px;
+    cursor: pointer;
+}
+
+.trazos-autocomplete-clear:hover:not(:disabled) {
+    color: var(--trazos-danger);
+    border-color: var(--trazos-wine-border);
+}
+
+.trazos-autocomplete-clear svg {
+    width: 0.9rem;
+    height: 0.9rem;
+}
+
+.trazos-autocomplete-helper {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--trazos-text-muted);
+}
+
+.trazos-autocomplete-error {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--trazos-danger);
+}
