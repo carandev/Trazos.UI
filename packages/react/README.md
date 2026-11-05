@@ -34,13 +34,9 @@ Load the fonts (Marcellus, Caveat, Plus Jakarta Sans), for example in `index.htm
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Marcellus&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
 ```
 
-If you do not use Tailwind CSS, add this to your global stylesheet. A few components size their icons with `w-4`/`h-5`-style classes, and form controls do not inherit the page font by default:
+Form controls do not inherit the page font by default. If your app has no CSS reset that does it, add this to your global stylesheet:
 
 ```css
-svg.w-4 { width: 1rem; }    svg.h-4 { height: 1rem; }
-svg.w-5 { width: 1.25rem; } svg.h-5 { height: 1.25rem; }
-svg.w-6 { width: 1.5rem; }  svg.h-6 { height: 1.5rem; }
-
 button, input, select, textarea { font: inherit; }
 ```
 

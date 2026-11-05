@@ -101,3 +101,9 @@
     font-weight: 600;
     color: var(--trazos-danger);
 }
+
+/* Built-in icon size (matches Tailwind w-4/h-4, so it does not depend on Tailwind) */
+.trazos-select-arrow svg {
+    width: 1rem;
+    height: 1rem;
+}
