@@ -17,7 +17,9 @@ export * from './components/FormSection';
 // Forms
 export * from './components/Input';
 export * from './components/RadioCardGroup';
+export * from './components/Autocomplete';
 
 // Data and navigation
 export * from './components/DataTable';
 export * from './components/Tabs';
+export * from './components/MonthCalendar';
