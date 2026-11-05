@@ -7,6 +7,7 @@ export * from './components/Button';
 export * from './components/Card';
 export * from './components/IconBox';
 export * from './components/LoadingSpinner';
+export * from './components/Skeleton';
 export * from './components/WhatsAppButton';
 
 // Composition
@@ -16,3 +17,7 @@ export * from './components/FormSection';
 // Forms
 export * from './components/Input';
 export * from './components/RadioCardGroup';
+
+// Data and navigation
+export * from './components/DataTable';
+export * from './components/Tabs';
