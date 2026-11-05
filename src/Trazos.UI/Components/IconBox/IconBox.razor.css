@@ -18,7 +18,7 @@
     width: 2rem;
     height: 2rem;
 }
-.trazos-icon-box-sm :deep(svg) {
+.trazos-icon-box-sm ::deep svg {
     width: 1.125rem;
     height: 1.125rem;
 }
@@ -27,7 +27,7 @@
     width: 3rem;
     height: 3rem;
 }
-.trazos-icon-box-md :deep(svg) {
+.trazos-icon-box-md ::deep svg {
     width: 1.5rem;
     height: 1.5rem;
 }
@@ -36,7 +36,7 @@
     width: 3.5rem;
     height: 3.5rem;
 }
-.trazos-icon-box-lg :deep(svg) {
+.trazos-icon-box-lg ::deep svg {
     width: 1.875rem;
     height: 1.875rem;
 }

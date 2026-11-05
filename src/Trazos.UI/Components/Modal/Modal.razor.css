@@ -140,7 +140,7 @@
         flex-direction: column;
     }
     
-    .modal-footer > :deep(*) {
+    .modal-footer > ::deep * {
         width: 100%;
     }
 }

@@ -2,10 +2,6 @@
    EMPTY STATE - Trazos UI (ported from Components/EmptyState/EmptyState.razor.css)
    ======================================== */
 
-/* Note: the `:deep(...)` rules below are copied verbatim. `:deep()` is not
-   Blazor syntax (Blazor uses `::deep`), so the Razor build emitted an invalid
-   selector that browsers drop; keeping them verbatim preserves that rendering. */
-
 .trazos-empty-state {
     display: flex;
     flex-direction: column;
@@ -18,11 +14,11 @@
     padding: 1.5rem 1rem;
 }
 
-.trazos-empty-state :deep(.trazos-empty-state-icon) {
+.trazos-empty-state .trazos-empty-state-icon {
     margin-bottom: 1rem;
 }
 
-.trazos-empty-state.is-compact :deep(.trazos-empty-state-icon) {
+.trazos-empty-state.is-compact .trazos-empty-state-icon {
     margin-bottom: 0.75rem;
 }
 
