@@ -14,11 +14,11 @@
     padding: 1.5rem 1rem;
 }
 
-.trazos-empty-state :deep(.trazos-empty-state-icon) {
+.trazos-empty-state ::deep .trazos-empty-state-icon {
     margin-bottom: 1rem;
 }
 
-.trazos-empty-state.is-compact :deep(.trazos-empty-state-icon) {
+.trazos-empty-state.is-compact ::deep .trazos-empty-state-icon {
     margin-bottom: 0.75rem;
 }
 

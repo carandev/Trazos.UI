@@ -102,7 +102,7 @@
     border-color: var(--trazos-olive-tint-border);
 }
 
-.trazos-radio-card-icon :deep(svg) {
+.trazos-radio-card-icon ::deep svg {
     width: 1.15rem;
     height: 1.15rem;
 }
