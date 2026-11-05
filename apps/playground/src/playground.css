@@ -1,0 +1,177 @@
+/* Playground-only layout. Colors come from the Trazos tokens, so the page follows the theme. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Host-app snippet from the README: some components size icons with
+   w-4/h-5-style classes, and form controls do not inherit the page font. */
+svg.w-4 { width: 1rem; }    svg.h-4 { height: 1rem; }
+svg.w-5 { width: 1.25rem; } svg.h-5 { height: 1.25rem; }
+svg.w-6 { width: 1.5rem; }  svg.h-6 { height: 1.5rem; }
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+html,
+body {
+  margin: 0;
+  background-color: var(--trazos-page);
+  color: var(--trazos-text);
+  font-family: var(--trazos-font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.pg-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+.pg-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 1.5rem 1.25rem;
+  border-right: 1.5px solid var(--trazos-border);
+  background-color: var(--trazos-panel);
+}
+
+.pg-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.pg-theme-toggle {
+  width: 100%;
+  margin-bottom: 1.25rem;
+  padding: 0.45rem 0.75rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--trazos-text);
+  background-color: var(--trazos-surface-raised);
+  border: 1.5px solid var(--trazos-border-control);
+  border-radius: var(--trazos-radius-sketch-btn);
+  cursor: pointer;
+}
+
+.pg-nav-group-title {
+  margin: 1rem 0 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--trazos-text-subtle);
+}
+
+.pg-nav-group ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pg-nav-group a {
+  display: block;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--trazos-radius-sketch-sm);
+  color: var(--trazos-text-light);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.pg-nav-group a:hover {
+  background-color: var(--trazos-hover);
+}
+
+.pg-nav-group a[aria-current='page'] {
+  background-color: var(--trazos-olive-tint);
+  color: var(--trazos-olive-text-strong);
+  font-weight: 700;
+}
+
+.pg-main {
+  padding: 2.5rem clamp(1rem, 4vw, 3.5rem) 4rem;
+  max-width: 1100px;
+}
+
+.pg-page-header h1 {
+  font-size: 2.2rem;
+}
+
+.pg-page-header p {
+  margin-top: 0.25rem;
+  color: var(--trazos-text-muted);
+}
+
+.pg-demo {
+  margin-top: 2rem;
+}
+
+.pg-demo-title {
+  margin: 0 0 0.25rem;
+  font-family: var(--trazos-font-display);
+  font-size: 1.2rem;
+}
+
+.pg-demo-description {
+  margin: 0 0 0.75rem;
+  color: var(--trazos-text-muted);
+  font-size: 0.92rem;
+}
+
+.pg-demo-preview {
+  position: relative;
+  padding: 1.5rem;
+  background-color: var(--trazos-surface);
+  border: 1.5px solid var(--trazos-border);
+  border-radius: var(--trazos-radius-sketch-card);
+}
+
+.pg-demo-code {
+  margin: 0.5rem 0 0;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  font-family: ui-monospace, 'JetBrains Mono', Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  color: var(--trazos-text);
+  background-color: var(--trazos-surface-muted);
+  border: 1px solid var(--trazos-border-soft);
+  border-radius: var(--trazos-radius-sketch-sm);
+}
+
+.pg-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pg-stack {
+  display: grid;
+  gap: 1rem;
+  max-width: 480px;
+}
+
+@media (max-width: 760px) {
+  .pg-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .pg-sidebar {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1.5px solid var(--trazos-border);
+  }
+}
