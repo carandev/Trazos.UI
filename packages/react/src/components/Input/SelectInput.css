@@ -1,0 +1,75 @@
+/* ========================================
+   SELECT INPUT - Trazos UI (Warmth and Lively Borders)
+   ======================================== */
+
+/* The shared field rules (group, label, required marker, helper, error) are
+   identical in the Razor stylesheets and live once in TextInput.css.
+   .trazos-input-icon differs from TextInput (padding-left only), so it is
+   renamed to .trazos-select-icon to keep both values under global CSS. */
+
+.trazos-select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--trazos-field);
+    border: 1.5px solid var(--trazos-border-input);
+    border-radius: 14px 18px 12px 16px / 16px 12px 18px 14px;
+    box-shadow: 1px 1px 0px rgb(var(--trazos-shadow-rgb) / calc(0.04 * var(--trazos-shadow-strength)));
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.trazos-select-wrapper:focus-within {
+    border-color: var(--trazos-focus);
+    box-shadow: 0 0 0 3px var(--trazos-focus-ring);
+}
+
+.trazos-select-wrapper.has-error {
+    border-color: var(--trazos-danger);
+}
+
+.trazos-select-wrapper.has-error:focus-within {
+    box-shadow: 0 0 0 3px var(--trazos-danger-ring);
+}
+
+.trazos-select-wrapper.disabled {
+    background: var(--trazos-field-disabled);
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.trazos-select-control {
+    flex: 1;
+    width: 100%;
+    padding: 0.65rem 2.25rem 0.65rem 0.875rem;
+    font-size: 0.875rem;
+    font-family: inherit;
+    color: var(--trazos-text);
+    background: transparent;
+    border: none;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.trazos-select-control:disabled {
+    cursor: not-allowed;
+}
+
+.trazos-select-arrow {
+    position: absolute;
+    right: 0.875rem;
+    pointer-events: none;
+    color: var(--trazos-text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.trazos-select-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--trazos-text-muted);
+    padding-left: 0.75rem;
+}

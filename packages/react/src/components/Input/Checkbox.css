@@ -1,0 +1,95 @@
+/* ========================================
+   CHECKBOX - Trazos UI (Warmth and Lively Borders)
+   ======================================== */
+
+.trazos-checkbox-group {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.trazos-checkbox-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+}
+
+.trazos-checkbox-container.disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.trazos-checkbox-control {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+}
+
+.trazos-checkbox-box {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    background: var(--trazos-surface-raised);
+    border: 1.5px solid var(--trazos-border-input);
+    border-radius: 6px 8px 5px 7px / 7px 5px 8px 6px;
+    box-shadow: 1px 1px 0px rgb(var(--trazos-shadow-rgb) / calc(0.05 * var(--trazos-shadow-strength)));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+.trazos-checkbox-container:hover .trazos-checkbox-box:not(.checked) {
+    border-color: var(--trazos-olive);
+    background-color: var(--trazos-olive-soft);
+}
+
+.trazos-checkbox-box.checked {
+    background-color: var(--trazos-olive-solid);
+    border-color: var(--trazos-olive-edge);
+    box-shadow: 1px 2px 0px var(--trazos-olive-edge);
+}
+
+.trazos-checkbox-check {
+    width: 0.85rem;
+    height: 0.85rem;
+    color: var(--trazos-on-accent);
+    opacity: 0;
+    transform: scale(0.6);
+    transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.trazos-checkbox-box.checked .trazos-checkbox-check {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.trazos-checkbox-box.has-error {
+    border-color: var(--trazos-danger);
+}
+
+.trazos-checkbox-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--trazos-text);
+}
+
+.trazos-checkbox-helper {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--trazos-text-muted);
+    padding-left: 1.9rem;
+}
+
+.trazos-checkbox-error {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--trazos-danger);
+    padding-left: 1.9rem;
+}

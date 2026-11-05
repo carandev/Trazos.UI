@@ -1,0 +1,54 @@
+/* ========================================
+   TEXTAREA - Trazos UI (Warmth and Lively Borders)
+   ======================================== */
+
+/* The shared field rules (group, label, required marker, helper, error) are
+   identical in the Razor stylesheets and live once in TextInput.css. */
+
+.trazos-textarea-wrapper {
+    position: relative;
+    display: flex;
+    background: var(--trazos-field);
+    border: 1.5px solid var(--trazos-border-input);
+    border-radius: 16px 20px 14px 18px / 18px 14px 20px 16px;
+    box-shadow: 1px 1px 0px rgb(var(--trazos-shadow-rgb) / calc(0.04 * var(--trazos-shadow-strength)));
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.trazos-textarea-wrapper:focus-within {
+    border-color: var(--trazos-focus);
+    box-shadow: 0 0 0 3px var(--trazos-focus-ring);
+}
+
+.trazos-textarea-wrapper.has-error {
+    border-color: var(--trazos-danger);
+}
+
+.trazos-textarea-wrapper.has-error:focus-within {
+    box-shadow: 0 0 0 3px var(--trazos-danger-ring);
+}
+
+.trazos-textarea-wrapper.disabled {
+    background: var(--trazos-field-disabled);
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.trazos-textarea-control {
+    flex: 1;
+    width: 100%;
+    padding: 0.75rem 0.875rem;
+    font-size: 0.875rem;
+    font-family: inherit;
+    color: var(--trazos-text);
+    background: transparent;
+    border: none;
+    outline: none;
+    resize: vertical;
+    min-height: 5rem;
+}
+
+.trazos-textarea-control::placeholder {
+    color: var(--trazos-text-subtle);
+    opacity: 0.7;
+}
