@@ -1,0 +1,122 @@
+/* ========================================
+   APP SHELL - Trazos UI (Warmth and Lively Borders)
+   ======================================== */
+
+.trazos-app-shell {
+    position: relative;
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--trazos-page);
+    color: var(--trazos-text);
+}
+
+/* Sidebar Desktop */
+.trazos-shell-sidebar {
+    width: 260px;
+    background-color: var(--trazos-page);
+    border-right: 1.5px solid var(--trazos-border-soft);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.trazos-shell-main-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+/* Topbar */
+.trazos-shell-topbar {
+    background-color: var(--trazos-page);
+    border-bottom: 1.5px solid var(--trazos-border-soft);
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.trazos-shell-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.trazos-shell-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.trazos-hamburger-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    background: var(--trazos-surface-raised);
+    border: 1.5px solid var(--trazos-border-control);
+    border-radius: 8px 10px 7px 9px / 9px 7px 10px 8px;
+    color: var(--trazos-text-light);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.trazos-hamburger-btn:hover {
+    background: var(--trazos-surface-raised-hover);
+    color: var(--trazos-text);
+}
+
+/* Main content */
+.trazos-shell-content {
+    flex: 1;
+    padding: 1.5rem;
+}
+
+.trazos-shell-container {
+    max-width: 72rem; /* max-w-6xl */
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .trazos-shell-sidebar {
+        display: none;
+    }
+
+    .trazos-hamburger-btn {
+        display: inline-flex;
+    }
+
+    .trazos-shell-topbar {
+        padding: 0 1rem;
+    }
+
+    .trazos-shell-content {
+        padding: 1rem;
+    }
+}
+
+/* Environment Badge (Dev / Staging) */
+.trazos-env-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background-color: var(--trazos-gold-tint);
+    color: var(--trazos-gold-text);
+    border: 1.5px dashed var(--trazos-gold-bright);
+    border-radius: 9999px;
+    box-shadow: 0 1px 2px rgb(var(--trazos-shadow-rgb) / calc(0.06 * var(--trazos-shadow-strength)));
+    user-select: none;
+    margin-left: 0.25rem;
+}
