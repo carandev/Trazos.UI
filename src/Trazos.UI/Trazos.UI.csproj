@@ -32,13 +32,13 @@
   <!--
     wwwroot/trazos.css is generated, not committed. The design tokens live in
     packages/tokens/tokens.css (the single source shared with the npm packages);
-    the Razor-only utility classes live in Styles/trazos.base.css.
+    the shared utility classes live in packages/tokens/utilities.css.
     This target concatenates both, byte for byte, before the static web assets
     are resolved, so the published asset is identical to the hand-written file.
   -->
   <PropertyGroup>
     <TrazosTokensCss>$(MSBuildThisFileDirectory)../../packages/tokens/tokens.css</TrazosTokensCss>
-    <TrazosBaseCss>$(MSBuildThisFileDirectory)Styles/trazos.base.css</TrazosBaseCss>
+    <TrazosBaseCss>$(MSBuildThisFileDirectory)../../packages/tokens/utilities.css</TrazosBaseCss>
     <TrazosGeneratedCss>$(MSBuildThisFileDirectory)wwwroot/trazos.css</TrazosGeneratedCss>
   </PropertyGroup>
 

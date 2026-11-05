@@ -1,0 +1,64 @@
+/* ========================================
+   BADGE - Trazos UI (ported from Components/Badge/Badge.razor.css)
+   ======================================== */
+
+.trazos-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid transparent;
+    border-radius: 12px 14px 10px 12px / 12px 10px 14px 12px;
+    box-shadow: 1px 1px 0px rgb(var(--trazos-shadow-rgb) / calc(0.04 * var(--trazos-shadow-strength)));
+}
+
+.trazos-badge-icon {
+    display: inline-flex;
+    align-items: center;
+}
+
+.trazos-badge-success {
+    background-color: var(--trazos-olive-soft);
+    color: var(--trazos-olive-text);
+    border-color: var(--trazos-olive-border);
+}
+
+.trazos-badge-warning {
+    background-color: var(--trazos-gold-soft);
+    color: var(--trazos-gold-text);
+    border-color: var(--trazos-gold-border);
+}
+
+.trazos-badge-error {
+    background-color: var(--trazos-wine-soft);
+    color: var(--trazos-wine-text);
+    border-color: var(--trazos-wine-border);
+}
+
+.trazos-badge-info {
+    background-color: var(--trazos-sky-soft);
+    color: var(--trazos-sky-text);
+    border-color: var(--trazos-sky-border);
+}
+
+.trazos-badge-lavender {
+    background-color: var(--trazos-lavender-soft);
+    color: var(--trazos-lavender-text);
+    border-color: var(--trazos-lavender-border);
+}
+
+.trazos-badge-cream {
+    background-color: var(--trazos-cream-soft);
+    color: var(--trazos-gold-text-strong);
+    border-color: var(--trazos-cream-border);
+}
+
+.trazos-badge-neutral {
+    background-color: var(--trazos-surface);
+    color: var(--trazos-text-light);
+    border-color: var(--trazos-border-control);
+}

@@ -8,7 +8,7 @@ on:
       - 'v*'
     paths:
       - 'src/**'
-      - 'packages/tokens/tokens.css'
+      - 'packages/tokens/*.css'
       - '.github/workflows/publish-trazos-nuget.yml'
   workflow_dispatch:
 
