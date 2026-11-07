@@ -21,6 +21,8 @@ public static class DocsNav
         new("Actions", "Acciones",
         [
             new("Button", "components/button"),
+            new("LinkButton", "components/link-button"),
+            new("IconButton", "components/icon-button"),
             new("WhatsAppButton", "components/whatsapp-button"),
         ]),
         new("Display", "Visualización",

@@ -1,0 +1,49 @@
+@page "/components/icon-button"
+
+<DocPage Title="IconButton" Category="@L.T("Actions", "Acciones")"
+         Lead="@L.T("A square button that only shows an icon. Label is required, because an icon alone has no accessible name.", "Un botón cuadrado que solo muestra un ícono. Label es obligatorio, porque un ícono por sí solo no tiene nombre accesible.")">
+
+    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@VariantsCode">
+        @foreach (var variant in Enum.GetValues<ButtonVariant>())
+        {
+            <IconButton Label="@variant.ToString()" Variant="variant">@Icons.Plus</IconButton>
+        }
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Sizes and states", "Tamaños y estados")" Description="@L.T("Medium is 44px and Large is 52px.", "Medium mide 44 px y Large, 52 px.")" Code="@StatesCode">
+        <IconButton Label="@L.T("Add", "Agregar")" Variant="ButtonVariant.Outline">@Icons.Plus</IconButton>
+        <IconButton Label="@L.T("Add", "Agregar")" Variant="ButtonVariant.Outline" Size="IconButtonSize.Large">@Icons.Plus</IconButton>
+        <IconButton Label="@L.T("Saving", "Guardando")" Variant="ButtonVariant.Outline" Loading="true">@Icons.Plus</IconButton>
+        <IconButton Label="@L.T("Add", "Agregar")" Variant="ButtonVariant.Outline" Disabled="true">@Icons.Plus</IconButton>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private const string VariantsCode = """
+        <IconButton Label="Add">
+            <svg>…</svg>
+        </IconButton>
+        """;
+
+    private const string StatesCode = """
+        <IconButton Label="Add" Size="IconButtonSize.Large"><svg>…</svg></IconButton>
+        <IconButton Label="Saving" Loading="true"><svg>…</svg></IconButton>
+        <IconButton Label="Add" Disabled="true"><svg>…</svg></IconButton>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Label", "string", null, L.T("Accessible name. Required.", "Nombre accesible. Obligatorio.")),
+        new("Variant", "ButtonVariant", "Ghost", L.T("Same variants as Button.", "Las mismas variantes de Button.")),
+        new("Size", "IconButtonSize", "Medium", L.T("Medium or Large.", "Medium o Large.")),
+        new("Type", "string", "button", L.T("The button type attribute.", "El atributo type del botón.")),
+        new("Disabled", "bool", "false", L.T("Disables the button.", "Deshabilita el botón.")),
+        new("Loading", "bool", "false", L.T("Shows a spinner in place of the icon and disables the button.", "Muestra un indicador de carga en lugar del ícono y deshabilita el botón.")),
+        new("ChildContent", "RenderFragment?", null, L.T("The icon.", "El ícono.")),
+        new("OnClick", "EventCallback<MouseEventArgs>", null, L.T("Raised when the button is clicked.", "Se dispara al hacer clic en el botón.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+}

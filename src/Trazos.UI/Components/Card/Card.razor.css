@@ -17,6 +17,31 @@
     box-shadow: 2px 3px 0px var(--trazos-lavender-shadow-sm), 0 6px 20px -4px var(--trazos-lavender-shadow-md);
 }
 
+/* Tones. The text color reaches the card's own text; headings set their own. */
+.trazos-card-olive {
+    background: var(--trazos-olive-tint);
+    border-color: var(--trazos-olive-border);
+    color: var(--trazos-olive-text);
+}
+
+.trazos-card-gold {
+    background: var(--trazos-gold-tint);
+    border-color: var(--trazos-gold-border);
+    color: var(--trazos-gold-text);
+}
+
+.trazos-card-wine {
+    background: var(--trazos-wine-tint);
+    border-color: var(--trazos-wine-border);
+    color: var(--trazos-wine-text);
+}
+
+.trazos-card-sky {
+    background: var(--trazos-sky-tint);
+    border-color: var(--trazos-sky-border);
+    color: var(--trazos-sky-text);
+}
+
 .trazos-card-interactive {
     cursor: pointer;
 }
@@ -24,6 +49,21 @@
     border-color: var(--trazos-border-highlight);
     transform: translateY(-2px);
     box-shadow: 3px 5px 0px rgb(var(--trazos-shadow-rgb) / calc(0.07 * var(--trazos-shadow-strength))), 0 10px 25px -5px rgb(var(--trazos-shadow-warm-rgb) / calc(0.08 * var(--trazos-shadow-strength)));
+}
+
+/* The background shows behind an image that failed to load. */
+.trazos-card-media {
+    margin-bottom: 1rem;
+    overflow: hidden;
+    background: var(--trazos-surface-inset);
+    border-radius: 14px 18px 12px 16px / 16px 12px 18px 14px;
+}
+
+.trazos-card-media ::deep img,
+.trazos-card-media ::deep video {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 .trazos-card-header {
@@ -40,4 +80,16 @@
     margin-top: 1.25rem;
     padding-top: 0.75rem;
     border-top: 1.5px solid var(--trazos-border-soft);
+}
+
+.trazos-card-fill {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.trazos-card-fill > .trazos-card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }

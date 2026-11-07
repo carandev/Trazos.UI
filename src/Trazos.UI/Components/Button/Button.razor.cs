@@ -15,6 +15,13 @@ public partial class Button
     [Parameter]
     public string Type { get; set; } = "button";
 
+    /// <summary>
+    /// Renders a link instead of a button. <see cref="LinkButton"/> is the public way to do
+    /// this; it lives here because scoped CSS only reaches the elements this file renders.
+    /// </summary>
+    [Parameter]
+    public string? Href { get; set; }
+
     [Parameter]
     public bool Disabled { get; set; }
 
