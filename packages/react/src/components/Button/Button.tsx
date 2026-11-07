@@ -23,6 +23,11 @@ const sizeClass: Record<ButtonSize, string> = {
   large: 'lg',
 };
 
+/** The classes shared by every element styled as a button. */
+export function buttonClasses(variant: ButtonVariant, size: ButtonSize, className?: string): string {
+  return cx('trazos-btn', `trazos-btn-${variant}`, `trazos-btn-${sizeClass[size]}`, className);
+}
+
 export function Button({
   variant = 'primary',
   size = 'medium',
@@ -39,7 +44,7 @@ export function Button({
     <button
       {...rest}
       type={type}
-      className={cx('trazos-btn', `trazos-btn-${variant}`, `trazos-btn-${sizeClass[size]}`, className)}
+      className={buttonClasses(variant, size, className)}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
     >

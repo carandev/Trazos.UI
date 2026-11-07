@@ -3,6 +3,8 @@ import userEvent from '@testing-library/user-event';
 import { createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { Button } from './Button';
+import { IconButton } from './IconButton';
+import { LinkButton } from './LinkButton';
 import { expectNoA11yViolations } from '../../../test/a11y';
 import buttonCss from './Button.css?raw';
 
@@ -105,5 +107,124 @@ describe('Button', () => {
     if (wrapper == null) throw new Error('no icon wrapper');
     expect(getComputedStyle(wrapper).display).toBe('inline-flex');
     expect(getComputedStyle(wrapper).alignItems).toBe('center');
+  });
+});
+
+describe('LinkButton', () => {
+  it('renders a link with the variant and size classes of Button', () => {
+    render(
+      <LinkButton href="/cv.pdf" variant="wine" size="large">
+        Resume
+      </LinkButton>,
+    );
+    const link = screen.getByRole('link', { name: 'Resume' });
+    expect(link).toHaveAttribute('href', '/cv.pdf');
+    expect(link).toHaveClass('trazos-btn', 'trazos-btn-wine', 'trazos-btn-lg');
+  });
+
+  it('defaults to the primary medium style', () => {
+    render(<LinkButton href="/">Home</LinkButton>);
+    expect(screen.getByRole('link')).toHaveClass('trazos-btn-primary', 'trazos-btn-md');
+  });
+
+  it('renders both icons in the Button wrappers', () => {
+    const { container } = render(
+      <LinkButton href="/" leadingIcon={<svg data-testid="lead" />} trailingIcon={<svg data-testid="trail" />}>
+        Home
+      </LinkButton>,
+    );
+    expect(container.querySelector('.trazos-btn-leading-icon')).toContainElement(screen.getByTestId('lead'));
+    expect(container.querySelector('.trazos-btn-trailing-icon')).toContainElement(screen.getByTestId('trail'));
+  });
+
+  it('forwards native anchor attributes and className', () => {
+    render(
+      <LinkButton href="mailto:a@b.co" download target="_blank" rel="noreferrer" className="extra">
+        Mail
+      </LinkButton>,
+    );
+    const link = screen.getByRole('link');
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', 'noreferrer');
+    expect(link).toHaveAttribute('download');
+    expect(link).toHaveClass('extra');
+  });
+
+  it('has no accessibility violations', async () => {
+    const { container } = render(<LinkButton href="/">Home</LinkButton>);
+    await expectNoA11yViolations(container);
+  });
+});
+
+describe('IconButton', () => {
+  it('uses the label as its accessible name and defaults to a non-submitting ghost button', () => {
+    render(
+      <IconButton label="Open menu">
+        <svg />
+      </IconButton>,
+    );
+    const button = screen.getByRole('button', { name: 'Open menu' });
+    expect(button).toHaveAttribute('type', 'button');
+    expect(button).toHaveClass('trazos-icon-btn', 'trazos-btn-ghost');
+  });
+
+  it.each(['primary', 'wine', 'secondary', 'outline', 'cream', 'lavender', 'ghost'] as const)(
+    'supports the %s variant',
+    (variant) => {
+      render(
+        <IconButton label="Go" variant={variant}>
+          <svg />
+        </IconButton>,
+      );
+      expect(screen.getByRole('button')).toHaveClass(`trazos-btn-${variant}`);
+    },
+  );
+
+  it.each([
+    ['medium', '44px'],
+    ['large', '52px'],
+  ] as const)('keeps a square %s hit area of at least 44px', (size, px) => {
+    render(
+      <IconButton label="Go" size={size}>
+        <svg />
+      </IconButton>,
+    );
+    const style = getComputedStyle(screen.getByRole('button'));
+    expect(style.width).toBe(px);
+    expect(style.height).toBe(px);
+  });
+
+  it('shows a spinner instead of the icon while loading', () => {
+    const { container } = render(
+      <IconButton label="Go" loading>
+        <svg data-testid="icon" />
+      </IconButton>,
+    );
+    expect(screen.queryByTestId('icon')).toBeNull();
+    expect(container.querySelector('.trazos-btn-spinner')).not.toBeNull();
+    expect(screen.getByRole('button')).toBeDisabled();
+    expect(screen.getByRole('button')).toHaveAttribute('aria-busy', 'true');
+  });
+
+  it('forwards native attributes', () => {
+    const onClick = vi.fn();
+    render(
+      <IconButton label="Go" aria-expanded="true" onClick={onClick}>
+        <svg />
+      </IconButton>,
+    );
+    const button = screen.getByRole('button');
+    button.click();
+    expect(onClick).toHaveBeenCalledOnce();
+    expect(button).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('has no accessibility violations', async () => {
+    const { container } = render(
+      <IconButton label="Go">
+        <svg />
+      </IconButton>,
+    );
+    await expectNoA11yViolations(container);
   });
 });
