@@ -6,10 +6,12 @@
 
 - **Artisanal Aesthetics**: Organic border-radii (`sketch-card`, `sketch-sm`), warm parchment backgrounds (`#FAF7F2`), ink accents (`#2C221E`), and soft shadows.
 - **Zero Heavy Dependencies**: Pure Blazor components (`.razor` + scoped `.razor.css`). Without Tailwind CSS, add the small icon-size snippet from the installation guide.
-- **Dark Mode**: Every color is a role-based CSS variable (`--trazos-*`). Light is the default; add `data-theme="dark"` to `<html>` (or any ancestor) for the dark theme.
+- **Dark Mode**: Every color is a role-based CSS variable (`--trazos-*`). Light is the default; add `data-theme="dark"` to `<html>` (or any ancestor) for the dark theme, or use `ThemeToggle` to follow the system until the user chooses.
 - **Atomic Primitives**:
   - `Button`: Primary, Wine, Secondary, Outline, Cream, Lavender, Ghost variants with loading spinners.
-  - `Card`: Default, Lavender, and Interactive variants with header/footer support.
+  - `LinkButton`: A link that looks like a `Button`, for actions that navigate.
+  - `IconButton`: A square, icon-only button with a required label and a hit area of at least 44px.
+  - `Card`: Default, Lavender, Interactive, Olive, Gold, Wine and Sky variants with media, header and footer slots, and `Fill` for equal-height grids.
   - `Badge`: Success, Warning, Error, Info, Lavender, Cream, Neutral status tags.
   - `TextInput`, `SelectInput`, `TextArea`, `Checkbox`: Accessible forms with labels, error states, and helper texts.
   - `Modal`: High-contrast, sketch-bordered dialogs with backdrop click handling and customizable sizes.
@@ -22,6 +24,18 @@
   - `Autocomplete<TItem>`: Debounced async search with keyboard navigation, custom item templates, and either a "selected" chip or clear-on-select mode.
   - `FormSection`: Numbered section heading to split long forms into simple steps.
   - `EmptyState`: Friendly empty view with icon, explanation and next-step actions.
+- **Decoration**:
+  - `SketchUnderline`, `SketchCircle`, `SketchArrow`, `SketchSquiggle`: Hand-drawn inline SVG strokes with an optional draw-in animation.
+  - `Tape`: A strip of translucent tape that pins a positioned parent.
+  - `PhotoFrame`: A framed image with an ink shadow, a backing sheet, optional tape and a handwritten caption.
+  - `SectionHeading`: Eyebrow, title with a heading level you choose, optional sketch underline and an actions slot.
+- **Website helpers**:
+  - `SiteHeader`: Top bar with logo, links, actions, a blurred sticky style after scrolling and a mobile menu. `ScrollSpy` marks the active section on one-page sites.
+  - `ThemeToggle`, `IThemeService`: Light and dark switching; see [Dark Mode](#dark-mode).
+  - `LinkList`, `LinkListItem`: A compact semantic list of links with metadata and truncation.
+  - `CopyButton`: Copies a value, with a handwritten note, an `aria-live` announcement and a configurable fallback.
+  - `Reveal`: Entrance on scroll that keeps content visible with reduced motion and before JavaScript runs.
+  - `SkipLink`, `VisuallyHidden`: Keyboard and screen-reader helpers.
 
 ## Calendar Example
 
@@ -76,7 +90,16 @@ Dark mode is opt-in, so existing apps keep their look:
 <html data-theme="dark">
 ```
 
-The library never reads `prefers-color-scheme` on its own; your app decides (for example, with a small script in `<head>` that reads the system preference and a saved choice). Customize the palette by overriding tokens after `trazos.css`:
+To follow the system until the user chooses, load the theme script in `<head>`, as a blocking script after the `theme-color` meta tag. It applies the theme before first paint, so there is no flash of the wrong colors:
+
+```html
+<meta name="theme-color" content="#FAF7F2" />
+<script src="_content/Trazos.UI/trazos-theme.js"></script>
+```
+
+Then use `<ThemeToggle Label="Toggle theme" />`, or `IThemeService` to build your own control. Both need `AddTrazosUI()`. The storage key and colors are in `TrazosUIOptions`; if you change the key, also set `data-storage-key` on the script tag.
+
+Without that script, nothing reads `prefers-color-scheme`. Customize the palette by overriding tokens after `trazos.css`:
 
 ```css
 :root { --trazos-olive: #3F7D5E; }

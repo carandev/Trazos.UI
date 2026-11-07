@@ -1,12 +1,13 @@
-@inject DocsTheme Theme
+@implements IDisposable
+@inject IThemeService Theme
 
 <button type="button"
         class="docs-theme-toggle"
-        aria-pressed="@(Theme.IsDark ? "true" : "false")"
+        aria-pressed="@(IsDark ? "true" : "false")"
         aria-label="@L.T("Dark theme", "Tema oscuro")"
-        title="@(Theme.IsDark ? L.T("Switch to light theme", "Cambiar a tema claro") : L.T("Switch to dark theme", "Cambiar a tema oscuro"))"
-        @onclick="Theme.ToggleAsync">
-    @if (Theme.IsDark)
+        title="@(IsDark ? L.T("Switch to light theme", "Cambiar a tema claro") : L.T("Switch to dark theme", "Cambiar a tema oscuro"))"
+        @onclick="ToggleAsync">
+    @if (IsDark)
     {
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
     }
@@ -15,3 +16,15 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
     }
 </button>
+
+@code {
+    private bool IsDark => Theme.Current == TrazosTheme.Dark;
+
+    protected override void OnInitialized() => Theme.Changed += OnThemeChanged;
+
+    private void OnThemeChanged() => InvokeAsync(StateHasChanged);
+
+    private Task ToggleAsync() => Theme.SetThemeAsync(IsDark ? TrazosTheme.Light : TrazosTheme.Dark);
+
+    public void Dispose() => Theme.Changed -= OnThemeChanged;
+}

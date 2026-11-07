@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Documentation for Trazos.UI, a warm, hand-crafted Blazor component library." />
+    <meta name="theme-color" content="#FAF7F2" />
     <title>Trazos.UI</title>
     <base href="/" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
@@ -28,24 +29,12 @@
                 document.documentElement.lang = lang;
                 if (!persist) return;
                 try { localStorage.setItem('trazos-docs-lang', lang); } catch (e) { }
-            },
-            getTheme: function () {
-                try {
-                    var saved = localStorage.getItem('trazos-docs-theme');
-                    if (saved === 'light' || saved === 'dark') return saved;
-                } catch (e) { }
-                return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            },
-            applyTheme: function (theme, persist) {
-                document.documentElement.dataset.theme = theme;
-                if (!persist) return;
-                try { localStorage.setItem('trazos-docs-theme', theme); } catch (e) { }
             }
         };
-        // Set language and theme before the first paint so nothing flashes.
+        // Set the language before the first paint so nothing flashes.
         document.documentElement.lang = window.trazosDocs.getLanguage();
-        window.trazosDocs.applyTheme(window.trazosDocs.getTheme(), false);
     </script>
+    <script src="_content/Trazos.UI/trazos-theme.js" data-storage-key="trazos-docs-theme"></script>
     <script type="importmap"></script>
 </head>
 

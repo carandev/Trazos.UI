@@ -1,0 +1,62 @@
+@page "/components/theme-toggle"
+@implements IDisposable
+@inject IThemeService Theme
+
+<DocPage Title="ThemeToggle" Category="@L.T("Website helpers", "Ayudas para sitios web")"
+         Lead="@L.T("Switches between the light and dark themes and remembers the choice. Until the user chooses, the theme follows the system.", "Cambia entre los temas claro y oscuro y recuerda la elección. Hasta que el usuario elija, el tema sigue al sistema.")">
+
+    <DemoBlock Title="@L.T("Toggle", "Interruptor")" Description="@L.T("Both icons are always rendered and CSS shows the right one, so prerendered HTML is already correct.", "Los dos íconos siempre se renderizan y CSS muestra el correcto, así que el HTML prerrenderizado ya es correcto.")" Code="@ToggleCode">
+        <ThemeToggle Label="@L.T("Toggle theme", "Cambiar tema")" Variant="ButtonVariant.Outline" />
+        <span class="docs-muted" data-testid="current-theme">@Theme.Current</span>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("Setup", "Configuración")</h2>
+    <p>
+        <Tr>
+            <En>Load the theme script in <code>&lt;head&gt;</code> and call <code>AddTrazosUI</code>. See <a href="theming">Theming</a>.</En>
+            <Es>Carga el script del tema en <code>&lt;head&gt;</code> y llama a <code>AddTrazosUI</code>. Consulta <a href="theming">Temas</a>.</Es>
+        </Tr>
+    </p>
+    <CodeBlock Language="html" Code="@ScriptCode" />
+
+    <ApiTable Params="Params" />
+    <ApiTable Title="IThemeService" Params="ServiceParams" />
+</DocPage>
+
+@code {
+    protected override void OnInitialized() => Theme.Changed += OnThemeChanged;
+
+    private void OnThemeChanged() => InvokeAsync(StateHasChanged);
+
+    public void Dispose() => Theme.Changed -= OnThemeChanged;
+
+    private const string ToggleCode = """
+        <ThemeToggle Label="Toggle theme" />
+        """;
+
+    private const string ScriptCode = """
+        <meta name="theme-color" content="#FAF7F2" />
+        <script src="_content/Trazos.UI/trazos-theme.js"></script>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Label", "string", null, L.T("Accessible name of the button. Required.", "Nombre accesible del botón. Obligatorio.")),
+        new("MoonIcon", "RenderFragment?", null, L.T("Shown in the light theme.", "Se muestra en el tema claro.")),
+        new("SunIcon", "RenderFragment?", null, L.T("Shown in the dark theme.", "Se muestra en el tema oscuro.")),
+        new("Variant", "ButtonVariant", "Ghost", L.T("Same variants as Button.", "Las mismas variantes de Button.")),
+        new("Size", "IconButtonSize", "Medium", L.T("Medium or Large.", "Medium o Large.")),
+        new("Disabled", "bool", "false", L.T("Disables the button.", "Deshabilita el botón.")),
+        new("OnClick", "EventCallback<MouseEventArgs>", null, L.T("Raised before the theme changes.", "Se dispara antes de cambiar el tema.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ServiceParams =>
+    [
+        new("Current", "TrazosTheme", "Light", L.T("The current theme. Light until initialized.", "El tema actual. Light hasta que se inicialice.")),
+        new("Changed", "event Action?", null, L.T("Raised when the theme changes, including from another tab.", "Se dispara cuando cambia el tema, incluso desde otra pestaña.")),
+        new("InitializeAsync()", "Task", null, L.T("Connects to the browser. With prerendering, call it from OnAfterRenderAsync.", "Se conecta al navegador. Con prerrenderizado, llámalo desde OnAfterRenderAsync.")),
+        new("SetThemeAsync(theme)", "Task", null, L.T("Applies a theme and remembers it.", "Aplica un tema y lo recuerda.")),
+    ];
+}
