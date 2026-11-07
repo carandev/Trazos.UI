@@ -7,6 +7,7 @@ import {
   LinkListItem,
   PhotoFrame,
   Reveal,
+  SiteHeader,
   SectionHeading,
   SketchArrow,
   SketchCircle,
@@ -14,6 +15,8 @@ import {
   SketchUnderline,
   SkipLink,
   Tape,
+  ThemeToggle,
+  useTheme,
 } from '@carandev/trazos-ui';
 import { Demo, Row } from '../Demo';
 import { ArrowIcon, PlusIcon } from '../icons';
@@ -144,7 +147,11 @@ export function RevealPage() {
 
 export function CopyButtonPage() {
   return (
-    <Demo title="Copy a value" code={`<CopyButton value="hi@example.com" label="Copy email" copiedLabel="Copied!" />`}>
+    <Demo title="Copy a value" code={`<CopyButton
+  value="hi@example.com"
+  label="Copy email"
+  copiedLabel="Copied!"
+/>`}>
       <div style={{ paddingTop: '2rem' }}>
         <CopyButton value="hi@example.com" label="Copy email" copiedLabel="Copied!" errorLabel="Could not copy" variant="outline" />
       </div>
@@ -165,6 +172,45 @@ export function LinkListPage() {
           </LinkListItem>
         </LinkList>
       </div>
+    </Demo>
+  );
+}
+
+export function ThemeTogglePage() {
+  const { theme } = useTheme();
+  return (
+    <Demo title="Toggle" description={`The current theme is ${theme}.`} code={`<ThemeToggle label="Toggle theme" />`}>
+      <Row>
+        <ThemeToggle label="Toggle theme" />
+        <ThemeToggle label="Toggle theme" variant="outline" />
+      </Row>
+    </Demo>
+  );
+}
+
+export function SiteHeaderPage() {
+  return (
+    <Demo title="With logo and actions" description="Narrow the window to see the menu button." code={`<SiteHeader
+  logo={…}
+  links={links}
+  activeHref="#work"
+  navLabel="Main"
+  openMenuLabel="Open menu"
+  closeMenuLabel="Close menu"
+/>`}>
+      <SiteHeader
+        logo={<strong className="trazos-handwriting">trazos</strong>}
+        links={[
+          { href: '#about', label: 'About' },
+          { href: '#work', label: 'Work' },
+          { href: '#contact', label: 'Contact' },
+        ]}
+        activeHref="#work"
+        navLabel="Main"
+        openMenuLabel="Open menu"
+        closeMenuLabel="Close menu"
+        actions={<ThemeToggle label="Toggle theme" />}
+      />
     </Demo>
   );
 }

@@ -4,7 +4,7 @@ import { DataTablePage, SkeletonPage, TabsPage } from './data';
 import { CheckboxPage, RadioCardGroupPage, SelectInputPage, TextAreaPage, TextInputPage } from './inputs';
 import { AppShellPage, ConfirmDialogPage, DrawerPage, ModalPage, ToastPage } from './overlays';
 import { AutocompletePage, MonthCalendarPage } from './search';
-import { CopyButtonPage, IconButtonPage, LinkButtonPage, LinkListPage, PhotoFramePage, RevealPage, SectionHeadingPage, SketchPage, SkipLinkPage, TapePage } from './site';
+import { CopyButtonPage, IconButtonPage, LinkButtonPage, LinkListPage, PhotoFramePage, RevealPage, SectionHeadingPage, SiteHeaderPage, SketchPage, SkipLinkPage, TapePage, ThemeTogglePage } from './site';
 
 export interface DemoEntry {
   id: string;
@@ -47,6 +47,8 @@ export const demos: DemoEntry[] = [
   { id: 'reveal', name: 'Reveal', group: 'Website', summary: 'Fade-and-rise entrance on scroll.', Page: RevealPage },
   { id: 'copy-button', name: 'CopyButton', group: 'Website', summary: 'Copy to clipboard with a handwritten note.', Page: CopyButtonPage },
   { id: 'link-list', name: 'LinkList', group: 'Website', summary: 'Compact rows of links.', Page: LinkListPage },
+  { id: 'theme-toggle', name: 'ThemeToggle', group: 'Website', summary: 'Light and dark switching that follows the system.', Page: ThemeTogglePage },
+  { id: 'site-header', name: 'SiteHeader', group: 'Website', summary: 'Sticky top bar with a mobile menu.', Page: SiteHeaderPage },
   { id: 'app-shell', name: 'AppShell', group: 'Layout', summary: 'Sidebar, top bar and mobile drawer layout.', Page: AppShellPage },
 ];
 
