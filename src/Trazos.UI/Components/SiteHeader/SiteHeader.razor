@@ -1,0 +1,47 @@
+@namespace Trazos.UI.Components
+@implements IAsyncDisposable
+
+<header @ref="_header" class="trazos-site-header @Class" @attributes="AdditionalAttributes">
+    <div class="trazos-site-header-inner">
+        @if (Logo != null)
+        {
+            <div class="trazos-site-header-logo">@Logo</div>
+        }
+        <nav id="@_navId"
+             aria-label="@NavLabel"
+             class="trazos-site-header-nav @(_menuOpen ? "trazos-site-header-nav-open" : null)">
+            @foreach (var link in Links)
+            {
+                <a @key="link.Href"
+                   @attributes="link.Attributes"
+                   href="@link.Href"
+                   aria-current="@(link.Href == ActiveHref ? CurrentValue : null)"
+                   class="trazos-site-header-link @link.Class"
+                   @onclick="() => HandleLinkClickAsync(link)">@link.Label</a>
+            }
+        </nav>
+        @if (Actions != null)
+        {
+            <div class="trazos-site-header-actions">@Actions</div>
+        }
+        <IconButton Label="@(_menuOpen ? CloseMenuLabel : OpenMenuLabel)"
+                    Variant="ButtonVariant.Outline"
+                    Class="trazos-site-header-toggle"
+                    aria-expanded="@(_menuOpen ? "true" : "false")"
+                    aria-controls="@_navId"
+                    OnClick="ToggleMenu">
+            @if (_menuOpen)
+            {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+            }
+            else
+            {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <path d="M4 7h16M4 12h16M4 17h16" />
+                </svg>
+            }
+        </IconButton>
+    </div>
+</header>

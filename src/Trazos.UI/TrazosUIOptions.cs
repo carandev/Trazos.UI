@@ -21,4 +21,16 @@ public class TrazosUIOptions
     /// Defaults to true.
     /// </summary>
     public bool ShowEnvironmentBadge { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets the <c>localStorage</c> key that holds the user's theme. If you change it,
+    /// also set <c>data-storage-key</c> on the <c>trazos-theme.js</c> script tag.
+    /// </summary>
+    public string ThemeStorageKey { get; set; } = "trazos-theme";
+
+    /// <summary>Gets or sets the <c>theme-color</c> meta value in the light theme.</summary>
+    public string ThemeLightColor { get; set; } = "#FAF7F2";
+
+    /// <summary>Gets or sets the <c>theme-color</c> meta value in the dark theme.</summary>
+    public string ThemeDarkColor { get; set; } = "#1A1512";
 }

@@ -1,0 +1,19 @@
+/* ========================================
+   THEME TOGGLE - Trazos UI
+   ======================================== */
+
+.trazos-theme-toggle-moon {
+    display: inline-flex;
+}
+
+.trazos-theme-toggle-sun {
+    display: none;
+}
+
+[data-theme='dark'] .trazos-theme-toggle-moon {
+    display: none;
+}
+
+[data-theme='dark'] .trazos-theme-toggle-sun {
+    display: inline-flex;
+}

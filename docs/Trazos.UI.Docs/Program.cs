@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Trazos.UI.Docs;
 using Trazos.UI.Docs.Localization;
 using Trazos.UI.Extensions;
+using Trazos.UI.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -13,12 +14,12 @@ builder.Services.AddTrazosUI(options =>
 {
     options.IsDevelopment = builder.HostEnvironment.IsDevelopment();
     options.EnvironmentName = builder.HostEnvironment.Environment;
+    options.ThemeStorageKey = "trazos-docs-theme";
 });
 
 builder.Services.AddSingleton<DocsLanguage>();
-builder.Services.AddSingleton<DocsTheme>();
 
 var host = builder.Build();
 await host.Services.GetRequiredService<DocsLanguage>().InitializeAsync();
-await host.Services.GetRequiredService<DocsTheme>().InitializeAsync();
+await host.Services.GetRequiredService<IThemeService>().InitializeAsync();
 await host.RunAsync();

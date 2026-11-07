@@ -1,0 +1,84 @@
+@page "/components/site-header"
+
+<DocPage Title="SiteHeader" Category="@L.T("Website helpers", "Ayudas para sitios web")"
+         Lead="@L.T("A top navigation bar for public websites, with logo and actions slots, a blurred sticky style after scrolling, a mobile menu and an active link. AppShell covers dashboards with a sidebar.", "Una barra de navegación superior para sitios públicos, con espacios para logo y acciones, un estilo fijo con desenfoque al desplazarse, un menú móvil y un enlace activo. AppShell cubre los paneles con barra lateral.")">
+
+    <DemoBlock Title="@L.T("One-page site", "Sitio de una página")" Description="@L.T("ScrollSpy reports the section in the middle of the viewport. The menu needs an interactive render mode. With a base tag, write links as a path plus a fragment.", "ScrollSpy informa la sección que está en el centro de la pantalla. El menú necesita un modo de renderizado interactivo. Con una etiqueta base, escribe los enlaces como una ruta más un fragmento.")" Code="@HeaderCode">
+        <div style="width: 100%;">
+            <SiteHeader Links="Links"
+                        NavLabel="@L.T("Main", "Principal")"
+                        OpenMenuLabel="@L.T("Open menu", "Abrir menú")"
+                        CloseMenuLabel="@L.T("Close menu", "Cerrar menú")"
+                        ActiveHref="@ActiveHref"
+                        CurrentType="SiteHeaderCurrentType.Location">
+                <Logo><strong class="trazos-heading">Trazos</strong></Logo>
+                <Actions><ThemeToggle Label="@L.T("Toggle theme", "Cambiar tema")" /></Actions>
+            </SiteHeader>
+            <ScrollSpy Ids="Ids" @bind-ActiveId="_active" />
+            @foreach (var id in Ids)
+            {
+                <section id="@id" style="min-height: 80vh; padding-top: 1rem;">
+                    <SectionHeading Title="@id" Level="3" />
+                </section>
+            }
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+    <ApiTable Title="ScrollSpy" Params="SpyParams" />
+</DocPage>
+
+@code {
+    private static readonly string[] Ids = ["about", "work", "contact"];
+    private string? _active;
+
+    private static IReadOnlyList<SiteHeaderLink> Links { get; } =
+        Ids.Select(id => new SiteHeaderLink($"components/site-header#{id}", id)).ToArray();
+
+    private string? ActiveHref => _active is null ? null : $"components/site-header#{_active}";
+
+    private const string HeaderCode = """
+        <SiteHeader Links="_links"
+                    NavLabel="Main"
+                    OpenMenuLabel="Open menu"
+                    CloseMenuLabel="Close menu"
+                    ActiveHref="@ActiveHref"
+                    CurrentType="SiteHeaderCurrentType.Location">
+            <Logo><a href="/">Trazos</a></Logo>
+            <Actions><ThemeToggle Label="Toggle theme" /></Actions>
+        </SiteHeader>
+        <ScrollSpy Ids="_ids" @bind-ActiveId="_active" />
+
+        @code {
+            private readonly string[] _ids = ["about", "work"];
+            private readonly SiteHeaderLink[] _links =
+            [
+                new("/#about", "About"),
+                new("/#work", "Work"),
+            ];
+            private string? _active;
+            private string? ActiveHref => _active is null ? null : $"/#{_active}";
+        }
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Links", "IReadOnlyList<SiteHeaderLink>", null, L.T("The navigation links: Href, Label, and optional Class and Attributes. Required.", "Los enlaces de navegación: Href, Label y, de forma opcional, Class y Attributes. Obligatorio.")),
+        new("NavLabel", "string", null, L.T("Accessible name of the navigation. Required.", "Nombre accesible de la navegación. Obligatorio.")),
+        new("OpenMenuLabel", "string", null, L.T("Accessible name of the closed menu button. Required.", "Nombre accesible del botón con el menú cerrado. Obligatorio.")),
+        new("CloseMenuLabel", "string", null, L.T("Accessible name of the open menu button. Required.", "Nombre accesible del botón con el menú abierto. Obligatorio.")),
+        new("Logo", "RenderFragment?", null, L.T("Rendered at the start of the bar.", "Se renderiza al inicio de la barra.")),
+        new("Actions", "RenderFragment?", null, L.T("Rendered beside the menu button.", "Se renderiza junto al botón del menú.")),
+        new("ActiveHref", "string?", null, L.T("The Href of the current link.", "El Href del enlace actual.")),
+        new("CurrentType", "SiteHeaderCurrentType", "Page", L.T("The aria-current value: Page or Location.", "El valor de aria-current: Page o Location.")),
+        new("OnLinkClick", "EventCallback<SiteHeaderLink>", null, L.T("Raised when a link is clicked.", "Se dispara al hacer clic en un enlace.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> SpyParams =>
+    [
+        new("Ids", "IReadOnlyList<string>", null, L.T("The section ids to watch. Required.", "Los id de las secciones que se observan. Obligatorio.")),
+        new("ActiveId", "string?", null, L.T("The active section. Use it with @bind-ActiveId.", "La sección activa. Úsalo con @bind-ActiveId.")),
+    ];
+}

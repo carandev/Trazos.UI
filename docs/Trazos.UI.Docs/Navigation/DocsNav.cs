@@ -43,6 +43,8 @@ public static class DocsNav
         ]),
         new("Website helpers", "Ayudas para sitios web",
         [
+            new("SiteHeader", "components/site-header"),
+            new("ThemeToggle", "components/theme-toggle"),
             new("LinkList", "components/link-list"),
             new("CopyButton", "components/copy-button"),
             new("Reveal", "components/reveal"),

@@ -8,7 +8,7 @@ namespace Trazos.UI.Extensions;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Registers Trazos.UI services, including dialogs and configuration options.
+    /// Registers Trazos.UI services, including dialogs, the theme and configuration options.
     /// </summary>
     /// <param name="services">The service collection.</param>
     /// <param name="configure">Optional configuration action for TrazosUIOptions.</param>
@@ -20,6 +20,7 @@ public static class ServiceCollectionExtensions
 
         services.TryAddSingleton(options);
         services.TryAddScoped<IDialogService, DialogService>();
+        services.TryAddScoped<IThemeService, ThemeService>();
 
         return services;
     }

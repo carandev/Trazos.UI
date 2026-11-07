@@ -1,0 +1,126 @@
+/* ========================================
+   SITE HEADER - Trazos UI
+   ======================================== */
+
+.trazos-site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1.5px solid transparent;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.trazos-site-header[data-trazos-scrolled] {
+    background: color-mix(in srgb, var(--trazos-page) 88%, transparent);
+    border-bottom-color: var(--trazos-border);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+.trazos-site-header-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 4.75rem;
+    padding: 0 1rem;
+}
+
+.trazos-site-header-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-left: auto;
+}
+
+.trazos-site-header-link {
+    position: relative;
+    padding: 0.625rem 0.875rem;
+    font-weight: 600;
+    color: var(--trazos-text-light);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+/* A hand-drawn underline that grows on hover and marks the current link. */
+.trazos-site-header-link::after {
+    content: '';
+    position: absolute;
+    right: 0.875rem;
+    bottom: 0.25rem;
+    left: 0.875rem;
+    height: 6px;
+    background: var(--trazos-wine);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'%3E%3Cpath d='M1 4 C 25 1, 50 6, 75 3 S 95 2, 99 4' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'%3E%3Cpath d='M1 4 C 25 1, 50 6, 75 3 S 95 2, 99 4' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+}
+
+.trazos-site-header-link:hover,
+.trazos-site-header-link[aria-current] {
+    color: var(--trazos-text);
+}
+
+.trazos-site-header-link:hover::after,
+.trazos-site-header-link[aria-current]::after {
+    transform: scaleX(1);
+}
+
+.trazos-site-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+@media (min-width: 761px) {
+    .trazos-site-header ::deep .trazos-site-header-toggle {
+        display: none;
+    }
+}
+
+@media (max-width: 760px) {
+    .trazos-site-header-actions {
+        margin-left: auto;
+    }
+
+    .trazos-site-header-nav {
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        right: 1rem;
+        left: 1rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.125rem;
+        margin-left: 0;
+        padding: 0.75rem;
+        background: var(--trazos-surface);
+        border: 1.5px solid var(--trazos-ink-edge);
+        border-radius: 20px 24px 18px 22px / 22px 18px 24px 20px;
+        box-shadow: 4px 5px 0 var(--trazos-ink-edge);
+        visibility: hidden;
+    }
+
+    .trazos-site-header-nav-open {
+        visibility: visible;
+    }
+
+    /* Without actions, the toggle is what pushes to the right. */
+    .trazos-site-header-inner ::deep .trazos-site-header-nav + .trazos-site-header-toggle {
+        margin-left: auto;
+    }
+
+    .trazos-site-header-link::after {
+        right: auto;
+        width: 3.75rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .trazos-site-header,
+    .trazos-site-header-link,
+    .trazos-site-header-link::after {
+        transition: none;
+    }
+}
