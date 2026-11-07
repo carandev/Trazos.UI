@@ -106,6 +106,10 @@ export function RenameFlow() {
 | `Drawer` | `open` + `onOpenChange`, `title`, `header` |
 | `ConfirmDialogProvider` + `useConfirm()` | `await confirm(message, overrides?)` or `confirm(options)` → `Promise<boolean>` |
 | `ToastProvider` + `useToast()` | `showSuccess` `showError` `showWarning` `showInfo` `(message, title?)` |
+| `SketchUnderline`, `SketchCircle`, `SketchArrow`, `SketchSquiggle` | Decorative hand-drawn strokes: `color`, `strokeWidth`, `animated` |
+| `Tape` | Decorative tape, needs a positioned parent: `color`, `rotate`, `position`: `top` `top-left` `top-right` |
+| `PhotoFrame` | `src`, `alt`, `caption`, `tape`, `imgProps` |
+| `SectionHeading` | `title`, `eyebrow`, `as`, `underline`, `actions` |
 | `AppShell` | `brand`, `sidebar`, `topBar`, `drawerHeader`, `drawerContent`, `isDevelopment`, `environmentName`, `showEnvironmentBadge` |
 
 Every component forwards `ref`, `className` and native attributes to its root element (form controls: to the native `<input>`, `<textarea>` or `<select>`). Variant unions mirror the Blazor `*Variant` enums (`ButtonVariant.Primary` → `'primary'`). Default texts (aria-labels, "Confirmar", "Sin resultados", month names) match the Blazor library, which is Spanish-first; override them with props.

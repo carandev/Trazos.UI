@@ -4,7 +4,7 @@ import { DataTablePage, SkeletonPage, TabsPage } from './data';
 import { CheckboxPage, RadioCardGroupPage, SelectInputPage, TextAreaPage, TextInputPage } from './inputs';
 import { AppShellPage, ConfirmDialogPage, DrawerPage, ModalPage, ToastPage } from './overlays';
 import { AutocompletePage, MonthCalendarPage } from './search';
-import { IconButtonPage, LinkButtonPage } from './site';
+import { IconButtonPage, LinkButtonPage, PhotoFramePage, SectionHeadingPage, SketchPage, TapePage } from './site';
 
 export interface DemoEntry {
   id: string;
@@ -24,6 +24,10 @@ export const demos: DemoEntry[] = [
   { id: 'loading-spinner', name: 'LoadingSpinner', group: 'Primitives', summary: 'Dual-ring spinner, inline or as an overlay.', Page: LoadingSpinnerPage },
   { id: 'skeleton', name: 'Skeleton', group: 'Primitives', summary: 'Placeholders while content loads.', Page: SkeletonPage },
   { id: 'whatsapp-button', name: 'WhatsAppButton', group: 'Primitives', summary: 'A wa.me link with brand colors.', Page: WhatsAppButtonPage },
+  { id: 'sketch', name: 'Sketch', group: 'Decoration', summary: 'Hand-drawn underline, circle, arrow and squiggle.', Page: SketchPage },
+  { id: 'tape', name: 'Tape', group: 'Decoration', summary: 'Translucent tape that pins things to the page.', Page: TapePage },
+  { id: 'photo-frame', name: 'PhotoFrame', group: 'Decoration', summary: 'A framed image with a backing sheet and caption.', Page: PhotoFramePage },
+  { id: 'section-heading', name: 'SectionHeading', group: 'Decoration', summary: 'Handwritten eyebrow and display title.', Page: SectionHeadingPage },
   { id: 'empty-state', name: 'EmptyState', group: 'Composition', summary: 'A friendly view for empty lists.', Page: EmptyStatePage },
   { id: 'form-section', name: 'FormSection', group: 'Composition', summary: 'Numbered steps for long forms.', Page: FormSectionPage },
   { id: 'text-input', name: 'TextInput', group: 'Forms', summary: 'Labelled text field with helper and error text.', Page: TextInputPage },

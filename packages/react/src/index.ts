@@ -30,5 +30,11 @@ export * from './components/Drawer';
 export * from './components/ConfirmDialog';
 export * from './components/Toast';
 
+// Decoration
+export * from './components/Sketch';
+export * from './components/Tape';
+export * from './components/PhotoFrame';
+export * from './components/SectionHeading';
+
 // Layout
 export * from './components/AppShell';
