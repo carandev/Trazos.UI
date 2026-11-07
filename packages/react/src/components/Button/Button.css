@@ -40,6 +40,29 @@
     font-size: 1rem;
 }
 
+/* Icon-only: square, with a touch target of at least 44px. */
+.trazos-icon-btn {
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.trazos-icon-btn-lg {
+    width: 3.25rem;
+    height: 3.25rem;
+}
+
+.trazos-icon-btn svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.trazos-icon-btn-lg svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
 /* Variants */
 .trazos-btn-primary {
     background-color: var(--trazos-olive-solid);

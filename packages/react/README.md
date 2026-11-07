@@ -85,6 +85,8 @@ export function RenameFlow() {
 | Component | Notes |
 |-----------|-------|
 | `Button` | `variant`: `primary` `wine` `secondary` `outline` `cream` `lavender` `ghost`; `size`: `small` `medium` `large`; `loading`, `leadingIcon`, `trailingIcon` |
+| `LinkButton` | A link styled as `Button`: `href`, `variant`, `size`, `leadingIcon`, `trailingIcon` |
+| `IconButton` | Icon-only button with a square hit area of at least 44px: `label` (required), `variant`, `size`: `medium` `large`; `loading` |
 | `Badge` | `variant`: `success` `warning` `error` `info` `lavender` `cream` `neutral`; `uppercase` (default `true`), `leadingIcon` |
 | `Card` | `variant`: `default` `white` `lavender` `interactive`; `header`, `footer` |
 | `IconBox` | `variant`: `primary` `lavender` `cream` `wine` `neutral`; `size` |

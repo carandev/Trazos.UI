@@ -4,6 +4,7 @@ import { DataTablePage, SkeletonPage, TabsPage } from './data';
 import { CheckboxPage, RadioCardGroupPage, SelectInputPage, TextAreaPage, TextInputPage } from './inputs';
 import { AppShellPage, ConfirmDialogPage, DrawerPage, ModalPage, ToastPage } from './overlays';
 import { AutocompletePage, MonthCalendarPage } from './search';
+import { IconButtonPage, LinkButtonPage } from './site';
 
 export interface DemoEntry {
   id: string;
@@ -15,6 +16,8 @@ export interface DemoEntry {
 
 export const demos: DemoEntry[] = [
   { id: 'button', name: 'Button', group: 'Primitives', summary: 'Sketch-bordered actions in seven variants and three sizes.', Page: ButtonPage },
+  { id: 'link-button', name: 'LinkButton', group: 'Primitives', summary: 'A link that looks like a Button.', Page: LinkButtonPage },
+  { id: 'icon-button', name: 'IconButton', group: 'Primitives', summary: 'Icon-only button with a 44px hit area.', Page: IconButtonPage },
   { id: 'badge', name: 'Badge', group: 'Primitives', summary: 'Small status tags.', Page: BadgePage },
   { id: 'card', name: 'Card', group: 'Primitives', summary: 'Containers with optional header and footer.', Page: CardPage },
   { id: 'icon-box', name: 'IconBox', group: 'Primitives', summary: 'A tinted well for an icon.', Page: IconBoxPage },
