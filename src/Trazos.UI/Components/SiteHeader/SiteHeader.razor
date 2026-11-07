@@ -12,8 +12,7 @@
              class="trazos-site-header-nav @(_menuOpen ? "trazos-site-header-nav-open" : null)">
             @foreach (var link in Links)
             {
-                <a @key="link.Href"
-                   @attributes="link.Attributes"
+                <a @attributes="link.Attributes"
                    href="@link.Href"
                    aria-current="@(link.Href == ActiveHref ? CurrentValue : null)"
                    class="trazos-site-header-link @link.Class"

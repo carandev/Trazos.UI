@@ -83,25 +83,29 @@ public partial class CopyButton
 
     private async Task HandleClickAsync(MouseEventArgs args)
     {
-        await OnClick.InvokeAsync(args);
+        // Host callbacks can be slow, and neither the copy nor its note waits for them.
+        var click = OnClick.InvokeAsync(args);
 
         if (await TryWriteToClipboardAsync())
         {
             ShowNote(CopyStatus.Copied);
             await OnCopied.InvokeAsync(Value);
-            return;
+        }
+        else
+        {
+            try
+            {
+                if (!Fallback.HasDelegate) throw new InvalidOperationException("No fallback");
+                await Fallback.InvokeAsync(Value);
+            }
+            catch (Exception)
+            {
+                // The fallback is host code, and any failure of it means the copy failed.
+                ShowNote(CopyStatus.Failed);
+            }
         }
 
-        try
-        {
-            if (!Fallback.HasDelegate) throw new InvalidOperationException("No fallback");
-            await Fallback.InvokeAsync(Value);
-        }
-        catch (Exception)
-        {
-            // The fallback is host code, and any failure of it means the copy failed.
-            ShowNote(CopyStatus.Failed);
-        }
+        await click;
     }
 
     private async Task<bool> TryWriteToClipboardAsync()
@@ -125,6 +129,7 @@ public partial class CopyButton
         _noteTimer?.Dispose();
         _noteTimer = new CancellationTokenSource();
         _ = HideNoteAsync(_noteTimer.Token);
+        StateHasChanged();
     }
 
     private async Task HideNoteAsync(CancellationToken token)

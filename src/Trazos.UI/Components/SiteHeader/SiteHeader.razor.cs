@@ -9,7 +9,7 @@ namespace Trazos.UI.Components;
 
 /// <summary>
 /// A top navigation bar for public websites. <c>AppShell</c> covers dashboards with a
-/// sidebar. The mobile menu needs an interactive render mode.
+/// sidebar. The mobile menu and the scrolled style need an interactive render mode.
 /// </summary>
 public partial class SiteHeader
 {

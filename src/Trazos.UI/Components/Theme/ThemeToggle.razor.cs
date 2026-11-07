@@ -63,7 +63,15 @@ public partial class ThemeToggle
     private async Task HandleClickAsync(MouseEventArgs args)
     {
         await OnClick.InvokeAsync(args);
-        await Theme.InitializeAsync();
-        await Theme.SetThemeAsync(Theme.Current == TrazosTheme.Dark ? TrazosTheme.Light : TrazosTheme.Dark);
+
+        try
+        {
+            await Theme.InitializeAsync();
+            await Theme.SetThemeAsync(Theme.Current == TrazosTheme.Dark ? TrazosTheme.Light : TrazosTheme.Dark);
+        }
+        catch (JSException)
+        {
+            // Without the script the page keeps the theme it has.
+        }
     }
 }

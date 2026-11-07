@@ -18,6 +18,8 @@ public partial class Button
     /// <summary>
     /// Renders a link instead of a button. <see cref="LinkButton"/> is the public way to do
     /// this; it lives here because scoped CSS only reaches the elements this file renders.
+    /// With <see cref="Disabled"/> or <see cref="Loading"/> it renders a disabled button,
+    /// since a link cannot be disabled.
     /// </summary>
     [Parameter]
     public string? Href { get; set; }

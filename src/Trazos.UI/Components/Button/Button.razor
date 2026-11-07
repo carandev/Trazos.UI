@@ -1,6 +1,6 @@
 @namespace Trazos.UI.Components
 
-@if (Href is null)
+@if (Href is null || Disabled || Loading)
 {
     <button type="@ButtonTypeValue"
             class="trazos-btn trazos-btn-@VariantClass trazos-btn-@SizeClass @Class"
@@ -31,10 +31,7 @@ else
             <span class="trazos-btn-leading-icon">@LeadingIcon</span>
         }
 
-        @if (ChildContent != null)
-        {
-            <span class="trazos-btn-text">@ChildContent</span>
-        }
+        <span class="trazos-btn-text">@ChildContent</span>
 
         @if (!Loading && TrailingIcon != null)
         {
