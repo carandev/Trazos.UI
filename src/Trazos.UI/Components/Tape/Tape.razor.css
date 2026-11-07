@@ -1,0 +1,37 @@
+/* ========================================
+   TAPE - Trazos UI
+   ======================================== */
+
+.trazos-tape {
+    position: absolute;
+    top: -12px;
+    z-index: 1;
+    width: 84px;
+    height: 24px;
+    background: var(--trazos-tape-color, color-mix(in srgb, var(--trazos-gold-tint-border) 80%, transparent));
+    transform: var(--trazos-tape-offset, translateX(0)) rotate(var(--trazos-tape-rotate, -3deg));
+    pointer-events: none;
+}
+
+.trazos-tape-top {
+    left: 50%;
+    --trazos-tape-offset: translateX(-50%);
+}
+
+.trazos-tape-top-left {
+    left: 1rem;
+}
+
+.trazos-tape-top-right {
+    right: 1rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .trazos-tape {
+        transition: transform 0.35s ease;
+    }
+
+    :hover > .trazos-tape {
+        transform: var(--trazos-tape-offset, translateX(0)) rotate(calc(var(--trazos-tape-rotate, -3deg) * -1));
+    }
+}

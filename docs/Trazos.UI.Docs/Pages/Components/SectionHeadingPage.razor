@@ -1,0 +1,37 @@
+@page "/components/section-heading"
+
+<DocPage Title="SectionHeading" Category="@L.T("Decoration", "Decoración")"
+         Lead="@L.T("A section title with a handwritten eyebrow, a heading level you choose, an optional sketch underline and a slot for actions.", "Un título de sección con una línea manuscrita superior, el nivel de encabezado que elijas, un subrayado opcional y un espacio para acciones.")">
+
+    <DemoBlock Title="@L.T("Full example", "Ejemplo completo")" Code="@FullCode">
+        <SectionHeading style="width: 100%;"
+                        Eyebrow="@L.T("Lately", "Últimamente")"
+                        Title="@L.T("Selected work", "Trabajo seleccionado")"
+                        Level="3"
+                        Underline="true">
+            <Actions><LinkButton Href="components/button" Variant="ButtonVariant.Ghost">@L.T("See all", "Ver todo")</LinkButton></Actions>
+        </SectionHeading>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private const string FullCode = """
+        <SectionHeading Eyebrow="Lately" Title="Selected work" Level="3" Underline="true">
+            <Actions><LinkButton Href="/work">See all</LinkButton></Actions>
+        </SectionHeading>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Title", "string?", null, L.T("The heading text.", "El texto del encabezado.")),
+        new("TitleContent", "RenderFragment?", null, L.T("The heading content, for markup. Takes precedence over Title.", "El contenido del encabezado, para marcado. Tiene prioridad sobre Title.")),
+        new("Eyebrow", "string?", null, L.T("Handwritten line above the title.", "Línea manuscrita sobre el título.")),
+        new("Level", "int", "2", L.T("Heading level, from 1 to 6.", "Nivel del encabezado, de 1 a 6.")),
+        new("Underline", "bool", "false", L.T("Draws a sketch underline below the title.", "Dibuja un subrayado a mano bajo el título.")),
+        new("Actions", "RenderFragment?", null, L.T("Rendered beside the title.", "Se renderiza junto al título.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+}

@@ -1,0 +1,19 @@
+@namespace Trazos.UI.Components
+
+<div class="trazos-section-heading @Class" @attributes="AdditionalAttributes">
+    <div class="trazos-section-heading-text">
+        @if (Eyebrow != null)
+        {
+            <p class="trazos-handwriting trazos-section-heading-eyebrow">@Eyebrow</p>
+        }
+        @Heading
+        @if (Underline)
+        {
+            <SketchUnderline Class="trazos-section-heading-underline" />
+        }
+    </div>
+    @if (Actions != null)
+    {
+        <div class="trazos-section-heading-actions">@Actions</div>
+    }
+</div>
