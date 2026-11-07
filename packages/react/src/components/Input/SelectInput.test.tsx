@@ -81,7 +81,7 @@ describe('SelectInput', () => {
     expect(screen.getByRole('alert')).toHaveTextContent('Pick one');
     expect(select).toHaveAttribute('aria-invalid', 'true');
     expect(select).toHaveAccessibleDescription('Pick one');
-    expect(select.parentElement).toHaveClass('has-error');
+    expect(select.parentElement).toHaveClass('trazos-input-has-error');
   });
 
   it('applies disabled', () => {
@@ -91,7 +91,7 @@ describe('SelectInput', () => {
       </SelectInput>,
     );
     expect(screen.getByLabelText('Country')).toBeDisabled();
-    expect(screen.getByLabelText('Country').parentElement).toHaveClass('disabled');
+    expect(screen.getByLabelText('Country').parentElement).toHaveClass('trazos-input-is-disabled');
   });
 
   it('works uncontrolled and calls onValueChange and onChange', async () => {

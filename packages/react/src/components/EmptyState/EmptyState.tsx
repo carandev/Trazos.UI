@@ -27,7 +27,7 @@ export function EmptyState({
   ...rest
 }: EmptyStateProps) {
   return (
-    <div {...rest} className={cx('trazos-empty-state', compact && 'is-compact', className)}>
+    <div {...rest} className={cx('trazos-empty-state', compact && 'trazos-empty-state-compact', className)}>
       {icon != null && (
         <IconBox variant={iconVariant} size={compact ? 'medium' : 'large'} className="trazos-empty-state-icon">
           {icon}

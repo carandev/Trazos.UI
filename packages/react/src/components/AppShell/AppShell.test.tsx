@@ -36,7 +36,7 @@ describe('AppShell', () => {
       'trazos-shell-sidebar',
       'trazos-shell-main-wrapper',
       'trazos-touch-area',
-      'toast-container',
+      'trazos-toast-container',
     ]);
   });
 
@@ -71,9 +71,9 @@ describe('AppShell', () => {
     if (!(hamburger instanceof HTMLElement)) throw new Error('hamburger missing');
     expect(hamburger).toHaveAttribute('aria-label', 'Abrir menú de navegación');
     await userEvent.click(hamburger);
-    expect(getDrawer(container)).toHaveClass('open');
+    expect(getDrawer(container)).toHaveClass('trazos-drawer-is-open');
     await userEvent.click(screen.getByRole('button', { name: 'Cerrar menú' }));
-    expect(getDrawer(container)).not.toHaveClass('open');
+    expect(getDrawer(container)).not.toHaveClass('trazos-drawer-is-open');
   });
 
   it('hides the environment badge by default', () => {
@@ -134,9 +134,9 @@ describe('AppShell', () => {
       </AppShell>,
     );
     await userEvent.click(screen.getByRole('button', { name: 'Toast' }));
-    expect(container.querySelector('.trazos-app-shell > .toast-container .toast-message')).toHaveTextContent('Saved');
+    expect(container.querySelector('.trazos-app-shell > .trazos-toast-container .trazos-toast-message')).toHaveTextContent('Saved');
     await userEvent.click(screen.getByRole('button', { name: 'Confirm' }));
-    const backdrop = container.querySelector('.trazos-app-shell > .modal-backdrop');
+    const backdrop = container.querySelector('.trazos-app-shell > .trazos-modal-backdrop');
     expect(backdrop).toHaveTextContent('Sure?');
   });
 

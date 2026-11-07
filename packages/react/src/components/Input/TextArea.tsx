@@ -64,7 +64,7 @@ export function TextArea({
         </label>
       )}
 
-      <div className={cx('trazos-textarea-wrapper', hasError && 'has-error', disabled && 'disabled')}>
+      <div className={cx('trazos-textarea-wrapper', hasError && 'trazos-input-has-error', disabled && 'trazos-input-is-disabled')}>
         <textarea
           {...rest}
           id={textareaId}

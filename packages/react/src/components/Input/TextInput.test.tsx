@@ -15,8 +15,8 @@ describe('TextInput', () => {
     expect(input.id).toMatch(/^trazos-input-/);
     expect(container.firstElementChild).toHaveClass('trazos-input-group');
     expect(input.parentElement).toHaveClass('trazos-input-wrapper');
-    expect(input.parentElement).not.toHaveClass('has-error');
-    expect(input.parentElement).not.toHaveClass('disabled');
+    expect(input.parentElement).not.toHaveClass('trazos-input-has-error');
+    expect(input.parentElement).not.toHaveClass('trazos-input-is-disabled');
     expect(container.querySelector('.trazos-input-label')).toHaveAttribute('for', input.id);
     expect(container.querySelector('.trazos-input-required')).not.toBeInTheDocument();
     expect(input).not.toHaveAttribute('aria-invalid');
@@ -49,7 +49,7 @@ describe('TextInput', () => {
     expect(container.querySelector('.trazos-input-helper')).not.toBeInTheDocument();
     expect(screen.getByRole('alert')).toHaveTextContent('Required field');
     expect(screen.getByRole('alert')).toHaveClass('trazos-input-error');
-    expect(input.parentElement).toHaveClass('has-error');
+    expect(input.parentElement).toHaveClass('trazos-input-has-error');
     expect(input).toHaveAttribute('aria-invalid', 'true');
     expect(input).toHaveAccessibleDescription('Required field');
   });
@@ -77,7 +77,7 @@ describe('TextInput', () => {
     const input = screen.getByLabelText('Name');
     expect(input).toBeDisabled();
     expect(input).toHaveAttribute('readonly');
-    expect(input.parentElement).toHaveClass('disabled');
+    expect(input.parentElement).toHaveClass('trazos-input-is-disabled');
   });
 
   it('works uncontrolled with defaultValue and reports every change', async () => {

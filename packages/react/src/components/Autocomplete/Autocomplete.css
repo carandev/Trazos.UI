@@ -115,7 +115,7 @@
     cursor: pointer;
 }
 
-.trazos-autocomplete-option.is-active {
+.trazos-autocomplete-option.trazos-autocomplete-option-active {
     background: var(--trazos-olive-soft);
     color: var(--trazos-olive-text-strong);
 }

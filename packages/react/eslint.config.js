@@ -14,7 +14,7 @@ export default tseslint.config(
     languageOptions: {
       globals: { ...globals.browser },
       parserOptions: {
-        projectService: { allowDefaultProject: ['eslint.config.js', 'vite.config.ts'] },
+        projectService: { allowDefaultProject: ['eslint.config.js', 'vite.config.ts', 'scripts/*.mjs'] },
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -27,5 +27,10 @@ export default tseslint.config(
   {
     files: ['eslint.config.js'],
     extends: [tseslint.configs.disableTypeChecked],
+  },
+  {
+    files: ['scripts/*.mjs'],
+    extends: [tseslint.configs.disableTypeChecked],
+    languageOptions: { globals: { ...globals.node } },
   },
 );

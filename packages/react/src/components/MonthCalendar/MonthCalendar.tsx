@@ -322,9 +322,9 @@ export function MonthCalendar<T>({
                   key={dayKey(day)}
                   className={cx(
                     'trazos-calendar-day',
-                    isOutside && 'is-outside',
-                    isToday && 'is-today',
-                    isSelected && 'is-selected',
+                    isOutside && 'trazos-calendar-day-outside',
+                    isToday && 'trazos-calendar-day-today',
+                    isSelected && 'trazos-calendar-day-selected',
                   )}
                   role="gridcell"
                   aria-selected={isSelected}
@@ -339,7 +339,7 @@ export function MonthCalendar<T>({
                     {dayItems.length > 0 && (
                       <span className="trazos-calendar-dots" aria-hidden="true">
                         {dayItems.slice(0, 3).map((item, i) => (
-                          <span key={i} className={`trazos-calendar-dot tone-${toneOf(item)}`} />
+                          <span key={i} className={`trazos-calendar-dot trazos-calendar-tone-${toneOf(item)}`} />
                         ))}
                       </span>
                     )}
@@ -354,7 +354,7 @@ export function MonthCalendar<T>({
                           <li key={i}>
                             <button
                               type="button"
-                              className={`trazos-calendar-chip tone-${toneOf(item)}`}
+                              className={`trazos-calendar-chip trazos-calendar-tone-${toneOf(item)}`}
                               title={titleSelector(item)}
                               onClick={(event) => {
                                 event.stopPropagation();

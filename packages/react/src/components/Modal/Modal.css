@@ -2,7 +2,7 @@
    MODAL - Trazos UI (Warmth and Lively Borders)
    ======================================== */
 
-.modal-backdrop {
+.trazos-modal-backdrop {
     position: fixed;
     top: 0;
     left: 0;
@@ -18,7 +18,7 @@
     padding: 1rem;
 }
 
-.modal-container {
+.trazos-modal-container {
     background: var(--trazos-panel);
     border: 1.5px solid var(--trazos-border);
     border-radius: 20px 24px 18px 22px / 22px 18px 24px 20px;
@@ -30,22 +30,22 @@
     animation: trazosModalSlideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.modal-small {
+.trazos-modal-small {
     width: 100%;
     max-width: 440px;
 }
 
-.modal-medium {
+.trazos-modal-medium {
     width: 100%;
     max-width: 640px;
 }
 
-.modal-large {
+.trazos-modal-large {
     width: 100%;
     max-width: 920px;
 }
 
-.modal-header {
+.trazos-modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -54,7 +54,7 @@
     background-color: var(--trazos-panel);
 }
 
-.modal-title {
+.trazos-modal-title {
     margin: 0;
     font-family: 'Marcellus', serif;
     font-size: 1.25rem;
@@ -63,7 +63,7 @@
     letter-spacing: 0.02em;
 }
 
-.modal-close {
+.trazos-modal-close {
     background: var(--trazos-surface-raised);
     border: 1.5px solid var(--trazos-border-control);
     border-radius: 10px 12px 9px 11px / 11px 9px 12px 10px;
@@ -78,17 +78,17 @@
     box-shadow: 1px 2px 0px rgb(var(--trazos-shadow-rgb) / calc(0.04 * var(--trazos-shadow-strength)));
 }
 
-.modal-close:hover {
+.trazos-modal-close:hover {
     background: var(--trazos-surface-raised-hover);
     color: var(--trazos-text);
     border-color: var(--trazos-border-control-hover);
 }
 
-.modal-close:active {
+.trazos-modal-close:active {
     transform: scale(0.96);
 }
 
-.modal-body {
+.trazos-modal-body {
     padding: 1.5rem;
     overflow-y: auto;
     flex: 1;
@@ -96,7 +96,7 @@
     color: var(--trazos-text);
 }
 
-.modal-footer {
+.trazos-modal-footer {
     display: flex;
     justify-content: flex-end;
     gap: 0.75rem;
@@ -127,26 +127,26 @@
 
 /* Responsive */
 @media (max-width: 640px) {
-    .modal-header {
+    .trazos-modal-header {
         padding: 1rem 1.25rem;
     }
     
-    .modal-body {
+    .trazos-modal-body {
         padding: 1.25rem;
     }
     
-    .modal-footer {
+    .trazos-modal-footer {
         padding: 1rem 1.25rem;
         flex-direction: column;
     }
     
-    .modal-footer > * {
+    .trazos-modal-footer > * {
         width: 100%;
     }
 }
 
 /* Built-in icon size (matches Tailwind w-5/h-5, so it does not depend on Tailwind) */
-.modal-close svg {
+.trazos-modal-close svg {
     width: 1.25rem;
     height: 1.25rem;
 }

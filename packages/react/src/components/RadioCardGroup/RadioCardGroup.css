@@ -50,18 +50,18 @@
     transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.trazos-radio-card:hover:not(.is-disabled) {
+.trazos-radio-card:hover:not(.trazos-radio-card-is-disabled) {
     border-color: var(--trazos-olive-border-hover);
     background: var(--trazos-surface-hover);
 }
 
-.trazos-radio-card.is-checked {
+.trazos-radio-card.trazos-radio-card-is-checked {
     border-color: var(--trazos-olive);
     background: var(--trazos-olive-soft);
     box-shadow: 0 0 0 3px var(--trazos-olive-ring);
 }
 
-.trazos-radio-card.is-disabled {
+.trazos-radio-card.trazos-radio-card-is-disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }
@@ -96,7 +96,7 @@
     border-radius: 10px;
 }
 
-.trazos-radio-card.is-checked .trazos-radio-card-icon {
+.trazos-radio-card.trazos-radio-card-is-checked .trazos-radio-card-icon {
     color: var(--trazos-olive-text);
     background: var(--trazos-olive-tint);
     border-color: var(--trazos-olive-tint-border);
@@ -139,7 +139,7 @@
     background: var(--trazos-surface-raised);
 }
 
-.trazos-radio-card.is-checked .trazos-radio-card-check {
+.trazos-radio-card.trazos-radio-card-is-checked .trazos-radio-card-check {
     background: var(--trazos-olive-strong);
     border-color: var(--trazos-olive-strong);
     color: var(--trazos-on-accent);

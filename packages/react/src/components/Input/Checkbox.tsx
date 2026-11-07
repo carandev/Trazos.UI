@@ -53,7 +53,7 @@ export function Checkbox({
 
   return (
     <div className={cx('trazos-checkbox-group', className)}>
-      <label className={cx('trazos-checkbox-container', disabled && 'disabled')} htmlFor={inputId}>
+      <label className={cx('trazos-checkbox-container', disabled && 'trazos-input-is-disabled')} htmlFor={inputId}>
         <input
           {...rest}
           id={inputId}
@@ -67,7 +67,7 @@ export function Checkbox({
         />
 
         <span
-          className={cx('trazos-checkbox-box', isChecked && 'checked', hasError && 'has-error')}
+          className={cx('trazos-checkbox-box', isChecked && 'trazos-checkbox-is-checked', hasError && 'trazos-input-has-error')}
           aria-hidden="true"
         >
           <svg

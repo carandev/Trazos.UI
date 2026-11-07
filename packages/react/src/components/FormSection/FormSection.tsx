@@ -29,7 +29,7 @@ export function FormSection({ title, description, step, className, children, ...
           {description ? <p className="trazos-form-section-description">{description}</p> : null}
         </div>
       </header>
-      <div className={cx('trazos-form-section-body', hasStep && 'has-step')}>{children}</div>
+      <div className={cx('trazos-form-section-body', hasStep && 'trazos-form-section-has-step')}>{children}</div>
     </section>
   );
 }

@@ -103,7 +103,7 @@ describe('Autocomplete', () => {
     expect(input).toHaveAttribute('aria-expanded', 'true');
     expect(screen.getByRole('listbox')).toHaveAttribute('id', `${input.id}-list`);
     expect(options[0]).toHaveAttribute('aria-selected', 'true');
-    expect(options[0]).toHaveClass('trazos-autocomplete-option', 'is-active');
+    expect(options[0]).toHaveClass('trazos-autocomplete-option', 'trazos-autocomplete-option-active');
     expect(input).toHaveAttribute('aria-activedescendant', options[0]?.id);
     expect(container.querySelector('.trazos-autocomplete-spinner')).not.toBeInTheDocument();
   });

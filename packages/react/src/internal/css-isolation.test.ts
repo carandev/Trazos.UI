@@ -31,6 +31,13 @@ const utilities = import.meta.glob<string>('../../../tokens/utilities.css', {
 });
 
 describe('component stylesheets', () => {
+  it('only define classes with the trazos- prefix, because React CSS is global', () => {
+    const unprefixed = Object.values(sheets)
+      .flatMap((css) => [...definedClasses(css)])
+      .filter((cls) => !cls.startsWith('trazos-'));
+    expect([...new Set(unprefixed)].sort()).toEqual([]);
+  });
+
   it('do not redefine the shared utility classes', () => {
     const utilityClasses = new Set(Object.values(utilities).flatMap((css) => [...definedClasses(css)]));
     expect(utilityClasses.size).toBeGreaterThan(0);

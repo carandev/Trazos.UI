@@ -44,20 +44,20 @@ function setup(request: Request = { kind: 'message', message: '¿Eliminar el reg
 describe('ConfirmDialog', () => {
   it('renders nothing until confirm is called', () => {
     const { container } = setup();
-    expect(container.querySelector('.modal-backdrop')).toBeNull();
+    expect(container.querySelector('.trazos-modal-backdrop')).toBeNull();
   });
 
   it('shows the message with the Razor defaults', async () => {
     const { ask } = setup();
     await ask();
     const dialog = screen.getByRole('dialog', { name: 'Confirmar acción' });
-    expect(dialog).toHaveClass('modal-small');
-    expect(dialog.querySelector('.modal-body p.trazos-confirm-message')).toHaveTextContent('¿Eliminar el registro?');
+    expect(dialog).toHaveClass('trazos-modal-small');
+    expect(dialog.querySelector('.trazos-modal-body p.trazos-confirm-message')).toHaveTextContent('¿Eliminar el registro?');
     const cancel = screen.getByRole('button', { name: 'Cancelar' });
     const confirm = screen.getByRole('button', { name: 'Confirmar' });
     expect(cancel).toHaveClass('trazos-btn-outline');
     expect(confirm).toHaveClass('trazos-btn-primary');
-    expect(dialog.querySelector('.modal-footer')?.children[0]).toBe(cancel);
+    expect(dialog.querySelector('.trazos-modal-footer')?.children[0]).toBe(cancel);
     expect(screen.getByRole('button', { name: 'Cerrar' })).toBeInTheDocument();
   });
 
@@ -95,7 +95,7 @@ describe('ConfirmDialog', () => {
   it('does not close on backdrop click', async () => {
     const { ask, container } = setup();
     await ask();
-    const backdrop = container.querySelector('.modal-backdrop');
+    const backdrop = container.querySelector('.trazos-modal-backdrop');
     if (!(backdrop instanceof HTMLElement)) throw new Error('backdrop missing');
     await userEvent.click(backdrop);
     expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -115,7 +115,7 @@ describe('ConfirmDialog', () => {
       },
     });
     await ask();
-    expect(screen.getByRole('dialog', { name: 'Danger' })).toHaveClass('modal-large');
+    expect(screen.getByRole('dialog', { name: 'Danger' })).toHaveClass('trazos-modal-large');
     expect(screen.getByRole('button', { name: 'Delete' })).toHaveClass('trazos-btn-wine');
     expect(screen.getByRole('button', { name: 'Keep' })).toBeInTheDocument();
   });
@@ -123,7 +123,7 @@ describe('ConfirmDialog', () => {
   it('applies overrides in the (message, overrides) overload', async () => {
     const { ask } = setup({ kind: 'message', message: 'Archive?', overrides: { title: 'Archive', confirmVariant: 'secondary' } });
     await ask();
-    expect(screen.getByRole('dialog', { name: 'Archive' })).toHaveClass('modal-small');
+    expect(screen.getByRole('dialog', { name: 'Archive' })).toHaveClass('trazos-modal-small');
     expect(screen.getByRole('button', { name: 'Confirmar' })).toHaveClass('trazos-btn-secondary');
   });
 
@@ -131,7 +131,7 @@ describe('ConfirmDialog', () => {
     const { container } = render(<Asker request={{ kind: 'message', message: 'x' }} />);
     await userEvent.click(screen.getByRole('button', { name: 'Ask' }));
     expect(await screen.findByText('false')).toBeInTheDocument();
-    expect(container.querySelector('.modal-backdrop')).toBeNull();
+    expect(container.querySelector('.trazos-modal-backdrop')).toBeNull();
   });
 
   it('has no accessibility violations while open', async () => {

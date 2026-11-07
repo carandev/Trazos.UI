@@ -72,7 +72,7 @@ export function SelectInput({
         </label>
       )}
 
-      <div className={cx('trazos-select-wrapper', hasError && 'has-error', disabled && 'disabled')}>
+      <div className={cx('trazos-select-wrapper', hasError && 'trazos-input-has-error', disabled && 'trazos-input-is-disabled')}>
         {leadingIcon != null && <div className="trazos-select-icon leading">{leadingIcon}</div>}
 
         <select

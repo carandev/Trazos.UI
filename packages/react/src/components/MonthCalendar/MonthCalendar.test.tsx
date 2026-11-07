@@ -66,7 +66,7 @@ describe('MonthCalendar', () => {
     // 6 weeks x 7 days.
     expect(dayCells(container)).toHaveLength(42);
     expect(container.querySelectorAll('.trazos-calendar-week')).toHaveLength(6);
-    expect(dayCells(container)[0]).toHaveClass('is-outside');
+    expect(dayCells(container)[0]).toHaveClass('trazos-calendar-day-outside');
     expect(dayCells(container)[0]).toHaveTextContent('26');
   });
 
@@ -77,22 +77,22 @@ describe('MonthCalendar', () => {
     expect(screen.getByRole('heading', { name: 'Nov 2026' })).toBeInTheDocument();
     expect(screen.getAllByRole('columnheader')[0]).toHaveTextContent('Sun');
     expect(dayCells(container)).toHaveLength(35);
-    expect(dayCells(container)[0]).not.toHaveClass('is-outside');
+    expect(dayCells(container)[0]).not.toHaveClass('trazos-calendar-day-outside');
   });
 
   it('marks today and gives every day button an accessible name with the full date', () => {
     renderCalendar();
     const todayCell = cellFor('Mié 4 de Noviembre de 2026');
-    expect(todayCell).toHaveClass('is-today');
+    expect(todayCell).toHaveClass('trazos-calendar-day-today');
     expect(todayCell).toHaveAttribute('role', 'gridcell');
     expect(todayCell).toHaveAttribute('aria-selected', 'false');
-    expect(cellFor('Lun 26 de Octubre de 2026')).toHaveClass('is-outside');
+    expect(cellFor('Lun 26 de Octubre de 2026')).toHaveClass('trazos-calendar-day-outside');
   });
 
   it('normalises the visible month and keeps time of day out of comparisons', () => {
     renderCalendar({ defaultMonth: new Date(2026, 10, 20, 23, 59), today: new Date(2026, 10, 4, 18, 30) });
     expect(screen.getByRole('heading', { name: 'Noviembre 2026' })).toBeInTheDocument();
-    expect(cellFor('Mié 4 de Noviembre de 2026')).toHaveClass('is-today');
+    expect(cellFor('Mié 4 de Noviembre de 2026')).toHaveClass('trazos-calendar-day-today');
   });
 
   it('selects a day (uncontrolled) and emits the date', async () => {
@@ -103,7 +103,7 @@ describe('MonthCalendar', () => {
     expect(onSelectedDateChange).toHaveBeenCalledWith(new Date(2026, 10, 10));
     expect(onMonthChange).not.toHaveBeenCalled();
     const cell = cellFor('Mar 10 de Noviembre de 2026');
-    expect(cell).toHaveClass('is-selected');
+    expect(cell).toHaveClass('trazos-calendar-day-selected');
     expect(cell).toHaveAttribute('aria-selected', 'true');
   });
 
@@ -113,7 +113,7 @@ describe('MonthCalendar', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Lun 26 de Octubre de 2026' }));
     expect(onMonthChange).toHaveBeenCalledWith(new Date(2026, 9, 1));
     expect(screen.getByRole('heading', { name: 'Octubre 2026' })).toBeInTheDocument();
-    expect(cellFor('Lun 26 de Octubre de 2026')).toHaveClass('is-selected');
+    expect(cellFor('Lun 26 de Octubre de 2026')).toHaveClass('trazos-calendar-day-selected');
   });
 
   it('navigates months with the Spanish-labelled arrows', async () => {
@@ -170,18 +170,18 @@ describe('MonthCalendar', () => {
         onMonthChange={onMonthChange}
       />,
     );
-    expect(cellFor('Lun 9 de Noviembre de 2026')).toHaveClass('is-selected');
+    expect(cellFor('Lun 9 de Noviembre de 2026')).toHaveClass('trazos-calendar-day-selected');
     await userEvent.click(screen.getByRole('button', { name: 'Mes siguiente' }));
     expect(onMonthChange).toHaveBeenCalledWith(new Date(2026, 11, 1));
     expect(screen.getByRole('heading', { name: 'Noviembre 2026' })).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: 'Mar 10 de Noviembre de 2026' }));
     expect(onSelectedDateChange).toHaveBeenCalledWith(new Date(2026, 10, 10));
-    expect(cellFor('Mar 10 de Noviembre de 2026')).not.toHaveClass('is-selected');
+    expect(cellFor('Mar 10 de Noviembre de 2026')).not.toHaveClass('trazos-calendar-day-selected');
     rerender(
       <MonthCalendar<CalendarEvent> {...baseProps} defaultMonth={undefined} month={new Date(2026, 11, 1)} selectedDate={null} />,
     );
     expect(screen.getByRole('heading', { name: 'Diciembre 2026' })).toBeInTheDocument();
-    expect(document.querySelector('.is-selected')).toBeNull();
+    expect(document.querySelector('.trazos-calendar-day-selected')).toBeNull();
   });
 
   it('renders item chips with time, tone, dots and the event count in the day name', async () => {
@@ -201,16 +201,16 @@ describe('MonthCalendar', () => {
     const cell = cellFor('Mar 10 de Noviembre de 2026, 3 eventos');
     const chips = within(cell).getAllByRole('button', { name: /Standup|Lunch|Holiday/ });
     expect(chips.map((c) => c.textContent)).toEqual(['Holiday', '9aStandup', '1:30pLunch']);
-    expect(chips[1]).toHaveClass('trazos-calendar-chip', 'tone-olive');
+    expect(chips[1]).toHaveClass('trazos-calendar-chip', 'trazos-calendar-tone-olive');
     expect(chips[1]).toHaveAttribute('title', 'Standup');
-    expect(chips[2]).toHaveClass('tone-wine');
+    expect(chips[2]).toHaveClass('trazos-calendar-tone-wine');
     expect(chips[1]?.querySelector('.trazos-calendar-chip-time')).toHaveTextContent('9a');
     expect(chips[0]?.querySelector('.trazos-calendar-chip-time')).toBeNull();
     const dots = cell.querySelectorAll('.trazos-calendar-dots .trazos-calendar-dot');
     expect(Array.from(dots).map((d) => d.className)).toEqual([
-      'trazos-calendar-dot tone-olive',
-      'trazos-calendar-dot tone-olive',
-      'trazos-calendar-dot tone-wine',
+      'trazos-calendar-dot trazos-calendar-tone-olive',
+      'trazos-calendar-dot trazos-calendar-tone-olive',
+      'trazos-calendar-dot trazos-calendar-tone-wine',
     ]);
     // A midnight end does not spill into the next day.
     expect(screen.getByRole('button', { name: 'Mié 11 de Noviembre de 2026' })).toBeInTheDocument();
@@ -265,7 +265,7 @@ describe('MonthCalendar', () => {
     try {
       render(<MonthCalendar<CalendarEvent> {...baseProps} today={undefined} defaultMonth={undefined} />);
       expect(screen.getByRole('heading', { name: 'Febrero 2027' })).toBeInTheDocument();
-      expect(cellFor('Dom 14 de Febrero de 2027')).toHaveClass('is-today');
+      expect(cellFor('Dom 14 de Febrero de 2027')).toHaveClass('trazos-calendar-day-today');
     } finally {
       vi.useRealTimers();
     }
