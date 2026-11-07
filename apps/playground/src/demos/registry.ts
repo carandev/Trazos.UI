@@ -4,7 +4,7 @@ import { DataTablePage, SkeletonPage, TabsPage } from './data';
 import { CheckboxPage, RadioCardGroupPage, SelectInputPage, TextAreaPage, TextInputPage } from './inputs';
 import { AppShellPage, ConfirmDialogPage, DrawerPage, ModalPage, ToastPage } from './overlays';
 import { AutocompletePage, MonthCalendarPage } from './search';
-import { IconButtonPage, LinkButtonPage, PhotoFramePage, SectionHeadingPage, SketchPage, TapePage } from './site';
+import { CopyButtonPage, IconButtonPage, LinkButtonPage, LinkListPage, PhotoFramePage, RevealPage, SectionHeadingPage, SketchPage, SkipLinkPage, TapePage } from './site';
 
 export interface DemoEntry {
   id: string;
@@ -43,6 +43,10 @@ export const demos: DemoEntry[] = [
   { id: 'drawer', name: 'Drawer', group: 'Overlays', summary: 'Slide-out panel for mobile navigation.', Page: DrawerPage },
   { id: 'confirm-dialog', name: 'ConfirmDialog', group: 'Overlays', summary: 'Promise-based confirmation: await confirm().', Page: ConfirmDialogPage },
   { id: 'toast', name: 'Toast', group: 'Overlays', summary: 'Notifications via useToast().', Page: ToastPage },
+  { id: 'skip-link', name: 'SkipLink', group: 'Website', summary: 'Keyboard shortcut past the navigation.', Page: SkipLinkPage },
+  { id: 'reveal', name: 'Reveal', group: 'Website', summary: 'Fade-and-rise entrance on scroll.', Page: RevealPage },
+  { id: 'copy-button', name: 'CopyButton', group: 'Website', summary: 'Copy to clipboard with a handwritten note.', Page: CopyButtonPage },
+  { id: 'link-list', name: 'LinkList', group: 'Website', summary: 'Compact rows of links.', Page: LinkListPage },
   { id: 'app-shell', name: 'AppShell', group: 'Layout', summary: 'Sidebar, top bar and mobile drawer layout.', Page: AppShellPage },
 ];
 
