@@ -1,23 +1,44 @@
 @namespace Trazos.UI.Components
 
-<button type="@ButtonTypeValue"
-        class="trazos-btn trazos-btn-@VariantClass trazos-btn-@SizeClass @Class"
-        disabled="@(Disabled || Loading)"
-        @onclick="OnClick"
-        @attributes="AdditionalAttributes">
-    @if (Loading)
-    {
-        <span class="trazos-btn-spinner" aria-hidden="true"></span>
-    }
-    else if (LeadingIcon != null)
-    {
-        <span class="trazos-btn-leading-icon">@LeadingIcon</span>
-    }
+@if (Href is null)
+{
+    <button type="@ButtonTypeValue"
+            class="trazos-btn trazos-btn-@VariantClass trazos-btn-@SizeClass @Class"
+            disabled="@(Disabled || Loading)"
+            @onclick="OnClick"
+            @attributes="AdditionalAttributes">
+        @Content
+    </button>
+}
+else
+{
+    <a href="@Href"
+       class="trazos-btn trazos-btn-@VariantClass trazos-btn-@SizeClass @Class"
+       @onclick="OnClick"
+       @attributes="AdditionalAttributes">
+        @Content
+    </a>
+}
 
-    <span class="trazos-btn-text">@ChildContent</span>
+@code {
+    private RenderFragment Content => @<text>
+        @if (Loading)
+        {
+            <span class="trazos-btn-spinner" aria-hidden="true"></span>
+        }
+        else if (LeadingIcon != null)
+        {
+            <span class="trazos-btn-leading-icon">@LeadingIcon</span>
+        }
 
-    @if (!Loading && TrailingIcon != null)
-    {
-        <span class="trazos-btn-trailing-icon">@TrailingIcon</span>
-    }
-</button>
+        @if (ChildContent != null)
+        {
+            <span class="trazos-btn-text">@ChildContent</span>
+        }
+
+        @if (!Loading && TrailingIcon != null)
+        {
+            <span class="trazos-btn-trailing-icon">@TrailingIcon</span>
+        }
+    </text>;
+}

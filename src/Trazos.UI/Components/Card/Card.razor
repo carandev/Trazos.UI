@@ -1,8 +1,15 @@
 @namespace Trazos.UI.Components
 
-<div class="trazos-card-box trazos-card-@VariantClass @Class"
+<div class="trazos-card-box trazos-card-@VariantClass @(Fill ? "trazos-card-fill" : null) @Class"
      @onclick="OnClick"
      @attributes="AdditionalAttributes">
+    @if (Media != null)
+    {
+        <div class="trazos-card-media">
+            @Media
+        </div>
+    }
+
     @if (Header != null)
     {
         <div class="trazos-card-header">

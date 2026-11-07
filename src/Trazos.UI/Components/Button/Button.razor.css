@@ -40,6 +40,33 @@
     font-size: 1rem;
 }
 
+/* Icon only: a square hit area of at least 44px. */
+.trazos-icon-btn {
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.trazos-icon-btn-lg {
+    width: 3.25rem;
+    height: 3.25rem;
+}
+
+.trazos-icon-btn .trazos-btn-text {
+    display: inline-flex;
+}
+
+.trazos-icon-btn ::deep svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.trazos-icon-btn-lg ::deep svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
 /* Variantes */
 .trazos-btn-primary {
     background-color: var(--trazos-olive-solid);

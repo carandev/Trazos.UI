@@ -1,0 +1,48 @@
+@page "/components/link-button"
+
+<DocPage Title="LinkButton" Category="@L.T("Actions", "Acciones")"
+         Lead="@L.T("A link that looks like a Button, for actions that navigate. It shares the variants, sizes and icons of Button.", "Un enlace con apariencia de Button, para acciones que navegan. Comparte las variantes, los tamaños y los íconos de Button.")">
+
+    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@VariantsCode">
+        @foreach (var variant in Enum.GetValues<ButtonVariant>())
+        {
+            <LinkButton Href="components/button" Variant="variant">@variant</LinkButton>
+        }
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Icons", "Íconos")" Code="@IconsCode">
+        <LinkButton Href="components/button" Variant="ButtonVariant.Outline">
+            <ChildContent>@L.T("Read more", "Leer más")</ChildContent>
+            <TrailingIcon>@Icons.Arrow</TrailingIcon>
+        </LinkButton>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private const string VariantsCode = """
+        <LinkButton Href="/projects">Projects</LinkButton>
+        <LinkButton Href="/projects" Variant="ButtonVariant.Wine">Projects</LinkButton>
+        """;
+
+    private const string IconsCode = """
+        <LinkButton Href="/about" Variant="ButtonVariant.Outline">
+            <ChildContent>Read more</ChildContent>
+            <TrailingIcon><svg>…</svg></TrailingIcon>
+        </LinkButton>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Href", "string", null, L.T("Link target. Required.", "Destino del enlace. Obligatorio.")),
+        new("Variant", "ButtonVariant", "Primary", L.T("Same variants as Button.", "Las mismas variantes de Button.")),
+        new("Size", "ButtonSize", "Medium", L.T("Small, Medium or Large.", "Small, Medium o Large.")),
+        new("LeadingIcon", "RenderFragment?", null, L.T("Icon before the text.", "Ícono antes del texto.")),
+        new("TrailingIcon", "RenderFragment?", null, L.T("Icon after the text.", "Ícono después del texto.")),
+        new("ChildContent", "RenderFragment?", null, L.T("Link text.", "Texto del enlace.")),
+        new("OnClick", "EventCallback<MouseEventArgs>", null, L.T("Raised when the link is clicked.", "Se dispara al hacer clic en el enlace.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes, such as target.", "Atributos HTML adicionales, como target.")),
+    ];
+}

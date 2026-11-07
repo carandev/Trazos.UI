@@ -4,7 +4,6 @@ import './Card.css';
 
 /**
  * Mirrors `Trazos.UI.Components.CardVariant`. `white` renders like `default`, as in Razor.
- * The tones `olive`, `gold`, `wine` and `sky` exist only in React for now.
  */
 export type CardVariant = 'default' | 'white' | 'lavender' | 'interactive' | 'olive' | 'gold' | 'wine' | 'sky';
 

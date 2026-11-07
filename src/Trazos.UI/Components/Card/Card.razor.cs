@@ -12,6 +12,10 @@ public partial class Card
     [Parameter]
     public string? Class { get; set; }
 
+    /// <summary>Rendered above the header and body, such as a cover image. It keeps its own aspect ratio.</summary>
+    [Parameter]
+    public RenderFragment? Media { get; set; }
+
     [Parameter]
     public RenderFragment? Header { get; set; }
 
@@ -20,6 +24,10 @@ public partial class Card
 
     [Parameter]
     public RenderFragment? Footer { get; set; }
+
+    /// <summary>Makes the body fill the card height, so <c>margin-top: auto</c> pins a row to the bottom in an equal-height grid.</summary>
+    [Parameter]
+    public bool Fill { get; set; }
 
     [Parameter]
     public EventCallback<MouseEventArgs> OnClick { get; set; }
@@ -31,6 +39,10 @@ public partial class Card
     {
         CardVariant.Lavender => "lavender",
         CardVariant.Interactive => "interactive",
+        CardVariant.Olive => "olive",
+        CardVariant.Gold => "gold",
+        CardVariant.Wine => "wine",
+        CardVariant.Sky => "sky",
         _ => "default"
     };
 }

@@ -5,5 +5,9 @@ public enum CardVariant
     Default,
     White,
     Lavender,
-    Interactive
+    Interactive,
+    Olive,
+    Gold,
+    Wine,
+    Sky
 }

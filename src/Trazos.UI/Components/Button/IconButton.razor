@@ -1,0 +1,13 @@
+@namespace Trazos.UI.Components
+
+<Button Variant="Variant"
+        Size="@(Size == IconButtonSize.Large ? ButtonSize.Large : ButtonSize.Medium)"
+        Type="@Type"
+        Disabled="Disabled"
+        Loading="Loading"
+        Class="@CssClass"
+        ChildContent="@(Loading ? null : ChildContent)"
+        OnClick="OnClick"
+        @attributes="AdditionalAttributes"
+        aria-label="@Label"
+        aria-busy="@(Loading ? "true" : null)" />
