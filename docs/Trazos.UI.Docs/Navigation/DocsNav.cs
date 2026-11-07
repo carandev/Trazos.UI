@@ -34,6 +34,13 @@ public static class DocsNav
             new("DataTable", "components/data-table"),
             new("MonthCalendar", "components/month-calendar"),
         ]),
+        new("Decoration", "Decoración",
+        [
+            new("Sketch", "components/sketch"),
+            new("Tape", "components/tape"),
+            new("PhotoFrame", "components/photo-frame"),
+            new("SectionHeading", "components/section-heading"),
+        ]),
         new("Forms", "Formularios",
         [
             new("TextInput", "components/text-input"),

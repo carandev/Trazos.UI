@@ -1,0 +1,17 @@
+@namespace Trazos.UI.Components
+
+<svg viewBox="@Shape.ViewBox"
+     preserveAspectRatio="@(Shape.Stretch ? "none" : null)"
+     @attributes="AdditionalAttributes"
+     aria-hidden="true"
+     class="trazos-sketch @(Animated ? "trazos-sketch-animated" : null) @Class">
+    @foreach (var stroke in Shape.Strokes)
+    {
+        <path @key="stroke.D"
+              d="@stroke.D"
+              pathLength="1"
+              stroke="@(Color ?? Shape.Color)"
+              stroke-width="@WidthValue"
+              style="@(stroke.Delay is { } delay ? FormattableString.Invariant($"--trazos-sketch-delay: {delay}s") : null)" />
+    }
+</svg>

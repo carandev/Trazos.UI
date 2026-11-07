@@ -1,0 +1,44 @@
+@page "/components/sketch"
+
+<DocPage Title="Sketch" Category="@L.T("Decoration", "Decoración")"
+         Lead="@L.T("Hand-drawn strokes as inline SVG: SketchUnderline, SketchCircle, SketchArrow and SketchSquiggle. They are decorative, so screen readers skip them.", "Trazos a mano como SVG en línea: SketchUnderline, SketchCircle, SketchArrow y SketchSquiggle. Son decorativos, así que los lectores de pantalla los omiten.")">
+
+    <DemoBlock Title="@L.T("Shapes", "Formas")" Description="@L.T("Each one defaults to a token, so it follows the theme. Size them with CSS.", "Cada uno usa un token por defecto, así que sigue el tema. Define su tamaño con CSS.")" Code="@ShapesCode">
+        <div style="display: grid; gap: 1.5rem; width: 100%; max-width: 20rem;">
+            <SketchUnderline style="height: 14px;" />
+            <SketchCircle style="height: 60px;" />
+            <SketchArrow style="width: 80px;" />
+            <SketchSquiggle style="height: 20px;" />
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Color and animation", "Color y animación")" Description="@L.T("Animated draws the stroke in when it mounts. Reduced motion shows it complete.", "Animated dibuja el trazo al montarse. Con movimiento reducido se muestra completo.")" Code="@AnimatedCode">
+        <div style="width: 100%; max-width: 20rem;">
+            <SketchUnderline Animated="true" Color="var(--trazos-olive)" StrokeWidth="4.5" style="height: 14px;" />
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private const string ShapesCode = """
+        <SketchUnderline style="height: 14px;" />
+        <SketchCircle style="height: 60px;" />
+        <SketchArrow style="width: 80px;" />
+        <SketchSquiggle style="height: 20px;" />
+        """;
+
+    private const string AnimatedCode = """
+        <SketchUnderline Animated="true" Color="var(--trazos-olive)" StrokeWidth="4.5" />
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Color", "string?", null, L.T("Any CSS color. Defaults to a token.", "Cualquier color CSS. Por defecto usa un token.")),
+        new("StrokeWidth", "double?", null, L.T("Stroke width in SVG units.", "Grosor del trazo en unidades SVG.")),
+        new("Animated", "bool", "false", L.T("Draws the stroke in when it mounts.", "Dibuja el trazo al montarse.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+}

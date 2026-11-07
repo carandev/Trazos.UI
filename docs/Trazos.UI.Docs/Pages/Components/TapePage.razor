@@ -1,0 +1,34 @@
+@page "/components/tape"
+
+<DocPage Title="Tape" Category="@L.T("Decoration", "Decoración")"
+         Lead="@L.T("A strip of translucent tape that pins a surface. Its parent must be positioned. It tilts when the parent is hovered.", "Una tira de cinta translúcida que fija una superficie. Su contenedor debe estar posicionado. Se inclina al pasar el cursor por el contenedor.")">
+
+    <DemoBlock Title="@L.T("Positions", "Posiciones")" Code="@PositionsCode">
+        <div class="docs-grid-2">
+            <Card style="position: relative;"><Tape />Top</Card>
+            <Card style="position: relative;"><Tape Position="TapePosition.TopLeft" />TopLeft</Card>
+            <Card style="position: relative;"><Tape Position="TapePosition.TopRight" Rotate="4.5" />TopRight</Card>
+            <Card style="position: relative;"><Tape Color="color-mix(in srgb, var(--trazos-sky-border) 70%, transparent)" />@L.T("Custom color", "Color propio")</Card>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private const string PositionsCode = """
+        <Card style="position: relative;">
+            <Tape Position="TapePosition.TopRight" Rotate="4.5" />
+            Pinned
+        </Card>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Color", "string?", null, L.T("Any CSS color. Defaults to translucent gold.", "Cualquier color CSS. Por defecto, dorado translúcido.")),
+        new("Rotate", "double?", "-3", L.T("Rotation in degrees.", "Rotación en grados.")),
+        new("Position", "TapePosition", "Top", L.T("Top, TopLeft or TopRight.", "Top, TopLeft o TopRight.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+}

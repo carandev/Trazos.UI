@@ -1,0 +1,30 @@
+/* ========================================
+   SKETCH - Trazos UI
+   ======================================== */
+
+.trazos-sketch {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.trazos-sketch-animated path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: trazosSketchDraw 0.8s ease var(--trazos-sketch-delay, 0s) forwards;
+}
+
+@keyframes trazosSketchDraw {
+    to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .trazos-sketch-animated path {
+        animation: none;
+        stroke-dashoffset: 0;
+    }
+}

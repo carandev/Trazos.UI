@@ -1,0 +1,15 @@
+@namespace Trazos.UI.Components
+
+<figure class="trazos-photo-frame @Class" @attributes="AdditionalAttributes">
+    <div class="trazos-photo-frame-sheet">
+        @if (ShowTape)
+        {
+            <Tape Color="@TapeColor" Rotate="TapeRotate" Position="TapePosition" />
+        }
+        <img @attributes="ImageAttributes" src="@Src" alt="@Alt" class="trazos-photo-frame-image" />
+    </div>
+    @if (Caption != null)
+    {
+        <figcaption class="trazos-handwriting trazos-photo-frame-caption">@Caption</figcaption>
+    }
+</figure>

@@ -1,0 +1,38 @@
+@page "/components/photo-frame"
+
+<DocPage Title="PhotoFrame" Category="@L.T("Decoration", "Decoración")"
+         Lead="@L.T("A framed image with an offset ink shadow, a rotated backing sheet, optional tape and an optional handwritten caption.", "Una imagen enmarcada con sombra de tinta desplazada, una hoja de fondo rotada, cinta opcional y un pie manuscrito opcional.")">
+
+    <DemoBlock Title="@L.T("With tape and caption", "Con cinta y pie")" Code="@FrameCode">
+        <div style="padding: 1.5rem; max-width: 16rem;">
+            <PhotoFrame Src="favicon.svg" Alt="@L.T("The Trazos logo", "El logo de Trazos")" ShowTape="true">
+                <Caption>@L.T("Hand drawn", "Hecho a mano")</Caption>
+            </PhotoFrame>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private const string FrameCode = """
+        <PhotoFrame Src="me.jpg" Alt="Portrait" ShowTape="true"
+                    ImageAttributes='new() { ["loading"] = "lazy" }'>
+            <Caption>Hand drawn</Caption>
+        </PhotoFrame>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Src", "string", null, L.T("Image source. Required.", "Origen de la imagen. Obligatorio.")),
+        new("Alt", "string", null, L.T("Alternative text. Required.", "Texto alternativo. Obligatorio.")),
+        new("Caption", "RenderFragment?", null, L.T("Handwritten text below the image.", "Texto manuscrito bajo la imagen.")),
+        new("ShowTape", "bool", "false", L.T("Pins the frame with a strip of tape.", "Fija el marco con una tira de cinta.")),
+        new("TapeColor", "string?", null, L.T("Color of the tape.", "Color de la cinta.")),
+        new("TapeRotate", "double?", null, L.T("Rotation of the tape in degrees.", "Rotación de la cinta en grados.")),
+        new("TapePosition", "TapePosition", "Top", L.T("Top, TopLeft or TopRight.", "Top, TopLeft o TopRight.")),
+        new("ImageAttributes", "Dictionary<string, object>?", null, L.T("Extra attributes for the image, such as loading.", "Atributos adicionales de la imagen, como loading.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+}
