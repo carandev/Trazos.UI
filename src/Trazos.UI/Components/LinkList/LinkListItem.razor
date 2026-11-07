@@ -1,0 +1,46 @@
+@namespace Trazos.UI.Components
+
+<li class="trazos-link-list-item">
+    <a href="@Href" class="trazos-link-list-link @Class" @attributes="AdditionalAttributes">
+        <span class="trazos-link-list-name">@ChildContent</span>
+        @if (Meta != null)
+        {
+            <span class="trazos-link-list-meta">@Meta</span>
+        }
+        <span class="trazos-link-list-icon">
+            @if (Icon != null)
+            {
+                @Icon
+            }
+            else
+            {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+            }
+        </span>
+    </a>
+</li>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Href { get; set; } = string.Empty;
+
+    /// <summary>Muted text beside the name, such as a language or a year.</summary>
+    [Parameter]
+    public RenderFragment? Meta { get; set; }
+
+    /// <summary>Replaces the default arrow.</summary>
+    [Parameter]
+    public RenderFragment? Icon { get; set; }
+
+    /// <summary>Goes to the link, along with any other attribute.</summary>
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

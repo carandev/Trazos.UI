@@ -1,0 +1,32 @@
+@page "/components/reveal"
+
+<DocPage Title="Reveal" Category="@L.T("Website helpers", "Ayudas para sitios web")"
+         Lead="@L.T("Fades and raises content when it scrolls into view. Content stays visible with reduced motion, when printing, and before JavaScript runs.", "Desvanece y eleva el contenido cuando entra en pantalla. El contenido sigue visible con movimiento reducido, al imprimir y antes de que se ejecute JavaScript.")">
+
+    <DemoBlock Title="@L.T("Scroll down", "Desplázate hacia abajo")" Description="@L.T("Content already on screen does not animate. Delay staggers siblings.", "El contenido que ya está en pantalla no se anima. Delay escalona elementos vecinos.")" Code="@RevealCode">
+        <div style="width: 100%;">
+            <div style="height: 110vh;" class="docs-muted">↓</div>
+            <div class="docs-grid-2">
+                <Reveal><Card><p>Delay 0</p></Card></Reveal>
+                <Reveal Delay="200"><Card><p>Delay 200</p></Card></Reveal>
+            </div>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private const string RevealCode = """
+        <Reveal><Card>First</Card></Reveal>
+        <Reveal Delay="200"><Card>Second</Card></Reveal>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Delay", "int", "0", L.T("Milliseconds to wait before the entrance starts.", "Milisegundos que se esperan antes de iniciar la entrada.")),
+        new("ChildContent", "RenderFragment?", null, L.T("The content.", "El contenido.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+}

@@ -41,6 +41,14 @@ public static class DocsNav
             new("PhotoFrame", "components/photo-frame"),
             new("SectionHeading", "components/section-heading"),
         ]),
+        new("Website helpers", "Ayudas para sitios web",
+        [
+            new("LinkList", "components/link-list"),
+            new("CopyButton", "components/copy-button"),
+            new("Reveal", "components/reveal"),
+            new("SkipLink", "components/skip-link"),
+            new("VisuallyHidden", "components/visually-hidden"),
+        ]),
         new("Forms", "Formularios",
         [
             new("TextInput", "components/text-input"),

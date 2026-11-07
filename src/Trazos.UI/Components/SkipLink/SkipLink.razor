@@ -1,0 +1,7 @@
+@namespace Trazos.UI.Components
+@implements IAsyncDisposable
+
+<a href="@ResolvedHref"
+   class="trazos-skip-link @Class"
+   @onclick="MoveFocusAsync"
+   @attributes="AdditionalAttributes">@ChildContent</a>
