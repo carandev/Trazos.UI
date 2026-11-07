@@ -7,7 +7,7 @@ describe('Badge', () => {
   it('renders a neutral badge by default', () => {
     render(<Badge>Draft</Badge>);
     const badge = screen.getByText('Draft').parentElement;
-    expect(badge).toHaveClass('trazos-badge', 'trazos-badge-neutral');
+    expect(badge).toHaveClass('trazos-badge-box', 'trazos-badge-neutral');
   });
 
   it.each(['success', 'warning', 'error', 'info', 'lavender', 'cream', 'neutral'] as const)(
@@ -32,12 +32,22 @@ describe('Badge', () => {
       </Badge>,
     );
     const badge = screen.getByTitle('Status');
-    expect(badge).toHaveClass('trazos-badge', 'extra');
+    expect(badge).toHaveClass('trazos-badge-box', 'extra');
     expect(badge).toHaveAttribute('data-x', '1');
   });
 
   it('has no accessibility violations', async () => {
     const { container } = render(<Badge variant="success">Active</Badge>);
     await expectNoA11yViolations(container);
+  });
+
+  it('uppercases its text by default', () => {
+    render(<Badge>tag</Badge>);
+    expect(getComputedStyle(screen.getByText('tag').parentElement as Element).textTransform).toBe('uppercase');
+  });
+
+  it('keeps the original case with uppercase={false}', () => {
+    render(<Badge uppercase={false}>lazytsql</Badge>);
+    expect(getComputedStyle(screen.getByText('lazytsql').parentElement as Element).textTransform).toBe('none');
   });
 });

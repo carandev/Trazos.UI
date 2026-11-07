@@ -75,6 +75,7 @@ export function BadgePage() {
         <Badge variant="success" leadingIcon={<CheckIcon />}>
           With icon
         </Badge>
+        <Badge uppercase={false}>lazytsql</Badge>
       </Row>
     </Demo>
   );
