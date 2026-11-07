@@ -110,6 +110,11 @@ export function RenameFlow() {
 | `Tape` | Decorative tape, needs a positioned parent: `color`, `rotate`, `position`: `top` `top-left` `top-right` |
 | `PhotoFrame` | `src`, `alt`, `caption`, `tape`, `imgProps` |
 | `SectionHeading` | `title`, `eyebrow`, `as`, `underline`, `actions` |
+| `VisuallyHidden` | Screen-reader-only content, for example an `aria-live` region |
+| `SkipLink` | Hidden until focused: `href` (default `#main`) |
+| `Reveal` | Fades and rises on scroll: `delay` in ms. Content stays visible without JavaScript, with reduced motion, and when already on screen |
+| `CopyButton` | Built on `IconButton`: `value`, `label`, `copiedLabel` (all required), `errorLabel`, `fallback`, `onCopied`, `icon`, `checkIcon` |
+| `LinkList` + `LinkListItem` | Compact link rows: `href`, `meta`, `icon` |
 | `AppShell` | `brand`, `sidebar`, `topBar`, `drawerHeader`, `drawerContent`, `isDevelopment`, `environmentName`, `showEnvironmentBadge` |
 
 Every component forwards `ref`, `className` and native attributes to its root element (form controls: to the native `<input>`, `<textarea>` or `<select>`). Variant unions mirror the Blazor `*Variant` enums (`ButtonVariant.Primary` → `'primary'`). Default texts (aria-labels, "Confirmar", "Sin resultados", month names) match the Blazor library, which is Spanish-first; override them with props.

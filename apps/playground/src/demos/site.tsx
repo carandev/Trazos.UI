@@ -1,13 +1,18 @@
 import {
   Card,
+  CopyButton,
   IconButton,
   LinkButton,
+  LinkList,
+  LinkListItem,
   PhotoFrame,
+  Reveal,
   SectionHeading,
   SketchArrow,
   SketchCircle,
   SketchSquiggle,
   SketchUnderline,
+  SkipLink,
   Tape,
 } from '@carandev/trazos-ui';
 import { Demo, Row } from '../Demo';
@@ -110,6 +115,56 @@ export function SectionHeadingPage() {
           </LinkButton>
         }
       />
+    </Demo>
+  );
+}
+
+export function SkipLinkPage() {
+  return (
+    <Demo title="Focus to see it" description="Press Tab from the button before it: the link appears in the page corner." code={`<SkipLink href="#main">Skip to content</SkipLink>`}>
+      <SkipLink href="#main">Skip to content</SkipLink>
+    </Demo>
+  );
+}
+
+export function RevealPage() {
+  return (
+    <Demo title="Scroll down" description="Each card fades in as it enters the viewport." code={`<Reveal delay={150}>…</Reveal>`}>
+      <div className="pg-stack">
+        <div style={{ height: '100vh' }} />
+        {[0, 150, 300].map((delay) => (
+          <Reveal key={delay} delay={delay}>
+            <Card>Delay {delay} ms</Card>
+          </Reveal>
+        ))}
+      </div>
+    </Demo>
+  );
+}
+
+export function CopyButtonPage() {
+  return (
+    <Demo title="Copy a value" code={`<CopyButton value="hi@example.com" label="Copy email" copiedLabel="Copied!" />`}>
+      <div style={{ paddingTop: '2rem' }}>
+        <CopyButton value="hi@example.com" label="Copy email" copiedLabel="Copied!" errorLabel="Could not copy" variant="outline" />
+      </div>
+    </Demo>
+  );
+}
+
+export function LinkListPage() {
+  return (
+    <Demo title="Other projects" code={`<LinkList><LinkListItem href="…" meta="C#">lazytsql</LinkListItem></LinkList>`}>
+      <div style={{ maxWidth: '24rem' }}>
+        <LinkList aria-label="Other projects">
+          <LinkListItem href="#" meta="C#">
+            lazytsql
+          </LinkListItem>
+          <LinkListItem href="#" meta="TypeScript">
+            A project with a very long name that has to truncate instead of wrapping
+          </LinkListItem>
+        </LinkList>
+      </div>
     </Demo>
   );
 }
