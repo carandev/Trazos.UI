@@ -115,9 +115,11 @@ export function RenameFlow() {
 | `Reveal` | Fades and rises on scroll: `delay` in ms. Content stays visible without JavaScript, with reduced motion, and when already on screen |
 | `CopyButton` | Built on `IconButton`: `value`, `label`, `copiedLabel` (all required), `errorLabel`, `fallback`, `onCopied`, `icon`, `checkIcon` |
 | `LinkList` + `LinkListItem` | Compact link rows: `href`, `meta`, `icon` |
+| `ThemeToggle`, `useTheme()`, `createThemeScript()` | Light and dark switching; see [Dark mode](#dark-mode) |
+| `SiteHeader`, `useScrollSpy(ids)` | Top bar for public sites: `links`, `navLabel`, `openMenuLabel`, `closeMenuLabel` (all required), `logo`, `actions`, `activeHref`, `currentType` |
 | `AppShell` | `brand`, `sidebar`, `topBar`, `drawerHeader`, `drawerContent`, `isDevelopment`, `environmentName`, `showEnvironmentBadge` |
 
-Every component forwards `ref`, `className` and native attributes to its root element (form controls: to the native `<input>`, `<textarea>` or `<select>`). Variant unions mirror the Blazor `*Variant` enums (`ButtonVariant.Primary` → `'primary'`). Default texts (aria-labels, "Confirmar", "Sin resultados", month names) match the Blazor library, which is Spanish-first; override them with props.
+Every component forwards `ref`, `className` and native attributes to its root element (form controls: to the native `<input>`, `<textarea>` or `<select>`). Variant unions mirror the Blazor `*Variant` enums (`ButtonVariant.Primary` → `'primary'`). Default texts (aria-labels, "Confirmar", "Sin resultados", month names) match the Blazor library, which is Spanish-first; override them with props. Newer website components (`CopyButton`, `ThemeToggle`, `SiteHeader`) have no default texts, so their labels are required props. `CopyButton` and `ThemeToggle` forward native attributes to the button, and `LinkListItem` to the link.
 
 Try every component in the playground: `npm run dev -w @carandev/trazos-playground` from the repository root.
 
@@ -127,7 +129,28 @@ Try every component in the playground: `npm run dev -w @carandev/trazos-playgrou
 <html data-theme="dark">
 ```
 
-Every token switches; nothing in the components changes. There is no automatic `prefers-color-scheme` switch, so your app decides.
+Every token switches; nothing in the components changes. The tokens have no automatic `prefers-color-scheme` switch, so your app decides, or uses the helpers below.
+
+To follow the system until the user chooses, inline the theme script in `<head>`, after the `theme-color` meta tag. It applies the theme before first paint, so there is no flash of the wrong colors, and it updates `theme-color`:
+
+```tsx
+import { createThemeScript } from '@carandev/trazos-ui';
+
+<meta name="theme-color" content="#FAF7F2" />
+<script dangerouslySetInnerHTML={{ __html: createThemeScript() }} />
+```
+
+In Astro, use `<script is:inline set:html={createThemeScript()} />`.
+
+Then use `ThemeToggle`, or `useTheme()` to build your own control:
+
+```tsx
+<ThemeToggle label="Toggle theme" />
+
+const { theme, setTheme } = useTheme();
+```
+
+The choice is stored in `localStorage` under `trazos-theme`. Pass the same `storageKey` and `colors` to `createThemeScript`, `useTheme` and `ThemeToggle` to change them.
 
 ## Theming
 

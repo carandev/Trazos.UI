@@ -42,6 +42,8 @@ export * from './components/SkipLink';
 export * from './components/Reveal';
 export * from './components/CopyButton';
 export * from './components/LinkList';
+export * from './components/Theme';
+export * from './components/SiteHeader';
 
 // Layout
 export * from './components/AppShell';
