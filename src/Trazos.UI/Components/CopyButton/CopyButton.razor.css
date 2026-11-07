@@ -1,0 +1,19 @@
+/* ========================================
+   COPY BUTTON - Trazos UI
+   ======================================== */
+
+.trazos-copy-button {
+    position: relative;
+    display: inline-flex;
+}
+
+.trazos-copy-button-note {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    color: var(--trazos-wine);
+    transform: translateX(-50%) rotate(-3deg);
+    pointer-events: none;
+}

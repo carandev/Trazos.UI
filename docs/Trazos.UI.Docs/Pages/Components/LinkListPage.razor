@@ -1,0 +1,55 @@
+@page "/components/link-list"
+
+<DocPage Title="LinkList" Category="@L.T("Website helpers", "Ayudas para sitios web")"
+         Lead="@L.T("A compact list of links with a name, muted metadata and an arrow, with truncation and an ink-shadow hover.", "Una lista compacta de enlaces con nombre, metadatos atenuados y una flecha, con truncado y sombra de tinta al pasar el cursor.")">
+
+    <DemoBlock Title="@L.T("Links", "Enlaces")" Code="@ListCode">
+        <div style="width: 100%; max-width: 26rem;">
+            <LinkList>
+                <LinkListItem Href="components/button">
+                    <ChildContent>Trazos.UI</ChildContent>
+                    <Meta>C#</Meta>
+                </LinkListItem>
+                <LinkListItem Href="components/card">
+                    <ChildContent>@L.T("A very long project name that does not fit on a single line of this list", "Un nombre de proyecto muy largo que no cabe en una sola línea de esta lista")</ChildContent>
+                    <Meta>2026</Meta>
+                </LinkListItem>
+                <LinkListItem Href="components/badge">
+                    <ChildContent>@L.T("Custom icon", "Ícono propio")</ChildContent>
+                    <Icon>@Icons.Check</Icon>
+                </LinkListItem>
+            </LinkList>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Title="LinkList" Params="ListParams" />
+    <ApiTable Title="LinkListItem" Params="ItemParams" />
+</DocPage>
+
+@code {
+    private const string ListCode = """
+        <LinkList>
+            <LinkListItem Href="/trazos">
+                <ChildContent>Trazos.UI</ChildContent>
+                <Meta>C#</Meta>
+            </LinkListItem>
+        </LinkList>
+        """;
+
+    private IReadOnlyList<ApiParam> ListParams =>
+    [
+        new("ChildContent", "RenderFragment?", null, L.T("The LinkListItem rows.", "Las filas LinkListItem.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ItemParams =>
+    [
+        new("Href", "string", null, L.T("Link target. Required.", "Destino del enlace. Obligatorio.")),
+        new("ChildContent", "RenderFragment?", null, L.T("The name. It truncates when it does not fit.", "El nombre. Se trunca si no cabe.")),
+        new("Meta", "RenderFragment?", null, L.T("Muted text beside the name.", "Texto atenuado junto al nombre.")),
+        new("Icon", "RenderFragment?", null, L.T("Replaces the default arrow.", "Reemplaza la flecha por defecto.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+}

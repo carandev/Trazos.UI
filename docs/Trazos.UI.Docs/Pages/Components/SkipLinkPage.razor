@@ -1,0 +1,28 @@
+@page "/components/skip-link"
+
+<DocPage Title="SkipLink" Category="@L.T("Website helpers", "Ayudas para sitios web")"
+         Lead="@L.T("Lets keyboard users jump past the navigation. It stays out of view until it receives focus. Put it first in the layout.", "Permite que quienes usan el teclado salten la navegación. Permanece oculto hasta recibir el foco. Colócalo primero en el diseño de la página.")">
+
+    <DemoBlock Title="@L.T("Press Tab", "Presiona Tab")" Description="@L.T("A bare fragment is resolved against the current page, not against the base tag, and the target receives focus.", "Un fragmento solo se resuelve contra la página actual, no contra la etiqueta base, y el destino recibe el foco.")" Code="@SkipCode">
+        <SkipLink Href="#skip-link-target">@L.T("Skip to content", "Saltar al contenido")</SkipLink>
+        <p id="skip-link-target">@L.T("The skip link lands here.", "El enlace llega hasta aquí.")</p>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private const string SkipCode = """
+        <SkipLink>Skip to content</SkipLink>
+        <nav>…</nav>
+        <main id="main">…</main>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Href", "string", "#main", L.T("The fragment of the main content.", "El fragmento del contenido principal.")),
+        new("ChildContent", "RenderFragment?", null, L.T("Link text.", "Texto del enlace.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+}

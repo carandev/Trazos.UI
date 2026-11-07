@@ -1,0 +1,50 @@
+@page "/components/copy-button"
+
+<DocPage Title="CopyButton" Category="@L.T("Website helpers", "Ayudas para sitios web")"
+         Lead="@L.T("Copies a value to the clipboard, with a check icon, a handwritten note for two seconds and a screen-reader announcement. Labels are parameters, so the library stays language-neutral.", "Copia un valor al portapapeles, con un ícono de confirmación, una nota manuscrita durante dos segundos y un anuncio para lectores de pantalla. Las etiquetas son parámetros, así que la librería no depende de un idioma.")">
+
+    <DemoBlock Title="@L.T("Copy a value", "Copiar un valor")" Code="@CopyCode">
+        <div style="padding-top: 2rem;">
+            <CopyButton Value="hello@example.com"
+                        Label="@L.T("Copy email", "Copiar correo")"
+                        CopiedLabel="@L.T("Copied!", "¡Copiado!")"
+                        ErrorLabel="@L.T("Could not copy", "No se pudo copiar")"
+                        Variant="ButtonVariant.Outline"
+                        OnCopied="value => _copied = value" />
+            <span class="docs-muted" data-testid="copied-value">@_copied</span>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private string? _copied;
+
+    private const string CopyCode = """
+        <CopyButton Value="hello@example.com"
+                    Label="Copy email"
+                    CopiedLabel="Copied!"
+                    ErrorLabel="Could not copy"
+                    Fallback="OpenMailClientAsync" />
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Value", "string", null, L.T("The text to copy. Required.", "El texto que se copia. Obligatorio.")),
+        new("Label", "string", null, L.T("Accessible name of the button. Required.", "Nombre accesible del botón. Obligatorio.")),
+        new("CopiedLabel", "string", null, L.T("Shown and announced after copying. Required.", "Se muestra y se anuncia al copiar. Obligatorio.")),
+        new("ErrorLabel", "string?", null, L.T("Shown and announced when copying fails and there is no Fallback.", "Se muestra y se anuncia si falla la copia y no hay Fallback.")),
+        new("Fallback", "EventCallback<string>", null, L.T("Runs when the clipboard API is missing or refuses.", "Se ejecuta si la API del portapapeles no existe o rechaza la copia.")),
+        new("OnCopied", "EventCallback<string>", null, L.T("Runs after the value reached the clipboard.", "Se ejecuta cuando el valor llegó al portapapeles.")),
+        new("Icon", "RenderFragment?", null, L.T("Replaces the copy icon.", "Reemplaza el ícono de copiar.")),
+        new("CheckIcon", "RenderFragment?", null, L.T("Replaces the check icon.", "Reemplaza el ícono de confirmación.")),
+        new("Variant", "ButtonVariant", "Ghost", L.T("Same variants as Button.", "Las mismas variantes de Button.")),
+        new("Size", "IconButtonSize", "Medium", L.T("Medium or Large.", "Medium o Large.")),
+        new("Disabled", "bool", "false", L.T("Disables the button.", "Deshabilita el botón.")),
+        new("Loading", "bool", "false", L.T("Shows a spinner and disables the button.", "Muestra un indicador de carga y deshabilita el botón.")),
+        new("OnClick", "EventCallback<MouseEventArgs>", null, L.T("Raised before copying.", "Se dispara antes de copiar.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+}

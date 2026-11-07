@@ -1,0 +1,23 @@
+/* ========================================
+   SKIP LINK - Trazos UI
+   ======================================== */
+
+.trazos-skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 100;
+    padding: 0.625rem 1.25rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--trazos-text);
+    background: var(--trazos-surface-raised);
+    border: 1.5px solid var(--trazos-ink-edge);
+    border-radius: 14px 18px 12px 16px / 16px 12px 18px 14px;
+    box-shadow: 2px 3px 0 var(--trazos-ink-edge);
+    transform: translateY(-200%);
+}
+
+.trazos-skip-link:focus {
+    transform: none;
+}
