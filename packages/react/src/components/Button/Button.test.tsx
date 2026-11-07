@@ -4,6 +4,7 @@ import { createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { Button } from './Button';
 import { expectNoA11yViolations } from '../../../test/a11y';
+import buttonCss from './Button.css?raw';
 
 describe('Button', () => {
   it('renders a primary, medium, type="button" button by default', () => {
@@ -87,5 +88,22 @@ describe('Button', () => {
   it('has no accessibility violations', async () => {
     const { container } = render(<Button>Save</Button>);
     await expectNoA11yViolations(container);
+  });
+
+  // jsdom has no user-agent font rule for buttons, so computed style cannot
+  // tell this apart from a missing rule. The stylesheet itself has to say it.
+  it('declares the inherited font, because browsers do not inherit it into native buttons', () => {
+    const baseRule = buttonCss.match(/^\.trazos-btn \{[^}]*\}/m)?.[0];
+    expect(baseRule).toContain('font-family: inherit;');
+  });
+
+  it.each(['leading', 'trailing'] as const)('centers the %s icon wrapper on the label', (position) => {
+    const { container } = render(
+      <Button {...{ [`${position}Icon`]: <svg /> }}>Save</Button>,
+    );
+    const wrapper = container.querySelector(`.trazos-btn-${position}-icon`);
+    if (wrapper == null) throw new Error('no icon wrapper');
+    expect(getComputedStyle(wrapper).display).toBe('inline-flex');
+    expect(getComputedStyle(wrapper).alignItems).toBe('center');
   });
 });
