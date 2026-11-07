@@ -45,6 +45,8 @@
     width: 2.75rem;
     height: 2.75rem;
     padding: 0;
+    /* It has one visible child, and the gap would push the spinner off center. */
+    gap: 0;
     flex-shrink: 0;
 }
 
