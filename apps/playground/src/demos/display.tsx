@@ -106,6 +106,26 @@ export function CardPage() {
           </Card>
         </Row>
       </Demo>
+      <Demo title="Tones" code={`<Card variant="olive">…</Card>`}>
+        <Row>
+          <Card variant="olive">Olive</Card>
+          <Card variant="gold">Gold</Card>
+          <Card variant="wine">Wine</Card>
+          <Card variant="sky">Sky</Card>
+        </Row>
+      </Demo>
+      <Demo title="Media and fill" description="fill lets margin-top: auto pin a row to the bottom." code={`<Card fill media={<img src="…" alt="…" />}>…</Card>`}>
+        <Row>
+          <Card fill style={{ width: '14rem' }} media={<div style={{ aspectRatio: '16 / 9' }} />}>
+            A cover slot above the body.
+            <div style={{ marginTop: 'auto', paddingTop: '1rem' }}>
+              <Button size="small" variant="outline">
+                Open
+              </Button>
+            </div>
+          </Card>
+        </Row>
+      </Demo>
     </>
   );
 }

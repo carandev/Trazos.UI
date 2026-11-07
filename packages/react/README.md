@@ -88,7 +88,7 @@ export function RenameFlow() {
 | `LinkButton` | A link styled as `Button`: `href`, `variant`, `size`, `leadingIcon`, `trailingIcon` |
 | `IconButton` | Icon-only button with a square hit area of at least 44px: `label` (required), `variant`, `size`: `medium` `large`; `loading` |
 | `Badge` | `variant`: `success` `warning` `error` `info` `lavender` `cream` `neutral`; `uppercase` (default `true`), `leadingIcon` |
-| `Card` | `variant`: `default` `white` `lavender` `interactive`; `header`, `footer` |
+| `Card` | `variant`: `default` `white` `lavender` `interactive` `olive` `gold` `wine` `sky`; `media`, `header`, `footer`; `fill` makes the body fill the card height |
 | `IconBox` | `variant`: `primary` `lavender` `cream` `wine` `neutral`; `size` |
 | `LoadingSpinner` | `message`, `overlay` |
 | `Skeleton` | `variant`: `text` `circular` `card` `rounded`; `width`, `height`, `count` |

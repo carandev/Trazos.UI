@@ -4,6 +4,7 @@ import { createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { Card } from './index';
 import { expectNoA11yViolations } from '../../../test/a11y';
+import cardCss from './Card.css?raw';
 
 describe('Card', () => {
   it('renders a default card with only the body when no header or footer is given', () => {
@@ -67,5 +68,43 @@ describe('Card', () => {
       </Card>,
     );
     await expectNoA11yViolations(container);
+  });
+
+  it.each(['olive', 'gold', 'wine', 'sky'] as const)('builds the %s tone from its tint, border and text tokens', (tone) => {
+    render(<Card variant={tone}>Tone</Card>);
+    expect(screen.getByText('Tone').parentElement).toHaveClass(`trazos-card-${tone}`);
+    const rule = cardCss.match(new RegExp(`^\\.trazos-card-${tone} \\{[^}]*\\}`, 'm'))?.[0];
+    expect(rule).toContain(`var(--trazos-${tone}-tint)`);
+    expect(rule).toContain(`var(--trazos-${tone}-border)`);
+    expect(rule).toContain(`var(--trazos-${tone}-text)`);
+  });
+
+  it('renders media above the body, outside the header divider', () => {
+    const { container } = render(
+      <Card media={<img src="/cover.png" alt="Cover" />} header="Title">
+        Body
+      </Card>,
+    );
+    const media = container.querySelector('.trazos-card-media');
+    expect(media).toContainElement(screen.getByAltText('Cover'));
+    expect(container.querySelector('.trazos-card-header')).not.toContainElement(screen.getByAltText('Cover'));
+    expect(media?.nextElementSibling).toHaveClass('trazos-card-header');
+  });
+
+  it('renders no media wrapper without media', () => {
+    const { container } = render(<Card>Body</Card>);
+    expect(container.querySelector('.trazos-card-media')).toBeNull();
+  });
+
+  it('lets the body fill the card height with fill', () => {
+    const { container, rerender } = render(<Card>Body</Card>);
+    const box = container.firstElementChild as Element;
+    expect(getComputedStyle(box).display).not.toBe('flex');
+    rerender(<Card fill>Body</Card>);
+    expect(getComputedStyle(box).display).toBe('flex');
+    expect(getComputedStyle(box).flexDirection).toBe('column');
+    const body = container.querySelector('.trazos-card-body') as Element;
+    expect(getComputedStyle(body).display).toBe('flex');
+    expect(getComputedStyle(body).flexGrow).toBe('1');
   });
 });
