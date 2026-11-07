@@ -1,6 +1,6 @@
 {
   "name": "@carandev/trazos-ui",
-  "version": "1.3.1",
+  "version": "2.0.0",
   "description": "Trazos UI for React: a warm, hand-drawn component library with organic sketch borders, parchment tones and accessible primitives.",
   "license": "MIT",
   "author": "carandev",
@@ -50,7 +50,7 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@carandev/trazos-tokens": "1.3.1",
+    "@carandev/trazos-tokens": "2.0.0",
     "@eslint/js": "^9.39.5",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^7.0.1",

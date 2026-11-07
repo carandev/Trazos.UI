@@ -1,6 +1,6 @@
 {
   "name": "@carandev/trazos-tokens",
-  "version": "1.3.1",
+  "version": "2.0.0",
   "private": true,
   "description": "Design tokens for Trazos UI, the single source shared by the React package and the Blazor library. Internal workspace: published inside @carandev/trazos-ui as tokens.css.",
   "license": "MIT",
