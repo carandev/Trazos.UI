@@ -284,7 +284,7 @@ export function Autocomplete<T>({
                     id={optionId(index)}
                     role="option"
                     aria-selected={index === activeIndex}
-                    className={cx('trazos-autocomplete-option', index === activeIndex && 'is-active')}
+                    className={cx('trazos-autocomplete-option', index === activeIndex && 'trazos-autocomplete-option-active')}
                     onMouseDown={(event) => {
                       event.preventDefault();
                       select(item);

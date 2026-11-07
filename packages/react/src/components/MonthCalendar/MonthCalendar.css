@@ -161,15 +161,15 @@
     border-left: 1px solid var(--trazos-border-grid);
 }
 
-.trazos-calendar-day.is-outside {
+.trazos-calendar-day.trazos-calendar-day-outside {
     background: var(--trazos-surface-dim);
 }
 
-.trazos-calendar-day.is-outside .trazos-calendar-day-number {
+.trazos-calendar-day.trazos-calendar-day-outside .trazos-calendar-day-number {
     color: var(--trazos-text-disabled);
 }
 
-.trazos-calendar-day.is-selected {
+.trazos-calendar-day.trazos-calendar-day-selected {
     background: var(--trazos-olive-soft);
     box-shadow: inset 0 0 0 2px var(--trazos-olive);
 }
@@ -207,7 +207,7 @@
     border-radius: 9999px;
 }
 
-.trazos-calendar-day.is-today .trazos-calendar-day-number {
+.trazos-calendar-day.trazos-calendar-day-today .trazos-calendar-day-number {
     background: var(--trazos-olive-strong);
     color: var(--trazos-on-accent);
 }
@@ -297,19 +297,19 @@
 }
 
 /* Tones */
-.tone-olive { background-color: var(--trazos-olive-soft); color: var(--trazos-olive-text); border-color: var(--trazos-olive-border); border-left-color: var(--trazos-olive); }
-.tone-lavender { background-color: var(--trazos-lavender-soft); color: var(--trazos-lavender-text); border-color: var(--trazos-lavender-border); border-left-color: var(--trazos-lavender); }
-.tone-gold { background-color: var(--trazos-gold-soft); color: var(--trazos-gold-text); border-color: var(--trazos-gold-border); border-left-color: var(--trazos-gold); }
-.tone-wine { background-color: var(--trazos-wine-soft); color: var(--trazos-wine-text); border-color: var(--trazos-wine-border); border-left-color: var(--trazos-wine); }
-.tone-sky { background-color: var(--trazos-sky-soft); color: var(--trazos-sky-text); border-color: var(--trazos-sky-border); border-left-color: var(--trazos-sky); }
-.tone-neutral { background-color: var(--trazos-surface-muted); color: var(--trazos-text-light); border-color: var(--trazos-border-control); border-left-color: var(--trazos-neutral); }
+.trazos-calendar-tone-olive { background-color: var(--trazos-olive-soft); color: var(--trazos-olive-text); border-color: var(--trazos-olive-border); border-left-color: var(--trazos-olive); }
+.trazos-calendar-tone-lavender { background-color: var(--trazos-lavender-soft); color: var(--trazos-lavender-text); border-color: var(--trazos-lavender-border); border-left-color: var(--trazos-lavender); }
+.trazos-calendar-tone-gold { background-color: var(--trazos-gold-soft); color: var(--trazos-gold-text); border-color: var(--trazos-gold-border); border-left-color: var(--trazos-gold); }
+.trazos-calendar-tone-wine { background-color: var(--trazos-wine-soft); color: var(--trazos-wine-text); border-color: var(--trazos-wine-border); border-left-color: var(--trazos-wine); }
+.trazos-calendar-tone-sky { background-color: var(--trazos-sky-soft); color: var(--trazos-sky-text); border-color: var(--trazos-sky-border); border-left-color: var(--trazos-sky); }
+.trazos-calendar-tone-neutral { background-color: var(--trazos-surface-muted); color: var(--trazos-text-light); border-color: var(--trazos-border-control); border-left-color: var(--trazos-neutral); }
 
-.trazos-calendar-dot.tone-olive { background-color: var(--trazos-olive); }
-.trazos-calendar-dot.tone-lavender { background-color: var(--trazos-lavender); }
-.trazos-calendar-dot.tone-gold { background-color: var(--trazos-gold); }
-.trazos-calendar-dot.tone-wine { background-color: var(--trazos-wine); }
-.trazos-calendar-dot.tone-sky { background-color: var(--trazos-sky); }
-.trazos-calendar-dot.tone-neutral { background-color: var(--trazos-neutral); }
+.trazos-calendar-dot.trazos-calendar-tone-olive { background-color: var(--trazos-olive); }
+.trazos-calendar-dot.trazos-calendar-tone-lavender { background-color: var(--trazos-lavender); }
+.trazos-calendar-dot.trazos-calendar-tone-gold { background-color: var(--trazos-gold); }
+.trazos-calendar-dot.trazos-calendar-tone-wine { background-color: var(--trazos-wine); }
+.trazos-calendar-dot.trazos-calendar-tone-sky { background-color: var(--trazos-sky); }
+.trazos-calendar-dot.trazos-calendar-tone-neutral { background-color: var(--trazos-neutral); }
 
 /* Mobile: the grid compacts and events are summarized as dots */
 @media (max-width: 640px) {

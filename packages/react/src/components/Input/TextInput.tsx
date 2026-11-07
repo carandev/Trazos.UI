@@ -66,7 +66,7 @@ export function TextInput({
         </label>
       )}
 
-      <div className={cx('trazos-input-wrapper', hasError && 'has-error', disabled && 'disabled')}>
+      <div className={cx('trazos-input-wrapper', hasError && 'trazos-input-has-error', disabled && 'trazos-input-is-disabled')}>
         {leadingIcon != null && <div className="trazos-input-icon leading">{leadingIcon}</div>}
 
         <input

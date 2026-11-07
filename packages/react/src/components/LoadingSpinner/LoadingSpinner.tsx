@@ -25,13 +25,13 @@ export function LoadingSpinner({
       aria-label={message ? undefined : label}
       aria-labelledby={message ? messageId : undefined}
       {...rest}
-      className={cx('loading-spinner', overlay && 'loading-overlay', className)}
+      className={cx('trazos-loading-spinner', overlay && 'trazos-loading-overlay', className)}
     >
-      <div className="spinner-container">
-        <div className="spinner" aria-hidden="true">
-          <div className="spinner-inner" />
+      <div className="trazos-spinner-container">
+        <div className="trazos-spinner" aria-hidden="true">
+          <div className="trazos-spinner-inner" />
         </div>
-        {message ? <p id={messageId} className="loading-message">{message}</p> : null}
+        {message ? <p id={messageId} className="trazos-loading-message">{message}</p> : null}
       </div>
     </div>
   );

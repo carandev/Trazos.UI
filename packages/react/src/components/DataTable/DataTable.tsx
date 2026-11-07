@@ -65,7 +65,7 @@ export function DataTable<T>({
     body = items.map((item, index) => (
       <tr
         key={getRowKey ? getRowKey(item, index) : index}
-        className={cx('trazos-table-row', interactive && 'interactive')}
+        className={cx('trazos-table-row', interactive && 'trazos-table-row-interactive')}
         tabIndex={interactive ? 0 : undefined}
         onClick={
           interactive

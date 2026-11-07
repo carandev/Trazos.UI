@@ -40,7 +40,7 @@ describe('TextArea', () => {
     expect(screen.getByRole('alert')).toHaveTextContent('Too long');
     expect(textarea).toHaveAttribute('aria-invalid', 'true');
     expect(textarea).toHaveAccessibleDescription('Too long');
-    expect(textarea.parentElement).toHaveClass('has-error');
+    expect(textarea.parentElement).toHaveClass('trazos-input-has-error');
   });
 
   it('applies disabled and readOnly', () => {
@@ -48,7 +48,7 @@ describe('TextArea', () => {
     const textarea = screen.getByLabelText('Notes');
     expect(textarea).toBeDisabled();
     expect(textarea).toHaveAttribute('readonly');
-    expect(textarea.parentElement).toHaveClass('disabled');
+    expect(textarea.parentElement).toHaveClass('trazos-input-is-disabled');
   });
 
   it('works uncontrolled and calls onValueChange and onChange', async () => {

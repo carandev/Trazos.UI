@@ -2,14 +2,14 @@
    LoadingSpinner - Trazos UI (ported from Components/Spinner/LoadingSpinner.razor.css)
    ======================================== */
 
-.loading-spinner {
+.trazos-loading-spinner {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 2.5rem 1rem;
 }
 
-.loading-overlay {
+.trazos-loading-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -20,7 +20,7 @@
     z-index: 9999;
 }
 
-.spinner-container {
+.trazos-spinner-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -28,7 +28,7 @@
 }
 
 /* Handcrafted spinning halo */
-.spinner {
+.trazos-spinner {
     width: 48px;
     height: 48px;
     border-radius: 50%;
@@ -40,7 +40,7 @@
     box-shadow: 0 4px 12px -2px var(--trazos-olive-glow);
 }
 
-.spinner-inner {
+.trazos-spinner-inner {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -54,7 +54,7 @@
     animation: spinInnerLiturgical 1.4s ease-in-out infinite reverse;
 }
 
-.loading-message {
+.trazos-loading-message {
     color: var(--trazos-text);
     font-family: 'Marcellus', serif;
     font-size: 0.875rem;
@@ -90,12 +90,12 @@
 }
 
 /* Smaller inline variant */
-.loading-spinner:not(.loading-overlay) .spinner {
+.trazos-loading-spinner:not(.trazos-loading-overlay) .trazos-spinner {
     width: 40px;
     height: 40px;
 }
 
-.loading-spinner:not(.loading-overlay) .spinner-inner {
+.trazos-loading-spinner:not(.trazos-loading-overlay) .trazos-spinner-inner {
     width: 16px;
     height: 16px;
     margin-top: -8px;

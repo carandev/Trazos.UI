@@ -26,9 +26,9 @@ export interface ModalProps extends Omit<ComponentPropsWithRef<'div'>, 'title'> 
 }
 
 const sizeClass: Record<ModalSize, string> = {
-  small: 'modal-small',
-  medium: 'modal-medium',
-  large: 'modal-large',
+  small: 'trazos-modal-small',
+  medium: 'trazos-modal-medium',
+  large: 'trazos-modal-large',
 };
 
 export function Modal({
@@ -71,7 +71,7 @@ export function Modal({
   return (
     // Pointer-only affordance: keyboard users close with Escape or the close button.
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-    <div className="modal-backdrop" onClick={onBackdropClick}>
+    <div className="trazos-modal-backdrop" onClick={onBackdropClick}>
       <div
         role="dialog"
         aria-modal="true"
@@ -79,14 +79,14 @@ export function Modal({
         tabIndex={-1}
         {...rest}
         ref={containerRef}
-        className={cx('modal-container', sizeClass[size], className)}
+        className={cx('trazos-modal-container', sizeClass[size], className)}
       >
-        <div className="modal-header">
-          <h3 className="modal-title" id={titleId}>
+        <div className="trazos-modal-header">
+          <h3 className="trazos-modal-title" id={titleId}>
             {title}
           </h3>
           {showCloseButton && (
-            <button type="button" className="modal-close" onClick={close} aria-label={closeButtonAriaLabel}>
+            <button type="button" className="trazos-modal-close" onClick={close} aria-label={closeButtonAriaLabel}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -101,8 +101,8 @@ export function Modal({
             </button>
           )}
         </div>
-        <div className="modal-body">{children}</div>
-        {footer != null && <div className="modal-footer">{footer}</div>}
+        <div className="trazos-modal-body">{children}</div>
+        {footer != null && <div className="trazos-modal-footer">{footer}</div>}
       </div>
     </div>
   );

@@ -15,11 +15,11 @@ describe('Checkbox', () => {
     expect(container.firstElementChild).toHaveClass('trazos-checkbox-group');
     const label = container.querySelector('label');
     expect(label).toHaveClass('trazos-checkbox-container');
-    expect(label).not.toHaveClass('disabled');
+    expect(label).not.toHaveClass('trazos-input-is-disabled');
     expect(label).toHaveAttribute('for', input.id);
     const box = container.querySelector('.trazos-checkbox-box');
     expect(box).toHaveAttribute('aria-hidden', 'true');
-    expect(box).not.toHaveClass('checked');
+    expect(box).not.toHaveClass('trazos-checkbox-is-checked');
     expect(box?.querySelector('svg.trazos-checkbox-check')).toBeInTheDocument();
     expect(container.querySelector('.trazos-checkbox-label')).toHaveTextContent('Accept terms');
   });
@@ -45,7 +45,7 @@ describe('Checkbox', () => {
     expect(container.querySelector('.trazos-checkbox-helper')).not.toBeInTheDocument();
     expect(screen.getByRole('alert')).toHaveClass('trazos-checkbox-error');
     expect(screen.getByRole('alert')).toHaveTextContent('Required');
-    expect(container.querySelector('.trazos-checkbox-box')).toHaveClass('has-error');
+    expect(container.querySelector('.trazos-checkbox-box')).toHaveClass('trazos-input-has-error');
     expect(input).toHaveAttribute('aria-invalid', 'true');
     expect(input).toHaveAccessibleDescription('Required');
   });
@@ -54,7 +54,7 @@ describe('Checkbox', () => {
     const onCheckedChange = vi.fn();
     const { container } = render(<Checkbox label="News" disabled onCheckedChange={onCheckedChange} />);
     expect(screen.getByRole('checkbox')).toBeDisabled();
-    expect(container.querySelector('label')).toHaveClass('disabled');
+    expect(container.querySelector('label')).toHaveClass('trazos-input-is-disabled');
     await userEvent.click(screen.getByText('News'));
     expect(onCheckedChange).not.toHaveBeenCalled();
   });
@@ -66,10 +66,10 @@ describe('Checkbox', () => {
       <Checkbox label="News" defaultChecked onCheckedChange={onCheckedChange} onChange={onChange} />,
     );
     const box = container.querySelector('.trazos-checkbox-box');
-    expect(box).toHaveClass('checked');
+    expect(box).toHaveClass('trazos-checkbox-is-checked');
     await userEvent.click(screen.getByText('News'));
     expect(screen.getByRole('checkbox')).not.toBeChecked();
-    expect(box).not.toHaveClass('checked');
+    expect(box).not.toHaveClass('trazos-checkbox-is-checked');
     expect(onCheckedChange).toHaveBeenCalledWith(false);
     expect(onChange).toHaveBeenCalledTimes(1);
   });
@@ -82,7 +82,7 @@ describe('Checkbox', () => {
     const { container } = render(<Controlled />);
     await userEvent.click(screen.getByRole('checkbox'));
     expect(screen.getByRole('checkbox')).toBeChecked();
-    expect(container.querySelector('.trazos-checkbox-box')).toHaveClass('checked');
+    expect(container.querySelector('.trazos-checkbox-box')).toHaveClass('trazos-checkbox-is-checked');
   });
 
   it('stays unchanged when controlled without a handler update', async () => {

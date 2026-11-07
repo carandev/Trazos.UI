@@ -9,25 +9,25 @@ describe('LoadingSpinner', () => {
     const { container } = render(<LoadingSpinner />);
     const status = screen.getByRole('status', { name: 'Cargando' });
     expect(status).toBe(container.firstElementChild);
-    expect(status).toHaveClass('loading-spinner');
-    expect(status).not.toHaveClass('loading-overlay');
-    const spinner = status.querySelector('.spinner-container > .spinner');
+    expect(status).toHaveClass('trazos-loading-spinner');
+    expect(status).not.toHaveClass('trazos-loading-overlay');
+    const spinner = status.querySelector('.trazos-spinner-container > .trazos-spinner');
     expect(spinner).toHaveAttribute('aria-hidden', 'true');
-    expect(spinner?.querySelector('.spinner-inner')).not.toBeNull();
-    expect(status.querySelector('.loading-message')).toBeNull();
+    expect(spinner?.querySelector('.trazos-spinner-inner')).not.toBeNull();
+    expect(status.querySelector('.trazos-loading-message')).toBeNull();
   });
 
   it('adds the overlay class', () => {
     render(<LoadingSpinner overlay />);
-    expect(screen.getByRole('status')).toHaveClass('loading-spinner', 'loading-overlay');
+    expect(screen.getByRole('status')).toHaveClass('trazos-loading-spinner', 'trazos-loading-overlay');
   });
 
   it('shows the message, which then names the status', () => {
     render(<LoadingSpinner message="Guardando cambios" />);
     const status = screen.getByRole('status', { name: 'Guardando cambios' });
     expect(status).not.toHaveAttribute('aria-label');
-    expect(status).toHaveAttribute('aria-labelledby', status.querySelector('.loading-message')?.id);
-    expect(status.querySelector('.spinner-container > .loading-message')).toHaveTextContent('Guardando cambios');
+    expect(status).toHaveAttribute('aria-labelledby', status.querySelector('.trazos-loading-message')?.id);
+    expect(status.querySelector('.trazos-spinner-container > .trazos-loading-message')).toHaveTextContent('Guardando cambios');
   });
 
   it('accepts a custom accessible label', () => {
@@ -40,7 +40,7 @@ describe('LoadingSpinner', () => {
     render(<LoadingSpinner ref={ref} className="extra" data-x="1" />);
     const status = screen.getByRole('status');
     expect(ref.current).toBe(status);
-    expect(status).toHaveClass('loading-spinner', 'extra');
+    expect(status).toHaveClass('trazos-loading-spinner', 'extra');
     expect(status).toHaveAttribute('data-x', '1');
   });
 

@@ -71,7 +71,7 @@ describe('RadioCardGroup', () => {
     await userEvent.click(screen.getByText('Pro'));
     expect(screen.getByRole('radio', { name: /Pro/ })).toBeChecked();
     expect(onValueChange).toHaveBeenCalledWith('pro');
-    const checked = container.querySelector('.trazos-radio-card.is-checked');
+    const checked = container.querySelector('.trazos-radio-card.trazos-radio-card-is-checked');
     expect(checked).toHaveTextContent('Pro');
     expect(checked?.querySelector('.trazos-radio-card-check svg')).toBeInTheDocument();
   });
@@ -109,7 +109,7 @@ describe('RadioCardGroup', () => {
     const onValueChange = vi.fn();
     const { container } = render(<RadioCardGroup label="Plan" options={options} disabled onValueChange={onValueChange} />);
     for (const radio of screen.getAllByRole('radio')) expect(radio).toBeDisabled();
-    expect(container.querySelectorAll('.trazos-radio-card.is-disabled')).toHaveLength(2);
+    expect(container.querySelectorAll('.trazos-radio-card.trazos-radio-card-is-disabled')).toHaveLength(2);
     await userEvent.click(screen.getByText('Pro'));
     expect(onValueChange).not.toHaveBeenCalled();
   });

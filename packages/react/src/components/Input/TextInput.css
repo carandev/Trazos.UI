@@ -39,14 +39,14 @@
     box-shadow: 0 0 0 3px var(--trazos-focus-ring);
 }
 
-.trazos-input-wrapper.has-error {
+.trazos-input-wrapper.trazos-input-has-error {
     border-color: var(--trazos-danger);
 }
-.trazos-input-wrapper.has-error:focus-within {
+.trazos-input-wrapper.trazos-input-has-error:focus-within {
     box-shadow: 0 0 0 3px var(--trazos-danger-ring);
 }
 
-.trazos-input-wrapper.disabled {
+.trazos-input-wrapper.trazos-input-is-disabled {
     background: var(--trazos-field-disabled);
     opacity: 0.65;
     cursor: not-allowed;

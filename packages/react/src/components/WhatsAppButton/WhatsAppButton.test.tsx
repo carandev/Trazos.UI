@@ -12,8 +12,8 @@ describe('WhatsAppButton', () => {
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
     expect(link).toHaveAttribute('title', 'Enviar mensaje por WhatsApp');
-    expect(link).toHaveClass('whatsapp-btn');
-    expect(link.querySelector('svg.whatsapp-icon')).not.toBeNull();
+    expect(link).toHaveClass('trazos-whatsapp-btn');
+    expect(link.querySelector('svg.trazos-whatsapp-icon')).not.toBeNull();
     expect(container.querySelector('span')).toBeNull();
   });
 
@@ -49,7 +49,7 @@ describe('WhatsAppButton', () => {
     );
     const link = screen.getByRole('link', { name: 'Send a WhatsApp message' });
     expect(ref.current).toBe(link);
-    expect(link).toHaveClass('whatsapp-btn', 'extra');
+    expect(link).toHaveClass('trazos-whatsapp-btn', 'extra');
     expect(link).toHaveAttribute('data-x', '1');
   });
 

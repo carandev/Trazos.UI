@@ -61,7 +61,7 @@
     overflow-y: auto;
 }
 
-.trazos-drawer.open {
+.trazos-drawer.trazos-drawer-is-open {
     transform: translateX(0);
 }
 

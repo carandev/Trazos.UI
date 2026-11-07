@@ -9,7 +9,7 @@ describe('EmptyState', () => {
     const { container } = render(<EmptyState title="No orders" />);
     const root = container.firstElementChild;
     expect(root).toHaveClass('trazos-empty-state');
-    expect(root).not.toHaveClass('is-compact');
+    expect(root).not.toHaveClass('trazos-empty-state-compact');
     expect(screen.getByRole('heading', { level: 3, name: 'No orders' })).toHaveClass('trazos-empty-state-title');
     expect(root?.querySelector('.trazos-icon-box')).toBeNull();
     expect(root?.querySelector('.trazos-empty-state-description')).toBeNull();
@@ -26,7 +26,7 @@ describe('EmptyState', () => {
 
   it('uses the given icon variant and a medium box when compact', () => {
     const { container } = render(<EmptyState title="Empty" icon={<svg />} iconVariant="wine" compact />);
-    expect(container.firstElementChild).toHaveClass('is-compact');
+    expect(container.firstElementChild).toHaveClass('trazos-empty-state-compact');
     expect(container.querySelector('.trazos-icon-box')).toHaveClass('trazos-icon-box-wine', 'trazos-icon-box-md');
   });
 

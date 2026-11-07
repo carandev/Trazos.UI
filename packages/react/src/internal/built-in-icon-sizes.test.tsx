@@ -30,7 +30,7 @@ describe('built-in icon sizes without Tailwind', () => {
         Body
       </Modal>,
     );
-    expectSize('.modal-close', '20px');
+    expectSize('.trazos-modal-close', '20px');
   });
 
   it('sizes the SelectInput arrow to 1rem', () => {
@@ -64,7 +64,7 @@ describe('built-in icon sizes without Tailwind', () => {
     act(() => {
       api?.showInfo('Saved');
     });
-    expectSize('.toast-icon', '20px');
-    expectSize('.toast-close', '16px');
+    expectSize('.trazos-toast-icon', '20px');
+    expectSize('.trazos-toast-close', '16px');
   });
 });

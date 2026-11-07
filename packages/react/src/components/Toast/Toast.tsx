@@ -122,26 +122,26 @@ export function ToastProvider({ children, closeButtonAriaLabel = 'Cerrar notific
   return (
     <ToastContext value={api}>
       {children}
-      <div className="toast-container">
+      <div className="trazos-toast-container">
         {toasts.map((toast) => (
           <div
             key={toast.id}
             role={toast.type === 'error' ? 'alert' : 'status'}
             aria-atomic="true"
-            className={cx('toast', `toast-${toast.type}`, toast.exiting && 'toast-exit')}
+            className={cx('trazos-toast', `trazos-toast-${toast.type}`, toast.exiting && 'trazos-toast-exit')}
           >
-            <div className="toast-icon">
+            <div className="trazos-toast-icon">
               <svg {...svgProps} className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d={iconPaths[toast.type]} />
               </svg>
             </div>
-            <div className="toast-content">
-              {toast.title != null && toast.title !== '' && <strong className="toast-title">{toast.title}</strong>}
-              <p className="toast-message">{toast.message}</p>
+            <div className="trazos-toast-content">
+              {toast.title != null && toast.title !== '' && <strong className="trazos-toast-title">{toast.title}</strong>}
+              <p className="trazos-toast-message">{toast.message}</p>
             </div>
             <button
               type="button"
-              className="toast-close"
+              className="trazos-toast-close"
               onClick={() => {
                 remove(toast.id);
               }}

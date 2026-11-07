@@ -99,7 +99,7 @@ export function RadioCardGroup<TValue>({
             <label
               key={inputId}
               htmlFor={inputId}
-              className={cx('trazos-radio-card', isChecked && 'is-checked', disabled && 'is-disabled')}
+              className={cx('trazos-radio-card', isChecked && 'trazos-radio-card-is-checked', disabled && 'trazos-radio-card-is-disabled')}
             >
               <input
                 type="radio"

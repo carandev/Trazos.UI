@@ -21,7 +21,7 @@ describe('FormSection', () => {
     expect(container.querySelector('.trazos-form-section-header .trazos-form-section-heading')).toContainElement(heading);
     const body = container.querySelector('.trazos-form-section-body');
     expect(body).toHaveTextContent('fields');
-    expect(body).not.toHaveClass('has-step');
+    expect(body).not.toHaveClass('trazos-form-section-has-step');
     expect(container.querySelector('.trazos-form-section-step')).toBeNull();
     expect(container.querySelector('.trazos-form-section-description')).toBeNull();
   });
@@ -42,7 +42,7 @@ describe('FormSection', () => {
     const badge = container.querySelector('.trazos-form-section-step');
     expect(badge).toHaveTextContent(String(step));
     expect(badge).toHaveAttribute('aria-hidden', 'true');
-    expect(container.querySelector('.trazos-form-section-body')).toHaveClass('has-step');
+    expect(container.querySelector('.trazos-form-section-body')).toHaveClass('trazos-form-section-has-step');
   });
 
   it('renders the description when non-empty', () => {

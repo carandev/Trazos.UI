@@ -19,12 +19,12 @@ describe('Modal', () => {
     );
     const dialog = screen.getByRole('dialog', { name: 'Edit' });
     expect(dialog).toHaveAttribute('aria-modal', 'true');
-    expect(dialog).toHaveClass('modal-container', 'modal-medium');
-    expect(dialog.parentElement).toHaveClass('modal-backdrop');
-    expect(container.querySelector('.modal-header .modal-title')).toHaveTextContent('Edit');
-    expect(container.querySelector('.modal-body')).toHaveTextContent('Body text');
-    expect(container.querySelector('.modal-footer')).toContainElement(screen.getByRole('button', { name: 'Ok' }));
-    expect(screen.getByRole('button', { name: 'Cerrar' })).toHaveClass('modal-close');
+    expect(dialog).toHaveClass('trazos-modal-container', 'trazos-modal-medium');
+    expect(dialog.parentElement).toHaveClass('trazos-modal-backdrop');
+    expect(container.querySelector('.trazos-modal-header .trazos-modal-title')).toHaveTextContent('Edit');
+    expect(container.querySelector('.trazos-modal-body')).toHaveTextContent('Body text');
+    expect(container.querySelector('.trazos-modal-footer')).toContainElement(screen.getByRole('button', { name: 'Ok' }));
+    expect(screen.getByRole('button', { name: 'Cerrar' })).toHaveClass('trazos-modal-close');
   });
 
   it('omits the footer and the close button when not requested', () => {
@@ -33,14 +33,14 @@ describe('Modal', () => {
         Body
       </Modal>,
     );
-    expect(container.querySelector('.modal-footer')).toBeNull();
-    expect(container.querySelector('.modal-close')).toBeNull();
+    expect(container.querySelector('.trazos-modal-footer')).toBeNull();
+    expect(container.querySelector('.trazos-modal-close')).toBeNull();
   });
 
   it.each([
-    ['small', 'modal-small'],
-    ['medium', 'modal-medium'],
-    ['large', 'modal-large'],
+    ['small', 'trazos-modal-small'],
+    ['medium', 'trazos-modal-medium'],
+    ['large', 'trazos-modal-large'],
   ] as const)('maps size %s to %s', (size, className) => {
     render(
       <Modal open title="T" size={size}>
@@ -75,7 +75,7 @@ describe('Modal', () => {
     );
     await userEvent.click(screen.getByText('Body'));
     expect(onClose).not.toHaveBeenCalled();
-    const backdrop = container.querySelector('.modal-backdrop');
+    const backdrop = container.querySelector('.trazos-modal-backdrop');
     if (!(backdrop instanceof HTMLElement)) throw new Error('backdrop missing');
     await userEvent.click(backdrop);
     expect(onClose).toHaveBeenCalledTimes(1);
@@ -88,7 +88,7 @@ describe('Modal', () => {
         Body
       </Modal>,
     );
-    const backdrop = container.querySelector('.modal-backdrop');
+    const backdrop = container.querySelector('.trazos-modal-backdrop');
     if (!(backdrop instanceof HTMLElement)) throw new Error('backdrop missing');
     await userEvent.click(backdrop);
     expect(onClose).not.toHaveBeenCalled();

@@ -55,7 +55,7 @@
     background-color: var(--trazos-surface-muted);
 }
 
-.trazos-table-row.interactive {
+.trazos-table-row.trazos-table-row-interactive {
     cursor: pointer;
 }
 

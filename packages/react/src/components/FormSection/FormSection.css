@@ -57,7 +57,7 @@
 }
 
 @media (min-width: 640px) {
-    .trazos-form-section-body.has-step {
+    .trazos-form-section-body.trazos-form-section-has-step {
         padding-left: 2.5rem;
     }
 }

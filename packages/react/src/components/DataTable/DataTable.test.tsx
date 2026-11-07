@@ -43,7 +43,7 @@ describe('DataTable', () => {
     const rows = container.querySelectorAll('tbody tr');
     expect(rows).toHaveLength(2);
     expect(rows[0]).toHaveClass('trazos-table-row');
-    expect(rows[0]).not.toHaveClass('interactive');
+    expect(rows[0]).not.toHaveClass('trazos-table-row-interactive');
     expect(rows[0]).not.toHaveAttribute('tabindex');
     expect(within(rows[1] as HTMLElement).getByText('Luis')).toBeInTheDocument();
   });
@@ -93,7 +93,7 @@ describe('DataTable', () => {
     const user = userEvent.setup();
     const { container } = render(<DataTable items={people} rowTemplate={row} onRowClick={onRowClick} />);
     const rows = container.querySelectorAll<HTMLElement>('tbody tr');
-    expect(rows[0]).toHaveClass('trazos-table-row', 'interactive');
+    expect(rows[0]).toHaveClass('trazos-table-row', 'trazos-table-row-interactive');
     expect(rows[0]).toHaveAttribute('tabindex', '0');
     await user.click(screen.getByText('Luis'));
     expect(onRowClick).toHaveBeenLastCalledWith(people[1]);

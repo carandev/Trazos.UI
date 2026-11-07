@@ -95,7 +95,7 @@ export function Drawer({
         tabIndex={-1}
         {...rest}
         ref={asideRef}
-        className={cx('trazos-drawer', isOpen && 'open', className)}
+        className={cx('trazos-drawer', isOpen && 'trazos-drawer-is-open', className)}
         aria-hidden={!isOpen}
         inert={!isOpen}
       >

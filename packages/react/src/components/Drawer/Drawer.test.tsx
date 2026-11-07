@@ -16,7 +16,7 @@ describe('Drawer', () => {
     const { container } = render(<Drawer title="Menu">Links</Drawer>);
     const aside = getDrawer(container);
     expect(aside.parentElement).toHaveClass('trazos-touch-area');
-    expect(aside).not.toHaveClass('open');
+    expect(aside).not.toHaveClass('trazos-drawer-is-open');
     expect(aside).toHaveAttribute('aria-hidden', 'true');
     expect(aside).toHaveAttribute('inert');
     expect(container.querySelector('.trazos-drawer-overlay')).toBeNull();
@@ -31,7 +31,7 @@ describe('Drawer', () => {
       </Drawer>,
     );
     const drawer = screen.getByRole('complementary', { name: 'Menu' });
-    expect(drawer).toHaveClass('trazos-drawer', 'open');
+    expect(drawer).toHaveClass('trazos-drawer', 'trazos-drawer-is-open');
     expect(drawer).toHaveAttribute('aria-hidden', 'false');
     expect(drawer).not.toHaveAttribute('inert');
     expect(container.querySelector('.trazos-drawer-overlay')).toBeInTheDocument();
@@ -93,9 +93,9 @@ describe('Drawer', () => {
         Links
       </Drawer>,
     );
-    expect(getDrawer(container)).toHaveClass('open');
+    expect(getDrawer(container)).toHaveClass('trazos-drawer-is-open');
     await userEvent.click(screen.getByRole('button', { name: 'Cerrar menú' }));
-    expect(getDrawer(container)).not.toHaveClass('open');
+    expect(getDrawer(container)).not.toHaveClass('trazos-drawer-is-open');
   });
 
   it('opens on a right swipe of more than 100px from the touch area', () => {
@@ -113,7 +113,7 @@ describe('Drawer', () => {
     fireEvent.touchMove(area, { touches: [{ clientX: 120 }] });
     expect(onOpenChange).toHaveBeenCalledWith(true);
     expect(onOpenChange).toHaveBeenCalledTimes(1);
-    expect(getDrawer(container)).toHaveClass('open');
+    expect(getDrawer(container)).toHaveClass('trazos-drawer-is-open');
     fireEvent.touchEnd(area);
   });
 
