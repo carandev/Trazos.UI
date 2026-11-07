@@ -7,6 +7,8 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    /* Native buttons do not inherit the page font unless they are told to. */
+    font-family: inherit;
     font-weight: 700;
     cursor: pointer;
     text-decoration: none;
@@ -14,6 +16,12 @@
     border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
     transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
     user-select: none;
+}
+
+.trazos-btn-leading-icon,
+.trazos-btn-trailing-icon {
+    display: inline-flex;
+    align-items: center;
 }
 
 /* Sizes */
