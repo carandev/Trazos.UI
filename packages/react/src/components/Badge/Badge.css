@@ -2,7 +2,7 @@
    BADGE - Trazos UI (ported from Components/Badge/Badge.razor.css)
    ======================================== */
 
-.trazos-badge {
+.trazos-badge-box {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
@@ -14,6 +14,11 @@
     border: 1px solid transparent;
     border-radius: 12px 14px 10px 12px / 12px 10px 14px 12px;
     box-shadow: 1px 1px 0px rgb(var(--trazos-shadow-rgb) / calc(0.04 * var(--trazos-shadow-strength)));
+}
+
+.trazos-badge-keep-case {
+    text-transform: none;
+    letter-spacing: 0.02em;
 }
 
 .trazos-badge-icon {

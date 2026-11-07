@@ -24,7 +24,22 @@ function definedClasses(css: string): Set<string> {
   return classes;
 }
 
+const utilities = import.meta.glob<string>('../../../tokens/utilities.css', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+
 describe('component stylesheets', () => {
+  it('do not redefine the shared utility classes', () => {
+    const utilityClasses = new Set(Object.values(utilities).flatMap((css) => [...definedClasses(css)]));
+    expect(utilityClasses.size).toBeGreaterThan(0);
+    const collisions = Object.values(sheets)
+      .flatMap((css) => [...definedClasses(css)])
+      .filter((cls) => utilityClasses.has(cls));
+    expect(collisions).toEqual([]);
+  });
+
   it('are found', () => {
     expect(Object.keys(sheets).length).toBeGreaterThan(0);
     for (const css of Object.values(sheets)) expect(css.length).toBeGreaterThan(0);

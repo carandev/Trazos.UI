@@ -8,6 +8,10 @@ public partial class Badge
     [Parameter]
     public BadgeVariant Variant { get; set; } = BadgeVariant.Neutral;
 
+    /// <summary>Set to false to keep the original case, for values such as C# or lazytsql.</summary>
+    [Parameter]
+    public bool Uppercase { get; set; } = true;
+
     [Parameter]
     public string? Class { get; set; }
 
@@ -19,6 +23,8 @@ public partial class Badge
 
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string? CaseClass => Uppercase ? null : "trazos-badge-keep-case";
 
     private string VariantClass => Variant switch
     {
