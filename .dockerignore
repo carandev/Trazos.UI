@@ -1,0 +1,10 @@
+# Only what docs/Trazos.UI.Docs/Dockerfile needs.
+*
+!Directory.Build.props
+!packages/tokens/tokens.css
+!packages/tokens/utilities.css
+!src/Trazos.UI/
+!docs/Trazos.UI.Docs/
+**/bin/
+**/obj/
+src/Trazos.UI/wwwroot/trazos.css
