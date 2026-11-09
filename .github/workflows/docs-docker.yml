@@ -1,0 +1,97 @@
+name: Docs (Docker)
+# Builds the docs site image on a GitHub-hosted runner, pushes it to GHCR,
+# then restarts the container on the self-hosted runner.
+# Deploy runs only on pushes to main or a manual run, never on pull requests:
+# the repository is public and the self-hosted runner is a real machine.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'src/**'
+      - 'packages/tokens/*.css'
+      - 'Directory.Build.props'
+      - '.dockerignore'
+      - '.github/workflows/docs-docker.yml'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: docs-docker
+  cancel-in-progress: false
+
+env:
+  IMAGE: ghcr.io/carandev/trazos-ui-docs
+  CONTAINER: trazos-ui-docs
+  HOST_PORT: '18473'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Build image
+        run: |
+          docker build \
+            -f docs/Trazos.UI.Docs/Dockerfile \
+            -t "$IMAGE:${{ github.sha }}" \
+            -t "$IMAGE:latest" \
+            .
+
+      - name: Push image
+        run: |
+          docker push "$IMAGE:${{ github.sha }}"
+          docker push "$IMAGE:latest"
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: [self-hosted, Linux, X64]
+    environment: docs
+    permissions:
+      packages: read
+    steps:
+      - name: Pull image
+        run: |
+          # Keep GHCR credentials out of the runner user's ~/.docker.
+          export DOCKER_CONFIG="$RUNNER_TEMP/docker-config"
+          mkdir -p "$DOCKER_CONFIG"
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          docker pull "$IMAGE:${{ github.sha }}"
+          docker logout ghcr.io
+          rm -rf "$DOCKER_CONFIG"
+
+      - name: Restart container
+        run: |
+          docker rm -f "$CONTAINER" 2>/dev/null || true
+          docker run -d \
+            --name "$CONTAINER" \
+            --restart unless-stopped \
+            -p "$HOST_PORT:80" \
+            "$IMAGE:${{ github.sha }}"
+
+      - name: Health check
+        run: |
+          for i in $(seq 1 10); do
+            if curl -fsS -o /dev/null "http://localhost:$HOST_PORT/"; then
+              echo "Docs are up on port $HOST_PORT"
+              exit 0
+            fi
+            sleep 2
+          done
+          docker logs "$CONTAINER"
+          exit 1
+
+      - name: Remove old images
+        run: docker image prune -af --filter "label=org.opencontainers.image.source=https://github.com/carandev/Trazos.UI"

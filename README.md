@@ -52,6 +52,14 @@ dotnet run --project docs/Trazos.UI.Docs                 # Blazor docs site
 | `publish-trazos-nuget.yml` | push to `main` (Razor or token changes), `v*` tags, manual | `Trazos.UI` to NuGet (`NUGET_API_KEY` secret) |
 | `js-packages.yml` | pull requests: lint, type-check, test, build, Razor build | — |
 | `js-packages.yml` | push to `main`, `v*` tags, manual | `@carandev/trazos-ui` to npm |
+| `docs-docker.yml` | push to `main` (docs, Razor or token changes), manual | `ghcr.io/carandev/trazos-ui-docs` image, then runs it on the self-hosted runner at port `18473` |
+
+The docs image can be built and run locally from the repository root:
+
+```bash
+docker build -f docs/Trazos.UI.Docs/Dockerfile -t trazos-ui-docs .
+docker run --rm -p 18473:80 trazos-ui-docs   # http://localhost:18473
+```
 
 npm publishing uses [Trusted Publishing](https://docs.npmjs.com/trusted-publishers) (OIDC, no stored token, automatic provenance). A version already on npm is skipped, so bump `version` in `packages/react/package.json` to release. Setup, once, on npmjs.com: *Settings → Trusted publisher → GitHub Actions*, organization `carandev`, repository `Trazos.UI`, workflow `js-packages.yml`. If the package does not exist on npm yet, publish its first version manually (`npm run build && npm publish -w @carandev/trazos-ui`), then add the trusted publisher.
 
