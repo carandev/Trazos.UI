@@ -87,6 +87,21 @@ public partial class NumberInput<TValue> : FormFieldBase<TValue>
 
     protected override CultureInfo FormatCulture => Culture ?? CultureInfo.CurrentCulture;
 
+    // Text shown instead of the formatted value for one render. See OnChanged.
+    private string? _displayOverride;
+
+    private string? DisplayText => _displayOverride ?? CurrentValueAsString;
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (Mode == NumberInputMode.Percent && IsIntegerType)
+        {
+            throw new InvalidOperationException(
+                $"NumberInput Percent mode needs a fractional type (decimal, double or float), not {typeof(TValue)}: 15 % is stored as 0.15.");
+        }
+    }
+
     private bool IsInteger => IsIntegerType;
 
     private decimal Scale => Mode == NumberInputMode.Percent ? 100m : 1m;
@@ -204,7 +219,32 @@ public partial class NumberInput<TValue> : FormFieldBase<TValue>
         }
     }
 
-    private Task OnChanged(ChangeEventArgs e) => SetValueFromStringAsync(e.Value?.ToString());
+    private async Task OnChanged(ChangeEventArgs e)
+    {
+        var typed = e.Value?.ToString();
+        await SetValueFromStringAsync(typed);
+
+        if (HasError)
+        {
+            // Keep the text the user typed visible next to the conversion error.
+            _displayOverride = typed;
+            return;
+        }
+
+        var formatted = CurrentValueAsString;
+        if (!string.Equals(typed, formatted, StringComparison.Ordinal))
+        {
+            // Blazor only writes the value attribute when it differs from the last
+            // render. When clamping or formatting lands on the value already shown
+            // (typing 70 with Max 48 while 48 is shown), render the typed text once
+            // and then the formatted value, so the field is rewritten.
+            _displayOverride = typed;
+            StateHasChanged();
+            await Task.Yield();
+        }
+
+        _displayOverride = null;
+    }
 
     private async Task OnKeyDown(KeyboardEventArgs e)
     {

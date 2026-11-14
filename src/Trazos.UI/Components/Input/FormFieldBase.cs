@@ -200,9 +200,16 @@ public abstract class FormFieldBase<TValue> : ComponentBase, IDisposable
     protected virtual string? FormatValueAsString(TValue value) =>
         BindConverter.FormatValue(value, FormatCulture)?.ToString();
 
-    /// <summary>Converts text from an HTML control. Empty text becomes <c>default</c> for nullable types.</summary>
+    /// <summary>Converts text from an HTML control. Strings pass through; empty text becomes <c>default</c> for other nullable types.</summary>
     protected virtual bool TryParseValueFromString(string? text, out TValue value)
     {
+        // Text binds as typed, so an empty option stays "" as it always did.
+        if (typeof(TValue) == typeof(string))
+        {
+            value = (TValue)(object)text!;
+            return true;
+        }
+
         if (string.IsNullOrWhiteSpace(text) && default(TValue) is null)
         {
             value = default!;

@@ -160,6 +160,7 @@
         new("Items", "IEnumerable<TItem>?", null, L.T("Preloaded list filtered in memory by ItemText. With MinChars at 0 it opens on focus.", "Lista precargada que se filtra en memoria por ItemText. Con MinChars en 0 se abre al enfocar.")),
         new("MaxResults", "int", "50", L.T("Most results shown from Items.", "Máximo de resultados mostrados de Items.")),
         new("AutocompleteSelect", "TItem, TValue", null, L.T("Same parameters plus ValueSelector (item → id) and Value/@bind-Value of the id, with EditForm validation.", "Mismos parámetros más ValueSelector (elemento → id) y Value/@bind-Value del id, con validación de EditForm.")),
+        new("ResolveItem", "Func<TValue, CancellationToken, Task<TItem?>>?", null, L.T("AutocompleteSelect: loads the item of an existing value that is not in Items, for remote search.", "AutocompleteSelect: carga el elemento de un valor existente que no está en Items, para búsqueda remota.")),
         new("ItemText", "Func<TItem, string>", "required", L.T("Text for an item in the list and in the chip.", "Texto de un elemento en la lista y en el chip.")),
         new("ItemTemplate", "RenderFragment<TItem>?", null, L.T("Custom markup for each result.", "Marcado personalizado para cada resultado.")),
         new("SelectedItem", "TItem?", null, L.T("Selected item. Supports @bind-SelectedItem.", "Elemento seleccionado. Admite @bind-SelectedItem.")),

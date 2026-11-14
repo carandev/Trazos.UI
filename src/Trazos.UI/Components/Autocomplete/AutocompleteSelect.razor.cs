@@ -31,6 +31,13 @@ public partial class AutocompleteSelect<TItem, TValue> : FormFieldBase<TValue>
     [Parameter]
     public Func<string, CancellationToken, Task<IEnumerable<TItem>>>? SearchFunc { get; set; }
 
+    /// <summary>
+    /// Loads the item of a value that is not in <see cref="Items"/>, such as an
+    /// existing id when the list comes from <see cref="SearchFunc"/>.
+    /// </summary>
+    [Parameter]
+    public Func<TValue, CancellationToken, Task<TItem?>>? ResolveItem { get; set; }
+
     /// <summary>The value bound for an item, normally its id.</summary>
     [Parameter, EditorRequired]
     public Func<TItem, TValue> ValueSelector { get; set; } = null!;
@@ -74,6 +81,22 @@ public partial class AutocompleteSelect<TItem, TValue> : FormFieldBase<TValue>
             return Items is null
                 ? default
                 : Items.FirstOrDefault(item => EqualityComparer<TValue>.Default.Equals(ValueSelector(item), Value));
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (ResolveItem is null || Value is null || EqualityComparer<TValue>.Default.Equals(Value, default!)
+            || SelectedItem is not null)
+        {
+            return;
+        }
+
+        var item = await ResolveItem(Value, CancellationToken.None);
+        if (item is not null && EqualityComparer<TValue>.Default.Equals(ValueSelector(item), Value))
+        {
+            _selected = item;
+            _hasSelected = true;
         }
     }
 

@@ -67,7 +67,7 @@
         new("Value", "TValue", null, L.T("Current value. Supports @bind-Value.", "Valor actual. Admite @bind-Value.")),
         new("ValueChanged", "EventCallback<TValue>", null, L.T("Raised when the field loses focus with a new value, or on an arrow key.", "Se dispara cuando el campo pierde el foco con un valor nuevo, o con una flecha.")),
         new("ValueExpression", "Expression<Func<TValue>>?", null, L.T("Set by @bind-Value. Links the field to the EditContext of an EditForm.", "Lo asigna @bind-Value. Vincula el campo al EditContext de un EditForm.")),
-        new("Mode", "NumberInputMode", "Number", L.T("Number, Currency or Percent. Percent binds the fraction (0.15 = 15 %).", "Number, Currency o Percent. Percent enlaza la fracción (0.15 = 15 %).")),
+        new("Mode", "NumberInputMode", "Number", L.T("Number, Currency or Percent. Percent binds the fraction (0.15 = 15 %), so it needs decimal, double or float.", "Number, Currency o Percent. Percent enlaza la fracción (0.15 = 15 %), así que necesita decimal, double o float.")),
         new("Min", "decimal?", null, L.T("Smallest value, in bound units. Typed and stepped values are clamped.", "Valor mínimo, en unidades del valor enlazado. Lo escrito y los pasos se limitan.")),
         new("Max", "decimal?", null, L.T("Largest value, in bound units. Typed and stepped values are clamped.", "Valor máximo, en unidades del valor enlazado. Lo escrito y los pasos se limitan.")),
         new("Step", "decimal", "1", L.T("Added or removed by ArrowUp and ArrowDown. Percentage points in percent mode.", "Se suma o resta con ArrowUp y ArrowDown. Puntos porcentuales en modo porcentaje.")),

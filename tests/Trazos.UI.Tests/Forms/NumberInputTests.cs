@@ -39,20 +39,20 @@ public class NumberInputTests : BunitContext
     }
 
     [Fact]
-    public void Typed_text_is_parsed_with_the_culture()
+    public async Task Typed_text_is_parsed_with_the_culture()
     {
         decimal value = 0;
         var cut = Render<NumberInput<decimal>>(p => p
             .Add(x => x.Culture, Colombia)
             .Add(x => x.ValueChanged, (decimal v) => value = v));
 
-        cut.Find("input").Change("$ 2.500,75");
+        await cut.Find("input").ChangeAsync(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = "$ 2.500,75" });
 
         Assert.Equal(2500.75m, value);
     }
 
     [Fact]
-    public void Integers_round_and_nullable_values_clear()
+    public async Task Integers_round_and_nullable_values_clear()
     {
         int? value = 1;
         var cut = Render<NumberInput<int?>>(p => p
@@ -60,15 +60,15 @@ public class NumberInputTests : BunitContext
             .Add(x => x.Culture, English)
             .Add(x => x.ValueChanged, (int? v) => value = v));
 
-        cut.Find("input").Change("12.6");
+        await cut.Find("input").ChangeAsync(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = "12.6" });
         Assert.Equal(13, value);
 
-        cut.Find("input").Change("");
+        await cut.Find("input").ChangeAsync(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = "" });
         Assert.Null(value);
     }
 
     [Fact]
-    public void Percent_mode_shows_the_fraction_as_a_percentage()
+    public async Task Percent_mode_shows_the_fraction_as_a_percentage()
     {
         decimal value = 0.15m;
         var cut = Render<NumberInput<decimal>>(p => p
@@ -80,13 +80,13 @@ public class NumberInputTests : BunitContext
         Assert.Equal("15", cut.Find("input").GetAttribute("value"));
         Assert.Equal("%", cut.Find(".trazos-input-affix.trailing").TextContent);
 
-        cut.Find("input").Change("20.5");
+        await cut.Find("input").ChangeAsync(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = "20.5" });
 
         Assert.Equal(0.205m, value);
     }
 
     [Fact]
-    public void Values_are_clamped_to_min_and_max()
+    public async Task Values_are_clamped_to_min_and_max()
     {
         var value = 0;
         var cut = Render<NumberInput<int>>(p => p
@@ -95,10 +95,10 @@ public class NumberInputTests : BunitContext
             .Add(x => x.Culture, English)
             .Add(x => x.ValueChanged, (int v) => value = v));
 
-        cut.Find("input").Change("150");
+        await cut.Find("input").ChangeAsync(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = "150" });
         Assert.Equal(100, value);
 
-        cut.Find("input").Change("-4");
+        await cut.Find("input").ChangeAsync(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = "-4" });
         Assert.Equal(0, value);
     }
 
@@ -130,7 +130,7 @@ public class NumberInputTests : BunitContext
     }
 
     [Fact]
-    public void Inside_an_edit_form_it_shows_validation_and_parse_errors()
+    public async Task Inside_an_edit_form_it_shows_validation_and_parse_errors()
     {
         var model = new PayrollModel();
         var cut = Render<PayrollForm>(p => p.Add(x => x.Model, model));
@@ -138,10 +138,10 @@ public class NumberInputTests : BunitContext
         cut.Find("form").Submit();
         Assert.Equal("Enter the base salary.", cut.Find("#salary-error").TextContent);
 
-        cut.Find("#salary").Change("abc");
+        await cut.Find("#salary").ChangeAsync(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = "abc" });
         Assert.Equal("Enter a valid number.", cut.Find("#salary-error").TextContent);
 
-        cut.Find("#salary").Change("3500000");
+        await cut.Find("#salary").ChangeAsync(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = "3500000" });
         Assert.Equal(3_500_000m, model.Salary);
         Assert.Empty(cut.FindAll("#salary-error"));
     }
