@@ -66,3 +66,27 @@ test('the dark theme redefines every color role except theme-independent ones', 
   const missing = [...light].filter((token) => !themeIndependent.has(token) && !dark.has(token));
   assert.deepEqual(missing, []);
 });
+
+function tokenValue(source, token) {
+  const match = source.match(new RegExp(`${token}\\s*:\\s*([^;]+);`));
+  assert.ok(match, `${token} is not declared`);
+  return match[1].trim();
+}
+
+test('dark background tints are opaque, like the light ones', () => {
+  // These tokens fill the background of whole components (toasts, cards,
+  // badges, icon boxes). A translucent value lets whatever sits behind the
+  // component show through, which only happens in dark mode.
+  const backgroundTints = [...light].filter((token) =>
+    /^--trazos-(olive|wine|gold|lavender|sky)-(soft|tint|tint-alt|tint-hover)$/.test(token)
+    || token === '--trazos-cream-soft'
+    || /^--trazos-lavender-card-(start|end)$/.test(token));
+  assert.ok(backgroundTints.length === 16, 'expected the tint families to be found');
+
+  const darkBlock = block('[data-theme="dark"]');
+  const translucent = backgroundTints.filter((token) => {
+    const value = tokenValue(darkBlock, token);
+    return /rgba\(|hsla\(|transparent|\/\s*0?\.\d/.test(value);
+  });
+  assert.deepEqual(translucent, []);
+});
