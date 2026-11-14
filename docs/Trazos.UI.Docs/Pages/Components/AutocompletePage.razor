@@ -42,10 +42,44 @@
         </div>
     </DemoBlock>
 
+    <DemoBlock Title="@L.T("As a searchable select (AutocompleteSelect)", "Como select con búsqueda (AutocompleteSelect)")"
+               Description="@L.T("AutocompleteSelect filters a preloaded list in memory and binds the id from ValueSelector. With MinChars at 0 the list opens on focus. It takes part in EditForm validation.", "AutocompleteSelect filtra una lista precargada en memoria y enlaza el id que devuelve ValueSelector. Con MinChars en 0 la lista se abre al enfocar. Participa en la validación de EditForm.")"
+               Code="@SelectCode">
+        <div class="docs-stack">
+            <AutocompleteSelect Label="@L.T("Company", "Empresa")" Placeholder="@L.T("Type to filter", "Escribe para filtrar")"
+                                Items="_companies" ItemText="c => c.Name" ValueSelector="c => (Guid?)c.Id"
+                                NoResultsText="@L.T("No results", "Sin resultados")" ClearText="@L.T("Clear selection", "Quitar selección")"
+                                @bind-Value="_companyId" />
+            <p class="docs-demo-output">@L.T("Company id:", "Id de empresa:") <strong>@(_companyId?.ToString() ?? "null")</strong></p>
+        </div>
+    </DemoBlock>
+
     <ApiTable Params="Params" />
 </DocPage>
 
 @code {
+    private sealed record Company(Guid Id, string Name);
+
+    private readonly IReadOnlyList<Company> _companies =
+    [
+        new(Guid.Parse("0b5b3c1e-1f00-4a8e-9a10-000000000001"), "Acme S.A.S."),
+        new(Guid.Parse("0b5b3c1e-1f00-4a8e-9a10-000000000002"), "Globex Ltda."),
+        new(Guid.Parse("0b5b3c1e-1f00-4a8e-9a10-000000000003"), "Initech Colombia"),
+        new(Guid.Parse("0b5b3c1e-1f00-4a8e-9a10-000000000004"), "Umbrella Andina"),
+    ];
+
+    private Guid? _companyId;
+
+    private const string SelectCode = """
+        <AutocompleteSelect Label="Company" Items="_companies"
+                            ItemText="c => c.Name" ValueSelector="c => (Guid?)c.Id"
+                            @bind-Value="_model.CompanyId" />
+
+        @code {
+            // Loaded once, for example from GET /companies.
+            private IReadOnlyList<Company> _companies = [];
+        }
+        """;
     private sealed record Member(string Name, string Group);
 
     // Initialized in OnInitialized so the group names can use L; the layout rebuilds the page when the language changes.
@@ -122,7 +156,10 @@
 
     private IReadOnlyList<ApiParam> Params =>
     [
-        new("SearchFunc", "Func<string, CancellationToken, Task<IEnumerable<TItem>>>", "required", L.T("Runs the search. The token is cancelled when a newer query starts.", "Ejecuta la búsqueda. El token se cancela cuando empieza una consulta más reciente.")),
+        new("SearchFunc", "Func<string, CancellationToken, Task<IEnumerable<TItem>>>?", null, L.T("Runs the search. The token is cancelled when a newer query starts. Optional when Items is set.", "Ejecuta la búsqueda. El token se cancela cuando empieza una consulta más reciente. Opcional si se pasa Items.")),
+        new("Items", "IEnumerable<TItem>?", null, L.T("Preloaded list filtered in memory by ItemText. With MinChars at 0 it opens on focus.", "Lista precargada que se filtra en memoria por ItemText. Con MinChars en 0 se abre al enfocar.")),
+        new("MaxResults", "int", "50", L.T("Most results shown from Items.", "Máximo de resultados mostrados de Items.")),
+        new("AutocompleteSelect", "TItem, TValue", null, L.T("Same parameters plus ValueSelector (item → id) and Value/@bind-Value of the id, with EditForm validation.", "Mismos parámetros más ValueSelector (elemento → id) y Value/@bind-Value del id, con validación de EditForm.")),
         new("ItemText", "Func<TItem, string>", "required", L.T("Text for an item in the list and in the chip.", "Texto de un elemento en la lista y en el chip.")),
         new("ItemTemplate", "RenderFragment<TItem>?", null, L.T("Custom markup for each result.", "Marcado personalizado para cada resultado.")),
         new("SelectedItem", "TItem?", null, L.T("Selected item. Supports @bind-SelectedItem.", "Elemento seleccionado. Admite @bind-SelectedItem.")),

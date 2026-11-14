@@ -1,0 +1,149 @@
+/* ========================================
+   REPEATER - Trazos UI
+   Rows of fields with a remove button and an add button below.
+   Lay the cells out with --trazos-repeater-columns, for example
+   style="--trazos-repeater-columns: 1fr 1fr 8rem".
+   ======================================== */
+
+.trazos-repeater {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    width: 100%;
+}
+
+.trazos-repeater-header,
+.trazos-repeater-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.trazos-repeater-header {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--trazos-text-light);
+}
+
+.trazos-repeater-cells {
+    flex: 1;
+    display: grid;
+    grid-template-columns: var(--trazos-repeater-columns, repeat(auto-fit, minmax(10rem, 1fr)));
+    align-items: start;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+.trazos-repeater-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.trazos-repeater-row {
+    padding: 0.75rem;
+    background: var(--trazos-surface);
+    border: 1.5px solid var(--trazos-border-soft);
+    border-radius: var(--trazos-radius-sketch-sm);
+}
+
+.trazos-repeater-spacer {
+    flex-shrink: 0;
+    width: 2.25rem;
+}
+
+.trazos-repeater-header .trazos-repeater-cells {
+    padding-inline: 0.75rem;
+}
+
+.trazos-repeater-remove {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin-top: 0.125rem;
+    padding: 0;
+    color: var(--trazos-text-muted);
+    background: var(--trazos-surface-raised);
+    border: 1.5px solid var(--trazos-border-control);
+    border-radius: 10px 12px 9px 11px / 11px 9px 12px 10px;
+    cursor: pointer;
+    transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.trazos-repeater-remove:hover:not(:disabled) {
+    color: var(--trazos-wine-text);
+    background: var(--trazos-wine-soft);
+    border-color: var(--trazos-wine-border);
+}
+
+.trazos-repeater-remove:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.trazos-repeater-remove svg,
+.trazos-repeater-add svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.trazos-repeater-add {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    align-self: flex-start;
+    padding: 0.55rem 1rem;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--trazos-olive-text);
+    background: transparent;
+    border: 1.5px dashed var(--trazos-olive-border);
+    border-radius: var(--trazos-radius-sketch-btn);
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.trazos-repeater-add:hover:not(:disabled) {
+    background: var(--trazos-olive-soft);
+    border-color: var(--trazos-olive);
+}
+
+.trazos-repeater-add:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.trazos-repeater-remove:focus-visible,
+.trazos-repeater-add:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--trazos-focus-ring);
+}
+
+.trazos-repeater-empty {
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--trazos-text-muted);
+    border: 1.5px dashed var(--trazos-border-soft);
+    border-radius: var(--trazos-radius-sketch-sm);
+}
+
+@media (max-width: 640px) {
+    .trazos-repeater-header {
+        display: none;
+    }
+
+    .trazos-repeater-cells {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

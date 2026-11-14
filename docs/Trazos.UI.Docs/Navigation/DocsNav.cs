@@ -70,6 +70,7 @@ public static class DocsNav
             new("Autocomplete", "components/autocomplete"),
             new("RadioCardGroup", "components/radio-card-group"),
             new("FormSection", "components/form-section"),
+            new("Repeater", "components/repeater"),
             new("Form layout", "components/form-layout", "Diseño de formularios"),
         ]),
         new("Page structure", "Estructura de página",

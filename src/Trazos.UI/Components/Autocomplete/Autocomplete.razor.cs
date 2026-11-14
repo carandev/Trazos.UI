@@ -43,9 +43,24 @@ public partial class Autocomplete<TItem> : IDisposable
     [Parameter]
     public bool Disabled { get; set; }
 
-    /// <summary>Función de búsqueda. Recibe el texto escrito y un token de cancelación.</summary>
-    [Parameter, EditorRequired]
-    public Func<string, CancellationToken, Task<IEnumerable<TItem>>> SearchFunc { get; set; } = null!;
+    /// <summary>
+    /// Función de búsqueda. Recibe el texto escrito y un token de cancelación.
+    /// Opcional cuando se pasa <see cref="Items"/>.
+    /// </summary>
+    [Parameter]
+    public Func<string, CancellationToken, Task<IEnumerable<TItem>>>? SearchFunc { get; set; }
+
+    /// <summary>
+    /// Preloaded list filtered in memory by <see cref="ItemText"/> (case-insensitive
+    /// "contains"). Used when <see cref="SearchFunc"/> is not set. With
+    /// <see cref="MinChars"/> at 0, focusing the field lists the items.
+    /// </summary>
+    [Parameter]
+    public IEnumerable<TItem>? Items { get; set; }
+
+    /// <summary>Most results shown from a preloaded list.</summary>
+    [Parameter]
+    public int MaxResults { get; set; } = 50;
 
     /// <summary>Texto que representa a un elemento (se usa si no hay <see cref="ItemTemplate"/>).</summary>
     [Parameter, EditorRequired]
@@ -99,10 +114,15 @@ public partial class Autocomplete<TItem> : IDisposable
 
     private string GetOptionId(int index) => $"{Id}-option-{index}";
 
-    private async Task OnInputAsync(ChangeEventArgs e)
+    private Task OnInputAsync(ChangeEventArgs e)
     {
         _query = e.Value?.ToString() ?? string.Empty;
         _hasFocus = true;
+        return SearchAsync(DebounceMs);
+    }
+
+    private async Task SearchAsync(int delay)
+    {
         _activeIndex = -1;
 
         _searchCts?.Cancel();
@@ -124,8 +144,12 @@ public partial class Autocomplete<TItem> : IDisposable
 
         try
         {
-            await Task.Delay(DebounceMs, cts.Token);
-            var results = await SearchFunc(term, cts.Token);
+            if (delay > 0)
+            {
+                await Task.Delay(delay, cts.Token);
+            }
+
+            var results = await RunSearchAsync(term, cts.Token);
 
             if (cts.IsCancellationRequested)
             {
@@ -152,6 +176,24 @@ public partial class Autocomplete<TItem> : IDisposable
                 _isSearching = false;
             }
         }
+    }
+
+    private Task<IEnumerable<TItem>> RunSearchAsync(string term, CancellationToken token)
+    {
+        if (SearchFunc is not null)
+        {
+            return SearchFunc(term, token);
+        }
+
+        if (Items is null)
+        {
+            throw new InvalidOperationException("Autocomplete needs SearchFunc or Items.");
+        }
+
+        var matches = term.Length == 0
+            ? Items
+            : Items.Where(item => ItemText(item).Contains(term, StringComparison.CurrentCultureIgnoreCase));
+        return Task.FromResult(matches.Take(Math.Max(1, MaxResults)));
     }
 
     private async Task OnKeyDownAsync(KeyboardEventArgs e)
@@ -185,7 +227,15 @@ public partial class Autocomplete<TItem> : IDisposable
         }
     }
 
-    private void OnFocus() => _hasFocus = true;
+    private async Task OnFocus()
+    {
+        _hasFocus = true;
+        // With MinChars at 0 the list opens on focus, like a select.
+        if (MinChars <= 0 && !_hasSearched && !_isSearching)
+        {
+            await SearchAsync(0);
+        }
+    }
 
     private void OnBlur() => _hasFocus = false;
 

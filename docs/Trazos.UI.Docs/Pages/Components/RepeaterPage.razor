@@ -1,0 +1,99 @@
+@page "/components/repeater"
+
+<DocPage Title="Repeater" Category="@L.T("Forms", "Formularios")"
+         Lead="@L.T("An editable list of rows with add and remove buttons, for tiered tables such as rate brackets, price tiers or schedules. The template gets IsLast, so the last tier can stay open-ended.", "Una lista editable de filas con botones para agregar y quitar, para tablas por tramos como tarifas, precios o horarios. La plantilla recibe IsLast, así el último tramo puede quedar abierto.")">
+
+    <DemoBlock Code="@Code">
+        <div class="docs-stack">
+            <Repeater TItem="Bracket" @bind-Items="_brackets" CreateItem="NewBracket" MinItems="1" MaxItems="6"
+                      Label="@L.T("Withholding brackets", "Tramos de retención")" AddText="@L.T("Add bracket", "Agregar tramo")"
+                      RemoveLabelFormat="@L.T("Remove bracket {0}", "Quitar tramo {0}")"
+                      style="--trazos-repeater-columns: 1fr 1fr 8rem">
+                <Header>
+                    <span>@L.T("From (UVT)", "Desde (UVT)")</span>
+                    <span>@L.T("To (UVT)", "Hasta (UVT)")</span>
+                    <span>@L.T("Rate", "Tarifa")</span>
+                </Header>
+                <ItemTemplate>
+                    <NumberInput TValue="decimal" aria-label="@L.T("From", "Desde")" Min="0" @bind-Value="context.Item.From" />
+                    @if (context.IsLast)
+                    {
+                        <TextInput aria-label="@L.T("To", "Hasta")" Value="@L.T("and above", "en adelante")" ReadOnly="true" />
+                    }
+                    else
+                    {
+                        <NumberInput TValue="decimal?" aria-label="@L.T("To", "Hasta")" Min="0" @bind-Value="context.Item.To" />
+                    }
+                    <NumberInput TValue="decimal" aria-label="@L.T("Rate", "Tarifa")" Mode="NumberInputMode.Percent" Min="0" Max="1" @bind-Value="context.Item.Rate" />
+                </ItemTemplate>
+            </Repeater>
+            <p class="docs-demo-output">@L.T("Brackets:", "Tramos:") <strong>@_brackets.Count</strong></p>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private sealed class Bracket
+    {
+        public decimal From { get; set; }
+        public decimal? To { get; set; }
+        public decimal Rate { get; set; }
+    }
+
+    private List<Bracket> _brackets =
+    [
+        new() { From = 0, To = 95, Rate = 0 },
+        new() { From = 95, To = 150, Rate = 0.19m },
+        new() { From = 150, Rate = 0.28m },
+    ];
+
+    private Bracket NewBracket()
+    {
+        // The previous open-ended tier gets an upper bound, and the new one starts there.
+        var last = _brackets.LastOrDefault();
+        var start = last is null ? 0 : last.From + 100;
+        if (last is not null)
+        {
+            last.To = start;
+        }
+
+        return new Bracket { From = start };
+    }
+
+    private const string Code = """
+        <Repeater TItem="Bracket" @bind-Items="_brackets" CreateItem="NewBracket" MinItems="1"
+                  AddText="Add bracket" style="--trazos-repeater-columns: 1fr 1fr 8rem">
+            <Header>
+                <span>From (UVT)</span>
+                <span>To (UVT)</span>
+                <span>Rate</span>
+            </Header>
+            <ItemTemplate>
+                <NumberInput TValue="decimal" aria-label="From" @bind-Value="context.Item.From" />
+                @if (context.IsLast)
+                {
+                    <TextInput aria-label="To" Value="and above" ReadOnly="true" />
+                }
+                else
+                {
+                    <NumberInput TValue="decimal?" aria-label="To" @bind-Value="context.Item.To" />
+                }
+                <NumberInput TValue="decimal" aria-label="Rate" Mode="NumberInputMode.Percent" @bind-Value="context.Item.Rate" />
+            </ItemTemplate>
+        </Repeater>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Items", "List<TItem>", "required", L.T("Rows. Changed in place; supports @bind-Items.", "Filas. Se cambian en el mismo lugar; admite @bind-Items.")),
+        new("ItemTemplate", "RenderFragment<RepeaterContext<TItem>>", "required", L.T("Row cells. context.Item, context.Index and context.IsLast.", "Celdas de la fila. context.Item, context.Index y context.IsLast.")),
+        new("CreateItem", "Func<TItem>?", null, L.T("Builds a new row. No add button when null.", "Crea una fila nueva. Sin botón de agregar si es null.")),
+        new("Header", "RenderFragment?", null, L.T("Column titles, laid out like the cells. Hidden on phones.", "Títulos de columna, ubicados como las celdas. Ocultos en teléfonos.")),
+        new("MinItems / MaxItems", "int / int?", "0 / null", L.T("Disable remove and add at the limits.", "Deshabilitan quitar y agregar en los límites.")),
+        new("EmptyContent", "RenderFragment?", null, L.T("Shown when there are no rows.", "Se muestra cuando no hay filas.")),
+        new("Label, AddText, RemoveLabelFormat", "string", null, L.T("List name, add button text and remove button names ({0} is the row number).", "Nombre de la lista, texto del botón de agregar y nombres de los botones de quitar ({0} es el número de fila).")),
+        new("--trazos-repeater-columns", "CSS", "auto-fit", L.T("grid-template-columns for the cells.", "grid-template-columns de las celdas.")),
+    ];
+}

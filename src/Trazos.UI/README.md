@@ -21,9 +21,17 @@
   - `AppShell`: Ready-to-use application layout with desktop sidebar, topbar, and mobile drawer.
   - `MonthCalendar<TItem>`: Generic month grid with day selection, month navigation and colored item chips (`CalendarItemTone`). On small screens items collapse into colored dots.
   - `RadioCardGroup<TValue>`: Mutually exclusive options rendered as cards with title, description and icon. Uses native radios (keyboard and screen-reader friendly).
-  - `Autocomplete<TItem>`: Debounced async search with keyboard navigation, custom item templates, and either a "selected" chip or clear-on-select mode.
+  - `Autocomplete<TItem>`: Debounced async search, or a preloaded `Items` list filtered in memory, with keyboard navigation, custom item templates, and either a "selected" chip or clear-on-select mode. `AutocompleteSelect<TItem, TValue>` binds the chosen item's id.
   - `FormSection`: Numbered section heading to split long forms into simple steps.
   - `EmptyState`: Friendly empty view with icon, explanation and next-step actions.
+- **Business apps** (forms, data and page structure):
+  - `NumberInput<TValue>`, `DateInput<TValue>`, `SearchInput`, `PhoneInput`, `FileInput`: Typed fields with culture-aware numbers, currency and percent modes, month pickers, debounced search, country codes and a file drop zone. `TextInput` takes text `Prefix` and `Suffix`.
+  - `RadioGroup<TValue>`, `CheckboxGroup<TItem>`: Compact native choice lists built from `SelectOption` items.
+  - `FormGrid`, `FormActions`, `FilterBar`, `Repeater<TItem>`: Responsive field grids, a submit bar that can stick on phones, a filter row above lists, and editable rows for tiered tables.
+  - `DataTable<TItem>` with `SortHeader`, toolbar, totals row, row actions and a `Pagination` slot; `Pagination` also works alone.
+  - `DescriptionList`, `Stat`, `ProgressBar`, `Stepper`: Detail grids, dashboard numbers, progress and multi-step indicators.
+  - `Alert`, `IPromptDialogService.PromptAsync`: Inline persistent messages and a confirmation that requires a typed reason.
+  - `PageHeader`, `Breadcrumbs`, `Divider`, `Ribbon`, `NoPrint`, `PrintOnly`: Page structure, status marks and print helpers. Printed pages always use the light tokens.
 - **Decoration**:
   - `SketchUnderline`, `SketchCircle`, `SketchArrow`, `SketchSquiggle`: Hand-drawn inline SVG strokes with an optional draw-in animation.
   - `Tape`: A strip of translucent tape that pins a positioned parent.

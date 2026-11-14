@@ -1,0 +1,25 @@
+<EditForm Model="Model">
+    <DataAnnotationsValidator />
+    <AutocompleteSelect Id="employee" Label="Employee" Items="Employees" ItemText="e => e.Name" ValueSelector="e => e.Id"
+                        MinChars="0" DebounceMs="0" @bind-Value="Model.EmployeeId" />
+    <button type="submit">Save</button>
+</EditForm>
+
+@code {
+    public sealed record Employee(int Id, string Name);
+
+    public sealed class PickerModel
+    {
+        [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue, ErrorMessage = "Choose an employee.")]
+        public int EmployeeId { get; set; }
+    }
+
+    [Parameter] public PickerModel Model { get; set; } = new();
+
+    public static readonly IReadOnlyList<Employee> Employees =
+    [
+        new(1, "Ana María Restrepo"),
+        new(2, "Julián Ospina"),
+        new(3, "Luisa Fernanda Gil"),
+    ];
+}
