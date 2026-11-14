@@ -1,0 +1,75 @@
+@page "/components/choice-groups"
+
+<DocPage Title="RadioGroup & CheckboxGroup" Category="@L.T("Forms", "Formularios")"
+         Lead="@L.T("Compact lists of native radios and checkboxes built from typed options. RadioGroup binds one value; CheckboxGroup binds a List of the selected values, in option order.", "Listas compactas de radios y casillas nativas construidas con opciones tipadas. RadioGroup enlaza un valor; CheckboxGroup enlaza una List con los valores elegidos, en el orden de las opciones.")">
+
+    <DemoBlock Code="@Code">
+        <div class="docs-stack">
+        <div class="docs-grid-2">
+            <RadioGroup Label="@L.T("Contract type", "Tipo de contrato")" Options="_contracts" @bind-Value="_contract" />
+            <CheckboxGroup Label="@L.T("Benefits", "Beneficios")" Options="_benefits" @bind-Value="_selected" />
+        </div>
+        <RadioGroup Label="@L.T("Shift", "Turno")" Inline="true" Options="_shifts" @bind-Value="_shift" />
+        <p class="docs-demo-output">@L.T("Values:", "Valores:") <strong>@(_contract ?? "null")</strong> · <strong>[@string.Join(", ", _selected)]</strong> · <strong>@_shift</strong></p>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private string? _contract;
+    private List<int> _selected = [2];
+    private int _shift = 1;
+
+    private IReadOnlyList<SelectOption<string?>> _contracts => [
+        new("fixed", L.T("Fixed term", "Término fijo")),
+        new("open", L.T("Open ended", "Término indefinido")),
+        new("service", L.T("Service contract", "Prestación de servicios")),
+    ];
+
+    private IReadOnlyList<SelectOption<int>> _benefits => [
+        new(1, L.T("Food allowance", "Auxilio de alimentación")),
+        new(2, L.T("Transport allowance", "Auxilio de transporte")),
+        new(3, L.T("Gym", "Gimnasio"), Disabled: true),
+    ];
+
+    private IReadOnlyList<SelectOption<int>> _shifts => [
+        new(1, L.T("Morning", "Mañana")),
+        new(2, L.T("Afternoon", "Tarde")),
+        new(3, L.T("Night", "Noche")),
+    ];
+
+    private const string Code = """
+        <RadioGroup Label="Contract type" Options="_contracts" @bind-Value="_contract" />
+        <CheckboxGroup Label="Benefits" Options="_benefits" @bind-Value="_selected" />
+        <RadioGroup Label="Shift" Inline="true" Options="_shifts" @bind-Value="_shift" />
+
+        @code {
+            private string? _contract;
+            private List<int> _selected = [2];
+
+            private readonly IReadOnlyList<SelectOption<string?>> _contracts =
+            [
+                new("fixed", "Fixed term"),
+                new("open", "Open ended"),
+            ];
+
+            private readonly IReadOnlyList<SelectOption<int>> _benefits =
+            [
+                new(1, "Food allowance"),
+                new(2, "Transport allowance"),
+                new(3, "Gym", Disabled: true),
+            ];
+        }
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Options", "IReadOnlyList<SelectOption<T>>", "required", L.T("Value, Text and Disabled for each choice.", "Value, Text y Disabled de cada opción.")),
+        new("Value (RadioGroup)", "TValue", null, L.T("Chosen value. Supports @bind-Value and EditForm validation.", "Valor elegido. Admite @bind-Value y validación con EditForm.")),
+        new("Value (CheckboxGroup)", "List<TItem>", null, L.T("Chosen values, in option order. A new list on every change.", "Valores elegidos, en el orden de las opciones. Una lista nueva en cada cambio.")),
+        new("Inline", "bool", "false", L.T("Lays the options out in a row that wraps.", "Ubica las opciones en una fila que se ajusta.")),
+        new("Label, HelperText, Error, Required, Disabled", "", null, L.T("Same as the other fields. Label is the fieldset legend.", "Igual que en los demás campos. Label es la leyenda del fieldset.")),
+    ];
+}

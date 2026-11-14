@@ -1,0 +1,27 @@
+@namespace Trazos.UI.Components
+@inherits FormFieldBase<string?>
+
+<FieldShell For="@Id" Label="@Label" Required="@Required" Disabled="@Disabled"
+            HelperText="@HelperText" HelperId="@HelperId" ErrorMessage="@ErrorMessage" ErrorId="@ErrorId"
+            StateClass="@FieldStateClass" Class="@Class">
+    <select class="trazos-phone-country" aria-label="@CountryLabel" disabled="@Disabled"
+            value="@_dial" @onchange="OnCountryChanged">
+        @foreach (var country in AvailableCountries)
+        {
+            <option value="@country.DialCode">@country.DialCode · @country.Name</option>
+        }
+    </select>
+    <input id="@Id"
+           type="tel"
+           inputmode="tel"
+           autocomplete="tel-national"
+           class="trazos-input-control"
+           placeholder="@Placeholder"
+           disabled="@Disabled"
+           value="@_digits"
+           aria-invalid="@AriaInvalid"
+           aria-describedby="@DescribedBy"
+           aria-required="@(Required ? "true" : null)"
+           @oninput="OnNumberInput"
+           @attributes="AdditionalAttributes" />
+</FieldShell>

@@ -1,0 +1,44 @@
+@page "/components/file-input"
+
+<DocPage Title="FileInput" Category="@L.T("Forms", "Formularios")"
+         Lead="@L.T("A drop zone over the native file picker. It checks accepted types and size, lists the chosen files with a remove button and binds them as IReadOnlyList<IBrowserFile>.", "Una zona para soltar archivos sobre el selector nativo. Revisa tipos aceptados y tamaño, lista los archivos elegidos con un botón para quitarlos y los enlaza como IReadOnlyList<IBrowserFile>.")">
+
+    <DemoBlock Code="@Code">
+        <FileInput Label="@L.T("Supporting documents", "Soportes")" Multiple="true" Accept=".pdf,image/*" MaxFileSize="5 * 1024 * 1024"
+                   ButtonText="@L.T("Choose files", "Elige archivos")" DropText="@L.T("or drag them here", "o arrástralos aquí")"
+                   Hint="@L.T("PDF or images, up to 5 MB each", "PDF o imágenes, hasta 5 MB cada uno")"
+                   RemoveLabelFormat="@L.T("Remove {0}", "Quitar {0}")"
+                   TooLargeMessage="@L.T("{0} is larger than {1}.", "{0} pesa más de {1}.")"
+                   NotAcceptedMessage="@L.T("{0} is not an accepted file type.", "{0} no es un tipo de archivo permitido.")"
+                   @bind-Value="_files" />
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private IReadOnlyList<Microsoft.AspNetCore.Components.Forms.IBrowserFile>? _files;
+
+    private const string Code = """
+        <FileInput Label="Supporting documents" Multiple="true" Accept=".pdf,image/*"
+                   MaxFileSize="5 * 1024 * 1024" Hint="PDF or images, up to 5 MB each"
+                   @bind-Value="_files" />
+
+        @code {
+            private IReadOnlyList<IBrowserFile>? _files;
+
+            // Later: await using var stream = file.OpenReadStream(5 * 1024 * 1024);
+        }
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Value", "IReadOnlyList<IBrowserFile>?", null, L.T("Chosen files. Supports @bind-Value and EditForm validation.", "Archivos elegidos. Admite @bind-Value y validación con EditForm.")),
+        new("Accept", "string?", null, L.T("Accepted types, as in the accept attribute: .pdf,image/*.", "Tipos aceptados, como en el atributo accept: .pdf,image/*.")),
+        new("MaxFileSize", "long?", null, L.T("Largest file in bytes.", "Archivo más grande en bytes.")),
+        new("Multiple / MaxFiles", "bool / int", "false / 10", L.T("Keeps several files, up to MaxFiles. Without Multiple a new file replaces the old one.", "Guarda varios archivos, hasta MaxFiles. Sin Multiple, un archivo nuevo reemplaza al anterior.")),
+        new("ButtonText, DropText, Hint", "string", null, L.T("Text in the drop zone.", "Texto de la zona.")),
+        new("RemoveLabelFormat, TooLargeMessage, NotAcceptedMessage, TooManyMessage", "string", L.T("English", "inglés"), L.T("Accessible names and rejection messages. {0} is the file name.", "Nombres accesibles y mensajes de rechazo. {0} es el nombre del archivo.")),
+        new("Label, HelperText, Error, Required, Disabled", "", null, L.T("Same as the other fields.", "Igual que en los demás campos.")),
+    ];
+}

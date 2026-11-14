@@ -1,0 +1,34 @@
+@page "/components/phone-input"
+
+<DocPage Title="PhoneInput" Category="@L.T("Forms", "Formularios")"
+         Lead="@L.T("A country code picker plus the national number, bound as one string: \"+57 3001234567\". Spaces and dashes typed by the user are dropped.", "Un selector de indicativo más el número nacional, enlazados como un solo texto: \"+57 3001234567\". Los espacios y guiones que escribe el usuario se descartan.")">
+
+    <DemoBlock Code="@Code">
+        <div class="docs-stack">
+            <PhoneInput Label="@L.T("Mobile phone", "Celular")" Placeholder="300 123 4567" CountryLabel="@L.T("Country code", "Indicativo")" @bind-Value="_phone" />
+            <p class="docs-demo-output">@L.T("Value:", "Valor:") <strong>@(_phone ?? "null")</strong></p>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private string? _phone = "+57 3001234567";
+
+    private const string Code = """
+        <PhoneInput Label="Mobile phone" Placeholder="300 123 4567" @bind-Value="_phone" />
+
+        <!-- Your own, translated list -->
+        <PhoneInput Label="Phone" Countries="@([new("+57", "Colombia"), new("+1", "Estados Unidos")])" @bind-Value="_phone" />
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Value", "string?", null, L.T("\"+57 3001234567\", or null when the number is empty. Supports @bind-Value.", "\"+57 3001234567\", o null cuando el número está vacío. Admite @bind-Value.")),
+        new("Countries", "IReadOnlyList<PhoneCountry>?", "PhoneCountry.Defaults", L.T("PhoneCountry(DialCode, Name) choices.", "Opciones PhoneCountry(DialCode, Name).")),
+        new("DefaultDialCode", "string?", L.T("first country", "primer país"), L.T("Code selected while the value is empty.", "Indicativo elegido mientras el valor está vacío.")),
+        new("CountryLabel", "string", "\"Country code\"", L.T("Accessible name of the picker.", "Nombre accesible del selector.")),
+        new("Label, HelperText, Error, Required, Disabled, Placeholder", "", null, L.T("Same as TextInput.", "Igual que en TextInput.")),
+    ];
+}

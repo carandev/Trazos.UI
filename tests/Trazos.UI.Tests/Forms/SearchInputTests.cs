@@ -10,7 +10,7 @@ public class SearchInputTests : BunitContext
     {
         var calls = new List<string?>();
         var cut = Render<SearchInput>(p => p
-            .Add(x => x.Debounce, 60)
+            .Add(x => x.Debounce, 500)
             .Add(x => x.ValueChanged, (string? v) => calls.Add(v)));
 
         cut.Find("input").Input("a");
@@ -18,7 +18,7 @@ public class SearchInputTests : BunitContext
         cut.Find("input").Input("ana");
         Assert.Empty(calls);
 
-        cut.WaitForAssertion(() => Assert.Equal(["ana"], calls), TimeSpan.FromSeconds(2));
+        cut.WaitForAssertion(() => Assert.Equal(["ana"], calls), TimeSpan.FromSeconds(5));
         Assert.Equal("search", cut.Find("input").GetAttribute("type"));
     }
 

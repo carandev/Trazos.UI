@@ -1,0 +1,51 @@
+@namespace Trazos.UI.Components
+@typeparam TValue
+@inherits FormFieldBase<TValue>
+
+<fieldset id="@Id" class="trazos-choice-group @(Inline ? "is-inline" : "") @FieldStateClass @Class"
+          role="radiogroup" aria-invalid="@AriaInvalid" aria-required="@(Required ? "true" : null)"
+          aria-describedby="@DescribedBy" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <legend class="trazos-choice-legend">
+            @Label
+            @if (Required)
+            {
+                <span class="trazos-choice-required" aria-hidden="true">*</span>
+            }
+        </legend>
+    }
+    <div class="trazos-choice-options">
+        @for (var i = 0; i < Options.Count; i++)
+        {
+            var option = Options[i];
+            var inputId = $"{Id}-{i}";
+            var isChecked = EqualityComparer<TValue>.Default.Equals(option.Value, Value);
+            var isDisabled = Disabled || option.Disabled;
+            <label for="@inputId" class="trazos-choice @(isDisabled ? "is-disabled" : "")">
+                <input type="radio" id="@inputId" name="@Id" class="trazos-choice-input is-radio"
+                       checked="@isChecked" disabled="@isDisabled" @onchange="() => SetValueAsync(option.Value)" />
+                <span class="trazos-choice-text">@option.Text</span>
+            </label>
+        }
+    </div>
+    @if (HasError)
+    {
+        <p id="@ErrorId" class="trazos-choice-error" role="alert">@ErrorMessage</p>
+    }
+    else if (HasHelperText)
+    {
+        <p id="@HelperId" class="trazos-choice-helper">@HelperText</p>
+    }
+</fieldset>
+
+@code {
+    public RadioGroup() : base("trazos-radio") { }
+
+    [Parameter, EditorRequired]
+    public IReadOnlyList<SelectOption<TValue>> Options { get; set; } = [];
+
+    /// <summary>Lays the options out in a row that wraps.</summary>
+    [Parameter]
+    public bool Inline { get; set; }
+}
