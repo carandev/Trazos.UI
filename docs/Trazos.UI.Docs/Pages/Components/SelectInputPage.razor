@@ -1,7 +1,7 @@
 @page "/components/select-input"
 
 <DocPage Title="SelectInput" Category="@L.T("Forms", "Formularios")"
-         Lead="@L.T("A styled native select. Options are plain <option> elements, so keyboard and mobile pickers work out of the box.", "Un select nativo con estilos. Las opciones son elementos <option> comunes, así que el teclado y los selectores móviles funcionan sin configuración adicional.")">
+         Lead="@L.T("A styled native select bound to any type: strings, enums, ids such as int or Guid, and their nullable forms. It stays a native select, so keyboard and mobile pickers work out of the box.", "Un select nativo con estilos enlazado a cualquier tipo: textos, enums, ids como int o Guid, y sus versiones anulables. Sigue siendo un select nativo, así que el teclado y los selectores móviles funcionan sin configuración adicional.")">
 
     <DemoBlock Code="@Code">
         <div class="docs-stack">
@@ -14,13 +14,24 @@
         </div>
     </DemoBlock>
 
+    <DemoBlock Title="@L.T("Typed values", "Valores tipados")"
+               Description="@L.T("Options builds the list from typed values. SelectOption.ForEnum and ForNullableEnum create one option per enum member; pass a function to translate the text.", "Options arma la lista con valores tipados. SelectOption.ForEnum y ForNullableEnum crean una opción por cada miembro del enum; pasa una función para traducir el texto.")"
+               Code="@TypedCode">
+        <div class="docs-grid-2">
+            <SelectInput Label="@L.T("Pay frequency", "Frecuencia de pago")" Placeholder="@L.T("Choose", "Elige")"
+                         Options="SelectOption.ForNullableEnum<PayFrequency>(FrequencyText)" @bind-Value="_frequency" />
+            <SelectInput Label="@L.T("Company", "Empresa")" Placeholder="@L.T("Choose", "Elige")" Options="_companies" @bind-Value="_companyId" />
+        </div>
+        <p class="docs-demo-output">@L.T("Frequency:", "Frecuencia:") <strong>@(_frequency?.ToString() ?? "null")</strong> · @L.T("Company id:", "Id de empresa:") <strong>@_companyId</strong></p>
+    </DemoBlock>
+
     <DemoBlock Title="@L.T("Error and disabled", "Error y deshabilitado")" Code="@StatesCode">
         <div class="docs-grid-2">
-            <SelectInput Label="@L.T("Shift", "Turno")" Placeholder="@L.T("Pick a shift", "Elige un turno")" Error="@L.T("Choose a shift to continue.", "Elige un turno para continuar.")">
+            <SelectInput TValue="string" Label="@L.T("Shift", "Turno")" Placeholder="@L.T("Pick a shift", "Elige un turno")" Error="@L.T("Choose a shift to continue.", "Elige un turno para continuar.")">
                 <option value="am">@L.T("Morning", "Mañana")</option>
                 <option value="pm">@L.T("Afternoon", "Tarde")</option>
             </SelectInput>
-            <SelectInput Label="@L.T("Disabled", "Deshabilitado")" Placeholder="@L.T("Unavailable", "No disponible")" Disabled="true" />
+            <SelectInput TValue="string" Label="@L.T("Disabled", "Deshabilitado")" Placeholder="@L.T("Unavailable", "No disponible")" Disabled="true" />
         </div>
     </DemoBlock>
 
@@ -29,6 +40,46 @@
 
 @code {
     private string? _team;
+    private PayFrequency? _frequency;
+    private int _companyId;
+
+    private enum PayFrequency { Weekly, Biweekly, Monthly }
+
+    private readonly IReadOnlyList<SelectOption<int>> _companies =
+    [
+        new(1, "Acme S.A.S."),
+        new(2, "Globex Ltda."),
+        new(3, "Initech (inactive)", Disabled: true),
+    ];
+
+    private string FrequencyText(PayFrequency value) => value switch
+    {
+        PayFrequency.Weekly => L.T("Weekly", "Semanal"),
+        PayFrequency.Biweekly => L.T("Biweekly", "Quincenal"),
+        _ => L.T("Monthly", "Mensual"),
+    };
+
+    private const string TypedCode = """
+        <SelectInput Label="Pay frequency" Placeholder="Choose"
+                     Options="SelectOption.ForNullableEnum<PayFrequency>()"
+                     @bind-Value="_frequency" />
+
+        <SelectInput Label="Company" Placeholder="Choose"
+                     Options="_companies"
+                     @bind-Value="_companyId" />
+
+        @code {
+            private PayFrequency? _frequency;
+            private int _companyId;
+
+            private readonly IReadOnlyList<SelectOption<int>> _companies =
+            [
+                new(1, "Acme S.A.S."),
+                new(2, "Globex Ltda."),
+                new(3, "Initech (inactive)", Disabled: true),
+            ];
+        }
+        """;
 
     private const string Code = """
         <SelectInput Label="Team" Placeholder="Choose a team" Required="true" @bind-Value="_team">
@@ -39,22 +90,26 @@
         """;
 
     private const string StatesCode = """
-        <SelectInput Label="Shift" Placeholder="Pick a shift" Error="Choose a shift to continue.">
+        <SelectInput TValue="string" Label="Shift" Placeholder="Pick a shift" Error="Choose a shift to continue.">
             <option value="am">Morning</option>
             <option value="pm">Afternoon</option>
         </SelectInput>
-        <SelectInput Label="Disabled" Placeholder="Unavailable" Disabled="true" />
+        <SelectInput TValue="string" Label="Disabled" Placeholder="Unavailable" Disabled="true" />
         """;
 
     private IReadOnlyList<ApiParam> Params =>
     [
-        new("Value", "string?", null, L.T("Selected option value. Supports @bind-Value.", "Valor de la opción seleccionada. Admite @bind-Value.")),
-        new("ValueChanged", "EventCallback<string?>", null, L.T("Raised when the selection changes.", "Se dispara cuando cambia la selección.")),
-        new("ChildContent", "RenderFragment?", null, L.T("The <option> elements.", "Los elementos <option>.")),
+        new("TValue", "type", L.T("inferred", "inferido"), L.T("Bound type. Inferred from Value or Options; set TValue=\"string\" when neither is given.", "Tipo enlazado. Se infiere de Value u Options; usa TValue=\"string\" cuando no pasas ninguno.")),
+        new("Value", "TValue", null, L.T("Selected value. Supports @bind-Value.", "Valor seleccionado. Admite @bind-Value.")),
+        new("ValueChanged", "EventCallback<TValue>", null, L.T("Raised when the selection changes.", "Se dispara cuando cambia la selección.")),
+        new("ValueExpression", "Expression<Func<TValue>>?", null, L.T("Set by @bind-Value. Links the field to the EditContext of an EditForm (see Forms and validation).", "Lo asigna @bind-Value. Vincula el campo al EditContext de un EditForm (ver Formularios y validación).")),
+        new("Options", "IEnumerable<SelectOption<TValue>>?", null, L.T("Typed options (Value, Text, Disabled). Rendered before ChildContent.", "Opciones tipadas (Value, Text, Disabled). Se muestran antes de ChildContent.")),
+        new("ChildContent", "RenderFragment?", null, L.T("<option> elements. Their value is converted to TValue.", "Elementos <option>. Su valor se convierte a TValue.")),
+        new("ParseErrorMessage", "string", "\"Enter a valid value.\"", L.T("Shown when an option value cannot be converted to TValue.", "Se muestra cuando el valor de una opción no se puede convertir a TValue.")),
         new("Placeholder", "string?", null, L.T("Disabled first option shown while nothing is selected.", "Primera opción deshabilitada que se muestra mientras no hay nada seleccionado.")),
         new("Label", "string?", null, L.T("Visible label.", "Etiqueta visible.")),
         new("HelperText", "string?", null, L.T("Hint below the field.", "Ayuda debajo del campo.")),
-        new("Error", "string?", null, L.T("Error message.", "Mensaje de error.")),
+        new("Error", "string?", null, L.T("Error message. Inside an EditForm it defaults to the validation message.", "Mensaje de error. Dentro de un EditForm toma el mensaje de validación.")),
         new("Required", "bool", "false", L.T("Shows an asterisk next to the label. It does not add the native required attribute.", "Muestra un asterisco junto a la etiqueta. No agrega el atributo nativo required.")),
         new("Disabled", "bool", "false", L.T("Disables the field.", "Deshabilita el campo.")),
         new("LeadingIcon", "RenderFragment?", null, L.T("Icon inside the field, on the left.", "Ícono dentro del campo, a la izquierda.")),

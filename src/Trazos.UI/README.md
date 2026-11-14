@@ -13,7 +13,7 @@
   - `IconButton`: A square, icon-only button with a required label and a hit area of at least 44px.
   - `Card`: Default, Lavender, Interactive, Olive, Gold, Wine and Sky variants with media, header and footer slots, and `Fill` for equal-height grids.
   - `Badge`: Success, Warning, Error, Info, Lavender, Cream, Neutral status tags.
-  - `TextInput`, `SelectInput`, `TextArea`, `Checkbox`: Accessible forms with labels, error states, and helper texts.
+  - `TextInput`, `SelectInput<TValue>`, `TextArea`, `Checkbox`, `RadioCardGroup<TValue>`: Accessible fields with labels, error states and helper texts. Bound with `@bind-Value` inside an `EditForm`, they show validation messages from the `EditContext` on their own.
   - `Modal`: High-contrast, sketch-bordered dialogs with backdrop click handling and customizable sizes.
   - `Drawer`: Mobile responsive slide-out drawer with native touch-swipe gestures and body scroll lock.
   - `Toast`: Global notification toast system.
