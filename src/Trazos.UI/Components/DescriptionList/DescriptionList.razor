@@ -1,0 +1,25 @@
+@namespace Trazos.UI.Components
+
+<dl class="trazos-dl trazos-dl-cols-@Math.Clamp(Columns, 1, 4) @(Bordered ? "is-bordered" : "") @Class" @attributes="AdditionalAttributes">
+    @ChildContent
+</dl>
+
+@code {
+    /// <summary>Columns on wide screens, 1 to 4. Phones show one column and tablets at most two.</summary>
+    [Parameter]
+    public int Columns { get; set; } = 2;
+
+    /// <summary>Draws a divider under each item, for dense detail pages.</summary>
+    [Parameter]
+    public bool Bordered { get; set; }
+
+    /// <summary>The <see cref="DescriptionItem"/> elements.</summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

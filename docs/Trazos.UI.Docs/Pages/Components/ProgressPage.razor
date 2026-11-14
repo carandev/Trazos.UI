@@ -1,0 +1,79 @@
+@page "/components/progress"
+
+<DocPage Title="ProgressBar & Stepper" Category="@L.T("Display", "Visualización")"
+         Lead="@L.T("ProgressBar shows how far a long operation got. Stepper shows where the user is in a multi-step workflow.", "ProgressBar muestra cuánto avanzó una operación larga. Stepper muestra en qué paso de un flujo de varios pasos está el usuario.")">
+
+    <DemoBlock Title="ProgressBar" Code="@ProgressCode">
+        <div class="docs-stack">
+            <ProgressBar Label="@L.T("Calculating payroll", "Calculando nómina")" Value="_done" Max="7"
+                         ValueText="@L.T($"{_done} of 7 employees", $"{_done} de 7 empleados")" />
+            <ProgressBar Label="@L.T("Sending payslips", "Enviando desprendibles")" Indeterminate="true" Tone="ProgressTone.Sky" />
+            <div>
+                <Button Variant="ButtonVariant.Outline" Size="ButtonSize.Small" OnClick="() => _done = _done >= 7 ? 0 : _done + 1">@L.T("Advance", "Avanzar")</Button>
+            </div>
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="Stepper" Code="@StepperCode">
+        <div class="docs-stack">
+            <Stepper Steps="_steps" Current="_step" Label="@L.T("New employee", "Nuevo empleado")" CompletedLabel="@L.T("Completed", "Completado")" />
+            <div>
+                <Button Variant="ButtonVariant.Outline" Size="ButtonSize.Small" OnClick="() => _step = _step >= 3 ? 0 : _step + 1">@L.T("Next step", "Siguiente paso")</Button>
+            </div>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="ProgressParams" />
+    <ApiTable Params="StepperParams" />
+</DocPage>
+
+@code {
+    private int _done = 3;
+    private int _step = 1;
+
+    private IReadOnlyList<StepperStep> _steps => [
+        new(L.T("Personal data", "Datos personales")),
+        new(L.T("Contract", "Contrato"), L.T("Type and dates", "Tipo y fechas")),
+        new(L.T("Payment", "Pago"), L.T("Bank and frequency", "Banco y frecuencia")),
+        new(L.T("Review", "Revisión")),
+    ];
+
+    private const string ProgressCode = """
+        <ProgressBar Label="Calculating payroll" Value="_done" Max="7" ValueText="@($"{_done} of 7 employees")" />
+        <ProgressBar Label="Sending payslips" Indeterminate="true" Tone="ProgressTone.Sky" />
+        """;
+
+    private const string StepperCode = """
+        <Stepper Steps="_steps" Current="1" Label="New employee" />
+
+        @code {
+            private readonly IReadOnlyList<StepperStep> _steps =
+            [
+                new("Personal data"),
+                new("Contract", "Type and dates"),
+                new("Payment", "Bank and frequency"),
+                new("Review"),
+            ];
+        }
+        """;
+
+    private IReadOnlyList<ApiParam> ProgressParams =>
+    [
+        new("Value / Max", "double", "0 / 100", L.T("Progress, clamped to 0..Max.", "Avance, limitado a 0..Max.")),
+        new("Label", "string?", null, L.T("Visible label and accessible name.", "Etiqueta visible y nombre accesible.")),
+        new("AriaLabel", "string?", null, L.T("Accessible name when there is no Label.", "Nombre accesible cuando no hay Label.")),
+        new("ValueText", "string?", L.T("percentage", "porcentaje"), L.T("Shown value and aria-valuetext, such as \"3 of 7\".", "Valor mostrado y aria-valuetext, como \"3 de 7\".")),
+        new("ShowValue", "bool", "true", L.T("Shows the value next to the label.", "Muestra el valor junto a la etiqueta.")),
+        new("Indeterminate", "bool", "false", L.T("Animated bar with no value. Static with reduced motion.", "Barra animada sin valor. Estática con movimiento reducido.")),
+        new("Tone", "ProgressTone", "Olive", L.T("Olive, Gold, Wine or Sky.", "Olive, Gold, Wine o Sky.")),
+    ];
+
+    private IReadOnlyList<ApiParam> StepperParams =>
+    [
+        new("Steps", "IReadOnlyList<StepperStep>", "required", L.T("StepperStep(Title, Description).", "StepperStep(Title, Description).")),
+        new("Current", "int", "0", L.T("Zero-based current step; it gets aria-current=\"step\".", "Paso actual empezando en cero; recibe aria-current=\"step\".")),
+        new("Label", "string?", null, L.T("Accessible name of the list.", "Nombre accesible de la lista.")),
+        new("CompletedLabel", "string", "\"Completed\"", L.T("Screen-reader text for completed steps.", "Texto para lectores de pantalla en los pasos completados.")),
+        new("Vertical", "bool", "false", L.T("Stacks the steps.", "Apila los pasos.")),
+    ];
+}

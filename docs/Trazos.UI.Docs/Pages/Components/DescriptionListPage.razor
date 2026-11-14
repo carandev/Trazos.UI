@@ -1,0 +1,49 @@
+@page "/components/description-list"
+
+<DocPage Title="DescriptionList" Category="@L.T("Display", "Visualización")"
+         Lead="@L.T("A label/value grid for read-only detail views, with responsive columns, full-width items, an empty placeholder and an optional hint per item.", "Una cuadrícula etiqueta/valor para vistas de detalle de solo lectura, con columnas adaptables, elementos de ancho completo, un texto para valores vacíos y una nota opcional por elemento.")">
+
+    <DemoBlock Code="@Code">
+        <DescriptionList Columns="3">
+            <DescriptionItem Label="@L.T("Document", "Documento")" Value="CC 1.020.304.050" />
+            <DescriptionItem Label="@L.T("Position", "Cargo")" Value="@L.T("Payroll analyst", "Analista de nómina")" />
+            <DescriptionItem Label="@L.T("Status", "Estado")"><Badge Variant="BadgeVariant.Success">@L.T("Active", "Activo")</Badge></DescriptionItem>
+            <DescriptionItem Label="@L.T("Base salary", "Salario base")" Value="$ 3.500.000" Hint="@L.T("Before deductions", "Antes de deducciones")" />
+            <DescriptionItem Label="@L.T("Bank account", "Cuenta bancaria")" EmptyText="@L.T("Not registered", "Sin registrar")" />
+            <DescriptionItem Label="@L.T("Start date", "Fecha de ingreso")" Value="2024-02-01" />
+            <DescriptionItem Label="@L.T("Address", "Dirección")" Value="Carrera 7 # 72-41, Bogotá" FullWidth="true" />
+        </DescriptionList>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+    <ApiTable Params="ItemParams" />
+</DocPage>
+
+@code {
+    private const string Code = """
+        <DescriptionList Columns="3">
+            <DescriptionItem Label="Document" Value="CC 1.020.304.050" />
+            <DescriptionItem Label="Status"><Badge Variant="BadgeVariant.Success">Active</Badge></DescriptionItem>
+            <DescriptionItem Label="Base salary" Value="$ 3.500.000" Hint="Before deductions" />
+            <DescriptionItem Label="Bank account" EmptyText="Not registered" />
+            <DescriptionItem Label="Address" Value="Carrera 7 # 72-41, Bogotá" FullWidth="true" />
+        </DescriptionList>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Columns", "int", "2", L.T("Columns on wide screens, 1 to 4. Phones show one; tablets at most two.", "Columnas en pantallas anchas, de 1 a 4. Los teléfonos muestran una; las tabletas como máximo dos.")),
+        new("Bordered", "bool", "false", L.T("Dashed divider under each item.", "Divisor punteado debajo de cada elemento.")),
+        new("ChildContent", "RenderFragment?", null, L.T("DescriptionItem elements.", "Elementos DescriptionItem.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ItemParams =>
+    [
+        new("Label", "string", "required", L.T("Term (dt).", "Término (dt).")),
+        new("Value", "string?", null, L.T("Plain value. ChildContent takes precedence.", "Valor simple. ChildContent tiene prioridad.")),
+        new("ChildContent", "RenderFragment?", null, L.T("Rich value, such as a badge or link.", "Valor enriquecido, como una insignia o un enlace.")),
+        new("EmptyText", "string", "\"—\"", L.T("Shown when there is no value.", "Se muestra cuando no hay valor.")),
+        new("Hint", "string?", null, L.T("Small note under the value.", "Nota pequeña debajo del valor.")),
+        new("FullWidth", "bool", "false", L.T("Spans every column.", "Ocupa todas las columnas.")),
+    ];
+}

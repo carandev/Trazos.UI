@@ -1,0 +1,35 @@
+.trazos-dl-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.trazos-dl-item.is-full {
+    grid-column: 1 / -1;
+}
+
+.trazos-dl-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--trazos-text-muted);
+}
+
+.trazos-dl-value {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--trazos-text);
+    overflow-wrap: anywhere;
+}
+
+.trazos-dl-value.is-empty {
+    color: var(--trazos-text-subtle);
+}
+
+.trazos-dl-hint {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--trazos-text-muted);
+}

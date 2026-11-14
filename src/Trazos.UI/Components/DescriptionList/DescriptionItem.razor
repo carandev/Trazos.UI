@@ -1,0 +1,56 @@
+@namespace Trazos.UI.Components
+
+<div class="trazos-dl-item @(FullWidth ? "is-full" : "") @Class" @attributes="AdditionalAttributes">
+    <dt class="trazos-dl-label">@Label</dt>
+    <dd class="trazos-dl-value @(IsEmpty ? "is-empty" : "")">
+        @if (ChildContent != null)
+        {
+            @ChildContent
+        }
+        else if (!string.IsNullOrEmpty(Value))
+        {
+            @Value
+        }
+        else
+        {
+            @EmptyText
+        }
+    </dd>
+    @if (!string.IsNullOrEmpty(Hint))
+    {
+        <dd class="trazos-dl-hint">@Hint</dd>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Label { get; set; } = string.Empty;
+
+    /// <summary>Plain text value. ChildContent takes precedence.</summary>
+    [Parameter]
+    public string? Value { get; set; }
+
+    /// <summary>Rich value, such as a badge or a link.</summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Shown when there is no value.</summary>
+    [Parameter]
+    public string EmptyText { get; set; } = "—";
+
+    /// <summary>Small note under the value.</summary>
+    [Parameter]
+    public string? Hint { get; set; }
+
+    /// <summary>Spans every column.</summary>
+    [Parameter]
+    public bool FullWidth { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private bool IsEmpty => ChildContent is null && string.IsNullOrEmpty(Value);
+}

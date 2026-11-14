@@ -1,0 +1,34 @@
+/* ========================================
+   DESCRIPTION LIST - Trazos UI
+   Label/value grid for read-only detail views.
+   ======================================== */
+
+.trazos-dl {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.125rem 1.5rem;
+    margin: 0;
+}
+
+@media (min-width: 640px) {
+    .trazos-dl-cols-2,
+    .trazos-dl-cols-3,
+    .trazos-dl-cols-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .trazos-dl-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .trazos-dl-cols-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+.trazos-dl.is-bordered ::deep .trazos-dl-item {
+    padding-bottom: 0.875rem;
+    border-bottom: 1px dashed var(--trazos-border-soft);
+}

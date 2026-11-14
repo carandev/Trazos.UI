@@ -1,0 +1,45 @@
+@page "/components/stat"
+
+<DocPage Title="Stat" Category="@L.T("Display", "Visualización")"
+         Lead="@L.T("A dashboard number with a label, a delta, an optional icon and a hint.", "Un número de tablero con etiqueta, variación, ícono opcional y una nota.")">
+
+    <DemoBlock Code="@Code">
+        <div class="docs-grid-2">
+            <Stat Label="@L.T("Net payroll", "Nómina neta")" Value="$ 148,2M" Delta="+4,2%" Trend="StatTrend.Up"
+                  TrendLabel="@L.T("up from last month", "más que el mes pasado")" Hint="@L.T("November 2026", "Noviembre 2026")">
+                <Icon>@Icons.Mail</Icon>
+            </Stat>
+            <Stat Label="@L.T("Absences", "Ausencias")" Value="12" Delta="-3" Trend="StatTrend.Down" Inverted="true"
+                  TrendLabel="@L.T("down from last month", "menos que el mes pasado")" Tone="IconBoxVariant.Wine">
+                <Icon>@Icons.Mail</Icon>
+            </Stat>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private const string Code = """
+        <Stat Label="Net payroll" Value="$ 148,2M" Delta="+4,2%" Trend="StatTrend.Up"
+              TrendLabel="up from last month" Hint="November 2026">
+            <Icon><svg>…</svg></Icon>
+        </Stat>
+
+        <!-- Fewer absences is good news: Inverted colors a fall in olive. -->
+        <Stat Label="Absences" Value="12" Delta="-3" Trend="StatTrend.Down" Inverted="true" Tone="IconBoxVariant.Wine" />
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Label", "string", "required", L.T("What the number measures.", "Qué mide el número.")),
+        new("Value", "string", "required", L.T("The number, already formatted.", "El número, ya formateado.")),
+        new("Delta", "string?", null, L.T("Change against a reference, such as +4.2%.", "Variación frente a una referencia, como +4,2%.")),
+        new("Trend", "StatTrend", "None", L.T("Up, Down or Flat: sets the arrow and color.", "Up, Down o Flat: define la flecha y el color.")),
+        new("Inverted", "bool", "false", L.T("A rise is bad and a fall is good (costs, absences).", "Subir es malo y bajar es bueno (costos, ausencias).")),
+        new("TrendLabel", "string?", null, L.T("Screen-reader text for the delta.", "Texto para lectores de pantalla de la variación.")),
+        new("Hint", "string?", null, L.T("Muted line at the bottom.", "Línea atenuada al final.")),
+        new("Icon", "RenderFragment?", null, L.T("Icon in a tinted well.", "Ícono en un recuadro con tinte.")),
+        new("Tone", "IconBoxVariant", "Primary", L.T("Color of the icon well.", "Color del recuadro del ícono.")),
+    ];
+}

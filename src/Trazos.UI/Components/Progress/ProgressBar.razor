@@ -1,0 +1,74 @@
+@namespace Trazos.UI.Components
+@using System.Globalization
+
+<div class="trazos-progress trazos-progress-@Tone.ToString().ToLowerInvariant() @(Indeterminate ? "is-indeterminate" : "") @Class" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrEmpty(Label) || ShowValue)
+    {
+        <div class="trazos-progress-header">
+            @if (!string.IsNullOrEmpty(Label))
+            {
+                <span id="@_labelId" class="trazos-progress-label">@Label</span>
+            }
+            @if (ShowValue && !Indeterminate)
+            {
+                <span class="trazos-progress-value" aria-hidden="true">@DisplayText</span>
+            }
+        </div>
+    }
+    <div class="trazos-progress-track"
+         role="progressbar"
+         aria-labelledby="@(string.IsNullOrEmpty(Label) ? null : _labelId)"
+         aria-label="@(string.IsNullOrEmpty(Label) ? AriaLabel : null)"
+         aria-valuemin="@(Indeterminate ? null : "0")"
+         aria-valuemax="@(Indeterminate ? null : Format(Max))"
+         aria-valuenow="@(Indeterminate ? null : Format(Clamped))"
+         aria-valuetext="@(Indeterminate ? null : ValueText)">
+        <div class="trazos-progress-fill" style="@(Indeterminate ? null : $"width: {Percent.ToString("0.##", CultureInfo.InvariantCulture)}%")"></div>
+    </div>
+</div>
+
+@code {
+    private readonly string _labelId = $"trazos-progress-{Guid.NewGuid():N}";
+
+    [Parameter]
+    public double Value { get; set; }
+
+    [Parameter]
+    public double Max { get; set; } = 100;
+
+    /// <summary>Visible label, also the accessible name.</summary>
+    [Parameter]
+    public string? Label { get; set; }
+
+    /// <summary>Accessible name when there is no visible label.</summary>
+    [Parameter]
+    public string? AriaLabel { get; set; }
+
+    /// <summary>Text for the value, such as "3 of 7". Defaults to a percentage.</summary>
+    [Parameter]
+    public string? ValueText { get; set; }
+
+    [Parameter]
+    public bool ShowValue { get; set; } = true;
+
+    /// <summary>Unknown duration: an animated bar with no value.</summary>
+    [Parameter]
+    public bool Indeterminate { get; set; }
+
+    [Parameter]
+    public ProgressTone Tone { get; set; } = ProgressTone.Olive;
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private double Clamped => Math.Clamp(Value, 0, Max <= 0 ? 0 : Max);
+
+    private double Percent => Max <= 0 ? 0 : Math.Round(Clamped / Max * 100, 2);
+
+    private string DisplayText => ValueText ?? $"{Math.Round(Percent).ToString(CultureInfo.InvariantCulture)}%";
+
+    private static string Format(double number) => number.ToString(CultureInfo.InvariantCulture);
+}

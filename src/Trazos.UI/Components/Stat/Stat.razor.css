@@ -1,0 +1,103 @@
+/* ========================================
+   STAT - Trazos UI
+   Dashboard number tile.
+   ======================================== */
+
+.trazos-stat {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.125rem 1.25rem;
+    background: var(--trazos-surface);
+    border: 1.5px solid var(--trazos-border);
+    border-radius: var(--trazos-radius-sketch-card);
+    box-shadow: var(--trazos-shadow-sketch);
+}
+
+.trazos-stat-text {
+    min-width: 0;
+}
+
+.trazos-stat-text p {
+    margin: 0;
+}
+
+.trazos-stat-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--trazos-text-muted);
+}
+
+.trazos-stat-value {
+    margin-top: 0.375rem !important;
+    font-family: var(--trazos-font-display);
+    font-size: clamp(1.5rem, 1.3rem + 0.8vw, 1.875rem);
+    line-height: 1.1;
+    color: var(--trazos-text);
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+
+.trazos-stat-delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 0.5rem !important;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--trazos-text-light);
+    background: var(--trazos-surface-muted);
+    border: 1px solid var(--trazos-border-soft);
+    border-radius: var(--trazos-radius-sketch-sm);
+}
+
+.trazos-stat-delta svg {
+    width: 0.8rem;
+    height: 0.8rem;
+}
+
+.trazos-stat-delta.is-up,
+.trazos-stat-delta.is-down.is-inverted {
+    color: var(--trazos-olive-text);
+    background: var(--trazos-olive-soft);
+    border-color: var(--trazos-olive-border);
+}
+
+.trazos-stat-delta.is-down,
+.trazos-stat-delta.is-up.is-inverted {
+    color: var(--trazos-wine-text);
+    background: var(--trazos-wine-soft);
+    border-color: var(--trazos-wine-border);
+}
+
+.trazos-stat-hint {
+    margin-top: 0.5rem !important;
+    font-size: 0.75rem;
+    color: var(--trazos-text-muted);
+}
+
+.trazos-stat-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid transparent;
+    border-radius: 10px 12px 9px 11px / 11px 9px 12px 10px;
+}
+
+.trazos-stat-icon ::deep svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.trazos-stat-icon-primary { background: var(--trazos-olive-tint); color: var(--trazos-olive-text); border-color: var(--trazos-olive-border); }
+.trazos-stat-icon-lavender { background: var(--trazos-lavender-tint); color: var(--trazos-lavender-text); border-color: var(--trazos-lavender-border); }
+.trazos-stat-icon-cream { background: var(--trazos-gold-tint); color: var(--trazos-gold-text); border-color: var(--trazos-gold-border); }
+.trazos-stat-icon-wine { background: var(--trazos-wine-tint); color: var(--trazos-wine-text); border-color: var(--trazos-wine-border); }
+.trazos-stat-icon-neutral { background: var(--trazos-surface-muted); color: var(--trazos-text-light); border-color: var(--trazos-border-soft); }
