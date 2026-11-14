@@ -75,6 +75,7 @@ public static class DocsNav
         new("Navigation", "Navegación",
         [
             new("Breadcrumbs", "components/breadcrumbs"),
+            new("Pagination", "components/pagination"),
             new("Tabs", "components/tabs"),
             new("AppShell", "components/app-shell"),
             new("Drawer", "components/drawer"),

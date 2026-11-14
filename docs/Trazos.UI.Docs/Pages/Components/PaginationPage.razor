@@ -1,0 +1,38 @@
+@page "/components/pagination"
+
+<DocPage Title="Pagination" Category="@L.T("Navigation", "Navegación")"
+         Lead="@L.T("Page buttons with ellipses, previous and next, a page-size selector and a summary of the visible range. It only raises events, so it works with client or server paging, alone or inside DataTable.", "Botones de página con elipsis, anterior y siguiente, un selector de tamaño de página y un resumen del rango visible. Solo dispara eventos, así que funciona con paginación en el cliente o en el servidor, sola o dentro de DataTable.")">
+
+    <DemoBlock Code="@Code">
+        <div class="docs-stack">
+            <Pagination @bind-Page="_page" @bind-PageSize="_size" TotalCount="248" PageSizeOptions="[10, 25, 50]"
+                        Label="@L.T("Pagination", "Paginación")" PreviousLabel="@L.T("Previous page", "Página anterior")" NextLabel="@L.T("Next page", "Página siguiente")"
+                        PageLabelFormat="@L.T("Page {0}", "Página {0}")" PageSizeLabel="@L.T("Rows per page", "Filas por página")" SummaryFormat="@L.T("{0}–{1} of {2}", "{0}–{1} de {2}")" />
+            <p class="docs-demo-output">@L.T("Page:", "Página:") <strong>@_page</strong> · @L.T("Size:", "Tamaño:") <strong>@_size</strong></p>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private int _page = 7;
+    private int _size = 10;
+
+    private const string Code = """
+        <Pagination @bind-Page="_page" @bind-PageSize="_size" TotalCount="248"
+                    PageSizeOptions="[10, 25, 50]" />
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Page", "int", "1", L.T("Current page, from 1. Supports @bind-Page.", "Página actual, desde 1. Admite @bind-Page.")),
+        new("PageSize", "int", "10", L.T("Items per page. Supports @bind-PageSize. Changing it goes back to page 1.", "Elementos por página. Admite @bind-PageSize. Cambiarlo vuelve a la página 1.")),
+        new("TotalCount", "int", "required", L.T("Total items across every page.", "Total de elementos en todas las páginas.")),
+        new("PageSizeOptions", "IReadOnlyList<int>?", null, L.T("Choices for the page-size selector. No selector when empty.", "Opciones del selector de tamaño. Sin selector si está vacío.")),
+        new("Siblings", "int", "1", L.T("Pages shown on each side of the current one.", "Páginas visibles a cada lado de la actual.")),
+        new("Label, PreviousLabel, NextLabel, PageSizeLabel", "string", L.T("English", "inglés"), L.T("Accessible names and visible text.", "Nombres accesibles y texto visible.")),
+        new("PageLabelFormat", "string", "\"Page {0}\"", L.T("Accessible name of each page button.", "Nombre accesible de cada botón de página.")),
+        new("SummaryFormat", "string", "\"{0}–{1} of {2}\"", L.T("First item, last item and total.", "Primer elemento, último y total.")),
+    ];
+}

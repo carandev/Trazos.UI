@@ -1,0 +1,53 @@
+@namespace Trazos.UI.Components
+
+<th class="trazos-sort-header @AlignClass @Class" aria-sort="@AriaSort" scope="col" @attributes="AdditionalAttributes">
+    <button type="button" class="trazos-sort-button" @onclick="ToggleAsync">
+        <span>@ChildContent</span>
+        <svg class="trazos-sort-icon is-@State" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.25" stroke="currentColor">
+            @if (State == "none")
+            {
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+            }
+            else
+            {
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+            }
+        </svg>
+    </button>
+</th>
+
+@code {
+    [CascadingParameter]
+    private IDataTableSortContext? Table { get; set; }
+
+    /// <summary>Name of the column in <see cref="TableSort.Field"/>.</summary>
+    [Parameter, EditorRequired]
+    public string Field { get; set; } = string.Empty;
+
+    [Parameter]
+    public TableAlign Align { get; set; } = TableAlign.Start;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string State => Table?.Sort is { } sort && sort.Field == Field
+        ? sort.Descending ? "descending" : "ascending"
+        : "none";
+
+    private string AriaSort => State;
+
+    private string AlignClass => Align switch
+    {
+        TableAlign.End => "trazos-cell-end",
+        TableAlign.Center => "trazos-cell-center",
+        _ => string.Empty,
+    };
+
+    private Task ToggleAsync() => Table?.ToggleSortAsync(Field) ?? Task.CompletedTask;
+}

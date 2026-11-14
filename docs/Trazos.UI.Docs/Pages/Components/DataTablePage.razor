@@ -1,7 +1,41 @@
 @page "/components/data-table"
 
 <DocPage Title="DataTable" Category="@L.T("Display", "Visualización")"
-         Lead="@L.T("A generic, responsive table with loading skeletons, an empty state and optional row clicks.", "Una tabla genérica y adaptable con esqueletos de carga, un estado vacío y clic opcional en las filas.")">
+         Lead="@L.T("A generic, responsive table with loading skeletons, an empty state, row clicks, sortable columns, a toolbar, a totals row, row actions and pagination.", "Una tabla genérica y adaptable con esqueletos de carga, estado vacío, clic en filas, columnas ordenables, barra de herramientas, fila de totales, acciones por fila y paginación.")">
+
+    <DemoBlock Title="@L.T("Sorting, toolbar, totals, actions and pagination", "Orden, barra, totales, acciones y paginación")"
+               Description="@L.T("SortHeader reports the sort through SortChanged; the app sorts and pages the data, so the same markup works with a server. Add trazos-cell-numeric to right-align amounts.", "SortHeader informa el orden con SortChanged; la app ordena y pagina los datos, así que el mismo marcado sirve con un servidor. Agrega trazos-cell-numeric para alinear montos a la derecha.")"
+               Code="@PayrollCode">
+        <div class="docs-stack">
+        <DataTable TItem="Payslip" Items="PageItems" Sort="_sort" SortChanged="s => _sort = s"
+                   ActionsLabel="@L.T("Actions", "Acciones")" AriaLabel="@L.T("Payslips", "Desprendibles")">
+            <Toolbar>
+                <TextInput Placeholder="@L.T("Filter by name", "Filtrar por nombre")" @bind-Value="Filter" Class="docs-table-filter" />
+            </Toolbar>
+            <TableHeader>
+                <SortHeader Field="name">@L.T("Employee", "Empleado")</SortHeader>
+                <SortHeader Field="net" Align="TableAlign.End">@L.T("Net pay", "Neto a pagar")</SortHeader>
+            </TableHeader>
+            <RowTemplate Context="slip">
+                <td>@slip.Name</td>
+                <td class="trazos-cell-numeric">@slip.Net.ToString("N0")</td>
+            </RowTemplate>
+            <RowActions Context="slip">
+                <Button Size="ButtonSize.Small" Variant="ButtonVariant.Ghost" OnClick="() => _opened = slip.Name">@L.T("View", "Ver")</Button>
+            </RowActions>
+            <TableFooter>
+                <td>@L.T("Total", "Total")</td>
+                <td class="trazos-cell-numeric">@Filtered.Sum(x => x.Net).ToString("N0")</td>
+            </TableFooter>
+            <Pagination>
+                <Pagination @bind-Page="_page" @bind-PageSize="_pageSize" TotalCount="Filtered.Count" PageSizeOptions="[3, 5, 10]"
+                            Label="@L.T("Pagination", "Paginación")" PreviousLabel="@L.T("Previous page", "Página anterior")" NextLabel="@L.T("Next page", "Página siguiente")"
+                            PageLabelFormat="@L.T("Page {0}", "Página {0}")" PageSizeLabel="@L.T("Rows per page", "Filas por página")" SummaryFormat="@L.T("{0}–{1} of {2}", "{0}–{1} de {2}")" />
+            </Pagination>
+        </DataTable>
+        <p class="docs-demo-output">@L.T("Opened:", "Abierto:") <strong>@(_opened ?? L.T("none", "ninguno"))</strong></p>
+        </div>
+    </DemoBlock>
 
     <DemoBlock Title="@L.T("Rows and row clicks", "Filas y clic en filas")" Code="@BasicCode">
         <div class="docs-stack">
@@ -58,6 +92,80 @@
 
 @code {
     private sealed record Person(string Name, string Group, bool Active);
+    private sealed record Payslip(string Name, decimal Net);
+
+    private static readonly Payslip[] Payslips =
+    [
+        new("Ana María Restrepo", 3_210_000), new("Julián Ospina", 4_580_000), new("Luisa Fernanda Gil", 2_890_000),
+        new("Tomás Arango", 5_120_000), new("Valentina Ríos", 3_760_000), new("Mateo Cárdenas", 2_450_000),
+        new("Sofía Londoño", 6_030_000), new("Samuel Duque", 3_340_000),
+    ];
+
+    private TableSort? _sort = new("name");
+    private int _page = 1;
+    private int _pageSize = 3;
+    private string? _filter;
+    private string? _opened;
+
+    private string? Filter
+    {
+        get => _filter;
+        set { _filter = value; _page = 1; }
+    }
+
+    private List<Payslip> Filtered
+    {
+        get
+        {
+            IEnumerable<Payslip> rows = Payslips.Where(p => string.IsNullOrWhiteSpace(_filter) || p.Name.Contains(_filter, StringComparison.CurrentCultureIgnoreCase));
+            rows = (_sort?.Field, _sort?.Descending) switch
+            {
+                ("net", true) => rows.OrderByDescending(p => p.Net),
+                ("net", _) => rows.OrderBy(p => p.Net),
+                ("name", true) => rows.OrderByDescending(p => p.Name),
+                _ => rows.OrderBy(p => p.Name),
+            };
+            return rows.ToList();
+        }
+    }
+
+    private IEnumerable<Payslip> PageItems => Filtered.Skip((_page - 1) * _pageSize).Take(_pageSize);
+
+    private const string PayrollCode = """
+        <DataTable TItem="Payslip" Items="PageItems" Sort="_sort" SortChanged="s => _sort = s">
+            <Toolbar>
+                <TextInput Placeholder="Filter by name" @bind-Value="Filter" />
+            </Toolbar>
+            <TableHeader>
+                <SortHeader Field="name">Employee</SortHeader>
+                <SortHeader Field="net" Align="TableAlign.End">Net pay</SortHeader>
+            </TableHeader>
+            <RowTemplate Context="slip">
+                <td>@slip.Name</td>
+                <td class="trazos-cell-numeric">@slip.Net.ToString("N0")</td>
+            </RowTemplate>
+            <RowActions Context="slip">
+                <Button Size="ButtonSize.Small" Variant="ButtonVariant.Ghost" OnClick="() => Open(slip)">View</Button>
+            </RowActions>
+            <TableFooter>
+                <td>Total</td>
+                <td class="trazos-cell-numeric">@Filtered.Sum(x => x.Net).ToString("N0")</td>
+            </TableFooter>
+            <Pagination>
+                <Pagination @bind-Page="_page" @bind-PageSize="_pageSize"
+                            TotalCount="Filtered.Count" PageSizeOptions="[10, 25, 50]" />
+            </Pagination>
+        </DataTable>
+
+        @code {
+            private TableSort? _sort = new("name");
+            private int _page = 1;
+            private int _pageSize = 10;
+
+            // Sort with _sort.Field / _sort.Descending, then Skip/Take for the page,
+            // in memory or in your API query.
+        }
+        """;
 
     private List<Person> Seed =>
     [
@@ -120,7 +228,17 @@
         new("EmptyMessage", "string", "\"No hay registros disponibles.\"", L.T("Default empty message.", "Mensaje vacío predeterminado.")),
         new("Loading", "bool", "false", L.T("Shows skeleton rows instead of data.", "Muestra filas esqueleto en lugar de datos.")),
         new("LoadingRows", "int", "3", L.T("Number of skeleton rows while loading.", "Cantidad de filas esqueleto mientras carga.")),
-        new("OnRowClick", "EventCallback<TItem>", null, L.T("Makes rows interactive and reports the clicked item.", "Hace las filas interactivas e informa el elemento en el que se hizo clic.")),
+        new("OnRowClick", "EventCallback<TItem>", null, L.T("Makes rows interactive and reports the clicked item. Rows become focusable and open with Enter.", "Hace las filas interactivas e informa el elemento en el que se hizo clic. Las filas reciben foco y se abren con Enter.")),
+        new("Sort", "TableSort?", null, L.T("Current sort (Field, Descending). The table does not sort Items.", "Orden actual (Field, Descending). La tabla no ordena Items.")),
+        new("SortChanged", "EventCallback<TableSort?>", null, L.T("Raised by SortHeader: a new column sorts ascending, the same column flips.", "Lo dispara SortHeader: una columna nueva ordena ascendente; la misma columna invierte el orden.")),
+        new("Toolbar", "RenderFragment?", null, L.T("Content above the table, such as filters.", "Contenido encima de la tabla, como filtros.")),
+        new("TableFooter", "RenderFragment?", null, L.T("Footer cells, such as totals. The <tr> is provided.", "Celdas del pie, como totales. El <tr> ya se incluye.")),
+        new("RowActions", "RenderFragment<TItem>?", null, L.T("Buttons in a last column. Their clicks do not raise OnRowClick.", "Botones en una última columna. Sus clics no disparan OnRowClick.")),
+        new("ActionsLabel", "string", "\"Actions\"", L.T("Screen-reader name of the actions column.", "Nombre para lectores de pantalla de la columna de acciones.")),
+        new("Pagination", "RenderFragment?", null, L.T("Content below the table, normally a Pagination.", "Contenido debajo de la tabla, normalmente un Pagination.")),
+        new("AriaLabel", "string?", null, L.T("Accessible name of the table.", "Nombre accesible de la tabla.")),
+        new("SortHeader", "Field, Align", null, L.T("Sortable <th> with aria-sort. Align: Start, Center or End.", "<th> ordenable con aria-sort. Align: Start, Center o End.")),
+        new("trazos-cell-numeric / -end / -center", "CSS class", null, L.T("Alignment for th and td. numeric also uses tabular figures.", "Alineación para th y td. numeric además usa cifras tabulares.")),
         new("Class", "string?", null, L.T("Extra CSS classes on the wrapper.", "Clases CSS adicionales en el contenedor.")),
     ];
 }
