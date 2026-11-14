@@ -18,6 +18,14 @@ public partial class TextInput : FormFieldBase<string?>
     [Parameter]
     public bool ReadOnly { get; set; }
 
+    /// <summary>Text shown inside the field before the value, such as <c>$</c> or <c>COP</c>.</summary>
+    [Parameter]
+    public string? Prefix { get; set; }
+
+    /// <summary>Text shown inside the field after the value, such as <c>%</c> or <c>kg</c>.</summary>
+    [Parameter]
+    public string? Suffix { get; set; }
+
     [Parameter]
     public RenderFragment? LeadingIcon { get; set; }
 

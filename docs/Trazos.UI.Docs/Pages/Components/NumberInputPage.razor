@@ -1,0 +1,83 @@
+@page "/components/number-input"
+@using System.Globalization
+
+<DocPage Title="NumberInput" Category="@L.T("Forms", "Formularios")"
+         Lead="@L.T("A numeric field for int, long, decimal, double and their nullable forms. It formats with a culture, has currency and percent modes, clamps to Min and Max, and steps with the arrow keys.", "Un campo numérico para int, long, decimal, double y sus versiones anulables. Formatea según una cultura, tiene modos de moneda y porcentaje, limita a Min y Max, y avanza con las flechas del teclado.")">
+
+    <DemoBlock Title="@L.T("Currency", "Moneda")"
+               Description="@L.T("The value is formatted when the field loses focus. Currency mode shows the culture's symbol, or CurrencySymbol, as a prefix.", "El valor se formatea cuando el campo pierde el foco. El modo moneda muestra el símbolo de la cultura, o CurrencySymbol, como prefijo.")"
+               Code="@CurrencyCode">
+        <div class="docs-grid-2">
+            <NumberInput Label="@L.T("Base salary", "Salario base")" Mode="NumberInputMode.Currency" CurrencySymbol="COP" Decimals="0"
+                         Culture="_colombia" Min="0" @bind-Value="_salary" />
+            <NumberInput Label="@L.T("Bonus (USD)", "Bonificación (USD)")" Mode="NumberInputMode.Currency" Culture="_us" @bind-Value="_bonus" />
+        </div>
+        <p class="docs-demo-output">@L.T("Values:", "Valores:") <strong>@_salary</strong> · <strong>@(_bonus?.ToString(CultureInfo.InvariantCulture) ?? "null")</strong></p>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Percent, steps and limits", "Porcentaje, pasos y límites")"
+               Description="@L.T("Percent mode binds the fraction: 0.04 reads 4 %. Use the arrow keys to add or remove Step.", "El modo porcentaje enlaza la fracción: 0.04 se lee 4 %. Usa las flechas para sumar o restar Step.")"
+               Code="@PercentCode">
+        <div class="docs-grid-2">
+            <NumberInput Label="@L.T("Pension contribution", "Aporte a pensión")" Mode="NumberInputMode.Percent" Decimals="1" Min="0" Max="1" Step="0.5m" @bind-Value="_pension" />
+            <NumberInput Label="@L.T("Overtime hours", "Horas extra")" Min="0" Max="48" Suffix="h" HelperText="@L.T("Between 0 and 48.", "Entre 0 y 48.")" @bind-Value="_hours" />
+        </div>
+        <p class="docs-demo-output">@L.T("Values:", "Valores:") <strong>@_pension.ToString(CultureInfo.InvariantCulture)</strong> · <strong>@_hours</strong></p>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private readonly CultureInfo _colombia = CultureInfo.GetCultureInfo("es-CO");
+    private readonly CultureInfo _us = CultureInfo.GetCultureInfo("en-US");
+    private decimal _salary = 3_500_000m;
+    private decimal? _bonus;
+    private decimal _pension = 0.04m;
+    private int _hours = 6;
+
+    private const string CurrencyCode = """
+        <NumberInput Label="Base salary" Mode="NumberInputMode.Currency" CurrencySymbol="COP" Decimals="0"
+                     Culture="@CultureInfo.GetCultureInfo("es-CO")" Min="0" @bind-Value="_salary" />
+
+        <NumberInput Label="Bonus (USD)" Mode="NumberInputMode.Currency"
+                     Culture="@CultureInfo.GetCultureInfo("en-US")" @bind-Value="_bonus" />
+
+        @code {
+            private decimal _salary = 3_500_000m;
+            private decimal? _bonus;
+        }
+        """;
+
+    private const string PercentCode = """
+        <NumberInput Label="Pension contribution" Mode="NumberInputMode.Percent"
+                     Decimals="1" Min="0" Max="1" Step="0.5m" @bind-Value="_pension" />
+
+        <NumberInput Label="Overtime hours" Min="0" Max="48" Suffix="h" @bind-Value="_hours" />
+
+        @code {
+            private decimal _pension = 0.04m; // 4 %
+            private int _hours = 6;
+        }
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("TValue", "int, long, short, decimal, double, float (or nullable)", L.T("inferred", "inferido"), L.T("Bound type. Empty text clears a nullable value.", "Tipo enlazado. El texto vacío limpia un valor anulable.")),
+        new("Value", "TValue", null, L.T("Current value. Supports @bind-Value.", "Valor actual. Admite @bind-Value.")),
+        new("ValueChanged", "EventCallback<TValue>", null, L.T("Raised when the field loses focus with a new value, or on an arrow key.", "Se dispara cuando el campo pierde el foco con un valor nuevo, o con una flecha.")),
+        new("ValueExpression", "Expression<Func<TValue>>?", null, L.T("Set by @bind-Value. Links the field to the EditContext of an EditForm.", "Lo asigna @bind-Value. Vincula el campo al EditContext de un EditForm.")),
+        new("Mode", "NumberInputMode", "Number", L.T("Number, Currency or Percent. Percent binds the fraction (0.15 = 15 %).", "Number, Currency o Percent. Percent enlaza la fracción (0.15 = 15 %).")),
+        new("Min", "decimal?", null, L.T("Smallest value, in bound units. Typed and stepped values are clamped.", "Valor mínimo, en unidades del valor enlazado. Lo escrito y los pasos se limitan.")),
+        new("Max", "decimal?", null, L.T("Largest value, in bound units. Typed and stepped values are clamped.", "Valor máximo, en unidades del valor enlazado. Lo escrito y los pasos se limitan.")),
+        new("Step", "decimal", "1", L.T("Added or removed by ArrowUp and ArrowDown. Percentage points in percent mode.", "Se suma o resta con ArrowUp y ArrowDown. Puntos porcentuales en modo porcentaje.")),
+        new("Decimals", "int?", L.T("by type", "según el tipo"), L.T("Fixed decimals. Defaults to 0 for integers and to the culture's currency digits in currency mode.", "Decimales fijos. Por defecto 0 para enteros y los dígitos de moneda de la cultura en modo moneda.")),
+        new("Grouping", "bool", "true", L.T("Shows group separators.", "Muestra separadores de miles.")),
+        new("Culture", "CultureInfo?", L.T("current culture", "cultura actual"), L.T("Culture used to format and parse.", "Cultura usada para formatear y leer.")),
+        new("CurrencySymbol", "string?", null, L.T("Currency prefix, such as COP. Defaults to the culture's symbol.", "Prefijo de moneda, como COP. Por defecto, el símbolo de la cultura.")),
+        new("Prefix / Suffix", "string?", null, L.T("Text inside the field, before or after the value.", "Texto dentro del campo, antes o después del valor.")),
+        new("ParseErrorMessage", "string", "\"Enter a valid number.\"", L.T("Shown when the text is not a number.", "Se muestra cuando el texto no es un número.")),
+        new("Label, HelperText, Error, Required, Disabled, ReadOnly, Placeholder", "", null, L.T("Same as TextInput.", "Igual que en TextInput.")),
+        new("LeadingIcon / TrailingIcon", "RenderFragment?", null, L.T("Icons inside the field.", "Íconos dentro del campo.")),
+    ];
+}

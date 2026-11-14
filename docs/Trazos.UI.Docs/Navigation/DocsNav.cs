@@ -55,6 +55,8 @@ public static class DocsNav
         new("Forms", "Formularios",
         [
             new("TextInput", "components/text-input"),
+            new("NumberInput", "components/number-input"),
+            new("DateInput", "components/date-input"),
             new("TextArea", "components/text-area"),
             new("SelectInput", "components/select-input"),
             new("Checkbox", "components/checkbox"),

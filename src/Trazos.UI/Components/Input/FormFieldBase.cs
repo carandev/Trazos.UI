@@ -91,7 +91,7 @@ public abstract class FormFieldBase<TValue> : ComponentBase, IDisposable
     protected FieldIdentifier? FieldIdentifier { get; private set; }
 
     /// <summary>Culture used to format and parse the value.</summary>
-    protected virtual CultureInfo Culture => CultureInfo.CurrentCulture;
+    protected virtual CultureInfo FormatCulture => CultureInfo.CurrentCulture;
 
     /// <summary>The message to show: <c>Error</c>, a conversion error, or the first validation message.</summary>
     protected string? ErrorMessage
@@ -103,12 +103,19 @@ public abstract class FormFieldBase<TValue> : ComponentBase, IDisposable
                 return Error;
             }
 
+            // Text that could not be converted is the most recent problem, so it
+            // wins over messages from an earlier validation.
+            if (_parseError is not null)
+            {
+                return _parseError;
+            }
+
             if (EditContext is { } context && FieldIdentifier is { } fieldId)
             {
                 return context.GetValidationMessages(fieldId).FirstOrDefault();
             }
 
-            return _parseError;
+            return null;
         }
     }
 
@@ -191,7 +198,7 @@ public abstract class FormFieldBase<TValue> : ComponentBase, IDisposable
 
     /// <summary>Formats a value for an HTML control.</summary>
     protected virtual string? FormatValueAsString(TValue value) =>
-        BindConverter.FormatValue(value, Culture)?.ToString();
+        BindConverter.FormatValue(value, FormatCulture)?.ToString();
 
     /// <summary>Converts text from an HTML control. Empty text becomes <c>default</c> for nullable types.</summary>
     protected virtual bool TryParseValueFromString(string? text, out TValue value)
@@ -202,7 +209,7 @@ public abstract class FormFieldBase<TValue> : ComponentBase, IDisposable
             return true;
         }
 
-        return BindConverter.TryConvertTo(text, Culture, out value!);
+        return BindConverter.TryConvertTo(text, FormatCulture, out value!);
     }
 
     private void ClearParseError()

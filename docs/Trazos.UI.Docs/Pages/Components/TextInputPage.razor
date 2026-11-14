@@ -20,6 +20,13 @@
         </div>
     </DemoBlock>
 
+    <DemoBlock Title="@L.T("Prefix and suffix", "Prefijo y sufijo")" Description="@L.T("Short text inside the field, such as a unit or a currency code.", "Texto corto dentro del campo, como una unidad o un código de moneda.")" Code="@AffixCode">
+        <div class="docs-grid-2">
+            <TextInput Label="@L.T("Bank account", "Cuenta bancaria")" Prefix="@L.T("No.", "N.º")" @bind-Value="_account" />
+            <TextInput Label="@L.T("Website", "Sitio web")" Prefix="https://" Suffix=".com" @bind-Value="_site" />
+        </div>
+    </DemoBlock>
+
     <DemoBlock Title="@L.T("Disabled and read-only", "Deshabilitado y de solo lectura")" Code="@StatesCode">
         <div class="docs-grid-2">
             <TextInput Label="@L.T("Disabled", "Deshabilitado")" Value="@L.T("Not editable", "No editable")" Disabled="true" />
@@ -33,6 +40,13 @@
 @code {
     private string? _name;
     private string? _email = "not-an-email";
+    private string? _account;
+    private string? _site;
+
+    private const string AffixCode = """
+        <TextInput Label="Bank account" Prefix="No." @bind-Value="_account" />
+        <TextInput Label="Website" Prefix="https://" Suffix=".com" @bind-Value="_site" />
+        """;
 
     private string EmailPlaceholder => L.T("name@example.com", "nombre@ejemplo.com");
 
@@ -79,6 +93,8 @@
         new("Required", "bool", "false", L.T("Shows an asterisk next to the label. It does not add the native required attribute.", "Muestra un asterisco junto a la etiqueta. No agrega el atributo nativo required.")),
         new("Disabled", "bool", "false", L.T("Disables the field.", "Deshabilita el campo.")),
         new("ReadOnly", "bool", "false", L.T("Makes the field read-only.", "Hace que el campo sea de solo lectura.")),
+        new("Prefix", "string?", null, L.T("Text inside the field before the value, such as $ or COP.", "Texto dentro del campo antes del valor, como $ o COP.")),
+        new("Suffix", "string?", null, L.T("Text inside the field after the value, such as % or kg.", "Texto dentro del campo después del valor, como % o kg.")),
         new("LeadingIcon", "RenderFragment?", null, L.T("Icon inside the field, on the left.", "Ícono dentro del campo, a la izquierda.")),
         new("TrailingIcon", "RenderFragment?", null, L.T("Icon inside the field, on the right.", "Ícono dentro del campo, a la derecha.")),
         new("Id", "string", "generated", L.T("Id of the input, used by the label.", "Id del input, usado por la etiqueta.")),

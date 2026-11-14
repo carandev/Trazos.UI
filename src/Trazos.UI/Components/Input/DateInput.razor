@@ -1,0 +1,22 @@
+@namespace Trazos.UI.Components
+@typeparam TValue
+@inherits FormFieldBase<TValue>
+
+<FieldShell For="@Id" Label="@Label" Required="@Required" Disabled="@Disabled"
+            HelperText="@HelperText" HelperId="@HelperId" ErrorMessage="@ErrorMessage" ErrorId="@ErrorId"
+            StateClass="@FieldStateClass" Class="@Class"
+            LeadingIcon="@LeadingIcon" TrailingIcon="@TrailingIcon">
+    <input id="@Id"
+           type="@(MonthOnly ? "month" : "date")"
+           class="trazos-input-control"
+           disabled="@Disabled"
+           readonly="@ReadOnly"
+           min="@FormatDate(Min)"
+           max="@FormatDate(Max)"
+           value="@CurrentValueAsString"
+           aria-invalid="@AriaInvalid"
+           aria-describedby="@DescribedBy"
+           aria-required="@(Required ? "true" : null)"
+           @onchange="OnChanged"
+           @attributes="AdditionalAttributes" />
+</FieldShell>

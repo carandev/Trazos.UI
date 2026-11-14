@@ -1,0 +1,45 @@
+@page "/components/date-input"
+
+<DocPage Title="DateInput" Category="@L.T("Forms", "Formularios")"
+         Lead="@L.T("A date field for DateOnly, DateTime and their nullable forms, built on the native picker. MonthOnly turns it into a month picker.", "Un campo de fecha para DateOnly, DateTime y sus versiones anulables, construido sobre el selector nativo. MonthOnly lo convierte en un selector de mes.")">
+
+    <DemoBlock Title="@L.T("Dates and months", "Fechas y meses")"
+               Description="@L.T("The picker follows the browser's language. A DateTime keeps its time of day when the date changes; a month binds its first day.", "El selector sigue el idioma del navegador. Un DateTime conserva su hora cuando cambia la fecha; un mes enlaza su primer día.")"
+               Code="@Code">
+        <div class="docs-grid-2">
+            <DateInput Label="@L.T("Start date", "Fecha de ingreso")" Min="new DateOnly(2020, 1, 1)" @bind-Value="_start" />
+            <DateInput Label="@L.T("Payroll period", "Periodo de nómina")" MonthOnly="true" @bind-Value="_period" />
+        </div>
+        <p class="docs-demo-output">@L.T("Values:", "Valores:") <strong>@(_start?.ToString("yyyy-MM-dd") ?? "null")</strong> · <strong>@_period.ToString("yyyy-MM-dd")</strong></p>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private DateOnly? _start;
+    private DateOnly _period = new(2026, 11, 1);
+
+    private const string Code = """
+        <DateInput Label="Start date" Min="new DateOnly(2020, 1, 1)" @bind-Value="_start" />
+        <DateInput Label="Payroll period" MonthOnly="true" @bind-Value="_period" />
+
+        @code {
+            private DateOnly? _start;
+            private DateOnly _period = new(2026, 11, 1);
+        }
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("TValue", "DateOnly, DateTime (or nullable)", L.T("inferred", "inferido"), L.T("Bound type. Clearing the picker sets a nullable value to null.", "Tipo enlazado. Borrar el selector deja un valor anulable en null.")),
+        new("Value", "TValue", null, L.T("Current value. Supports @bind-Value.", "Valor actual. Admite @bind-Value.")),
+        new("ValueChanged", "EventCallback<TValue>", null, L.T("Raised when the date changes.", "Se dispara cuando cambia la fecha.")),
+        new("ValueExpression", "Expression<Func<TValue>>?", null, L.T("Set by @bind-Value. Links the field to the EditContext of an EditForm.", "Lo asigna @bind-Value. Vincula el campo al EditContext de un EditForm.")),
+        new("MonthOnly", "bool", "false", L.T("Picks a month. The bound value is the first day of that month.", "Elige un mes. El valor enlazado es el primer día de ese mes.")),
+        new("Min / Max", "DateOnly?", null, L.T("Earliest and latest date the picker offers.", "Fecha más temprana y más tardía que ofrece el selector.")),
+        new("ParseErrorMessage", "string", "\"Enter a valid date.\"", L.T("Shown when the browser sends a value that is not a date.", "Se muestra cuando el navegador envía un valor que no es una fecha.")),
+        new("Label, HelperText, Error, Required, Disabled, ReadOnly", "", null, L.T("Same as TextInput.", "Igual que en TextInput.")),
+        new("LeadingIcon / TrailingIcon", "RenderFragment?", null, L.T("Icons inside the field.", "Íconos dentro del campo.")),
+    ];
+}

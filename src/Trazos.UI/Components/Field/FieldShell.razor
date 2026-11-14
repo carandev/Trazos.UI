@@ -1,0 +1,73 @@
+@namespace Trazos.UI.Components
+@* Shared frame of single-line fields: label, bordered wrapper with icons and
+   text affixes, helper text and error. The control itself is ChildContent and
+   must use the trazos-input-control class. *@
+
+<div class="trazos-input-group @StateClass @Class">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="trazos-input-label" for="@For">
+            @Label
+            @if (Required)
+            {
+                <span class="trazos-input-required" aria-hidden="true">*</span>
+            }
+        </label>
+    }
+
+    <div class="trazos-input-wrapper @(HasError ? "has-error" : "") @(Disabled ? "disabled" : "")">
+        @if (LeadingIcon != null)
+        {
+            <div class="trazos-input-icon leading">
+                @LeadingIcon
+            </div>
+        }
+        @if (!string.IsNullOrEmpty(Prefix))
+        {
+            <span class="trazos-input-affix leading" aria-hidden="true">@Prefix</span>
+        }
+
+        @ChildContent
+
+        @if (!string.IsNullOrEmpty(Suffix))
+        {
+            <span class="trazos-input-affix trailing" aria-hidden="true">@Suffix</span>
+        }
+        @if (TrailingIcon != null)
+        {
+            <div class="trazos-input-icon trailing">
+                @TrailingIcon
+            </div>
+        }
+    </div>
+
+    @if (!HasError && !string.IsNullOrEmpty(HelperText))
+    {
+        <p id="@HelperId" class="trazos-input-helper">@HelperText</p>
+    }
+
+    @if (HasError)
+    {
+        <p id="@ErrorId" class="trazos-input-error" role="alert">@ErrorMessage</p>
+    }
+</div>
+
+@code {
+    [Parameter] public string? For { get; set; }
+    [Parameter] public string? Label { get; set; }
+    [Parameter] public bool Required { get; set; }
+    [Parameter] public bool Disabled { get; set; }
+    [Parameter] public string? HelperText { get; set; }
+    [Parameter] public string? HelperId { get; set; }
+    [Parameter] public string? ErrorMessage { get; set; }
+    [Parameter] public string? ErrorId { get; set; }
+    [Parameter] public string? StateClass { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public string? Prefix { get; set; }
+    [Parameter] public string? Suffix { get; set; }
+    [Parameter] public RenderFragment? LeadingIcon { get; set; }
+    [Parameter] public RenderFragment? TrailingIcon { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    private bool HasError => !string.IsNullOrEmpty(ErrorMessage);
+}

@@ -10,6 +10,12 @@
         <EditForm Model="_employee" OnValidSubmit="Save" class="docs-stack">
             <DataAnnotationsValidator />
             <TextInput Label="@L.T("Full name", "Nombre completo")" Required="true" @bind-Value="_employee.Name" />
+            <div class="docs-grid-2">
+                <NumberInput Label="@L.T("Base salary", "Salario base")" Mode="NumberInputMode.Currency" Decimals="0" @bind-Value="_employee.Salary" />
+                <DateInput Label="@L.T("Start date", "Fecha de ingreso")" @bind-Value="_employee.StartDate" />
+            </div>
+            <SelectInput Label="@L.T("Pay frequency", "Frecuencia de pago")" Placeholder="@L.T("Choose", "Elige")"
+                         Options="SelectOption.ForNullableEnum<PayFrequency>()" @bind-Value="_employee.Frequency" />
             <TextArea Label="@L.T("Notes", "Notas")" HelperText="@L.T("At least 10 characters.", "Mínimo 10 caracteres.")" @bind-Value="_employee.Notes" />
             <Checkbox Label="@L.T("The data was checked against the contract", "Los datos se revisaron contra el contrato")" @bind-Value="_employee.Checked" />
             <div>
@@ -39,10 +45,21 @@
 
     private void Save() => _saved = true;
 
+    private enum PayFrequency { Weekly, Biweekly, Monthly }
+
     private sealed class EmployeeForm
     {
         [Required(ErrorMessage = "Enter the full name.")]
         public string? Name { get; set; }
+
+        [Range(1, 1_000_000_000, ErrorMessage = "Enter the base salary.")]
+        public decimal Salary { get; set; }
+
+        [Required(ErrorMessage = "Enter the start date.")]
+        public DateOnly? StartDate { get; set; }
+
+        [Required(ErrorMessage = "Choose a pay frequency.")]
+        public PayFrequency? Frequency { get; set; }
 
         [MinLength(10, ErrorMessage = "Write at least 10 characters.")]
         public string? Notes { get; set; }
@@ -55,6 +72,10 @@
         <EditForm Model="_employee" OnValidSubmit="Save">
             <DataAnnotationsValidator />
             <TextInput Label="Full name" Required="true" @bind-Value="_employee.Name" />
+            <NumberInput Label="Base salary" Mode="NumberInputMode.Currency" Decimals="0" @bind-Value="_employee.Salary" />
+            <DateInput Label="Start date" @bind-Value="_employee.StartDate" />
+            <SelectInput Label="Pay frequency" Placeholder="Choose"
+                         Options="SelectOption.ForNullableEnum<PayFrequency>()" @bind-Value="_employee.Frequency" />
             <TextArea Label="Notes" HelperText="At least 10 characters." @bind-Value="_employee.Notes" />
             <Checkbox Label="The data was checked against the contract" @bind-Value="_employee.Checked" />
             <Button Type="submit">Save</Button>
@@ -63,10 +84,21 @@
         @code {
             private readonly EmployeeForm _employee = new();
 
+            private enum PayFrequency { Weekly, Biweekly, Monthly }
+
             private sealed class EmployeeForm
             {
                 [Required(ErrorMessage = "Enter the full name.")]
                 public string? Name { get; set; }
+
+        [Range(1, 1_000_000_000, ErrorMessage = "Enter the base salary.")]
+        public decimal Salary { get; set; }
+
+        [Required(ErrorMessage = "Enter the start date.")]
+        public DateOnly? StartDate { get; set; }
+
+        [Required(ErrorMessage = "Choose a pay frequency.")]
+        public PayFrequency? Frequency { get; set; }
 
                 [MinLength(10, ErrorMessage = "Write at least 10 characters.")]
                 public string? Notes { get; set; }

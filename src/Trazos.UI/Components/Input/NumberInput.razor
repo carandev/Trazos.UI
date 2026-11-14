@@ -1,0 +1,28 @@
+@namespace Trazos.UI.Components
+@typeparam TValue
+@inherits FormFieldBase<TValue>
+
+<FieldShell For="@Id" Label="@Label" Required="@Required" Disabled="@Disabled"
+            HelperText="@HelperText" HelperId="@HelperId" ErrorMessage="@ErrorMessage" ErrorId="@ErrorId"
+            StateClass="@FieldStateClass" Class="@Class" Prefix="@EffectivePrefix" Suffix="@EffectiveSuffix"
+            LeadingIcon="@LeadingIcon" TrailingIcon="@TrailingIcon">
+    <input id="@Id"
+           type="text"
+           inputmode="@(IsInteger && Mode != NumberInputMode.Percent ? "numeric" : "decimal")"
+           autocomplete="off"
+           role="spinbutton"
+           class="trazos-input-control is-numeric"
+           placeholder="@Placeholder"
+           disabled="@Disabled"
+           readonly="@ReadOnly"
+           value="@CurrentValueAsString"
+           aria-valuenow="@AriaValueNow"
+           aria-valuemin="@AriaNumber(Min)"
+           aria-valuemax="@AriaNumber(Max)"
+           aria-invalid="@AriaInvalid"
+           aria-describedby="@DescribedBy"
+           aria-required="@(Required ? "true" : null)"
+           @onchange="OnChanged"
+           @onkeydown="OnKeyDown"
+           @attributes="AdditionalAttributes" />
+</FieldShell>
