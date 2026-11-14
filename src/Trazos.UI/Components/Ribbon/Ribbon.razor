@@ -1,0 +1,26 @@
+@namespace Trazos.UI.Components
+
+@* Place it inside an element with position: relative, such as a Card with style="position: relative". *@
+<span class="trazos-ribbon trazos-ribbon-@Tone.ToString().ToLowerInvariant() is-@PositionName trazos-print-exact @Class" @attributes="AdditionalAttributes">
+    <span class="trazos-ribbon-band">@Text</span>
+</span>
+
+@code {
+    /// <summary>Short status text, such as DRAFT or PAID.</summary>
+    [Parameter, EditorRequired]
+    public string Text { get; set; } = string.Empty;
+
+    [Parameter]
+    public RibbonTone Tone { get; set; } = RibbonTone.Olive;
+
+    [Parameter]
+    public RibbonPosition Position { get; set; } = RibbonPosition.TopRight;
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string PositionName => Position == RibbonPosition.TopLeft ? "top-left" : "top-right";
+}

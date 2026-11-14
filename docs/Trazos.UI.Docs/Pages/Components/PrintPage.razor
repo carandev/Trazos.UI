@@ -1,0 +1,70 @@
+@page "/components/print"
+
+<DocPage Title="@L.T("Print & Ribbon", "Impresión y Ribbon")" Category="@L.T("Page structure", "Estructura de página")"
+         Lead="@L.T("Printable documents (receipts, payslips, reports) built from library components. Printed pages always use the light tokens, NoPrint hides controls, PrintOnly adds paper-only content, and Ribbon marks a status in a corner.", "Documentos imprimibles (recibos, desprendibles, reportes) hechos con componentes de la librería. Las páginas impresas siempre usan los tokens claros, NoPrint oculta controles, PrintOnly agrega contenido solo para papel y Ribbon marca un estado en una esquina.")">
+
+    <DemoBlock Code="@Code">
+        <div class="docs-stack">
+            <Card Style="position: relative;" Class="trazos-print-avoid-break">
+                <Ribbon Text="@L.T("Paid", "Pagado")" />
+                <h3 class="trazos-heading">@L.T("Payslip · November 2026", "Desprendible · Noviembre 2026")</h3>
+                <DescriptionList Columns="2">
+                    <DescriptionItem Label="@L.T("Employee", "Empleado")" Value="Ana María Restrepo" />
+                    <DescriptionItem Label="@L.T("Net pay", "Neto a pagar")" Value="$ 3.210.000" />
+                </DescriptionList>
+                <PrintOnly>
+                    <p>@L.T("Signature: ______________________", "Firma: ______________________")</p>
+                </PrintOnly>
+            </Card>
+            <NoPrint>
+                <Button Variant="ButtonVariant.Outline" OnClick="PrintAsync">@L.T("Print", "Imprimir")</Button>
+            </NoPrint>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                @foreach (var tone in Enum.GetValues<RibbonTone>())
+                {
+                    <Card Style="position: relative; width: 11rem; height: 7rem;">
+                        <Ribbon Text="@tone.ToString()" Tone="tone" Position="RibbonPosition.TopLeft" />
+                    </Card>
+                }
+            </div>
+        </div>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("Print utilities", "Utilidades de impresión")</h2>
+    <ul>
+        <li><code>trazos-no-print</code> · @L.T("hidden on paper (NoPrint).", "oculto en papel (NoPrint).")</li>
+        <li><code>trazos-print-only</code> · @L.T("shown only on paper (PrintOnly).", "visible solo en papel (PrintOnly).")</li>
+        <li><code>trazos-print-break-before</code> · @L.T("starts a new page.", "empieza una página nueva.")</li>
+        <li><code>trazos-print-avoid-break</code> · @L.T("keeps a block on one page.", "mantiene un bloque en una sola página.")</li>
+        <li><code>trazos-print-exact</code> · @L.T("keeps tinted fills when printing.", "conserva los rellenos de color al imprimir.")</li>
+    </ul>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+
+    private async Task PrintAsync() => await JS.InvokeVoidAsync("print");
+
+    private const string Code = """
+        <Card Style="position: relative;" Class="trazos-print-avoid-break">
+            <Ribbon Text="Paid" />
+            <h3 class="trazos-heading">Payslip · November 2026</h3>
+            <DescriptionList>…</DescriptionList>
+            <PrintOnly><p>Signature: ______________________</p></PrintOnly>
+        </Card>
+
+        <NoPrint>
+            <Button OnClick="PrintAsync">Print</Button>
+        </NoPrint>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Ribbon.Text", "string", "required", L.T("Short status, such as DRAFT or PAID.", "Estado corto, como BORRADOR o PAGADO.")),
+        new("Ribbon.Tone", "RibbonTone", "Olive", L.T("Olive, Wine, Gold, Sky or Neutral.", "Olive, Wine, Gold, Sky o Neutral.")),
+        new("Ribbon.Position", "RibbonPosition", "TopRight", L.T("TopRight or TopLeft. The parent needs position: relative.", "TopRight o TopLeft. El contenedor necesita position: relative.")),
+        new("NoPrint / PrintOnly", "ChildContent, Class", null, L.T("Wrappers with the print utility classes.", "Envoltorios con las clases de impresión.")),
+    ];
+}

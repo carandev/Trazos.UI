@@ -27,6 +27,8 @@
 
    Every token below is redefined under `[data-theme="dark"]`. There is no
    automatic switch from `prefers-color-scheme`; the host app decides.
+   The dark block sits inside `@media not print`, so printed pages always use
+   the light tokens: dark ink on white paper.
    ========================================================================== */
 
 :root {
@@ -210,163 +212,165 @@
    carry dark text (`--trazos-on-accent`), so every solid keeps >= 4.5:1.
    ========================================================================== */
 
-[data-theme="dark"] {
-    color-scheme: dark;
+@media not print {
+    [data-theme="dark"] {
+        color-scheme: dark;
 
-    /* Legacy public tokens */
-    --trazos-color-ink: #F1E9DD;
-    --trazos-color-ink-light: #D9CCBE;
-    --trazos-color-ink-muted: #A0918A;
-    --trazos-color-parchment-50: #1E1814;
-    --trazos-color-parchment-100: #2A221D;
-    --trazos-color-parchment-200: #2C241F;
-    --trazos-color-parchment-300: #3D332D;
-    --trazos-color-parchment-border: #463B34;
-    --trazos-color-olive-500: #6FB08F;
-    --trazos-color-olive-600: #5E9E7E;
-    --trazos-color-wine-500: #E0668A;
-    --trazos-color-wine-600: #CC5277;
-    --trazos-color-gold-500: #F2A541;
-    --trazos-color-gold-600: #DB8B26;
+        /* Legacy public tokens */
+        --trazos-color-ink: #F1E9DD;
+        --trazos-color-ink-light: #D9CCBE;
+        --trazos-color-ink-muted: #A0918A;
+        --trazos-color-parchment-50: #1E1814;
+        --trazos-color-parchment-100: #2A221D;
+        --trazos-color-parchment-200: #2C241F;
+        --trazos-color-parchment-300: #3D332D;
+        --trazos-color-parchment-border: #463B34;
+        --trazos-color-olive-500: #6FB08F;
+        --trazos-color-olive-600: #5E9E7E;
+        --trazos-color-wine-500: #E0668A;
+        --trazos-color-wine-600: #CC5277;
+        --trazos-color-gold-500: #F2A541;
+        --trazos-color-gold-600: #DB8B26;
 
-    /* Surfaces */
-    --trazos-page: #1A1512;
-    --trazos-panel: #2A221D;
-    --trazos-surface: #231C18;
-    --trazos-surface-raised: #2F2621;
-    --trazos-surface-raised-hover: #3A302A;
-    --trazos-surface-muted: #2A221E;
-    --trazos-surface-dim: #1E1814;
-    --trazos-surface-hover: #2A221E;
-    --trazos-surface-inset: #1E1814;
-    --trazos-track: #1E1814;
-    --trazos-hover: #3A302A;
-    --trazos-hover-tint: rgba(241, 233, 221, 0.05);
-    --trazos-hover-tint-strong: rgba(241, 233, 221, 0.08);
-    --trazos-tag: #3D332D;
-    --trazos-field: #1E1814;
-    --trazos-field-disabled: #2A221E;
-    --trazos-skeleton-base: #2C241F;
-    --trazos-skeleton-highlight: #3A302A;
+        /* Surfaces */
+        --trazos-page: #1A1512;
+        --trazos-panel: #2A221D;
+        --trazos-surface: #231C18;
+        --trazos-surface-raised: #2F2621;
+        --trazos-surface-raised-hover: #3A302A;
+        --trazos-surface-muted: #2A221E;
+        --trazos-surface-dim: #1E1814;
+        --trazos-surface-hover: #2A221E;
+        --trazos-surface-inset: #1E1814;
+        --trazos-track: #1E1814;
+        --trazos-hover: #3A302A;
+        --trazos-hover-tint: rgba(241, 233, 221, 0.05);
+        --trazos-hover-tint-strong: rgba(241, 233, 221, 0.08);
+        --trazos-tag: #3D332D;
+        --trazos-field: #1E1814;
+        --trazos-field-disabled: #2A221E;
+        --trazos-skeleton-base: #2C241F;
+        --trazos-skeleton-highlight: #3A302A;
 
-    /* Borders */
-    --trazos-border: #463B34;
-    --trazos-border-soft: #3D332D;
-    --trazos-border-grid: #342B26;
-    --trazos-divider: #2F2722;
-    --trazos-border-control: #4A3F37;
-    --trazos-border-control-hover: #625449;
-    --trazos-border-input: #54473F;
-    --trazos-border-strong: #54473F;
-    --trazos-border-strong-hover: #6A5B50;
-    --trazos-border-highlight: #C9925A;
+        /* Borders */
+        --trazos-border: #463B34;
+        --trazos-border-soft: #3D332D;
+        --trazos-border-grid: #342B26;
+        --trazos-divider: #2F2722;
+        --trazos-border-control: #4A3F37;
+        --trazos-border-control-hover: #625449;
+        --trazos-border-input: #54473F;
+        --trazos-border-strong: #54473F;
+        --trazos-border-strong-hover: #6A5B50;
+        --trazos-border-highlight: #C9925A;
 
-    /* Text */
-    --trazos-text: #F1E9DD;
-    --trazos-text-light: #D9CCBE;
-    --trazos-text-muted: #B3A497;
-    --trazos-text-secondary: #A89A8D;
-    --trazos-text-subtle: #A0918A;
-    --trazos-text-placeholder: #857870;
-    --trazos-text-disabled: #64584F;
-    --trazos-on-accent: #1A1512;
+        /* Text */
+        --trazos-text: #F1E9DD;
+        --trazos-text-light: #D9CCBE;
+        --trazos-text-muted: #B3A497;
+        --trazos-text-secondary: #A89A8D;
+        --trazos-text-subtle: #A0918A;
+        --trazos-text-placeholder: #857870;
+        --trazos-text-disabled: #64584F;
+        --trazos-on-accent: #1A1512;
 
-    /* Focus, status and overlays */
-    --trazos-focus: #6FB08F;
-    --trazos-focus-ring: rgba(111, 176, 143, 0.28);
-    --trazos-danger: #E0668A;
-    --trazos-danger-ring: rgba(224, 102, 138, 0.28);
-    --trazos-backdrop: rgba(0, 0, 0, 0.62);
-    --trazos-overlay-veil: rgba(26, 21, 18, 0.85);
+        /* Focus, status and overlays */
+        --trazos-focus: #6FB08F;
+        --trazos-focus-ring: rgba(111, 176, 143, 0.28);
+        --trazos-danger: #E0668A;
+        --trazos-danger-ring: rgba(224, 102, 138, 0.28);
+        --trazos-backdrop: rgba(0, 0, 0, 0.62);
+        --trazos-overlay-veil: rgba(26, 21, 18, 0.85);
 
-    /* Shadows: black-based, stronger */
-    --trazos-shadow-rgb: 0 0 0;
-    --trazos-shadow-warm-rgb: 0 0 0;
-    --trazos-shadow-strength: 3.5;
-    /* Re-declared so they also resolve dark when data-theme sits below <html> */
-    --trazos-shadow-sketch: 2px 3px 0px rgb(var(--trazos-shadow-rgb) / calc(0.08 * var(--trazos-shadow-strength)));
-    --trazos-shadow-sketch-lg: 3px 4px 0px rgb(var(--trazos-shadow-rgb) / calc(0.12 * var(--trazos-shadow-strength)));
-    --trazos-shadow-soft: 0 4px 20px -2px rgb(var(--trazos-shadow-rgb) / calc(0.06 * var(--trazos-shadow-strength)));
-    --trazos-shadow-deep: 0 10px 30px -5px rgb(var(--trazos-shadow-rgb) / calc(0.12 * var(--trazos-shadow-strength)));
+        /* Shadows: black-based, stronger */
+        --trazos-shadow-rgb: 0 0 0;
+        --trazos-shadow-warm-rgb: 0 0 0;
+        --trazos-shadow-strength: 3.5;
+        /* Re-declared so they also resolve dark when data-theme sits below <html> */
+        --trazos-shadow-sketch: 2px 3px 0px rgb(var(--trazos-shadow-rgb) / calc(0.08 * var(--trazos-shadow-strength)));
+        --trazos-shadow-sketch-lg: 3px 4px 0px rgb(var(--trazos-shadow-rgb) / calc(0.12 * var(--trazos-shadow-strength)));
+        --trazos-shadow-soft: 0 4px 20px -2px rgb(var(--trazos-shadow-rgb) / calc(0.06 * var(--trazos-shadow-strength)));
+        --trazos-shadow-deep: 0 10px 30px -5px rgb(var(--trazos-shadow-rgb) / calc(0.12 * var(--trazos-shadow-strength)));
 
-    /* Ink (inverted: light solid with dark text) */
-    --trazos-ink-solid: #F1E9DD;
-    --trazos-ink-solid-hover: #FFFFFF;
-    --trazos-ink-edge: #8C7E77;
+        /* Ink (inverted: light solid with dark text) */
+        --trazos-ink-solid: #F1E9DD;
+        --trazos-ink-solid-hover: #FFFFFF;
+        --trazos-ink-edge: #8C7E77;
 
-    --trazos-neutral: #A0918A;
+        --trazos-neutral: #A0918A;
 
-    /* Background tints are mixed into the surface instead of using alpha, so
-       they stay opaque like the light ones and nothing behind a toast, card or
-       badge shows through. Borders and rings keep their alpha. */
+        /* Background tints are mixed into the surface instead of using alpha, so
+           they stay opaque like the light ones and nothing behind a toast, card or
+           badge shows through. Borders and rings keep their alpha. */
 
-    /* Olive */
-    --trazos-olive: #6FB08F;
-    --trazos-olive-solid: #6FB08F;
-    --trazos-olive-solid-hover: #85C2A3;
-    --trazos-olive-edge: #2F5A45;
-    --trazos-olive-strong: #6FB08F;
-    --trazos-olive-bar: #6FB08F;
-    --trazos-olive-glow: rgba(111, 176, 143, 0.2);
-    --trazos-olive-ring: rgba(111, 176, 143, 0.22);
-    --trazos-olive-soft: color-mix(in srgb, #6FB08F 12%, var(--trazos-surface));
-    --trazos-olive-border: rgba(111, 176, 143, 0.35);
-    --trazos-olive-border-hover: rgba(111, 176, 143, 0.6);
-    --trazos-olive-tint: color-mix(in srgb, #6FB08F 20%, var(--trazos-surface));
-    --trazos-olive-tint-alt: color-mix(in srgb, #6FB08F 20%, var(--trazos-surface));
-    --trazos-olive-tint-border: rgba(111, 176, 143, 0.4);
-    --trazos-olive-text: #8CC7A8;
-    --trazos-olive-text-strong: #A6D6BC;
+        /* Olive */
+        --trazos-olive: #6FB08F;
+        --trazos-olive-solid: #6FB08F;
+        --trazos-olive-solid-hover: #85C2A3;
+        --trazos-olive-edge: #2F5A45;
+        --trazos-olive-strong: #6FB08F;
+        --trazos-olive-bar: #6FB08F;
+        --trazos-olive-glow: rgba(111, 176, 143, 0.2);
+        --trazos-olive-ring: rgba(111, 176, 143, 0.22);
+        --trazos-olive-soft: color-mix(in srgb, #6FB08F 12%, var(--trazos-surface));
+        --trazos-olive-border: rgba(111, 176, 143, 0.35);
+        --trazos-olive-border-hover: rgba(111, 176, 143, 0.6);
+        --trazos-olive-tint: color-mix(in srgb, #6FB08F 20%, var(--trazos-surface));
+        --trazos-olive-tint-alt: color-mix(in srgb, #6FB08F 20%, var(--trazos-surface));
+        --trazos-olive-tint-border: rgba(111, 176, 143, 0.4);
+        --trazos-olive-text: #8CC7A8;
+        --trazos-olive-text-strong: #A6D6BC;
 
-    /* Wine */
-    --trazos-wine: #E0668A;
-    --trazos-wine-solid: #E0668A;
-    --trazos-wine-solid-hover: #EA86A3;
-    --trazos-wine-edge: #7A2440;
-    --trazos-wine-soft: color-mix(in srgb, #E0668A 12%, var(--trazos-surface));
-    --trazos-wine-tint: color-mix(in srgb, #E0668A 20%, var(--trazos-surface));
-    --trazos-wine-border: rgba(224, 102, 138, 0.38);
-    --trazos-wine-text: #EE93AD;
+        /* Wine */
+        --trazos-wine: #E0668A;
+        --trazos-wine-solid: #E0668A;
+        --trazos-wine-solid-hover: #EA86A3;
+        --trazos-wine-edge: #7A2440;
+        --trazos-wine-soft: color-mix(in srgb, #E0668A 12%, var(--trazos-surface));
+        --trazos-wine-tint: color-mix(in srgb, #E0668A 20%, var(--trazos-surface));
+        --trazos-wine-border: rgba(224, 102, 138, 0.38);
+        --trazos-wine-text: #EE93AD;
 
-    /* Gold */
-    --trazos-gold: #F2A541;
-    --trazos-gold-bright: #F2A541;
-    --trazos-gold-shadow: rgba(0, 0, 0, 0.35);
-    --trazos-gold-soft: color-mix(in srgb, #F2A541 10%, var(--trazos-surface));
-    --trazos-gold-border: rgba(242, 165, 65, 0.35);
-    --trazos-gold-tint: color-mix(in srgb, #F2A541 16%, var(--trazos-surface));
-    --trazos-gold-tint-hover: color-mix(in srgb, #F2A541 26%, var(--trazos-surface));
-    --trazos-gold-tint-border: rgba(242, 165, 65, 0.42);
-    --trazos-gold-text: #F5B867;
-    --trazos-gold-text-strong: #F7C886;
-    --trazos-cream-soft: color-mix(in srgb, #F2A541 8%, var(--trazos-surface));
-    --trazos-cream-border: #4A3F37;
+        /* Gold */
+        --trazos-gold: #F2A541;
+        --trazos-gold-bright: #F2A541;
+        --trazos-gold-shadow: rgba(0, 0, 0, 0.35);
+        --trazos-gold-soft: color-mix(in srgb, #F2A541 10%, var(--trazos-surface));
+        --trazos-gold-border: rgba(242, 165, 65, 0.35);
+        --trazos-gold-tint: color-mix(in srgb, #F2A541 16%, var(--trazos-surface));
+        --trazos-gold-tint-hover: color-mix(in srgb, #F2A541 26%, var(--trazos-surface));
+        --trazos-gold-tint-border: rgba(242, 165, 65, 0.42);
+        --trazos-gold-text: #F5B867;
+        --trazos-gold-text-strong: #F7C886;
+        --trazos-cream-soft: color-mix(in srgb, #F2A541 8%, var(--trazos-surface));
+        --trazos-cream-border: #4A3F37;
 
-    /* Lavender */
-    --trazos-lavender: #B9A3D9;
-    --trazos-lavender-soft: color-mix(in srgb, #B9A3D9 12%, var(--trazos-surface));
-    --trazos-lavender-tint: color-mix(in srgb, #B9A3D9 18%, var(--trazos-surface));
-    --trazos-lavender-tint-hover: color-mix(in srgb, #B9A3D9 28%, var(--trazos-surface));
-    --trazos-lavender-border: rgba(185, 163, 217, 0.38);
-    --trazos-lavender-text: #CBB9E6;
-    --trazos-lavender-text-strong: #DCCDF0;
-    --trazos-lavender-shadow: rgba(0, 0, 0, 0.35);
-    --trazos-lavender-shadow-sm: rgba(0, 0, 0, 0.2);
-    --trazos-lavender-shadow-md: rgba(0, 0, 0, 0.3);
-    --trazos-lavender-card-start: color-mix(in srgb, #B9A3D9 16%, var(--trazos-surface));
-    --trazos-lavender-card-end: var(--trazos-surface);
-    --trazos-lavender-card-border: rgba(185, 163, 217, 0.32);
+        /* Lavender */
+        --trazos-lavender: #B9A3D9;
+        --trazos-lavender-soft: color-mix(in srgb, #B9A3D9 12%, var(--trazos-surface));
+        --trazos-lavender-tint: color-mix(in srgb, #B9A3D9 18%, var(--trazos-surface));
+        --trazos-lavender-tint-hover: color-mix(in srgb, #B9A3D9 28%, var(--trazos-surface));
+        --trazos-lavender-border: rgba(185, 163, 217, 0.38);
+        --trazos-lavender-text: #CBB9E6;
+        --trazos-lavender-text-strong: #DCCDF0;
+        --trazos-lavender-shadow: rgba(0, 0, 0, 0.35);
+        --trazos-lavender-shadow-sm: rgba(0, 0, 0, 0.2);
+        --trazos-lavender-shadow-md: rgba(0, 0, 0, 0.3);
+        --trazos-lavender-card-start: color-mix(in srgb, #B9A3D9 16%, var(--trazos-surface));
+        --trazos-lavender-card-end: var(--trazos-surface);
+        --trazos-lavender-card-border: rgba(185, 163, 217, 0.32);
 
-    /* Sky */
-    --trazos-sky: #8FB3DE;
-    --trazos-sky-soft: color-mix(in srgb, #8FB3DE 12%, var(--trazos-surface));
-    --trazos-sky-tint: color-mix(in srgb, #8FB3DE 18%, var(--trazos-surface));
-    --trazos-sky-border: rgba(143, 179, 222, 0.38);
-    --trazos-sky-text: #A9C6E8;
+        /* Sky */
+        --trazos-sky: #8FB3DE;
+        --trazos-sky-soft: color-mix(in srgb, #8FB3DE 12%, var(--trazos-surface));
+        --trazos-sky-tint: color-mix(in srgb, #8FB3DE 18%, var(--trazos-surface));
+        --trazos-sky-border: rgba(143, 179, 222, 0.38);
+        --trazos-sky-text: #A9C6E8;
 
-    /* WhatsApp keeps its brand colors; only the shadow darkens */
-    --trazos-whatsapp-shadow: rgba(0, 0, 0, 0.35);
-    --trazos-whatsapp-shadow-hover: rgba(0, 0, 0, 0.45);
-    --trazos-whatsapp-shadow-active: rgba(0, 0, 0, 0.3);
+        /* WhatsApp keeps its brand colors; only the shadow darkens */
+        --trazos-whatsapp-shadow: rgba(0, 0, 0, 0.35);
+        --trazos-whatsapp-shadow-hover: rgba(0, 0, 0, 0.45);
+        --trazos-whatsapp-shadow-active: rgba(0, 0, 0, 0.3);
+    }
 }
 

@@ -76,6 +76,7 @@ public static class DocsNav
         [
             new("PageHeader", "components/page-header"),
             new("Divider", "components/divider"),
+            new("Print & Ribbon", "components/print", "Impresión y Ribbon"),
         ]),
         new("Navigation", "Navegación",
         [

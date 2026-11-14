@@ -1,5 +1,6 @@
 @page "/components/confirm-dialog"
 @inject IDialogService Dialogs
+@inject IPromptDialogService Prompts
 
 <DocPage Title="@L.T("Confirm dialog", "Diálogo de confirmación")" Category="@L.T("Overlays & feedback", "Superposiciones y avisos")"
          Lead="@L.T("Ask for confirmation from code with IDialogService and await the answer. No markup per page: the container lives in AppShell.", "Pide confirmación desde el código con IDialogService y espera la respuesta. Sin markup en cada página: el contenedor vive en AppShell.")">
@@ -26,11 +27,73 @@
         </Tr>
     </p>
 
+    <DemoBlock Title="@L.T("Ask for a reason", "Pedir un motivo")"
+               Description="@L.T("IPromptDialogService.PromptAsync requires typed text before confirming, with required and minimum-length checks. It is shown by the same ConfirmDialogContainer.", "IPromptDialogService.PromptAsync exige escribir un texto antes de confirmar, con validación de obligatorio y largo mínimo. Lo muestra el mismo ConfirmDialogContainer.")"
+               Code="@PromptCode">
+        <div class="docs-stack">
+            <div>
+                <Button Variant="ButtonVariant.Wine" OnClick="RejectAsync">@L.T("Reject payroll", "Rechazar nómina")</Button>
+            </div>
+            <p class="docs-demo-output">@L.T("Result:", "Resultado:") <strong>@_promptResult</strong></p>
+        </div>
+    </DemoBlock>
+
     <ApiTable Title="IDialogService.ConfirmAsync" Params="Params" />
     <ApiTable Title="ConfirmDialogOptions" Params="OptionParams" />
+    <ApiTable Title="PromptDialogOptions" Params="PromptParams" />
 </DocPage>
 
 @code {
+    private string _promptResult = "—";
+
+    private async Task RejectAsync()
+    {
+        var result = await Prompts.PromptAsync(new PromptDialogOptions(
+            Message: L.T("The payroll goes back to draft and the analyst is notified.", "La nómina vuelve a borrador y se notifica al analista."),
+            Title: L.T("Reject payroll", "Rechazar nómina"),
+            InputLabel: L.T("Reason", "Motivo"),
+            ConfirmText: L.T("Reject", "Rechazar"),
+            CancelText: L.T("Cancel", "Cancelar"),
+            ConfirmVariant: ButtonVariant.Wine,
+            MinLength: 10,
+            RequiredMessage: L.T("Write the reason.", "Escribe el motivo."),
+            MinLengthMessage: L.T("Write at least {0} characters.", "Escribe al menos {0} caracteres.")));
+
+        _promptResult = result.Confirmed ? result.Text! : L.T("cancelled", "cancelado");
+    }
+
+    private const string PromptCode = """
+        @inject IPromptDialogService Prompts
+
+        <Button Variant="ButtonVariant.Wine" OnClick="RejectAsync">Reject payroll</Button>
+
+        @code {
+            private async Task RejectAsync()
+            {
+                var result = await Prompts.PromptAsync(new PromptDialogOptions(
+                    Message: "The payroll goes back to draft and the analyst is notified.",
+                    Title: "Reject payroll",
+                    ConfirmText: "Reject",
+                    ConfirmVariant: ButtonVariant.Wine,
+                    MinLength: 10));
+
+                if (result.Confirmed)
+                {
+                    await Payroll.RejectAsync(result.Text!);
+                }
+            }
+        }
+        """;
+
+    private IReadOnlyList<ApiParam> PromptParams =>
+    [
+        new("Message, Title", "string", null, L.T("Explanation and dialog title.", "Explicación y título del diálogo.")),
+        new("InputLabel, Placeholder, InitialText", "string?", "\"Reason\"", L.T("Text field label, placeholder and starting text.", "Etiqueta, marcador y texto inicial del campo.")),
+        new("ConfirmText, CancelText, ConfirmVariant", "", "\"Confirm\", \"Cancel\", Primary", L.T("Buttons.", "Botones.")),
+        new("Required, MinLength, MaxLength", "bool, int, int", "true, 0, 500", L.T("Checks run on confirm; the text is trimmed.", "Las validaciones corren al confirmar; el texto se recorta.")),
+        new("RequiredMessage, MinLengthMessage", "string", L.T("English", "inglés"), L.T("Error texts. {0} is MinLength.", "Textos de error. {0} es MinLength.")),
+        new(L.T("Result", "Resultado"), "PromptResult(Confirmed, Text)", null, L.T("Text is null when cancelled.", "Text es null al cancelar.")),
+    ];
     private string _answer = "none";
 
     private string AnswerLabel => _answer switch

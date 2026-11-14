@@ -24,3 +24,30 @@
         </Footer>
     </Modal>
 }
+
+@if (_prompt != null)
+{
+    <Modal IsOpen="true"
+           Title="@_prompt.Title"
+           Size="@_prompt.Size"
+           CloseOnBackdropClick="false"
+           ShowCloseButton="true"
+           OnClose="CancelPrompt">
+        <ChildContent>
+            <div class="trazos-prompt-body">
+                <p class="trazos-confirm-message">@_prompt.Message</p>
+                <TextArea Id="@_promptFieldId" Label="@_prompt.InputLabel" Placeholder="@_prompt.Placeholder" Rows="3"
+                          Required="@_prompt.Required" Error="@_promptError" maxlength="@_prompt.MaxLength"
+                          Value="@_promptText" ValueChanged="OnPromptTextChanged" />
+            </div>
+        </ChildContent>
+        <Footer>
+            <Button Variant="ButtonVariant.Outline" Class="trazos-prompt-cancel" OnClick="CancelPrompt">
+                @_prompt.CancelText
+            </Button>
+            <Button Variant="@_prompt.ConfirmVariant" Class="trazos-prompt-confirm" OnClick="ConfirmPrompt">
+                @_prompt.ConfirmText
+            </Button>
+        </Footer>
+    </Modal>
+}

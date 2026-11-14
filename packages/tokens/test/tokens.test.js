@@ -90,3 +90,18 @@ test('dark background tints are opaque, like the light ones', () => {
   });
   assert.deepEqual(translucent, []);
 });
+
+test('printing always uses the light tokens', () => {
+  // Dark text on white paper: a dark theme must not reach the printer.
+  assert.match(css, /@media not print\s*{\s*\[data-theme="dark"\]\s*{/);
+});
+
+test('utilities ship print helpers', () => {
+  const utilities = readFileSync(new URL('../utilities.css', import.meta.url), 'utf8');
+  assert.match(utilities, /\.trazos-print-only\s*{\s*display:\s*none/);
+  const print = utilities.slice(utilities.indexOf('@media print'));
+  assert.ok(print.length > 0, 'missing @media print block');
+  for (const rule of ['.trazos-no-print', '.trazos-print-only', '.trazos-print-break-before', '.trazos-print-avoid-break']) {
+    assert.ok(print.includes(rule), `${rule} is missing from the print block`);
+  }
+});

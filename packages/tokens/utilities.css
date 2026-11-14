@@ -42,3 +42,38 @@
     font-size: 1.25rem;
     line-height: 1;
 }
+
+/* ==========================================================================
+   Print helpers
+   Printed pages use the light tokens (see tokens.css). Hide controls with
+   .trazos-no-print, show print-only content (signatures, legal notes) with
+   .trazos-print-only, and control page breaks for receipts and reports.
+   ========================================================================== */
+
+.trazos-print-only {
+    display: none;
+}
+
+@media print {
+    .trazos-no-print {
+        display: none !important;
+    }
+
+    .trazos-print-only {
+        display: block !important;
+    }
+
+    .trazos-print-break-before {
+        break-before: page;
+    }
+
+    .trazos-print-avoid-break {
+        break-inside: avoid;
+    }
+
+    /* Keep tinted fills (badges, ribbons, totals rows) on paper. */
+    .trazos-print-exact {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
