@@ -106,14 +106,10 @@
     font-variant-numeric: tabular-nums;
 }
 
-/* Native pickers: keep the calendar icon readable in both themes. */
+/* Native pickers. color-scheme on the theme already lightens the icon in dark mode. */
 .trazos-input-wrapper ::deep .trazos-input-control::-webkit-calendar-picker-indicator {
     cursor: pointer;
     opacity: 0.6;
-}
-
-[data-theme="dark"] .trazos-input-wrapper ::deep .trazos-input-control::-webkit-calendar-picker-indicator {
-    filter: invert(0.85);
 }
 
 .trazos-input-helper {
