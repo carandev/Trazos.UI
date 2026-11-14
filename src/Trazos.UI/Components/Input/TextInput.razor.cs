@@ -1,23 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 
 namespace Trazos.UI.Components;
 
-public partial class TextInput
+/// <summary>Single-line text field. Works standalone or bound inside an EditForm.</summary>
+public partial class TextInput : FormFieldBase<string?>
 {
-    [Parameter]
-    public string Id { get; set; } = $"trazos-input-{Guid.NewGuid():N}";
-
-    [Parameter]
-    public string? Label { get; set; }
-
-    [Parameter]
-    public string? Value { get; set; }
-
-    [Parameter]
-    public EventCallback<string?> ValueChanged { get; set; }
+    public TextInput() : base("trazos-input")
+    {
+    }
 
     [Parameter]
     public string Type { get; set; } = "text";
@@ -26,22 +16,7 @@ public partial class TextInput
     public string? Placeholder { get; set; }
 
     [Parameter]
-    public string? HelperText { get; set; }
-
-    [Parameter]
-    public string? Error { get; set; }
-
-    [Parameter]
-    public bool Required { get; set; }
-
-    [Parameter]
-    public bool Disabled { get; set; }
-
-    [Parameter]
     public bool ReadOnly { get; set; }
-
-    [Parameter]
-    public string? Class { get; set; }
 
     [Parameter]
     public RenderFragment? LeadingIcon { get; set; }
@@ -49,14 +24,5 @@ public partial class TextInput
     [Parameter]
     public RenderFragment? TrailingIcon { get; set; }
 
-    [Parameter(CaptureUnmatchedValues = true)]
-    public Dictionary<string, object>? AdditionalAttributes { get; set; }
-
-    private bool HasError => !string.IsNullOrEmpty(Error);
-
-    private async Task OnInputChanged(ChangeEventArgs e)
-    {
-        Value = e.Value?.ToString();
-        await ValueChanged.InvokeAsync(Value);
-    }
+    private Task OnInputChanged(ChangeEventArgs e) => SetValueAsync(e.Value?.ToString());
 }

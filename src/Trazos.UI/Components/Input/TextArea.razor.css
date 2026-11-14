@@ -82,3 +82,10 @@
     font-weight: 600;
     color: var(--trazos-danger);
 }
+
+/* EditForm state classes (modified, valid, invalid) land on the group. The
+   field draws its own error state, so drop the outline Blazor templates add. */
+.trazos-input-group.valid,
+.trazos-input-group.invalid {
+    outline: none;
+}

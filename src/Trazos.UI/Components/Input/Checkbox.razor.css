@@ -93,3 +93,10 @@
     color: var(--trazos-danger);
     padding-left: 1.9rem;
 }
+
+/* EditForm state classes (modified, valid, invalid) land on the group. The
+   checkbox draws its own error state, so drop the outline Blazor templates add. */
+.trazos-checkbox-group.valid,
+.trazos-checkbox-group.invalid {
+    outline: none;
+}

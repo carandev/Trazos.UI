@@ -38,10 +38,11 @@
     [
         new("Value", "bool", "false", L.T("Checked state. Supports @bind-Value.", "Estado marcado. Admite @bind-Value.")),
         new("ValueChanged", "EventCallback<bool>", null, L.T("Raised when the state changes.", "Se dispara cuando cambia el estado.")),
+        new("ValueExpression", "Expression<Func<bool>>?", null, L.T("Set by @bind-Value. Links the field to the EditContext of an EditForm (see Forms and validation).", "Lo asigna @bind-Value. Vincula el campo al EditContext de un EditForm (ver Formularios y validación).")),
         new("Label", "string?", null, L.T("Plain text label.", "Etiqueta de texto simple.")),
         new("ChildContent", "RenderFragment?", null, L.T("Rich label. Takes precedence over Label.", "Etiqueta enriquecida. Tiene prioridad sobre Label.")),
         new("HelperText", "string?", null, L.T("Hint below the checkbox.", "Ayuda debajo de la casilla.")),
-        new("Error", "string?", null, L.T("Error message.", "Mensaje de error.")),
+        new("Error", "string?", null, L.T("Error message. Inside an EditForm it defaults to the validation message.", "Mensaje de error. Dentro de un EditForm toma el mensaje de validación.")),
         new("Disabled", "bool", "false", L.T("Disables the checkbox.", "Deshabilita la casilla.")),
         new("Id", "string", "generated", L.T("Id of the input.", "Id del input.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),

@@ -1,6 +1,7 @@
 @namespace Trazos.UI.Components
+@inherits FormFieldBase<string?>
 
-<div class="trazos-input-group @Class">
+<div class="trazos-input-group @FieldStateClass @Class">
     @if (!string.IsNullOrEmpty(Label))
     {
         <label class="trazos-input-label" for="@Id">
@@ -26,7 +27,10 @@
                placeholder="@Placeholder"
                disabled="@Disabled"
                readonly="@ReadOnly"
-               value="@Value"
+               value="@CurrentValueAsString"
+               aria-invalid="@AriaInvalid"
+               aria-describedby="@DescribedBy"
+               aria-required="@(Required ? "true" : null)"
                @oninput="OnInputChanged"
                @attributes="AdditionalAttributes" />
 
@@ -38,13 +42,13 @@
         }
     </div>
 
-    @if (!string.IsNullOrEmpty(HelperText) && !HasError)
+    @if (HasHelperText)
     {
-        <p class="trazos-input-helper">@HelperText</p>
+        <p id="@HelperId" class="trazos-input-helper">@HelperText</p>
     }
 
     @if (HasError)
     {
-        <p class="trazos-input-error" role="alert">@Error</p>
+        <p id="@ErrorId" class="trazos-input-error" role="alert">@ErrorMessage</p>
     }
 </div>

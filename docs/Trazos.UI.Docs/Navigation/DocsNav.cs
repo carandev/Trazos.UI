@@ -17,6 +17,7 @@ public static class DocsNav
             new("Installation", "installation", "Instalación"),
             new("Design tokens", "tokens", "Tokens de diseño"),
             new("Theming", "theming", "Temas y modo oscuro"),
+            new("Forms and validation", "forms", "Formularios y validación"),
         ]),
         new("Actions", "Acciones",
         [

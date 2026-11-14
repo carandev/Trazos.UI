@@ -1,0 +1,79 @@
+@page "/forms"
+@using System.ComponentModel.DataAnnotations
+
+<DocPage Title="@L.T("Forms and validation", "Formularios y validación")" Category="@L.T("Getting started", "Primeros pasos")"
+         Lead="@L.T("Every Trazos field works inside a Blazor EditForm. Bind it with @bind-Value and the field shows its validation message, its state classes and its ARIA attributes on its own.", "Cada campo de Trazos funciona dentro de un EditForm de Blazor. Enlázalo con @bind-Value y el campo muestra su mensaje de validación, sus clases de estado y sus atributos ARIA por sí solo.")">
+
+    <DemoBlock Title="@L.T("EditForm with DataAnnotations", "EditForm con DataAnnotations")"
+               Description="@L.T("Submit the empty form: each field reads its error from the EditContext. No Error parameter is passed by hand.", "Envía el formulario vacío: cada campo lee su error del EditContext. No se pasa ningún parámetro Error a mano.")"
+               Code="@Code">
+        <EditForm Model="_employee" OnValidSubmit="Save" class="docs-stack">
+            <DataAnnotationsValidator />
+            <TextInput Label="@L.T("Full name", "Nombre completo")" Required="true" @bind-Value="_employee.Name" />
+            <TextArea Label="@L.T("Notes", "Notas")" HelperText="@L.T("At least 10 characters.", "Mínimo 10 caracteres.")" @bind-Value="_employee.Notes" />
+            <Checkbox Label="@L.T("The data was checked against the contract", "Los datos se revisaron contra el contrato")" @bind-Value="_employee.Checked" />
+            <div>
+                <Button Type="submit">@L.T("Save", "Guardar")</Button>
+            </div>
+            @if (_saved)
+            {
+                <p class="docs-demo-output">@L.T("Saved:", "Guardado:") <strong>@_employee.Name</strong></p>
+            }
+        </EditForm>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How it works", "Cómo funciona")</h2>
+    <ul>
+        <li>@L.T("@bind-Value also passes ValueExpression, which tells the field which model property it edits.", "@bind-Value también pasa ValueExpression, que le dice al campo qué propiedad del modelo edita.")</li>
+        <li>@L.T("On every change the field calls NotifyFieldChanged, so validators such as DataAnnotationsValidator or FluentValidation run for that field.", "En cada cambio el campo llama a NotifyFieldChanged, así que validadores como DataAnnotationsValidator o FluentValidation se ejecutan para ese campo.")</li>
+        <li>@L.T("The first validation message is shown below the field, linked with aria-describedby and aria-invalid.", "El primer mensaje de validación se muestra debajo del campo, vinculado con aria-describedby y aria-invalid.")</li>
+        <li>@L.T("The EditContext state classes (modified, valid, invalid) are added to the field root, so a custom FieldCssClassProvider also applies.", "Las clases de estado del EditContext (modified, valid, invalid) se agregan a la raíz del campo, así que también aplica un FieldCssClassProvider propio.")</li>
+        <li>@L.T("An explicit Error parameter always wins, which is useful for server-side errors.", "Un parámetro Error explícito siempre gana, útil para errores del servidor.")</li>
+        <li>@L.T("Outside an EditForm nothing changes: fields stay plain Value / ValueChanged components.", "Fuera de un EditForm nada cambia: los campos siguen siendo componentes simples de Value / ValueChanged.")</li>
+    </ul>
+</DocPage>
+
+@code {
+    private readonly EmployeeForm _employee = new();
+    private bool _saved;
+
+    private void Save() => _saved = true;
+
+    private sealed class EmployeeForm
+    {
+        [Required(ErrorMessage = "Enter the full name.")]
+        public string? Name { get; set; }
+
+        [MinLength(10, ErrorMessage = "Write at least 10 characters.")]
+        public string? Notes { get; set; }
+
+        [Range(typeof(bool), "true", "true", ErrorMessage = "Confirm the data before saving.")]
+        public bool Checked { get; set; }
+    }
+
+    private const string Code = """
+        <EditForm Model="_employee" OnValidSubmit="Save">
+            <DataAnnotationsValidator />
+            <TextInput Label="Full name" Required="true" @bind-Value="_employee.Name" />
+            <TextArea Label="Notes" HelperText="At least 10 characters." @bind-Value="_employee.Notes" />
+            <Checkbox Label="The data was checked against the contract" @bind-Value="_employee.Checked" />
+            <Button Type="submit">Save</Button>
+        </EditForm>
+
+        @code {
+            private readonly EmployeeForm _employee = new();
+
+            private sealed class EmployeeForm
+            {
+                [Required(ErrorMessage = "Enter the full name.")]
+                public string? Name { get; set; }
+
+                [MinLength(10, ErrorMessage = "Write at least 10 characters.")]
+                public string? Notes { get; set; }
+
+                [Range(typeof(bool), "true", "true", ErrorMessage = "Confirm the data before saving.")]
+                public bool Checked { get; set; }
+            }
+        }
+        """;
+}

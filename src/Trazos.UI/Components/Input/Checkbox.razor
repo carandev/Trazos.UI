@@ -1,12 +1,16 @@
 @namespace Trazos.UI.Components
+@inherits FormFieldBase<bool>
 
-<div class="trazos-checkbox-group @Class">
+<div class="trazos-checkbox-group @FieldStateClass @Class">
     <label class="trazos-checkbox-container @(Disabled ? "disabled" : "")" for="@Id">
         <input id="@Id"
                type="checkbox"
                class="trazos-checkbox-control"
                checked="@Value"
                disabled="@Disabled"
+               aria-required="@(Required ? "true" : null)"
+               aria-invalid="@AriaInvalid"
+               aria-describedby="@DescribedBy"
                @onchange="OnCheckboxChanged"
                @attributes="AdditionalAttributes" />
 
@@ -31,13 +35,13 @@
         }
     </label>
 
-    @if (!string.IsNullOrEmpty(HelperText) && !HasError)
+    @if (HasHelperText)
     {
-        <p class="trazos-checkbox-helper">@HelperText</p>
+        <p id="@HelperId" class="trazos-checkbox-helper">@HelperText</p>
     }
 
     @if (HasError)
     {
-        <p class="trazos-checkbox-error" role="alert">@Error</p>
+        <p id="@ErrorId" class="trazos-checkbox-error" role="alert">@ErrorMessage</p>
     }
 </div>
