@@ -1,0 +1,97 @@
+@page "/components/form-layout"
+
+<DocPage Title="@L.T("Form layout", "Diseño de formularios")" Category="@L.T("Forms", "Formularios")"
+         Lead="@L.T("FormGrid places fields in 1 to 4 responsive columns, Divider with a Label splits sections, FormActions aligns the submit bar, and FilterBar groups filters above a list.", "FormGrid ubica los campos en 1 a 4 columnas adaptables, Divider con Label separa secciones, FormActions alinea la barra de envío y FilterBar agrupa filtros encima de una lista.")">
+
+    <DemoBlock Title="FormGrid · Divider · FormActions" Code="@FormCode">
+        <div class="docs-stack">
+            <FormGrid Columns="3">
+                <TextInput Label="@L.T("First name", "Nombres")" />
+                <TextInput Label="@L.T("Last name", "Apellidos")" />
+                <DateInput TValue="DateOnly?" Label="@L.T("Birth date", "Fecha de nacimiento")" />
+                <TextInput Label="@L.T("Address", "Dirección")" Class="trazos-form-full" />
+            </FormGrid>
+            <Divider Label="@L.T("Payment", "Pago")" />
+            <FormGrid>
+                <NumberInput TValue="decimal?" Label="@L.T("Base salary", "Salario base")" Mode="NumberInputMode.Currency" Decimals="0" />
+                <TextInput Label="@L.T("Bank account", "Cuenta bancaria")" />
+            </FormGrid>
+            <FormActions Align="FormActionsAlign.Between" Sticky="true">
+                <Button Variant="ButtonVariant.Ghost">@L.T("Cancel", "Cancelar")</Button>
+                <Button Variant="ButtonVariant.Outline">@L.T("Save draft", "Guardar borrador")</Button>
+                <Button>@L.T("Save", "Guardar")</Button>
+            </FormActions>
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="FilterBar" Code="@FilterCode">
+        <FilterBar Label="@L.T("Filter employees", "Filtrar empleados")">
+            <ChildContent>
+                <SearchInput Placeholder="@L.T("Name or document", "Nombre o documento")" @bind-Value="_query" />
+                <SelectInput TValue="string" Placeholder="@L.T("Area", "Área")" aria-label="@L.T("Area", "Área")" @bind-Value="_area">
+                    <option value="it">@L.T("Technology", "Tecnología")</option>
+                    <option value="hr">@L.T("People", "Gestión humana")</option>
+                </SelectInput>
+                <DateInput MonthOnly="true" aria-label="@L.T("Period", "Periodo")" @bind-Value="_period" />
+            </ChildContent>
+            <Actions>
+                <Button Variant="ButtonVariant.Ghost" OnClick="Reset">@L.T("Reset", "Limpiar")</Button>
+            </Actions>
+        </FilterBar>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private string? _query;
+    private string? _area;
+    private DateOnly? _period;
+
+    private void Reset()
+    {
+        _query = null;
+        _area = null;
+        _period = null;
+    }
+
+    private const string FormCode = """
+        <FormGrid Columns="3">
+            <TextInput Label="First name" @bind-Value="_model.FirstName" />
+            <TextInput Label="Last name" @bind-Value="_model.LastName" />
+            <DateInput Label="Birth date" @bind-Value="_model.BirthDate" />
+            <TextInput Label="Address" Class="trazos-form-full" @bind-Value="_model.Address" />
+        </FormGrid>
+
+        <Divider Label="Payment" />
+
+        <FormActions Align="FormActionsAlign.Between" Sticky="true">
+            <Button Variant="ButtonVariant.Ghost">Cancel</Button>
+            <Button Variant="ButtonVariant.Outline">Save draft</Button>
+            <Button Type="submit">Save</Button>
+        </FormActions>
+        """;
+
+    private const string FilterCode = """
+        <FilterBar Label="Filter employees">
+            <ChildContent>
+                <SearchInput Placeholder="Name or document" @bind-Value="_query" />
+                <SelectInput TValue="string" Placeholder="Area" aria-label="Area" @bind-Value="_area">…</SelectInput>
+                <DateInput MonthOnly="true" aria-label="Period" @bind-Value="_period" />
+            </ChildContent>
+            <Actions>
+                <Button Variant="ButtonVariant.Ghost" OnClick="Reset">Reset</Button>
+            </Actions>
+        </FilterBar>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("FormGrid.Columns", "int", "2", L.T("1 to 4 on wide screens; one on phones, at most two on tablets. Add trazos-form-full to a field's Class to span the row.", "De 1 a 4 en pantallas anchas; una en teléfonos y como máximo dos en tabletas. Agrega trazos-form-full a Class de un campo para ocupar la fila.")),
+        new("FormActions.Align", "FormActionsAlign", "End", L.T("End, Start, or Between (the first button goes left).", "End, Start o Between (el primer botón va a la izquierda).")),
+        new("FormActions.Sticky", "bool", "false", L.T("On phones the bar sticks to the bottom of the screen.", "En teléfonos la barra se queda fija abajo.")),
+        new("FilterBar.Label", "string?", null, L.T("Accessible name of the search landmark.", "Nombre accesible del landmark de búsqueda.")),
+        new("FilterBar.Actions", "RenderFragment?", null, L.T("Buttons on the right, such as reset.", "Botones a la derecha, como limpiar.")),
+        new("Divider.Label", "string?", null, L.T("Section title between groups of fields.", "Título de sección entre grupos de campos.")),
+    ];
+}

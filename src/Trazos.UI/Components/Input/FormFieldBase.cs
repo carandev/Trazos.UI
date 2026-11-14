@@ -242,14 +242,23 @@ public abstract class FormFieldBase<TValue> : ComponentBase, IDisposable
 
     public void Dispose()
     {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>Releases the edit context subscription. Override to release a field's own resources.</summary>
+    protected virtual void Dispose(bool disposing)
+    {
         if (_disposed)
         {
             return;
         }
 
         _disposed = true;
-        DetachContext();
-        _subscribedContext = null;
-        GC.SuppressFinalize(this);
+        if (disposing)
+        {
+            DetachContext();
+            _subscribedContext = null;
+        }
     }
 }

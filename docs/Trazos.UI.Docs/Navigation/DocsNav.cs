@@ -59,6 +59,7 @@ public static class DocsNav
         [
             new("TextInput", "components/text-input"),
             new("NumberInput", "components/number-input"),
+            new("SearchInput", "components/search-input"),
             new("DateInput", "components/date-input"),
             new("TextArea", "components/text-area"),
             new("SelectInput", "components/select-input"),
@@ -66,6 +67,7 @@ public static class DocsNav
             new("Autocomplete", "components/autocomplete"),
             new("RadioCardGroup", "components/radio-card-group"),
             new("FormSection", "components/form-section"),
+            new("Form layout", "components/form-layout", "Diseño de formularios"),
         ]),
         new("Page structure", "Estructura de página",
         [

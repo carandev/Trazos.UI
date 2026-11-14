@@ -1,0 +1,33 @@
+@namespace Trazos.UI.Components
+@inherits FormFieldBase<string?>
+
+<FieldShell For="@Id" Label="@Label" Required="@Required" Disabled="@Disabled"
+            HelperText="@HelperText" HelperId="@HelperId" ErrorMessage="@ErrorMessage" ErrorId="@ErrorId"
+            StateClass="@FieldStateClass" Class="@($"trazos-search {Class}")"
+            LeadingIcon="@SearchIcon" TrailingIcon="@(HasText && !Disabled ? ClearButton : null)">
+    <input id="@Id"
+           type="search"
+           class="trazos-input-control"
+           placeholder="@Placeholder"
+           disabled="@Disabled"
+           autocomplete="off"
+           value="@_text"
+           aria-label="@(string.IsNullOrEmpty(Label) ? AriaLabel : null)"
+           aria-invalid="@AriaInvalid"
+           aria-describedby="@DescribedBy"
+           @oninput="OnInput"
+           @onkeydown="OnKeyDown"
+           @attributes="AdditionalAttributes" />
+</FieldShell>
+
+@code {
+    private RenderFragment SearchIcon => @<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="18" height="18" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+    </svg>;
+
+    private RenderFragment ClearButton => @<button type="button" class="trazos-search-clear" aria-label="@ClearLabel" @onclick="ClearAsync">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.25" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+    </button>;
+}

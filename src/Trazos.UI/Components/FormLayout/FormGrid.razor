@@ -1,0 +1,20 @@
+@namespace Trazos.UI.Components
+
+<div class="trazos-form-grid trazos-form-grid-cols-@Math.Clamp(Columns, 1, 4) @Class" @attributes="AdditionalAttributes">
+    @ChildContent
+</div>
+
+@code {
+    /// <summary>Columns on wide screens, 1 to 4. Phones show one; tablets at most two. Give a child the <c>trazos-form-full</c> class to span the row.</summary>
+    [Parameter]
+    public int Columns { get; set; } = 2;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

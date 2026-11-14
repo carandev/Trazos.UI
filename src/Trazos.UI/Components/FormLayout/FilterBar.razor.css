@@ -1,0 +1,35 @@
+/* ========================================
+   FILTER BAR - Trazos UI
+   Fields grow to fill the row and wrap on narrow screens.
+   ======================================== */
+
+.trazos-filter-bar {
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.trazos-filter-bar-fields {
+    display: flex;
+    flex: 1 1 24rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+.trazos-filter-bar-fields ::deep > * {
+    flex: 1 1 12rem;
+    min-width: 0;
+}
+
+.trazos-filter-bar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}

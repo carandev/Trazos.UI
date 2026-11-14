@@ -1,0 +1,29 @@
+@namespace Trazos.UI.Components
+
+<div class="trazos-filter-bar @Class" role="search" aria-label="@Label" @attributes="AdditionalAttributes">
+    <div class="trazos-filter-bar-fields">@ChildContent</div>
+    @if (Actions != null)
+    {
+        <div class="trazos-filter-bar-actions">@Actions</div>
+    }
+</div>
+
+@code {
+    /// <summary>Accessible name of the search landmark, such as "Filter employees".</summary>
+    [Parameter]
+    public string? Label { get; set; }
+
+    /// <summary>Filter fields: SearchInput, SelectInput, DateInput…</summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Buttons on the right, such as a reset action.</summary>
+    [Parameter]
+    public RenderFragment? Actions { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

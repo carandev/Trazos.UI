@@ -1,0 +1,24 @@
+@namespace Trazos.UI.Components
+
+<div class="trazos-form-actions is-@Align.ToString().ToLowerInvariant() @(Sticky ? "is-sticky" : "") @Class" @attributes="AdditionalAttributes">
+    @ChildContent
+</div>
+
+@code {
+    /// <summary>End (default), Start, or Between to push the first child to the left.</summary>
+    [Parameter]
+    public FormActionsAlign Align { get; set; } = FormActionsAlign.End;
+
+    /// <summary>On phones, keeps the bar at the bottom of the screen while the form scrolls.</summary>
+    [Parameter]
+    public bool Sticky { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

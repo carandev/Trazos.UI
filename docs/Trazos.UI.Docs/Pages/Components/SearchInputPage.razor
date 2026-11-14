@@ -1,0 +1,46 @@
+@page "/components/search-input"
+
+<DocPage Title="SearchInput" Category="@L.T("Forms", "Formularios")"
+         Lead="@L.T("A search box for filtering lists, with a clear button, Escape to clear, and a debounced ValueChanged so the list filters once the user pauses.", "Un buscador para filtrar listas, con botón para limpiar, Escape para borrar y un ValueChanged con retardo, así la lista se filtra cuando el usuario hace una pausa.")">
+
+    <DemoBlock Code="@Code">
+        <div class="docs-stack">
+            <SearchInput Placeholder="@L.T("Search employees", "Buscar empleados")" AriaLabel="@L.T("Search employees", "Buscar empleados")"
+                         ClearLabel="@L.T("Clear search", "Limpiar búsqueda")" @bind-Value="_query" />
+            <ul>
+                @foreach (var name in _names.Where(n => string.IsNullOrWhiteSpace(_query) || n.Contains(_query, StringComparison.CurrentCultureIgnoreCase)))
+                {
+                    <li>@name</li>
+                }
+            </ul>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private string? _query;
+    private readonly string[] _names = ["Ana María Restrepo", "Julián Ospina", "Luisa Fernanda Gil", "Tomás Arango", "Valentina Ríos"];
+
+    private const string Code = """
+        <SearchInput Placeholder="Search employees" @bind-Value="_query" />
+
+        @foreach (var name in _names.Where(n => string.IsNullOrWhiteSpace(_query)
+                                            || n.Contains(_query, StringComparison.CurrentCultureIgnoreCase)))
+        {
+            <li>@name</li>
+        }
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Value", "string?", null, L.T("Committed search text. Supports @bind-Value.", "Texto de búsqueda confirmado. Admite @bind-Value.")),
+        new("ValueChanged", "EventCallback<string?>", null, L.T("Raised after the debounce, or at once when clearing.", "Se dispara tras el retardo, o de inmediato al limpiar.")),
+        new("Debounce", "int", "300", L.T("Milliseconds to wait after the last key. 0 raises on every key.", "Milisegundos de espera tras la última tecla. 0 lo dispara en cada tecla.")),
+        new("Placeholder", "string?", null, L.T("Placeholder text.", "Texto de marcador de posición.")),
+        new("AriaLabel", "string", "\"Search\"", L.T("Accessible name when there is no Label.", "Nombre accesible cuando no hay Label.")),
+        new("ClearLabel", "string", "\"Clear search\"", L.T("Accessible name of the clear button.", "Nombre accesible del botón de limpiar.")),
+        new("Label, HelperText, Error, Disabled", "", null, L.T("Same as TextInput.", "Igual que en TextInput.")),
+    ];
+}
