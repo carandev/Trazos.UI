@@ -1,0 +1,39 @@
+@page "/components/breadcrumbs"
+
+<DocPage Title="Breadcrumbs" Category="@L.T("Navigation", "Navegación")"
+         Lead="@L.T("A trail of links from the root to the current page. The last item is the current page, marked with aria-current and not linked.", "Una ruta de enlaces desde la raíz hasta la página actual. El último elemento es la página actual, marcado con aria-current y sin enlace.")">
+
+    <DemoBlock Code="@Code">
+        <Breadcrumbs Items="_trail" Label="@L.T("Breadcrumb", "Migas de pan")" />
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private IReadOnlyList<BreadcrumbItem> _trail => [
+        new(L.T("Home", "Inicio"), ""),
+        new(L.T("Payroll", "Nómina"), "components/breadcrumbs"),
+        new(L.T("November 2026", "Noviembre 2026")),
+    ];
+
+    private const string Code = """
+        <Breadcrumbs Items="_trail" />
+
+        @code {
+            private readonly IReadOnlyList<BreadcrumbItem> _trail =
+            [
+                new("Home", "/"),
+                new("Payroll", "/payroll"),
+                new("November 2026"),
+            ];
+        }
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Items", "IReadOnlyList<BreadcrumbItem>", "required", L.T("BreadcrumbItem(Text, Href). The last item is the current page.", "BreadcrumbItem(Text, Href). El último elemento es la página actual.")),
+        new("Label", "string", "\"Breadcrumb\"", L.T("Accessible name of the nav landmark.", "Nombre accesible del landmark nav.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+    ];
+}

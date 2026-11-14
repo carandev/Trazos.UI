@@ -1,0 +1,73 @@
+@page "/components/alert"
+
+<DocPage Title="Alert" Category="@L.T("Overlays & feedback", "Superposiciones y avisos")"
+         Lead="@L.T("An inline, persistent message with a tone, title, body, actions and an optional dismiss button. Use Toast for messages that disappear on their own.", "Un mensaje en línea y persistente con tono, título, cuerpo, acciones y un botón opcional para cerrarlo. Usa Toast para mensajes que desaparecen solos.")">
+
+    <DemoBlock Title="@L.T("Tones", "Tonos")" Code="@TonesCode">
+        <div class="docs-stack">
+            <Alert Title="@L.T("Payroll period open", "Periodo de nómina abierto")">@L.T("You can add novelties until November 25.", "Puedes registrar novedades hasta el 25 de noviembre.")</Alert>
+            <Alert Tone="AlertTone.Success" Title="@L.T("Payroll approved", "Nómina aprobada")">@L.T("42 payslips were generated.", "Se generaron 42 desprendibles.")</Alert>
+            <Alert Tone="AlertTone.Warning" Title="@L.T("3 employees without a bank account", "3 empleados sin cuenta bancaria")">@L.T("Their payment will be left pending.", "Su pago quedará pendiente.")</Alert>
+            <Alert Tone="AlertTone.Danger" Title="@L.T("The calculation failed", "El cálculo falló")">@L.T("Check the salary of the employees marked in red.", "Revisa el salario de los empleados marcados en rojo.")</Alert>
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Actions and dismiss", "Acciones y cierre")"
+               Description="@L.T("A dismissible alert hides itself and raises OnDismiss. Give DismissLabel a text in your app's language.", "Una alerta que se puede cerrar se oculta sola y dispara OnDismiss. Dale a DismissLabel un texto en el idioma de tu app.")"
+               Code="@ActionsCode">
+        <div class="docs-stack">
+            @if (_showAlert)
+            {
+                <Alert Tone="AlertTone.Warning" Title="@L.T("This will cancel the payroll run", "Esto anulará la liquidación")"
+                       Dismissible="true" DismissLabel="@L.T("Dismiss", "Cerrar")" OnDismiss="() => _showAlert = false">
+                    <ChildContent>@L.T("Payslips already sent will not be recalled.", "Los desprendibles ya enviados no se recuperan.")</ChildContent>
+                    <Actions>
+                        <Button Variant="ButtonVariant.Wine" Size="ButtonSize.Small">@L.T("Cancel run", "Anular liquidación")</Button>
+                        <Button Variant="ButtonVariant.Ghost" Size="ButtonSize.Small">@L.T("Review first", "Revisar primero")</Button>
+                    </Actions>
+                </Alert>
+            }
+            else
+            {
+                <Button Variant="ButtonVariant.Outline" OnClick="() => _showAlert = true">@L.T("Show again", "Mostrar de nuevo")</Button>
+            }
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private bool _showAlert = true;
+
+    private const string TonesCode = """
+        <Alert Title="Payroll period open">You can add novelties until November 25.</Alert>
+        <Alert Tone="AlertTone.Success" Title="Payroll approved">42 payslips were generated.</Alert>
+        <Alert Tone="AlertTone.Warning" Title="3 employees without a bank account">Their payment will be left pending.</Alert>
+        <Alert Tone="AlertTone.Danger" Title="The calculation failed">Check the salary of the employees marked in red.</Alert>
+        """;
+
+    private const string ActionsCode = """
+        <Alert Tone="AlertTone.Warning" Title="This will cancel the payroll run"
+               Dismissible="true" DismissLabel="Dismiss" OnDismiss="() => _showAlert = false">
+            <ChildContent>Payslips already sent will not be recalled.</ChildContent>
+            <Actions>
+                <Button Variant="ButtonVariant.Wine" Size="ButtonSize.Small">Cancel run</Button>
+                <Button Variant="ButtonVariant.Ghost" Size="ButtonSize.Small">Review first</Button>
+            </Actions>
+        </Alert>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Tone", "AlertTone", "Info", L.T("Info, Success, Warning or Danger. Warning and Danger use role=\"alert\"; the others use role=\"status\".", "Info, Success, Warning o Danger. Warning y Danger usan role=\"alert\"; los demás, role=\"status\".")),
+        new("Title", "string?", null, L.T("Bold first line.", "Primera línea en negrita.")),
+        new("ChildContent", "RenderFragment?", null, L.T("Body of the message.", "Cuerpo del mensaje.")),
+        new("Actions", "RenderFragment?", null, L.T("Buttons or links below the body.", "Botones o enlaces debajo del cuerpo.")),
+        new("Icon", "RenderFragment?", null, L.T("Replaces the tone's icon.", "Reemplaza el ícono del tono.")),
+        new("Dismissible", "bool", "false", L.T("Shows a close button.", "Muestra un botón para cerrar.")),
+        new("DismissLabel", "string", "\"Dismiss\"", L.T("Accessible name of the close button.", "Nombre accesible del botón de cierre.")),
+        new("OnDismiss", "EventCallback", null, L.T("Raised after the alert hides itself.", "Se dispara después de que la alerta se oculta.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+    ];
+}

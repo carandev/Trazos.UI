@@ -1,0 +1,36 @@
+@namespace Trazos.UI.Components
+
+<div class="trazos-divider @(Vertical ? "is-vertical" : "is-horizontal") @(Dashed ? "is-dashed" : "") @(HasLabel ? "has-label" : "") @Class"
+     role="separator"
+     aria-orientation="@(Vertical ? "vertical" : null)"
+     aria-label="@(HasLabel ? Label : null)"
+     @attributes="AdditionalAttributes">
+    @if (HasLabel)
+    {
+        <span class="trazos-divider-line" aria-hidden="true"></span>
+        <span class="trazos-divider-label" aria-hidden="true">@Label</span>
+        <span class="trazos-divider-line" aria-hidden="true"></span>
+    }
+</div>
+
+@code {
+    /// <summary>Text in the middle of a horizontal divider, such as a form section name.</summary>
+    [Parameter]
+    public string? Label { get; set; }
+
+    /// <summary>Separates items in a row. Stretches to the height of the row.</summary>
+    [Parameter]
+    public bool Vertical { get; set; }
+
+    /// <summary>Draws a dashed line, like a cut mark.</summary>
+    [Parameter]
+    public bool Dashed { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private bool HasLabel => !Vertical && !string.IsNullOrEmpty(Label);
+}

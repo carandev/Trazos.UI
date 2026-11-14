@@ -1,0 +1,43 @@
+@page "/components/divider"
+
+<DocPage Title="Divider" Category="@L.T("Page structure", "Estructura de página")"
+         Lead="@L.T("A separator line, horizontal or vertical, with an optional label in the middle to split sections of a form or a document.", "Una línea separadora, horizontal o vertical, con una etiqueta opcional en el medio para dividir secciones de un formulario o un documento.")">
+
+    <DemoBlock Code="@Code">
+        <div>
+            <p>@L.T("Earnings", "Devengados")</p>
+            <Divider />
+            <Divider Label="@L.T("Deductions", "Deducciones")" />
+            <Divider Dashed="true" />
+            <div style="display: flex; align-items: center;">
+                <span>@L.T("Draft", "Borrador")</span>
+                <Divider Vertical="true" />
+                <span>@L.T("42 employees", "42 empleados")</span>
+            </div>
+        </div>
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private const string Code = """
+        <Divider />
+        <Divider Label="Deductions" />
+        <Divider Dashed="true" />
+
+        <div style="display: flex; align-items: center;">
+            <span>Draft</span>
+            <Divider Vertical="true" />
+            <span>42 employees</span>
+        </div>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Label", "string?", null, L.T("Text in the middle of a horizontal divider. Also its accessible name.", "Texto en medio de un divisor horizontal. También es su nombre accesible.")),
+        new("Vertical", "bool", "false", L.T("Separates items in a row.", "Separa elementos en una fila.")),
+        new("Dashed", "bool", "false", L.T("Dashed line.", "Línea punteada.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+    ];
+}

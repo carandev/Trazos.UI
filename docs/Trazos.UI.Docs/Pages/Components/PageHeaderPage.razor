@@ -1,0 +1,74 @@
+@page "/components/page-header"
+
+<DocPage Title="PageHeader" Category="@L.T("Page structure", "Estructura de página")"
+         Lead="@L.T("The top of an application page: breadcrumbs or a back link, the title, a subtitle, metadata and a right-aligned action area that moves below the title on narrow screens.", "La parte superior de una página de aplicación: migas de pan o un enlace para volver, el título, un subtítulo, metadatos y un área de acciones alineada a la derecha que pasa debajo del título en pantallas angostas.")">
+
+    <DemoBlock Title="@L.T("Detail page", "Página de detalle")" Code="@DetailCode">
+        <PageHeader Title="Ana María Restrepo" Subtitle="@L.T("Payroll analyst · Bogotá", "Analista de nómina · Bogotá")" Level="2"
+                    Breadcrumbs="_trail" BreadcrumbsLabel="@L.T("Breadcrumb", "Migas de pan")">
+            <Meta>
+                <Badge Variant="BadgeVariant.Success">@L.T("Active", "Activa")</Badge>
+                <Badge Variant="BadgeVariant.Info">@L.T("Open-ended contract", "Contrato indefinido")</Badge>
+            </Meta>
+            <Actions>
+                <Button Variant="ButtonVariant.Outline">@L.T("Edit", "Editar")</Button>
+                <Button>@L.T("New novelty", "Nueva novedad")</Button>
+            </Actions>
+        </PageHeader>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Back link", "Enlace para volver")" Code="@BackCode">
+        <PageHeader Title="@L.T("New employee", "Nuevo empleado")" Level="2" BackHref="components/page-header" BackLabel="@L.T("Employees", "Empleados")" />
+    </DemoBlock>
+
+    <ApiTable Params="Params" />
+</DocPage>
+
+@code {
+    private IReadOnlyList<BreadcrumbItem> _trail => [
+        new(L.T("Home", "Inicio"), ""),
+        new(L.T("Employees", "Empleados"), "components/page-header"),
+        new("Ana María Restrepo"),
+    ];
+
+    private const string DetailCode = """
+        <PageHeader Title="Ana María Restrepo" Subtitle="Payroll analyst · Bogotá"
+                    Breadcrumbs="_trail">
+            <Meta>
+                <Badge Variant="BadgeVariant.Success">Active</Badge>
+            </Meta>
+            <Actions>
+                <Button Variant="ButtonVariant.Outline">Edit</Button>
+                <Button>New novelty</Button>
+            </Actions>
+        </PageHeader>
+
+        @code {
+            private readonly IReadOnlyList<BreadcrumbItem> _trail =
+            [
+                new("Home", "/"),
+                new("Employees", "/employees"),
+                new("Ana María Restrepo"),
+            ];
+        }
+        """;
+
+    private const string BackCode = """
+        <PageHeader Title="New employee" BackHref="/employees" BackLabel="Employees" />
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Title", "string", "required", L.T("Page title.", "Título de la página.")),
+        new("Subtitle", "string?", null, L.T("Muted line under the title.", "Línea atenuada debajo del título.")),
+        new("Level", "int", "1", L.T("Heading level of the title, 1 to 6.", "Nivel de encabezado del título, de 1 a 6.")),
+        new("Breadcrumbs", "IReadOnlyList<BreadcrumbItem>?", null, L.T("Trail above the title. Takes precedence over BackHref.", "Ruta encima del título. Tiene prioridad sobre BackHref.")),
+        new("BreadcrumbsLabel", "string", "\"Breadcrumb\"", L.T("Accessible name of the breadcrumb navigation.", "Nombre accesible de la navegación de migas.")),
+        new("BackHref", "string?", null, L.T("Target of a back link above the title.", "Destino de un enlace para volver encima del título.")),
+        new("BackLabel", "string", "\"Back\"", L.T("Text of the back link.", "Texto del enlace para volver.")),
+        new("Meta", "RenderFragment?", null, L.T("Badges, dates or other details under the subtitle.", "Insignias, fechas u otros detalles debajo del subtítulo.")),
+        new("Actions", "RenderFragment?", null, L.T("Buttons aligned to the right. Full width on phones.", "Botones alineados a la derecha. Ancho completo en teléfonos.")),
+        new("ChildContent", "RenderFragment?", null, L.T("Content below the header row, such as Tabs.", "Contenido debajo de la fila del encabezado, como Tabs.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+    ];
+}

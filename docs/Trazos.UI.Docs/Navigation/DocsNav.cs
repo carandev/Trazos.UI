@@ -64,14 +64,21 @@ public static class DocsNav
             new("RadioCardGroup", "components/radio-card-group"),
             new("FormSection", "components/form-section"),
         ]),
+        new("Page structure", "Estructura de página",
+        [
+            new("PageHeader", "components/page-header"),
+            new("Divider", "components/divider"),
+        ]),
         new("Navigation", "Navegación",
         [
+            new("Breadcrumbs", "components/breadcrumbs"),
             new("Tabs", "components/tabs"),
             new("AppShell", "components/app-shell"),
             new("Drawer", "components/drawer"),
         ]),
         new("Overlays & feedback", "Superposiciones y avisos",
         [
+            new("Alert", "components/alert"),
             new("Modal", "components/modal"),
             new("Confirm dialog", "components/confirm-dialog", "Diálogo de confirmación"),
             new("Toast", "components/toast"),
