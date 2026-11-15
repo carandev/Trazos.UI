@@ -3,7 +3,7 @@
 <DocPage Title="PhotoFrame" Category="@L.T("Decoration", "Decoración")"
          Lead="@L.T("A framed image with an offset ink shadow, a rotated backing sheet, optional tape and an optional handwritten caption.", "Una imagen enmarcada con sombra de tinta desplazada, una hoja de fondo rotada, cinta opcional y un pie manuscrito opcional.")">
 
-    <DemoBlock Title="@L.T("With tape and caption", "Con cinta y pie")" Code="@FrameCode">
+    <DemoBlock Title="@L.T("With tape and caption", "Con cinta y pie")" Code="@FrameCode" React="photo-frame/with-tape">
         <div style="padding: 1.5rem; max-width: 16rem;">
             <PhotoFrame Src="favicon.svg" Alt="@L.T("The Trazos logo", "El logo de Trazos")" ShowTape="true">
                 <Caption>@L.T("Hand drawn", "Hecho a mano")</Caption>
@@ -11,7 +11,7 @@
         </div>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -34,5 +34,16 @@
         new("ImageAttributes", "Dictionary<string, object>?", null, L.T("Extra attributes for the image, such as loading.", "Atributos adicionales de la imagen, como loading.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("src", "string", null, L.T("Image source. Required.", "Origen de la imagen. Obligatorio.")),
+        new("alt", "string", null, L.T("Alternative text. Required.", "Texto alternativo. Obligatorio.")),
+        new("caption", "ReactNode", null, L.T("Handwritten text below the image.", "Texto manuscrito bajo la imagen.")),
+        new("tape", "boolean | TapeProps", "false", L.T("true pins the frame with default tape; an object sets its color, rotate and position.", "true fija el marco con la cinta por defecto; un objeto define su color, rotate y position.")),
+        new("imgProps", "ComponentPropsWithRef<'img'>", null, L.T("Extra attributes for the image, such as loading. src and alt are not allowed.", "Atributos adicionales de la imagen, como loading. No admite src ni alt.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'figure'>", null, L.T("Any other figure attribute, including ref.", "Cualquier otro atributo de figure, incluido ref.")),
     ];
 }
