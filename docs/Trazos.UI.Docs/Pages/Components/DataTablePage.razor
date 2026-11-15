@@ -3,7 +3,7 @@
 <DocPage Title="DataTable" Category="@L.T("Display", "Visualización")"
          Lead="@L.T("A generic, responsive table with loading skeletons, an empty state and optional row clicks.", "Una tabla genérica y adaptable con esqueletos de carga, un estado vacío y clic opcional en las filas.")">
 
-    <DemoBlock Title="@L.T("Rows and row clicks", "Filas y clic en filas")" Code="@BasicCode">
+    <DemoBlock Title="@L.T("Rows and row clicks", "Filas y clic en filas")" Code="@BasicCode" React="data-table/rows">
         <div class="docs-stack">
             <div class="docs-row">
                 <Button Size="ButtonSize.Small" Variant="ButtonVariant.Outline" OnClick="ReloadAsync">@L.T("Simulate loading", "Simular carga")</Button>
@@ -33,7 +33,7 @@
         </div>
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("Custom empty content", "Contenido vacío personalizado")" Code="@EmptyCode">
+    <DemoBlock Title="@L.T("Custom empty content", "Contenido vacío personalizado")" Code="@EmptyCode" React="data-table/empty-content">
         <div class="docs-stack">
             <DataTable TItem="Person" Items="Array.Empty<Person>()">
                 <TableHeader>
@@ -53,7 +53,7 @@
         </div>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -122,5 +122,20 @@
         new("LoadingRows", "int", "3", L.T("Number of skeleton rows while loading.", "Cantidad de filas esqueleto mientras carga.")),
         new("OnRowClick", "EventCallback<TItem>", null, L.T("Makes rows interactive and reports the clicked item.", "Hace las filas interactivas e informa el elemento en el que se hizo clic.")),
         new("Class", "string?", null, L.T("Extra CSS classes on the wrapper.", "Clases CSS adicionales en el contenedor.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("items", "readonly T[] | null", null, L.T("Rows to render. Null or empty shows the empty state.", "Filas a renderizar. Si es null o está vacío, muestra el estado vacío.")),
+        new("tableHeader", "ReactNode", null, L.T("Header cells (<th>). The <tr> is provided.", "Celdas de encabezado (<th>). El <tr> ya se incluye.")),
+        new("rowTemplate", "(item: T) => ReactNode", "required", L.T("Cells (<td>) for one row. The <tr> is provided.", "Celdas (<td>) de una fila. El <tr> ya se incluye.")),
+        new("getRowKey", "(item: T, index: number) => Key", L.T("row index", "índice de la fila"), L.T("React key of each row.", "Key de React de cada fila.")),
+        new("emptyContent", "ReactNode", null, L.T("Replaces the default empty message.", "Reemplaza el mensaje vacío predeterminado.")),
+        new("emptyMessage", "string", "'No hay registros disponibles.'", L.T("Default empty message.", "Mensaje vacío predeterminado.")),
+        new("loading", "boolean", "false", L.T("Shows skeleton rows instead of data.", "Muestra filas esqueleto en lugar de datos.")),
+        new("loadingRows", "number", "3", L.T("Number of skeleton rows while loading.", "Cantidad de filas esqueleto mientras carga.")),
+        new("onRowClick", "(item: T) => void", null, L.T("Makes rows interactive (focusable, Enter and Space activate) and reports the clicked item.", "Hace las filas interactivas (enfocables, Enter y Espacio las activan) e informa el elemento en el que se hizo clic.")),
+        new("className", "string", null, L.T("Extra CSS classes on the wrapper.", "Clases CSS adicionales en el contenedor.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other attribute of the wrapper div, including ref.", "Cualquier otro atributo del div contenedor, incluido ref.")),
     ];
 }

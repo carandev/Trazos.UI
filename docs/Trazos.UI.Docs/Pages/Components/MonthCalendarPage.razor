@@ -3,7 +3,7 @@
 <DocPage Title="MonthCalendar" Category="@L.T("Display", "Visualización")"
          Lead="@L.T("A generic month grid with day selection, month navigation and colored item chips. On small screens the chips collapse into dots.", "Una cuadrícula mensual genérica con selección de día, navegación entre meses y etiquetas de colores para los elementos. En pantallas pequeñas, las etiquetas se convierten en puntos.")">
 
-    <DemoBlock Code="@CalendarCode">
+    <DemoBlock Code="@CalendarCode" React="month-calendar/calendar">
         <div class="docs-stack">
             <MonthCalendar TItem="CalendarEvent"
                            Items="_events"
@@ -33,22 +33,22 @@
     <p>
         <Tr>
             <En>The grid always shows whole weeks, so it starts before the 1st and ends after the last day of the month.
-                Use the static helpers to request exactly that range from your API.</En>
+                @(F.Pick("Use the static helpers", "Use the exported helpers getGridStart and getGridEndExclusive")) to request exactly that range from your API.</En>
             <Es>La cuadrícula siempre muestra semanas completas, así que empieza antes del día 1 y termina después del último día del mes.
-                Usa los métodos estáticos auxiliares para pedirle a tu API exactamente ese rango.</Es>
+                @(F.Pick("Usa los métodos estáticos auxiliares", "Usa las funciones exportadas getGridStart y getGridEndExclusive")) para pedirle a tu API exactamente ese rango.</Es>
         </Tr>
     </p>
-    <CodeBlock Language="csharp" Code="@RangeCode" />
+    <CodeBlock Language="@F.Pick("csharp", "tsx")" Code="@F.Pick(RangeCode, ReactRangeCode)" />
 
     <h2 class="docs-h2">@L.T("Tones", "Tonos")</h2>
     <div class="docs-row">
         @foreach (var tone in Enum.GetValues<CalendarItemTone>())
         {
-            <code>CalendarItemTone.@tone</code>
+            <code>@F.Pick($"CalendarItemTone.{tone}", $"'{tone.ToString().ToLowerInvariant()}'")</code>
         }
     </div>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -123,6 +123,17 @@
         }
         """;
 
+    private const string ReactRangeCode = """
+        import { getGridEndExclusive, getGridStart } from '@carandev/trazos-ui';
+
+        async function loadMonth(month: Date) {
+          setMonth(month);
+          const from = getGridStart(month);
+          const to = getGridEndExclusive(month);
+          setEvents(await api.getEvents(from, to));
+        }
+        """;
+
     private IReadOnlyList<ApiParam> Params =>
     [
         new("Items", "IEnumerable<TItem>", "[]", L.T("Items to place on the grid.", "Elementos que se ubican en la cuadrícula.")),
@@ -147,5 +158,34 @@
         new("MoreTextFormat", "string", "\"+{0} más\"", L.T("Format of the overflow link.", "Formato del enlace de desbordamiento.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("items", "readonly T[]", "[]", L.T("Items to place on the grid.", "Elementos que se ubican en la cuadrícula.")),
+        new("startSelector", "(item: T) => Date", "required", L.T("Start of the item, in local time.", "Inicio del elemento, en hora local.")),
+        new("endSelector", "(item: T) => Date", "required", L.T("End of the item. Multi-day items appear on every day they span; an end at exactly midnight does not occupy that day.", "Fin del elemento. Los elementos de varios días aparecen en cada día que abarcan; un fin exactamente a medianoche no ocupa ese día.")),
+        new("titleSelector", "(item: T) => string", "required", L.T("Text of the chip.", "Texto de la etiqueta.")),
+        new("toneSelector", "(item: T) => CalendarItemTone", "'olive'", L.T("Color of the chip.", "Color de la etiqueta.")),
+        new("month", "Date", null, L.T("Controlled displayed month. Any day is normalized to the 1st.", "Mes mostrado, controlado. Cualquier día se normaliza al día 1.")),
+        new("defaultMonth", "Date", L.T("month of today", "mes de today"), L.T("Initial month when month is not controlled.", "Mes inicial cuando month no está controlado.")),
+        new("onMonthChange", "(month: Date) => void", null, L.T("Called by the previous, next and today buttons with the 1st of the new month.", "Se llama con los botones de mes anterior, mes siguiente y hoy, con el día 1 del nuevo mes.")),
+        new("selectedDate", "Date | null", null, L.T("Controlled selected day (null for none).", "Día seleccionado, controlado (null para ninguno).")),
+        new("defaultSelectedDate", "Date | null", "null", L.T("Initial selected day when selectedDate is not controlled.", "Día seleccionado inicial cuando selectedDate no está controlado.")),
+        new("onSelectedDateChange", "(date: Date) => void", null, L.T("Called with the selected day at local midnight.", "Se llama con el día seleccionado a medianoche local.")),
+        new("onItemClick", "(item: T) => void", null, L.T("Called when a chip is clicked.", "Se llama al hacer clic en una etiqueta.")),
+        new("firstDayOfWeek", "DayOfWeek (0-6)", "1", L.T("First column of the grid. 0 is Sunday, like Date.getDay().", "Primera columna de la cuadrícula. 0 es domingo, como en Date.getDay().")),
+        new("maxItemsPerDay", "number", "3", L.T("Chips per day before the \"+N more\" link.", "Etiquetas por día antes del enlace \"+N más\".")),
+        new("loading", "boolean", "false", L.T("Shows a loading state over the grid.", "Muestra un estado de carga sobre la cuadrícula.")),
+        new("toolbarContent", "ReactNode", null, L.T("Extra content in the toolbar, such as filters.", "Contenido adicional en la barra de herramientas, como filtros.")),
+        new("monthNames", "readonly string[]", L.T("Spanish names", "nombres en español"), L.T("Twelve month names, January first.", "Los doce nombres de los meses, empezando por enero.")),
+        new("dayNames", "readonly string[]", L.T("Spanish names", "nombres en español"), L.T("Seven short day names ordered like Date.getDay(), so the list starts on Sunday.", "Siete nombres cortos de días ordenados como Date.getDay(), así que la lista empieza en domingo.")),
+        new("todayText", "string", "'Hoy'", L.T("Label of the today button.", "Etiqueta del botón de hoy.")),
+        new("previousMonthText", "string", "'Mes anterior'", L.T("Accessible label of the previous button.", "Etiqueta accesible del botón de mes anterior.")),
+        new("nextMonthText", "string", "'Mes siguiente'", L.T("Accessible label of the next button.", "Etiqueta accesible del botón de mes siguiente.")),
+        new("moreTextFormat", "string", "'+{0} más'", L.T("Format of the overflow link. {0} is the hidden count.", "Formato del enlace de desbordamiento. {0} es la cantidad oculta.")),
+        new("today", "Date", L.T("system date", "fecha del sistema"), L.T("The current day; pass it to make rendering deterministic.", "El día actual; pásalo para que el renderizado sea determinista.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other div attribute, including ref (children excepted).", "Cualquier otro atributo de div, incluido ref (excepto children).")),
     ];
 }
