@@ -3,21 +3,21 @@
 <DocPage Title="LinkButton" Category="@L.T("Actions", "Acciones")"
          Lead="@L.T("A link that looks like a Button, for actions that navigate. It shares the variants, sizes and icons of Button.", "Un enlace con apariencia de Button, para acciones que navegan. Comparte las variantes, los tamaños y los íconos de Button.")">
 
-    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@VariantsCode">
+    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@VariantsCode" React="link-button/variants">
         @foreach (var variant in Enum.GetValues<ButtonVariant>())
         {
             <LinkButton Href="components/button" Variant="variant">@variant</LinkButton>
         }
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("Icons", "Íconos")" Code="@IconsCode">
+    <DemoBlock Title="@L.T("Icons", "Íconos")" Code="@IconsCode" React="link-button/icons">
         <LinkButton Href="components/button" Variant="ButtonVariant.Outline">
             <ChildContent>@L.T("Read more", "Leer más")</ChildContent>
             <TrailingIcon>@Icons.Arrow</TrailingIcon>
         </LinkButton>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -44,5 +44,17 @@
         new("OnClick", "EventCallback<MouseEventArgs>", null, L.T("Raised when the link is clicked.", "Se dispara al hacer clic en el enlace.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes, such as target.", "Atributos HTML adicionales, como target.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("href", "string", null, L.T("Link target. Required.", "Destino del enlace. Obligatorio.")),
+        new("variant", "ButtonVariant", "'primary'", L.T("Same variants as Button.", "Las mismas variantes de Button.")),
+        new("size", "ButtonSize", "'medium'", L.T("'small', 'medium' or 'large'.", "'small', 'medium' o 'large'.")),
+        new("leadingIcon", "ReactNode", null, L.T("Icon before the text.", "Ícono antes del texto.")),
+        new("trailingIcon", "ReactNode", null, L.T("Icon after the text.", "Ícono después del texto.")),
+        new("children", "ReactNode", null, L.T("Link text.", "Texto del enlace.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'a'>", null, L.T("Any other anchor attribute, such as target, onClick or ref.", "Cualquier otro atributo de enlace, como target, onClick o ref.")),
     ];
 }

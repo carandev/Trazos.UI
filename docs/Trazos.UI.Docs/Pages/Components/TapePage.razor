@@ -3,7 +3,7 @@
 <DocPage Title="Tape" Category="@L.T("Decoration", "Decoración")"
          Lead="@L.T("A strip of translucent tape that pins a surface. Its parent must be positioned. It tilts when the parent is hovered.", "Una tira de cinta translúcida que fija una superficie. Su contenedor debe estar posicionado. Se inclina al pasar el cursor por el contenedor.")">
 
-    <DemoBlock Title="@L.T("Positions", "Posiciones")" Code="@PositionsCode">
+    <DemoBlock Title="@L.T("Positions", "Posiciones")" Code="@PositionsCode" React="tape/positions">
         <div class="docs-grid-2">
             <Card style="position: relative;"><Tape />Top</Card>
             <Card style="position: relative;"><Tape Position="TapePosition.TopLeft" />TopLeft</Card>
@@ -12,7 +12,7 @@
         </div>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -30,5 +30,14 @@
         new("Position", "TapePosition", "Top", L.T("Top, TopLeft or TopRight.", "Top, TopLeft o TopRight.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("color", "string", null, L.T("Any CSS color. Defaults to translucent gold.", "Cualquier color CSS. Por defecto, dorado translúcido.")),
+        new("rotate", "number", "-3", L.T("Rotation in degrees.", "Rotación en grados.")),
+        new("position", "TapePosition", "'top'", L.T("'top', 'top-left' or 'top-right'.", "'top', 'top-left' o 'top-right'.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'span'>", null, L.T("Any other span attribute, including style and ref.", "Cualquier otro atributo de span, incluidos style y ref.")),
     ];
 }
