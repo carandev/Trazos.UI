@@ -1,9 +1,9 @@
 @page "/components/toast"
 
 <DocPage Title="Toast" Category="@L.T("Overlays & feedback", "Superposiciones y avisos")"
-         Lead="@L.T("Short, non-blocking notifications. Call the static helpers from anywhere; each toast closes on its own after five seconds.", "Notificaciones breves que no bloquean la interfaz (toasts). Llama a los métodos estáticos desde cualquier lugar; cada toast se cierra solo después de cinco segundos.")">
+         Lead="@F.Pick(L.T("Short, non-blocking notifications. Call the static helpers from anywhere; each toast closes on its own after five seconds.", "Notificaciones breves que no bloquean la interfaz (toasts). Llama a los métodos estáticos desde cualquier lugar; cada toast se cierra solo después de cinco segundos."), L.T("Short, non-blocking notifications. Call useToast() in any component inside ToastProvider; each toast closes on its own after five seconds.", "Notificaciones breves que no bloquean la interfaz (toasts). Llama a useToast() en cualquier componente dentro de ToastProvider; cada toast se cierra solo después de cinco segundos."))">
 
-    <DemoBlock Code="@Code">
+    <DemoBlock Code="@Code" React="toast/types">
         <Button Variant="ButtonVariant.Primary" OnClick="@(() => Toast.ShowSuccess(L.T("Your sign-up was saved.", "Tu inscripción se guardó."), L.T("Done", "Listo")))">@L.T("Success", "Éxito")</Button>
         <Button Variant="ButtonVariant.Wine" OnClick="@(() => Toast.ShowError(L.T("We could not reach the server.", "No pudimos conectar con el servidor."), L.T("Error", "Error")))">@L.T("Error", "Error")</Button>
         <Button Variant="ButtonVariant.Cream" OnClick="@(() => Toast.ShowWarning(L.T("Only two seats left.", "Solo quedan dos lugares.")))">@L.T("Warning", "Advertencia")</Button>
@@ -11,16 +11,32 @@
     </DemoBlock>
 
     <h2 class="docs-h2">@L.T("Setup", "Configuración")</h2>
-    <p>
-        <Tr>
-            <En>Toasts render in a single <code>&lt;Toast /&gt;</code> container. <code>AppShell</code> already includes it;
-                with a custom layout, render it once. The helpers use the most recently rendered container.</En>
-            <Es>Los toasts se renderizan en un único contenedor <code>&lt;Toast /&gt;</code>. <code>AppShell</code> ya lo incluye;
-                con un layout propio, renderízalo una sola vez. Los métodos usan el contenedor renderizado más recientemente.</Es>
-        </Tr>
-    </p>
+    @if (F.IsReact)
+    {
+        <p>
+            <Tr>
+                <En>Toasts render in the stack of a <code>&lt;ToastProvider&gt;</code>. <code>AppShell</code> already includes it;
+                    with a custom layout, wrap your app in it once. Outside a provider, the methods do nothing.</En>
+                <Es>Los toasts se renderizan en la pila de un <code>&lt;ToastProvider&gt;</code>. <code>AppShell</code> ya lo incluye;
+                    con un layout propio, envuelve tu app en él una sola vez. Fuera de un proveedor, los métodos no hacen nada.</Es>
+            </Tr>
+        </p>
+        <CodeBlock Code="@ReactSetupCode" />
+    }
+    else
+    {
+        <p>
+            <Tr>
+                <En>Toasts render in a single <code>&lt;Toast /&gt;</code> container. <code>AppShell</code> already includes it;
+                    with a custom layout, render it once. The helpers use the most recently rendered container.</En>
+                <Es>Los toasts se renderizan en un único contenedor <code>&lt;Toast /&gt;</code>. <code>AppShell</code> ya lo incluye;
+                    con un layout propio, renderízalo una sola vez. Los métodos usan el contenedor renderizado más recientemente.</Es>
+            </Tr>
+        </p>
+    }
 
-    <ApiTable Title="@L.T("Static methods", "Métodos estáticos")" Params="Params" />
+    <ApiTable Title="@F.Pick(L.T("Static methods", "Métodos estáticos"), "useToast()")" Params="Params" ReactParams="ReactParams" />
+    <ApiTable Title="ToastProvider" ReactParams="ProviderParams" />
 </DocPage>
 
 @code {
@@ -37,5 +53,29 @@
         new("ShowError(message, title?)", "void", null, L.T("Red error.", "Error en rojo.")),
         new("ShowWarning(message, title?)", "void", null, L.T("Amber warning.", "Advertencia en ámbar.")),
         new("ShowInfo(message, title?)", "void", null, L.T("Neutral information.", "Información neutral.")),
+    ];
+
+    private const string ReactSetupCode = """
+        import { ToastProvider } from '@carandev/trazos-ui';
+
+        createRoot(document.getElementById('root')!).render(
+          <ToastProvider>
+            <App />
+          </ToastProvider>,
+        );
+        """;
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("showSuccess(message, title?)", "(message: string, title?: string) => void", null, L.T("Green confirmation.", "Confirmación en verde.")),
+        new("showError(message, title?)", "(message: string, title?: string) => void", null, L.T("Red error.", "Error en rojo.")),
+        new("showWarning(message, title?)", "(message: string, title?: string) => void", null, L.T("Amber warning.", "Advertencia en ámbar.")),
+        new("showInfo(message, title?)", "(message: string, title?: string) => void", null, L.T("Neutral information.", "Información neutral.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ProviderParams =>
+    [
+        new("children", "ReactNode", null, L.T("The part of the app that can call useToast().", "La parte de la app que puede llamar a useToast().")),
+        new("closeButtonAriaLabel", "string", "'Cerrar notificación'", L.T("Accessible label of each toast's dismiss button.", "Etiqueta accesible del botón para descartar cada toast.")),
     ];
 }

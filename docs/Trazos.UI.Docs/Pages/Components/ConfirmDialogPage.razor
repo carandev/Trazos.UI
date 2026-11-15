@@ -2,9 +2,9 @@
 @inject IDialogService Dialogs
 
 <DocPage Title="@L.T("Confirm dialog", "Diálogo de confirmación")" Category="@L.T("Overlays & feedback", "Superposiciones y avisos")"
-         Lead="@L.T("Ask for confirmation from code with IDialogService and await the answer. No markup per page: the container lives in AppShell.", "Pide confirmación desde el código con IDialogService y espera la respuesta. Sin markup en cada página: el contenedor vive en AppShell.")">
+         Lead="@F.Pick(L.T("Ask for confirmation from code with IDialogService and await the answer. No markup per page: the container lives in AppShell.", "Pide confirmación desde el código con IDialogService y espera la respuesta. Sin markup en cada página: el contenedor vive en AppShell."), L.T("Ask for confirmation from code with useConfirm() and await the answer. No markup per page: the dialog lives in ConfirmDialogProvider, which AppShell already includes.", "Pide confirmación desde el código con useConfirm() y espera la respuesta. Sin markup en cada página: el diálogo vive en ConfirmDialogProvider, que AppShell ya incluye."))">
 
-    <DemoBlock Code="@Code">
+    <DemoBlock Code="@Code" React="confirm-dialog/delete">
         <div class="docs-stack">
             <div class="docs-row">
                 <Button Variant="ButtonVariant.Wine" OnClick="DeleteAsync">
@@ -17,17 +17,33 @@
     </DemoBlock>
 
     <h2 class="docs-h2">@L.T("Setup", "Configuración")</h2>
-    <p>
-        <Tr>
-            <En><code>AddTrazosUI()</code> registers the service. <code>AppShell</code> already renders
-                <code>&lt;ConfirmDialogContainer /&gt;</code>; with a custom layout, add it once.</En>
-            <Es><code>AddTrazosUI()</code> registra el servicio. <code>AppShell</code> ya renderiza
-                <code>&lt;ConfirmDialogContainer /&gt;</code>; con un layout propio, agrégalo una sola vez.</Es>
-        </Tr>
-    </p>
+    @if (F.IsReact)
+    {
+        <p>
+            <Tr>
+                <En>Wrap your app once in <code>&lt;ConfirmDialogProvider&gt;</code>; <code>AppShell</code> already includes it.
+                    Any component inside it can call <code>useConfirm()</code>. Outside a provider, <code>confirm()</code> resolves false.</En>
+                <Es>Envuelve tu app una sola vez en <code>&lt;ConfirmDialogProvider&gt;</code>; <code>AppShell</code> ya lo incluye.
+                    Cualquier componente dentro puede llamar a <code>useConfirm()</code>. Fuera de un proveedor, <code>confirm()</code> se resuelve en false.</Es>
+            </Tr>
+        </p>
+        <CodeBlock Code="@ReactSetupCode" />
+    }
+    else
+    {
+        <p>
+            <Tr>
+                <En><code>AddTrazosUI()</code> registers the service. <code>AppShell</code> already renders
+                    <code>&lt;ConfirmDialogContainer /&gt;</code>; with a custom layout, add it once.</En>
+                <Es><code>AddTrazosUI()</code> registra el servicio. <code>AppShell</code> ya renderiza
+                    <code>&lt;ConfirmDialogContainer /&gt;</code>; con un layout propio, agrégalo una sola vez.</Es>
+            </Tr>
+        </p>
+    }
 
-    <ApiTable Title="IDialogService.ConfirmAsync" Params="Params" />
-    <ApiTable Title="ConfirmDialogOptions" Params="OptionParams" />
+    <ApiTable Title="@F.Pick("IDialogService.ConfirmAsync", "useConfirm()")" Params="Params" ReactParams="ReactParams" />
+    <ApiTable Title="ConfirmDialogOptions" Params="OptionParams" ReactParams="ReactOptionParams" />
+    <ApiTable Title="ConfirmDialogProvider" ReactParams="ProviderParams" />
 </DocPage>
 
 @code {
@@ -89,5 +105,36 @@
         new("CancelText", "string", "\"Cancelar\"", L.T("Label of the cancel button.", "Texto del botón de cancelar.")),
         new("ConfirmVariant", "ButtonVariant", "Primary", L.T("Use Wine for destructive actions.", "Usa Wine para acciones destructivas.")),
         new("Size", "string", "\"small\"", L.T("Modal size.", "Tamaño del modal.")),
+    ];
+
+    private const string ReactSetupCode = """
+        import { ConfirmDialogProvider } from '@carandev/trazos-ui';
+
+        createRoot(document.getElementById('root')!).render(
+          <ConfirmDialogProvider>
+            <App />
+          </ConfirmDialogProvider>,
+        );
+        """;
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("confirm(options)", "Promise<boolean>", null, L.T("Shows the dialog. Resolves true when confirmed, false when cancelled, closed or dismissed with Escape.", "Muestra el diálogo. Se resuelve en true si se confirma y en false si se cancela, se cierra o se descarta con Escape.")),
+        new("confirm(message, overrides?)", "Promise<boolean>", null, L.T("Shortcut: overrides takes every ConfirmDialogOptions field except message.", "Atajo: overrides acepta todos los campos de ConfirmDialogOptions salvo message.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactOptionParams =>
+    [
+        new("message", "string", "required", L.T("Question or explanation.", "Pregunta o explicación.")),
+        new("title", "string", "'Confirmar acción'", L.T("Dialog title.", "Título del diálogo.")),
+        new("confirmText", "string", "'Confirmar'", L.T("Label of the confirm button.", "Texto del botón de confirmar.")),
+        new("cancelText", "string", "'Cancelar'", L.T("Label of the cancel button.", "Texto del botón de cancelar.")),
+        new("confirmVariant", "ButtonVariant", "'primary'", L.T("Use 'wine' for destructive actions.", "Usa 'wine' para acciones destructivas.")),
+        new("size", "ModalSize", "'small'", L.T("Modal size.", "Tamaño del modal.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ProviderParams =>
+    [
+        new("children", "ReactNode", null, L.T("The part of the app that can call useConfirm().", "La parte de la app que puede llamar a useConfirm().")),
     ];
 }
