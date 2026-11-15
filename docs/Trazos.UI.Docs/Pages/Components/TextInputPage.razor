@@ -1,16 +1,16 @@
 @page "/components/text-input"
 
 <DocPage Title="TextInput" Category="@L.T("Forms", "Formularios")"
-         Lead="@L.T("A labelled single-line input with helper text, validation errors and optional icons. Supports two-way binding with bind-Value.", "Un campo de una sola línea con etiqueta, texto de ayuda, errores de validación e íconos opcionales. Admite enlace bidireccional (binding) con bind-Value.")">
+         Lead="@F.Pick(L.T("A labelled single-line input with helper text, validation errors and optional icons. Supports two-way binding with bind-Value.", "Un campo de una sola línea con etiqueta, texto de ayuda, errores de validación e íconos opcionales. Admite enlace bidireccional (binding) con bind-Value."), L.T("A labelled single-line input with helper text, validation errors and optional icons. Use it controlled with value and onValueChange, or uncontrolled with defaultValue.", "Un campo de una sola línea con etiqueta, texto de ayuda, errores de validación e íconos opcionales. Úsalo controlado con value y onValueChange, o no controlado con defaultValue."))">
 
-    <DemoBlock Title="@L.T("Basic", "Básico")" Code="@BasicCode">
+    <DemoBlock Title="@L.T("Basic", "Básico")" Code="@BasicCode" React="text-input/basic">
         <div class="docs-stack">
             <TextInput Label="@L.T("Full name", "Nombre completo")" Placeholder="Ana María Restrepo" HelperText="@L.T("As it appears on your ID.", "Tal como aparece en tu documento de identidad.")" @bind-Value="_name" />
             <p class="docs-demo-output">@L.T("Value:", "Valor:") <strong>@(_name ?? "null")</strong></p>
         </div>
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("Validation", "Validación")" Description="@L.T("Error replaces the helper text and marks the field as invalid.", "Error reemplaza el texto de ayuda y marca el campo como inválido.")" Code="@ErrorCode">
+    <DemoBlock Title="@L.T("Validation", "Validación")" Description="@F.Pick(L.T("Error replaces the helper text and marks the field as invalid.", "Error reemplaza el texto de ayuda y marca el campo como inválido."), L.T("error replaces the helper text and marks the field as invalid.", "error reemplaza el texto de ayuda y marca el campo como inválido."))" Code="@ErrorCode" React="text-input/validation">
         <div class="docs-stack">
             <TextInput Label="@L.T("Email", "Correo electrónico")" Type="email" Required="true" Placeholder="@EmailPlaceholder"
                        @bind-Value="_email"
@@ -20,14 +20,14 @@
         </div>
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("Disabled and read-only", "Deshabilitado y de solo lectura")" Code="@StatesCode">
+    <DemoBlock Title="@L.T("Disabled and read-only", "Deshabilitado y de solo lectura")" Code="@StatesCode" React="text-input/states">
         <div class="docs-grid-2">
             <TextInput Label="@L.T("Disabled", "Deshabilitado")" Value="@L.T("Not editable", "No editable")" Disabled="true" />
             <TextInput Label="@L.T("Read-only", "Solo lectura")" Value="@L.T("Selectable, not editable", "Seleccionable, no editable")" ReadOnly="true" />
         </div>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -83,5 +83,26 @@
         new("Id", "string", "generated", L.T("Id of the input, used by the label.", "Id del input, usado por la etiqueta.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra attributes for the <input>.", "Atributos adicionales para el <input>.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("value", "string", null, L.T("Controlled value. Pair it with onValueChange.", "Valor controlado. Úsalo junto con onValueChange.")),
+        new("defaultValue", "string", null, L.T("Initial value for uncontrolled use.", "Valor inicial para uso no controlado.")),
+        new("onValueChange", "(value: string) => void", null, L.T("Called with the new value on every input.", "Se llama con el nuevo valor en cada cambio.")),
+        new("onChange", "ChangeEventHandler<HTMLInputElement>", null, L.T("Native change handler. It still runs before onValueChange.", "Manejador nativo de cambio. Se sigue ejecutando antes de onValueChange.")),
+        new("label", "string", null, L.T("Visible label linked to the input.", "Etiqueta visible vinculada al campo.")),
+        new("type", "string", "'text'", L.T("Native input type: text, email, password, number, date…", "Tipo nativo del input: text, email, password, number, date…")),
+        new("placeholder", "string", null, L.T("Placeholder text.", "Texto de marcador de posición.")),
+        new("helperText", "string", null, L.T("Hint below the field. Hidden while there is an error.", "Ayuda debajo del campo. Se oculta mientras haya un error.")),
+        new("error", "string", null, L.T("Error message. Marks the field as invalid.", "Mensaje de error. Marca el campo como inválido.")),
+        new("required", "boolean", "false", L.T("Shows an asterisk next to the label and sets aria-required. It does not add the native required attribute.", "Muestra un asterisco junto a la etiqueta y agrega aria-required. No agrega el atributo nativo required.")),
+        new("disabled", "boolean", "false", L.T("Disables the field.", "Deshabilita el campo.")),
+        new("readOnly", "boolean", "false", L.T("Makes the field read-only.", "Hace que el campo sea de solo lectura.")),
+        new("leadingIcon", "ReactNode", null, L.T("Icon inside the field, on the left.", "Ícono dentro del campo, a la izquierda.")),
+        new("trailingIcon", "ReactNode", null, L.T("Icon inside the field, on the right.", "Ícono dentro del campo, a la derecha.")),
+        new("id", "string", "generated", L.T("Id of the input, used by the label.", "Id del input, usado por la etiqueta.")),
+        new("className", "string", null, L.T("Extra CSS classes for the field wrapper.", "Clases CSS adicionales para el contenedor del campo.")),
+        new("...rest", "ComponentPropsWithRef<'input'>", null, L.T("Any other input attribute, including ref.", "Cualquier otro atributo de input, incluido ref.")),
     ];
 }

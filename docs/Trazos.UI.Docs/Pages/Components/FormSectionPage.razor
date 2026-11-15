@@ -3,7 +3,7 @@
 <DocPage Title="FormSection" Category="@L.T("Forms", "Formularios")"
          Lead="@L.T("A numbered heading that splits long forms into simple, scannable steps.", "Un encabezado numerado que divide los formularios largos en pasos simples y fáciles de recorrer.")">
 
-    <DemoBlock Code="@Code">
+    <DemoBlock Code="@Code" React="form-section/basic">
         <div class="docs-stack">
             <FormSection Step="1" Title="@L.T("About you", "Sobre ti")" Description="@L.T("We use this to identify you at the door.", "Lo usamos para identificarte en la entrada.")">
                 <div class="docs-grid-2">
@@ -20,7 +20,7 @@
         </div>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -48,5 +48,15 @@
         new("ChildContent", "RenderFragment?", null, L.T("Fields of the section.", "Campos de la sección.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("title", "string", "required", L.T("Section heading. It also labels the section.", "Encabezado de la sección. También sirve de etiqueta para la sección.")),
+        new("description", "string", null, L.T("Text below the heading.", "Texto debajo del encabezado.")),
+        new("step", "number", null, L.T("Step number shown next to the heading. Omit for an unnumbered section.", "Número de paso que se muestra junto al encabezado. Omítelo para una sección sin número.")),
+        new("children", "ReactNode", null, L.T("Fields of the section.", "Campos de la sección.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'section'>", null, L.T("Any other section attribute, including ref.", "Cualquier otro atributo de section, incluido ref.")),
     ];
 }
