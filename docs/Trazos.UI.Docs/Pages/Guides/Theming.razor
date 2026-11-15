@@ -16,7 +16,7 @@
 
     <DemoBlock Title="@L.T("Any ancestor works", "Funciona en cualquier ancestro")"
                Description="@L.T("The attribute can also wrap a single region, like this preview.", "El atributo también puede envolver una sola región, como esta vista previa.")"
-               Code="@IslandCode">
+               Code="@IslandCode" React="theming/island">
         <div data-theme="dark" class="docs-theme-island">
             <div class="docs-row">
                 <Button Variant="ButtonVariant.Primary">@L.T("Save", "Guardar")</Button>
@@ -29,29 +29,61 @@
     </DemoBlock>
 
     <h2 class="docs-h2">@L.T("Follow the system and remember the choice", "Sigue al sistema y recuerda la elección")</h2>
-    <p>
-        <Tr>
-            <En>Load <code>trazos-theme.js</code> in <code>&lt;head&gt;</code>, as a blocking script after the <code>theme-color</code> meta tag.
-                It applies the theme before the first paint, so the page never flashes the wrong one, and it follows the system until the user chooses.</En>
-            <Es>Carga <code>trazos-theme.js</code> en <code>&lt;head&gt;</code>, como script bloqueante después de la etiqueta meta <code>theme-color</code>.
-                Aplica el tema antes de la primera pintura, para que la página nunca muestre el equivocado, y sigue al sistema hasta que el usuario elija.</Es>
-        </Tr>
-    </p>
-    <CodeBlock Language="html" Code="@ScriptCode" />
-    <p>
-        <Tr>
-            <En>Then use <a href="components/theme-toggle">ThemeToggle</a>, or <code>IThemeService</code> to build your own control. <code>AddTrazosUI</code> registers it:</En>
-            <Es>Luego usa <a href="components/theme-toggle">ThemeToggle</a>, o <code>IThemeService</code> para crear tu propio control. <code>AddTrazosUI</code> lo registra:</Es>
-        </Tr>
-    </p>
-    <CodeBlock Language="csharp" Code="@ToggleCode" />
+    @if (F.IsReact)
+    {
+        <p>
+            <Tr>
+                <En>Inline the script from <code>createThemeScript()</code> in <code>&lt;head&gt;</code>, after the <code>theme-color</code> meta tag.
+                    It applies the theme before the first paint, so the page never flashes the wrong one, and it follows the system until the user chooses.
+                    In Astro, use <code>&lt;script is:inline set:html={createThemeScript()} /&gt;</code>.</En>
+                <Es>Inserta en línea el script de <code>createThemeScript()</code> en <code>&lt;head&gt;</code>, después de la etiqueta meta <code>theme-color</code>.
+                    Aplica el tema antes de la primera pintura, para que la página nunca muestre el equivocado, y sigue al sistema hasta que el usuario elija.
+                    En Astro, usa <code>&lt;script is:inline set:html={createThemeScript()} /&gt;</code>.</Es>
+            </Tr>
+        </p>
+        <CodeBlock Language="tsx" Code="@ReactScriptCode" />
+        <p>
+            <Tr>
+                <En>Then use <a href="components/theme-toggle">ThemeToggle</a>, or the <code>useTheme()</code> hook to build your own control:</En>
+                <Es>Luego usa <a href="components/theme-toggle">ThemeToggle</a>, o el hook <code>useTheme()</code> para crear tu propio control:</Es>
+            </Tr>
+        </p>
+        <CodeBlock Language="tsx" Code="@ReactToggleCode" />
+        <p>
+            <Tr>
+                <En>The choice is stored in <code>localStorage</code> under <code>trazos-theme</code>. To change the key or the <code>theme-color</code> values,
+                    pass the same <code>storageKey</code> and <code>colors</code> to <code>createThemeScript</code>, <code>useTheme</code> and <code>ThemeToggle</code>.</En>
+                <Es>La elección se guarda en <code>localStorage</code> bajo <code>trazos-theme</code>. Para cambiar la clave o los valores de <code>theme-color</code>,
+                    pasa los mismos <code>storageKey</code> y <code>colors</code> a <code>createThemeScript</code>, <code>useTheme</code> y <code>ThemeToggle</code>.</Es>
+            </Tr>
+        </p>
+    }
+    else
+    {
+        <p>
+            <Tr>
+                <En>Load <code>trazos-theme.js</code> in <code>&lt;head&gt;</code>, as a blocking script after the <code>theme-color</code> meta tag.
+                    It applies the theme before the first paint, so the page never flashes the wrong one, and it follows the system until the user chooses.</En>
+                <Es>Carga <code>trazos-theme.js</code> en <code>&lt;head&gt;</code>, como script bloqueante después de la etiqueta meta <code>theme-color</code>.
+                    Aplica el tema antes de la primera pintura, para que la página nunca muestre el equivocado, y sigue al sistema hasta que el usuario elija.</Es>
+            </Tr>
+        </p>
+        <CodeBlock Language="html" Code="@ScriptCode" />
+        <p>
+            <Tr>
+                <En>Then use <a href="components/theme-toggle">ThemeToggle</a>, or <code>IThemeService</code> to build your own control. <code>AddTrazosUI</code> registers it:</En>
+                <Es>Luego usa <a href="components/theme-toggle">ThemeToggle</a>, o <code>IThemeService</code> para crear tu propio control. <code>AddTrazosUI</code> lo registra:</Es>
+            </Tr>
+        </p>
+        <CodeBlock Language="csharp" Code="@ToggleCode" />
+    }
 
     <h2 class="docs-h2">@L.T("Customize the palette", "Personaliza la paleta")</h2>
     <p>
         <Tr>
-            <En>Override any token after <code>trazos.css</code>. Put light values in <code>:root</code> and dark values in
+            <En>Override any token after <code>@StylesheetText</code>. Put light values in <code>:root</code> and dark values in
                 <code>[data-theme="dark"]</code>.</En>
-            <Es>Sobrescribe cualquier token después de <code>trazos.css</code>. Pon los valores claros en <code>:root</code> y los oscuros en
+            <Es>Sobrescribe cualquier token después de <code>@StylesheetText</code>. Pon los valores claros en <code>:root</code> y los oscuros en
                 <code>[data-theme="dark"]</code>.</Es>
         </Tr>
     </p>
@@ -62,9 +94,9 @@
         <p>
             <Tr>
                 <En>Each accent (<code>olive</code>, <code>wine</code>, <code>gold</code>, <code>lavender</code>, <code>sky</code>) also has
-                    <code>-soft</code>, <code>-border</code> and <code>-text</code> variants. The full list, with comments, is in <code>trazos.css</code>.</En>
+                    <code>-soft</code>, <code>-border</code> and <code>-text</code> variants. The full list, with comments, is in <code>@TokensFileText</code>.</En>
                 <Es>Cada acento (<code>olive</code>, <code>wine</code>, <code>gold</code>, <code>lavender</code>, <code>sky</code>) también tiene
-                    variantes <code>-soft</code>, <code>-border</code> y <code>-text</code>. La lista completa, con comentarios, está en <code>trazos.css</code>.</Es>
+                    variantes <code>-soft</code>, <code>-border</code> y <code>-text</code>. La lista completa, con comentarios, está en <code>@TokensFileText</code>.</Es>
             </Tr>
         </p>
         <div class="docs-api-scroll">
@@ -99,6 +131,9 @@
 
 @code {
     private sealed record TokenRow(string Name, string Light, string Dark, string Use);
+
+    private string StylesheetText => F.Pick("trazos.css", L.T("the styles.css import", "la importación de styles.css"));
+    private string TokensFileText => F.Pick("trazos.css", "tokens.css");
 
     private string EmailPlaceholder => L.T("name@example.com", "nombre@ejemplo.com");
 
@@ -149,6 +184,25 @@
                 await Theme.SetThemeAsync(Theme.Current == TrazosTheme.Dark ? TrazosTheme.Light : TrazosTheme.Dark);
             }
         }
+        """;
+
+    private const string ReactScriptCode = """
+        import { createThemeScript } from '@carandev/trazos-ui';
+
+        <meta name="theme-color" content="#FAF7F2" />
+        <script dangerouslySetInnerHTML={{ __html: createThemeScript() }} />
+        """;
+
+    private const string ReactToggleCode = """
+        import { Button, ThemeToggle, useTheme } from '@carandev/trazos-ui';
+
+        <ThemeToggle label="Toggle theme" />
+
+        // Or your own control
+        const { theme, setTheme } = useTheme();
+        <Button variant="ghost" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+          Toggle theme
+        </Button>
         """;
 
     private const string OverrideCode = """

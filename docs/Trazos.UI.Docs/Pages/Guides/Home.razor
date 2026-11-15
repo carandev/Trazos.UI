@@ -1,10 +1,10 @@
 @page "/"
 
-<PageTitle>@L.T("Trazos.UI · Hand-crafted Blazor components", "Trazos.UI · Componentes Blazor hechos a mano")</PageTitle>
+<PageTitle>@F.Pick(L.T("Trazos.UI · Hand-crafted Blazor components", "Trazos.UI · Componentes Blazor hechos a mano"), L.T("Trazos.UI · Hand-crafted React components", "Trazos.UI · Componentes React hechos a mano"))</PageTitle>
 
 <article class="docs-page">
     <section class="docs-hero">
-        <span class="docs-eyebrow">@L.T("Blazor component library", "Biblioteca de componentes Blazor")</span>
+        <span class="docs-eyebrow">@F.Pick(L.T("Blazor component library", "Biblioteca de componentes Blazor"), L.T("React component library", "Biblioteca de componentes React"))</span>
         <h1 class="docs-hero-title trazos-heading" tabindex="-1">
             <Tr>
                 <En>Interfaces with a <span class="trazos-handwriting">human</span> stroke.</En>
@@ -12,8 +12,26 @@
             </Tr>
         </h1>
         <p class="docs-lead">
-            @L.T("Trazos.UI is a warm, artisanal design system for Blazor: organic sketch borders, parchment tones, editorial serif type and accessible primitives. Pure Razor components with scoped CSS, no JavaScript runtime and no CSS framework required.",
-                 "Trazos.UI es un sistema de diseño cálido y artesanal para Blazor: bordes orgánicos de boceto, tonos de pergamino, tipografía serif editorial y primitivas accesibles. Componentes Razor puros con CSS aislado, sin runtime de JavaScript ni framework de CSS.")
+            @if (F.IsReact)
+            {
+                @L.T("Trazos.UI is a warm, artisanal design system for React: organic sketch borders, parchment tones, editorial serif type and accessible primitives. React 19 components in strict TypeScript with one plain stylesheet, no CSS-in-JS runtime and no CSS framework required.",
+                     "Trazos.UI es un sistema de diseño cálido y artesanal para React: bordes orgánicos de boceto, tonos de pergamino, tipografía serif editorial y primitivas accesibles. Componentes de React 19 en TypeScript estricto con una sola hoja de estilos, sin runtime de CSS-in-JS ni framework de CSS.")
+            }
+            else
+            {
+                @L.T("Trazos.UI is a warm, artisanal design system for Blazor: organic sketch borders, parchment tones, editorial serif type and accessible primitives. Pure Razor components with scoped CSS, no JavaScript runtime and no CSS framework required.",
+                     "Trazos.UI es un sistema de diseño cálido y artesanal para Blazor: bordes orgánicos de boceto, tonos de pergamino, tipografía serif editorial y primitivas accesibles. Componentes Razor puros con CSS aislado, sin runtime de JavaScript ni framework de CSS.")
+            }
+        </p>
+        <p>
+            <Tr>
+                <En>This site documents both libraries: <a href="@DocsLinks.NuGet" target="_blank" rel="noopener noreferrer">Trazos.UI</a> for Blazor on NuGet
+                    and <a href="@DocsLinks.Npm" target="_blank" rel="noopener noreferrer">@@carandev/trazos-ui</a> for React on npm. They share the same markup, class names and design tokens.
+                    Use the Blazor/React switch in the top bar to pick one; every page then shows that library's code, API and live demos.</En>
+                <Es>Este sitio documenta ambas bibliotecas: <a href="@DocsLinks.NuGet" target="_blank" rel="noopener noreferrer">Trazos.UI</a> para Blazor en NuGet
+                    y <a href="@DocsLinks.Npm" target="_blank" rel="noopener noreferrer">@@carandev/trazos-ui</a> para React en npm. Comparten el mismo marcado, los mismos nombres de clase y los mismos tokens de diseño.
+                    Usa el selector Blazor/React de la barra superior para elegir una; cada página muestra entonces el código, la API y las demos en vivo de esa biblioteca.</Es>
+            </Tr>
         </p>
         <div class="docs-hero-actions">
             <a href="installation" class="docs-link-button">@L.T("Get started", "Comenzar")</a>
@@ -35,12 +53,12 @@
         <Card Variant="CardVariant.White">
             <IconBox Variant="IconBoxVariant.Wine">@Icons.Layers</IconBox>
             <h2 class="docs-feature-title">@L.T("Zero heavy dependencies", "Cero dependencias pesadas")</h2>
-            <p class="docs-feature-text">@L.T("Only Blazor. Each component ships its own scoped stylesheet.", "Solo Blazor. Cada componente trae su propia hoja de estilos aislada.")</p>
+            <p class="docs-feature-text">@F.Pick(L.T("Only Blazor. Each component ships its own scoped stylesheet.", "Solo Blazor. Cada componente trae su propia hoja de estilos aislada."), L.T("Only React. One plain stylesheet, tree-shakeable components and no CSS-in-JS runtime.", "Solo React. Una sola hoja de estilos, componentes con tree-shaking y sin runtime de CSS-in-JS."))</p>
         </Card>
     </div>
 
     <h2 class="docs-h2">@L.T("A quick taste", "Una muestra rápida")</h2>
-    <DemoBlock Code="@TasteCode">
+    <DemoBlock Code="@TasteCode" React="home/taste">
         <Card Class="docs-taste">
             <Header>
                 <div class="docs-row">
