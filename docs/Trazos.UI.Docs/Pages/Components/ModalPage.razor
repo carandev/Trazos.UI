@@ -3,7 +3,7 @@
 <DocPage Title="Modal" Category="@L.T("Overlays & feedback", "Superposiciones y avisos")"
          Lead="@L.T("A focused dialog with a title, body and footer actions, in three sizes.", "Un diálogo enfocado con título, cuerpo y acciones en el pie, en tres tamaños.")">
 
-    <DemoBlock Code="@Code">
+    <DemoBlock Code="@Code" React="modal/sizes">
         @foreach (var size in Sizes)
         {
             <Button Variant="ButtonVariant.Outline" OnClick="() => Open(size)">@L.T("Open", "Abrir") @SizeLabel(size)</Button>
@@ -23,7 +23,7 @@
         </Modal>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -83,5 +83,22 @@
         new("ShowCloseButton", "bool", "true", L.T("Shows the close button in the header.", "Muestra el botón de cerrar en el encabezado.")),
         new("CloseOnBackdropClick", "bool", "true", L.T("Closes the modal when the backdrop is clicked.", "Cierra el modal al hacer clic en el fondo.")),
         new("OnClose", "EventCallback", null, L.T("Raised after the modal closes.", "Se dispara después de que el modal se cierra.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("open", "boolean", null, L.T("Controlled visibility. Pair it with onOpenChange.", "Visibilidad controlada. Úsala junto con onOpenChange.")),
+        new("defaultOpen", "boolean", "false", L.T("Initial visibility when uncontrolled.", "Visibilidad inicial cuando no está controlado.")),
+        new("onOpenChange", "(open: boolean) => void", null, L.T("Called when the modal closes from its close button, the backdrop or Escape.", "Se llama cuando el modal se cierra con su botón de cerrar, el fondo o Escape.")),
+        new("title", "ReactNode", "''", L.T("Dialog title.", "Título del diálogo.")),
+        new("children", "ReactNode", null, L.T("Dialog body.", "Cuerpo del diálogo.")),
+        new("footer", "ReactNode", null, L.T("Actions at the bottom.", "Acciones en la parte inferior.")),
+        new("size", "ModalSize", "'medium'", L.T("'small', 'medium' or 'large'.", "'small', 'medium' o 'large'.")),
+        new("showCloseButton", "boolean", "true", L.T("Shows the close button in the header.", "Muestra el botón de cerrar en el encabezado.")),
+        new("closeOnBackdropClick", "boolean", "true", L.T("Closes the modal when the backdrop is clicked.", "Cierra el modal al hacer clic en el fondo.")),
+        new("closeButtonAriaLabel", "string", "'Cerrar'", L.T("Accessible label of the close button.", "Etiqueta accesible del botón de cerrar.")),
+        new("onClose", "() => void", null, L.T("Called after the modal closes.", "Se llama después de que el modal se cierra.")),
+        new("className", "string", null, L.T("Extra CSS classes for the dialog.", "Clases CSS adicionales para el diálogo.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other attribute of the dialog div, including ref.", "Cualquier otro atributo del div del diálogo, incluido ref.")),
     ];
 }

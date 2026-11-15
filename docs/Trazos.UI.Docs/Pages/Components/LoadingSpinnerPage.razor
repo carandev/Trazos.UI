@@ -3,12 +3,12 @@
 <DocPage Title="LoadingSpinner" Category="@L.T("Overlays & feedback", "Superposiciones y avisos")"
          Lead="@L.T("A dual-ring halo for loading states, inline or as a full-screen overlay.", "Un halo de doble anillo para estados de carga, en línea o como superposición de pantalla completa.")">
 
-    <DemoBlock Title="@L.T("Inline", "En línea")" Code="@InlineCode">
+    <DemoBlock Title="@L.T("Inline", "En línea")" Code="@InlineCode" React="loading-spinner/inline">
         <LoadingSpinner />
         <LoadingSpinner Message="@L.T("Loading events…", "Cargando eventos…")" />
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("Overlay", "Superposición")" Description="@L.T("Covers the whole viewport and blocks interaction. The demo closes it after two seconds.", "Cubre toda la ventana y bloquea la interacción. La demo la cierra después de dos segundos.")" Code="@OverlayCode">
+    <DemoBlock Title="@L.T("Overlay", "Superposición")" Description="@L.T("Covers the whole viewport and blocks interaction. The demo closes it after two seconds.", "Cubre toda la ventana y bloquea la interacción. La demo la cierra después de dos segundos.")" Code="@OverlayCode" React="loading-spinner/overlay">
         <Button Variant="ButtonVariant.Outline" OnClick="ShowOverlayAsync">@L.T("Show overlay", "Mostrar superposición")</Button>
         @if (_overlay)
         {
@@ -16,7 +16,7 @@
         }
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -45,5 +45,14 @@
     [
         new("Message", "string?", null, L.T("Text below the spinner.", "Texto debajo del indicador.")),
         new("Overlay", "bool", "false", L.T("Renders a fixed, full-screen overlay.", "Renderiza una superposición fija de pantalla completa.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("message", "string", null, L.T("Text below the spinner. It also names the status region.", "Texto debajo del indicador. También da nombre a la región de estado.")),
+        new("overlay", "boolean", "false", L.T("Renders a fixed, full-screen overlay.", "Renderiza una superposición fija de pantalla completa.")),
+        new("label", "string", "'Cargando'", L.T("Accessible name used when there is no message.", "Nombre accesible que se usa cuando no hay message.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other div attribute, including ref.", "Cualquier otro atributo de div, incluido ref.")),
     ];
 }

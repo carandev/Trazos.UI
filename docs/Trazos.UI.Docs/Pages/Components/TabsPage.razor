@@ -1,11 +1,11 @@
 @page "/components/tabs"
 
 <DocPage Title="Tabs" Category="@L.T("Navigation", "Navegación")"
-         Lead="@L.T("Switches between related views. Three visual variants, icons and badges, and binding by index or by key.", "Alterna entre vistas relacionadas. Tres variantes visuales, íconos e insignias, y binding por índice o por clave.")">
+         Lead="@F.Pick(L.T("Switches between related views. Three visual variants, icons and badges, and binding by index or by key.", "Alterna entre vistas relacionadas. Tres variantes visuales, íconos e insignias, y binding por índice o por clave."), L.T("Switches between related views. Three visual variants, icons and badges, and control by index or by key.", "Alterna entre vistas relacionadas. Tres variantes visuales, íconos e insignias, y control por índice o por clave."))">
 
     @foreach (var variant in Enum.GetValues<TabsVariant>())
     {
-        <DemoBlock Title="@variant.ToString()" Code="@CodeFor(variant)">
+        <DemoBlock Title="@variant.ToString()" Code="@CodeFor(variant)" React="@($"tabs/{variant.ToString().ToLowerInvariant()}")">
             <div class="docs-stack">
                 <Tabs Variant="variant">
                     <TabItem Title="@L.T("Overview", "Resumen")">
@@ -27,7 +27,7 @@
         </DemoBlock>
     }
 
-    <DemoBlock Title="@L.T("Binding by key", "Binding por clave")" Description="@L.T("Keys are stable even when tabs are added or reordered, so they work well with query strings.", "Las claves se mantienen estables aunque agregues o reordenes pestañas, así que funcionan bien con parámetros de consulta (query strings).")" Code="@KeyCode">
+    <DemoBlock Title="@F.Pick(L.T("Binding by key", "Binding por clave"), L.T("Controlled by key", "Controlado por clave"))" Description="@L.T("Keys are stable even when tabs are added or reordered, so they work well with query strings.", "Las claves se mantienen estables aunque agregues o reordenes pestañas, así que funcionan bien con parámetros de consulta (query strings).")" Code="@KeyCode" React="tabs/by-key">
         <div class="docs-stack">
             <Tabs @bind-ActiveKey="_activeKey">
                 <TabItem Key="calendar" Title="@L.T("Calendar", "Calendario")">
@@ -43,8 +43,8 @@
         </div>
     </DemoBlock>
 
-    <ApiTable Title="@L.T("Tabs parameters", "Parámetros de Tabs")" Params="TabsParams" />
-    <ApiTable Title="@L.T("TabItem parameters", "Parámetros de TabItem")" Params="TabItemParams" />
+    <ApiTable Title="@F.Pick(L.T("Tabs parameters", "Parámetros de Tabs"), L.T("Tabs props", "Props de Tabs"))" Params="TabsParams" ReactParams="TabsReactParams" />
+    <ApiTable Title="@F.Pick(L.T("TabItem parameters", "Parámetros de TabItem"), L.T("TabItem props", "Props de TabItem"))" Params="TabItemParams" ReactParams="TabItemReactParams" />
 </DocPage>
 
 @code {
@@ -94,5 +94,30 @@
         new("HeaderTemplate", "RenderFragment?", null, L.T("Replaces the whole tab header.", "Reemplaza todo el encabezado de la pestaña.")),
         new("Disabled", "bool", "false", L.T("Prevents selecting the tab.", "Impide seleccionar la pestaña.")),
         new("ChildContent", "RenderFragment?", null, L.T("Panel content.", "Contenido del panel.")),
+    ];
+
+    private IReadOnlyList<ApiParam> TabsReactParams =>
+    [
+        new("variant", "TabsVariant", "'underline'", L.T("'underline', 'pills' or 'contained'.", "'underline', 'pills' o 'contained'.")),
+        new("activeIndex", "number", null, L.T("Controlled active tab by position.", "Pestaña activa controlada por posición.")),
+        new("defaultActiveIndex", "number", "0", L.T("Initial active tab by position when uncontrolled.", "Pestaña activa inicial por posición cuando no está controlado.")),
+        new("onActiveIndexChange", "(index: number) => void", null, L.T("Called with the position of the new tab.", "Se llama con la posición de la nueva pestaña.")),
+        new("activeKey", "string", null, L.T("Controlled active tab by tabKey (case-insensitive). Wins over the index when it matches a tab.", "Pestaña activa controlada por tabKey (no distingue mayúsculas de minúsculas). Tiene prioridad sobre el índice cuando coincide con una pestaña.")),
+        new("defaultActiveKey", "string", null, L.T("Initial active tab by tabKey when uncontrolled.", "Pestaña activa inicial por tabKey cuando no está controlado.")),
+        new("onActiveKeyChange", "(key: string) => void", null, L.T("Called with the tabKey of the new tab; only for tabs that have one.", "Se llama con la tabKey de la nueva pestaña; solo para pestañas que la tienen.")),
+        new("children", "ReactNode", null, L.T("TabItem elements, as direct children.", "Elementos TabItem, como hijos directos.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other div attribute, including ref.", "Cualquier otro atributo de div, incluido ref.")),
+    ];
+
+    private IReadOnlyList<ApiParam> TabItemReactParams =>
+    [
+        new("title", "string", "''", L.T("Tab label.", "Etiqueta de la pestaña.")),
+        new("tabKey", "string", null, L.T("Stable identifier used by activeKey and onActiveKeyChange.", "Identificador estable que usan activeKey y onActiveKeyChange.")),
+        new("icon", "ReactNode", null, L.T("Icon before the label.", "Ícono antes de la etiqueta.")),
+        new("badge", "ReactNode", null, L.T("Content after the label, such as a counter.", "Contenido después de la etiqueta, como un contador.")),
+        new("header", "ReactNode", null, L.T("Replaces the whole tab header.", "Reemplaza todo el encabezado de la pestaña.")),
+        new("disabled", "boolean", "false", L.T("Prevents selecting the tab.", "Impide seleccionar la pestaña.")),
+        new("children", "ReactNode", null, L.T("Panel content.", "Contenido del panel.")),
     ];
 }
