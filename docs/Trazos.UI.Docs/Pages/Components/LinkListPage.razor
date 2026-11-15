@@ -3,7 +3,7 @@
 <DocPage Title="LinkList" Category="@L.T("Website helpers", "Ayudas para sitios web")"
          Lead="@L.T("A compact list of links with a name, muted metadata and an arrow, with truncation and an ink-shadow hover.", "Una lista compacta de enlaces con nombre, metadatos atenuados y una flecha, con truncado y sombra de tinta al pasar el cursor.")">
 
-    <DemoBlock Title="@L.T("Links", "Enlaces")" Code="@ListCode">
+    <DemoBlock Title="@L.T("Links", "Enlaces")" Code="@ListCode" React="link-list/links">
         <div style="width: 100%; max-width: 26rem;">
             <LinkList>
                 <LinkListItem Href="components/button">
@@ -22,8 +22,8 @@
         </div>
     </DemoBlock>
 
-    <ApiTable Title="LinkList" Params="ListParams" />
-    <ApiTable Title="LinkListItem" Params="ItemParams" />
+    <ApiTable Title="LinkList" Params="ListParams" ReactParams="ReactListParams" />
+    <ApiTable Title="LinkListItem" Params="ItemParams" ReactParams="ReactItemParams" />
 </DocPage>
 
 @code {
@@ -51,5 +51,22 @@
         new("Icon", "RenderFragment?", null, L.T("Replaces the default arrow.", "Reemplaza la flecha por defecto.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactListParams =>
+    [
+        new("children", "ReactNode", null, L.T("The LinkListItem rows.", "Las filas LinkListItem.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'ul'>", null, L.T("Any other ul attribute, including ref.", "Cualquier otro atributo de ul, incluido ref.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactItemParams =>
+    [
+        new("href", "string", null, L.T("Link target. Required.", "Destino del enlace. Obligatorio.")),
+        new("children", "ReactNode", null, L.T("The name. It truncates when it does not fit.", "El nombre. Se trunca si no cabe.")),
+        new("meta", "ReactNode", null, L.T("Muted text beside the name, such as a language or a year.", "Texto atenuado junto al nombre, como un lenguaje o un año.")),
+        new("icon", "ReactNode", null, L.T("Replaces the default arrow.", "Reemplaza la flecha por defecto.")),
+        new("className", "string", null, L.T("Extra CSS classes for the link.", "Clases CSS adicionales para el enlace.")),
+        new("...rest", "ComponentPropsWithRef<'a'>", null, L.T("Any other anchor attribute, including ref. It goes to the link.", "Cualquier otro atributo de enlace, incluido ref. Va al enlace.")),
     ];
 }

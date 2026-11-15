@@ -3,12 +3,12 @@
 <DocPage Title="SkipLink" Category="@L.T("Website helpers", "Ayudas para sitios web")"
          Lead="@L.T("Lets keyboard users jump past the navigation. It stays out of view until it receives focus. Put it first in the layout.", "Permite que quienes usan el teclado salten la navegación. Permanece oculto hasta recibir el foco. Colócalo primero en el diseño de la página.")">
 
-    <DemoBlock Title="@L.T("Press Tab", "Presiona Tab")" Description="@L.T("A bare fragment is resolved against the current page, not against the base tag, and the target receives focus.", "Un fragmento solo se resuelve contra la página actual, no contra la etiqueta base, y el destino recibe el foco.")" Code="@SkipCode">
+    <DemoBlock Title="@L.T("Press Tab", "Presiona Tab")" Description="@F.Pick(L.T("A bare fragment is resolved against the current page, not against the base tag, and the target receives focus.", "Un fragmento solo se resuelve contra la página actual, no contra la etiqueta base, y el destino recibe el foco."), L.T("The React SkipLink is a plain link, so the browser resolves a bare fragment against the base tag. This site has one, so the demo writes a path plus a fragment. Give the target tabIndex={-1} so it can receive focus.", "El SkipLink de React es un enlace normal, así que el navegador resuelve un fragmento solo contra la etiqueta base. Este sitio tiene una, así que la demo escribe una ruta más un fragmento. Dale tabIndex={-1} al destino para que pueda recibir el foco."))" Code="@SkipCode" React="skip-link/tab">
         <SkipLink Href="#skip-link-target">@L.T("Skip to content", "Saltar al contenido")</SkipLink>
         <p id="skip-link-target">@L.T("The skip link lands here.", "El enlace llega hasta aquí.")</p>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -24,5 +24,13 @@
         new("ChildContent", "RenderFragment?", null, L.T("Link text.", "Texto del enlace.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("href", "string", "'#main'", L.T("The fragment of the main content. Under a base tag, a path plus a fragment.", "El fragmento del contenido principal. Con una etiqueta base, una ruta más un fragmento.")),
+        new("children", "ReactNode", null, L.T("Link text.", "Texto del enlace.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'a'>", null, L.T("Any other anchor attribute, including ref.", "Cualquier otro atributo de enlace, incluido ref.")),
     ];
 }
