@@ -3,11 +3,11 @@
 <DocPage Title="VisuallyHidden" Category="@L.T("Website helpers", "Ayudas para sitios web")"
          Lead="@L.T("Content for screen readers only, such as an aria-live announcement or a label for an icon.", "Contenido solo para lectores de pantalla, como un anuncio aria-live o la etiqueta de un ícono.")">
 
-    <DemoBlock Title="@L.T("Announcement", "Anuncio")" Description="@L.T("The status below is in the page, but you cannot see it.", "El estado siguiente está en la página, pero no se ve.")" Code="@HiddenCode">
+    <DemoBlock Title="@L.T("Announcement", "Anuncio")" Description="@L.T("The status below is in the page, but you cannot see it.", "El estado siguiente está en la página, pero no se ve.")" Code="@HiddenCode" React="visually-hidden/announcement">
         <span>@L.T("Saved", "Guardado")<VisuallyHidden role="status" aria-live="polite">@L.T("Your changes were saved", "Tus cambios se guardaron")</VisuallyHidden></span>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -20,5 +20,12 @@
         new("ChildContent", "RenderFragment?", null, L.T("The hidden content.", "El contenido oculto.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("children", "ReactNode", null, L.T("The hidden content.", "El contenido oculto.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'span'>", null, L.T("Any other span attribute, including ref, role and aria-live.", "Cualquier otro atributo de span, incluidos ref, role y aria-live.")),
     ];
 }

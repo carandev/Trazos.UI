@@ -5,22 +5,36 @@
 <DocPage Title="ThemeToggle" Category="@L.T("Website helpers", "Ayudas para sitios web")"
          Lead="@L.T("Switches between the light and dark themes and remembers the choice. Until the user chooses, the theme follows the system.", "Cambia entre los temas claro y oscuro y recuerda la elección. Hasta que el usuario elija, el tema sigue al sistema.")">
 
-    <DemoBlock Title="@L.T("Toggle", "Interruptor")" Description="@L.T("Both icons are always rendered and CSS shows the right one, so prerendered HTML is already correct.", "Los dos íconos siempre se renderizan y CSS muestra el correcto, así que el HTML prerrenderizado ya es correcto.")" Code="@ToggleCode">
+    <DemoBlock Title="@L.T("Toggle", "Interruptor")" Description="@F.Pick(L.T("Both icons are always rendered and CSS shows the right one, so prerendered HTML is already correct.", "Los dos íconos siempre se renderizan y CSS muestra el correcto, así que el HTML prerrenderizado ya es correcto."), L.T("Both icons are always rendered and CSS shows the right one, so server-rendered HTML is already correct. The demo passes this site's storageKey, so it switches the whole page.", "Los dos íconos siempre se renderizan y CSS muestra el correcto, así que el HTML renderizado en el servidor ya es correcto. La demo pasa el storageKey de este sitio, así que cambia toda la página."))" Code="@ToggleCode" React="theme-toggle/toggle">
         <ThemeToggle Label="@L.T("Toggle theme", "Cambiar tema")" Variant="ButtonVariant.Outline" />
         <span class="docs-muted" data-testid="current-theme">@Theme.Current</span>
     </DemoBlock>
 
     <h2 class="docs-h2">@L.T("Setup", "Configuración")</h2>
-    <p>
-        <Tr>
-            <En>Load the theme script in <code>&lt;head&gt;</code> and call <code>AddTrazosUI</code>. See <a href="theming">Theming</a>.</En>
-            <Es>Carga el script del tema en <code>&lt;head&gt;</code> y llama a <code>AddTrazosUI</code>. Consulta <a href="theming">Temas</a>.</Es>
-        </Tr>
-    </p>
-    <CodeBlock Language="html" Code="@ScriptCode" />
+    @if (!F.IsReact)
+    {
+        <p>
+            <Tr>
+                <En>Load the theme script in <code>&lt;head&gt;</code> and call <code>AddTrazosUI</code>. See <a href="theming">Theming</a>.</En>
+                <Es>Carga el script del tema en <code>&lt;head&gt;</code> y llama a <code>AddTrazosUI</code>. Consulta <a href="theming">Temas</a>.</Es>
+            </Tr>
+        </p>
+        <CodeBlock Language="html" Code="@ScriptCode" />
+    }
+    else
+    {
+        <p>
+            <Tr>
+                <En>Inline the script from <code>createThemeScript()</code> in <code>&lt;head&gt;</code>, after the <code>theme-color</code> meta tag, so the theme applies before first paint. The choice is stored under <code>trazos-theme</code>: pass the same <code>storageKey</code> and <code>colors</code> to <code>createThemeScript</code>, <code>useTheme</code> and <code>ThemeToggle</code> to change them. See <a href="theming">Theming</a>.</En>
+                <Es>Inserta el script de <code>createThemeScript()</code> en <code>&lt;head&gt;</code>, después de la etiqueta meta <code>theme-color</code>, para que el tema se aplique antes del primer pintado. La elección se guarda en <code>trazos-theme</code>: pasa el mismo <code>storageKey</code> y los mismos <code>colors</code> a <code>createThemeScript</code>, <code>useTheme</code> y <code>ThemeToggle</code> para cambiarlos. Consulta <a href="theming">Temas</a>.</Es>
+            </Tr>
+        </p>
+        <CodeBlock Language="tsx" Code="@ReactScriptCode" />
+    }
 
-    <ApiTable Params="Params" />
-    <ApiTable Title="IThemeService" Params="ServiceParams" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
+    <ApiTable Title="@F.Pick("IThemeService", "useTheme(options)")" Params="ServiceParams" ReactParams="ReactHookParams" />
+    <ApiTable Title="createThemeScript(options)" ReactParams="ReactScriptParams" />
 </DocPage>
 
 @code {
@@ -37,6 +51,13 @@
     private const string ScriptCode = """
         <meta name="theme-color" content="#FAF7F2" />
         <script src="_content/Trazos.UI/trazos-theme.js"></script>
+        """;
+
+    private const string ReactScriptCode = """
+        import { createThemeScript } from '@carandev/trazos-ui';
+
+        <meta name="theme-color" content="#FAF7F2" />
+        <script dangerouslySetInnerHTML={{ __html: createThemeScript() }} />
         """;
 
     private IReadOnlyList<ApiParam> Params =>
@@ -58,5 +79,36 @@
         new("Changed", "event Action?", null, L.T("Raised when the theme changes, including from another tab.", "Se dispara cuando cambia el tema, incluso desde otra pestaña.")),
         new("InitializeAsync()", "Task", null, L.T("Connects to the browser. With prerendering, call it from OnAfterRenderAsync.", "Se conecta al navegador. Con prerrenderizado, llámalo desde OnAfterRenderAsync.")),
         new("SetThemeAsync(theme)", "Task", null, L.T("Applies a theme and remembers it.", "Aplica un tema y lo recuerda.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("label", "string", null, L.T("Accessible name of the button. Required.", "Nombre accesible del botón. Obligatorio.")),
+        new("moonIcon", "ReactNode", null, L.T("Shown in the light theme.", "Se muestra en el tema claro.")),
+        new("sunIcon", "ReactNode", null, L.T("Shown in the dark theme.", "Se muestra en el tema oscuro.")),
+        new("storageKey", "string", "'trazos-theme'", L.T("The localStorage key that holds the choice.", "La clave de localStorage que guarda la elección.")),
+        new("colors", "Record<Theme, string>", "{ light: '#FAF7F2', dark: '#1A1512' }", L.T("Values for the theme-color meta tag.", "Valores para la etiqueta meta theme-color.")),
+        new("variant", "ButtonVariant", "'ghost'", L.T("Same variants as Button.", "Las mismas variantes de Button.")),
+        new("size", "IconButtonSize", "'medium'", L.T("'medium' or 'large'.", "'medium' o 'large'.")),
+        new("disabled", "boolean", "false", L.T("Disables the button.", "Deshabilita el botón.")),
+        new("loading", "boolean", "false", L.T("Shows a spinner and disables the button.", "Muestra un indicador de carga y deshabilita el botón.")),
+        new("onClick", "MouseEventHandler<HTMLButtonElement>", null, L.T("Runs before the theme changes.", "Se ejecuta antes de cambiar el tema.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'button'>", null, L.T("Any other button attribute, including ref.", "Cualquier otro atributo de button, incluido ref.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactHookParams =>
+    [
+        new("options.storageKey", "string", "'trazos-theme'", L.T("The localStorage key that holds the choice.", "La clave de localStorage que guarda la elección.")),
+        new("options.colors", "Record<Theme, string>", "{ light: '#FAF7F2', dark: '#1A1512' }", L.T("Values for the theme-color meta tag.", "Valores para la etiqueta meta theme-color.")),
+        new("theme", "'light' | 'dark'", null, L.T("The current theme, read from data-theme on <html>. It updates from any source, including another tab. 'light' on the server.", "El tema actual, leído de data-theme en <html>. Se actualiza desde cualquier origen, incluso otra pestaña. 'light' en el servidor.")),
+        new("setTheme(theme)", "(theme: Theme) => void", null, L.T("Applies a theme and remembers it, so the system no longer decides.", "Aplica un tema y lo recuerda, así que el sistema deja de decidir.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactScriptParams =>
+    [
+        new("options.storageKey", "string", "'trazos-theme'", L.T("The localStorage key that holds the choice.", "La clave de localStorage que guarda la elección.")),
+        new("options.colors", "Record<Theme, string>", "{ light: '#FAF7F2', dark: '#1A1512' }", L.T("Values for the theme-color meta tag.", "Valores para la etiqueta meta theme-color.")),
+        new(L.T("returns", "devuelve"), "string", null, L.T("A script to inline in <head>. It applies the theme before first paint and follows the system until the user chooses.", "Un script para insertar en <head>. Aplica el tema antes del primer pintado y sigue al sistema hasta que el usuario elija.")),
     ];
 }
