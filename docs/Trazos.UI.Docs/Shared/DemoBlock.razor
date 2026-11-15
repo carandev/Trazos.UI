@@ -9,10 +9,28 @@
     }
 
     <div class="docs-demo-preview">
-        @ChildContent
+        @if (!F.IsReact)
+        {
+            @ChildContent
+        }
+        else if (React is not null)
+        {
+            <ReactDemo @key="React" Id="@React" />
+        }
+        else
+        {
+            <p class="docs-muted">@L.T("This example is only available for Blazor.", "Este ejemplo solo está disponible para Blazor.")</p>
+        }
     </div>
 
-    @if (!string.IsNullOrEmpty(Code))
+    @if (F.IsReact && React is not null)
+    {
+        <details class="docs-demo-source" open="@ShowCode">
+            <summary>@L.T("Show code", "Ver código")</summary>
+            <ReactSource @key="React" Id="@React" />
+        </details>
+    }
+    else if (!F.IsReact && !string.IsNullOrEmpty(Code))
     {
         <details class="docs-demo-source" open="@ShowCode">
             <summary>@L.T("Show code", "Ver código")</summary>
@@ -24,7 +42,16 @@
 @code {
     [Parameter] public string? Title { get; set; }
     [Parameter] public string? Description { get; set; }
+
+    /// <summary>Razor snippet shown in Blazor mode.</summary>
     [Parameter] public string? Code { get; set; }
+
+    /// <summary>
+    /// The React version of this demo: the id of apps/docs-react/src/demos/&lt;id&gt;.tsx,
+    /// such as "badge/variants". In React mode it renders live and its source is the code shown.
+    /// </summary>
+    [Parameter] public string? React { get; set; }
+
     [Parameter] public bool ShowCode { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
 }

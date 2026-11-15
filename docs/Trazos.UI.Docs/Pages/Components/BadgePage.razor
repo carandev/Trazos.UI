@@ -3,14 +3,14 @@
 <DocPage Title="Badge" Category="@L.T("Display", "Visualización")"
          Lead="@L.T("A small status tag for states, categories and counts.", "Una pequeña etiqueta para estados, categorías y conteos.")">
 
-    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@VariantsCode">
+    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@VariantsCode" React="badge/variants">
         @foreach (var variant in Enum.GetValues<BadgeVariant>())
         {
             <Badge Variant="variant">@variant</Badge>
         }
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("With an icon", "Con un ícono")" Code="@IconCode">
+    <DemoBlock Title="@L.T("With an icon", "Con un ícono")" Code="@IconCode" React="badge/with-icon">
         <Badge Variant="BadgeVariant.Success">
             <LeadingIcon>@Icons.Check</LeadingIcon>
             <ChildContent>@L.T("Confirmed", "Confirmado")</ChildContent>
@@ -21,7 +21,7 @@
         </Badge>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -50,5 +50,15 @@
         new("ChildContent", "RenderFragment?", null, L.T("Badge text.", "Texto de la insignia.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("variant", "BadgeVariant", "'neutral'", L.T("'success', 'warning', 'error', 'info', 'lavender', 'cream' or 'neutral'.", "'success', 'warning', 'error', 'info', 'lavender', 'cream' o 'neutral'.")),
+        new("leadingIcon", "ReactNode", null, L.T("Icon rendered before the text.", "Ícono que se renderiza antes del texto.")),
+        new("uppercase", "boolean", "true", L.T("Set to false to keep the original case, for values such as C#.", "Usa false para conservar las mayúsculas y minúsculas originales, en valores como C#.")),
+        new("children", "ReactNode", null, L.T("Badge text.", "Texto de la insignia.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'span'>", null, L.T("Any other span attribute, including ref.", "Cualquier otro atributo de span, incluido ref.")),
     ];
 }

@@ -1,0 +1,42 @@
+@implements IAsyncDisposable
+@inject ReactDemos Demos
+
+@* React owns everything inside this element; Blazor never renders into it. *@
+<div class="docs-react-host" @ref="_host"></div>
+
+@if (_status is ReactDemoStatus.Missing or ReactDemoStatus.Unavailable)
+{
+    <p class="docs-muted">
+        @(_status == ReactDemoStatus.Missing
+            ? L.T($"The React demo \"{Id}\" does not exist.", $"La demo de React \"{Id}\" no existe.")
+            : L.T("The React demos are not built. Run: npm run build -w @carandev/trazos-docs-react",
+                  "Las demos de React no están compiladas. Ejecuta: npm run build -w @carandev/trazos-docs-react"))
+    </p>
+}
+
+@code {
+    /// <summary>Demo id: the file apps/docs-react/src/demos/&lt;Id&gt;.tsx.</summary>
+    [Parameter, EditorRequired] public string Id { get; set; } = string.Empty;
+
+    private ElementReference _host;
+    private bool _rendered;
+    private ReactDemoStatus? _status;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        _rendered = true;
+        _status = await Demos.MountAsync(_host, Id, L.Code);
+        if (_status is ReactDemoStatus.Missing or ReactDemoStatus.Unavailable)
+        {
+            StateHasChanged();
+        }
+    }
+
+    // Always unmount: it also cancels a mount that is still loading.
+    public async ValueTask DisposeAsync()
+    {
+        if (_rendered) await Demos.UnmountAsync(_host);
+    }
+}
