@@ -1,31 +1,42 @@
-<section class="docs-api">
-    <h2 class="docs-h2">@(Title ?? L.T("Parameters", "Parámetros"))</h2>
-    <div class="docs-api-scroll">
-        <table class="docs-api-table">
-            <thead>
-                <tr>
-                    <th>@L.T("Name", "Nombre")</th>
-                    <th>@L.T("Type", "Tipo")</th>
-                    <th>@L.T("Default", "Predeterminado")</th>
-                    <th>@L.T("Description", "Descripción")</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var p in Params)
-                {
+@if (Rows is { } rows)
+{
+    <section class="docs-api">
+        <h2 class="docs-h2">@(Title ?? F.Pick(L.T("Parameters", "Parámetros"), "Props"))</h2>
+        <div class="docs-api-scroll">
+            <table class="docs-api-table">
+                <thead>
                     <tr>
-                        <td><code>@p.Name</code></td>
-                        <td><code class="docs-type">@p.Type</code></td>
-                        <td>@if (p.Default is not null) { <code>@p.Default</code> } else { <span class="docs-muted">—</span> }</td>
-                        <td>@p.Description</td>
+                        <th>@L.T("Name", "Nombre")</th>
+                        <th>@L.T("Type", "Tipo")</th>
+                        <th>@L.T("Default", "Predeterminado")</th>
+                        <th>@L.T("Description", "Descripción")</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-</section>
+                </thead>
+                <tbody>
+                    @foreach (var p in rows)
+                    {
+                        <tr>
+                            <td><code>@p.Name</code></td>
+                            <td><code class="docs-type">@p.Type</code></td>
+                            <td>@if (p.Default is not null) { <code>@p.Default</code> } else { <span class="docs-muted">—</span> }</td>
+                            <td>@p.Description</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+}
 
 @code {
     [Parameter] public string? Title { get; set; }
-    [Parameter, EditorRequired] public IReadOnlyList<ApiParam> Params { get; set; } = [];
+
+    /// <summary>Blazor parameters, shown in Blazor mode.</summary>
+    [Parameter] public IReadOnlyList<ApiParam>? Params { get; set; }
+
+    /// <summary>React props, shown in React mode.</summary>
+    [Parameter] public IReadOnlyList<ApiParam>? ReactParams { get; set; }
+
+    // A table without rows for the current framework is left out: that API does not exist there.
+    private IReadOnlyList<ApiParam>? Rows => F.Pick(Params, ReactParams);
 }

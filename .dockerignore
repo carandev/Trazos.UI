@@ -1,10 +1,17 @@
 # Only what docs/Trazos.UI.Docs/Dockerfile needs.
 *
 !Directory.Build.props
-!packages/tokens/tokens.css
-!packages/tokens/utilities.css
+!package.json
+!package-lock.json
+!packages/
+!apps/docs-react/
+# npm ci needs every workspace manifest listed in the lockfile.
+!apps/playground/package.json
 !src/Trazos.UI/
 !docs/Trazos.UI.Docs/
 **/bin/
 **/obj/
+**/node_modules/
+**/dist/
 src/Trazos.UI/wwwroot/trazos.css
+docs/Trazos.UI.Docs/wwwroot/react/

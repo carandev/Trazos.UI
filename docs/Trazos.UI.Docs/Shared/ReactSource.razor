@@ -1,0 +1,23 @@
+@inject ReactDemos Demos
+
+@if (_code is not null)
+{
+    <CodeBlock Code="@_code" Language="tsx" />
+}
+else if (_loaded)
+{
+    <p class="docs-muted">@L.T("The code for this demo is not available.", "El código de esta demo no está disponible.")</p>
+}
+
+@code {
+    [Parameter, EditorRequired] public string Id { get; set; } = string.Empty;
+
+    private string? _code;
+    private bool _loaded;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _code = await Demos.SourceAsync(Id, L.Code);
+        _loaded = true;
+    }
+}

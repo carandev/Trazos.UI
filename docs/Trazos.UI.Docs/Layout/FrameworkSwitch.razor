@@ -1,0 +1,4 @@
+<div class="docs-lang" role="group" aria-label="@L.T("Framework", "Framework")">
+    <button type="button" class="docs-lang-option" aria-pressed="@(F.IsReact ? "false" : "true")" @onclick="() => F.SetAsync(DocsFw.Blazor)">Blazor</button>
+    <button type="button" class="docs-lang-option" aria-pressed="@(F.IsReact ? "true" : "false")" @onclick="() => F.SetAsync(DocsFw.React)">React</button>
+</div>
