@@ -3,7 +3,7 @@
 <DocPage Title="SelectInput" Category="@L.T("Forms", "Formularios")"
          Lead="@L.T("A styled native select. Options are plain <option> elements, so keyboard and mobile pickers work out of the box.", "Un select nativo con estilos. Las opciones son elementos <option> comunes, así que el teclado y los selectores móviles funcionan sin configuración adicional.")">
 
-    <DemoBlock Code="@Code">
+    <DemoBlock Code="@Code" React="select-input/basic">
         <div class="docs-stack">
             <SelectInput Label="@L.T("Team", "Equipo")" Placeholder="@L.T("Choose a team", "Elige un equipo")" Required="true" @bind-Value="_team">
                 <option value="design">@L.T("Design", "Diseño")</option>
@@ -14,7 +14,7 @@
         </div>
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("Error and disabled", "Error y deshabilitado")" Code="@StatesCode">
+    <DemoBlock Title="@L.T("Error and disabled", "Error y deshabilitado")" Code="@StatesCode" React="select-input/states">
         <div class="docs-grid-2">
             <SelectInput Label="@L.T("Shift", "Turno")" Placeholder="@L.T("Pick a shift", "Elige un turno")" Error="@L.T("Choose a shift to continue.", "Elige un turno para continuar.")">
                 <option value="am">@L.T("Morning", "Mañana")</option>
@@ -24,7 +24,7 @@
         </div>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -61,5 +61,23 @@
         new("Id", "string", "generated", L.T("Id of the select.", "Id del select.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra attributes for the <select>.", "Atributos adicionales para el <select>.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("value", "string", null, L.T("Controlled selected value; '' selects the placeholder. Pair it with onValueChange.", "Valor seleccionado controlado; '' selecciona el marcador de posición. Úsalo junto con onValueChange.")),
+        new("defaultValue", "string", null, L.T("Initial value for uncontrolled use.", "Valor inicial para uso no controlado.")),
+        new("onValueChange", "(value: string) => void", null, L.T("Called with the selected option value.", "Se llama con el valor de la opción seleccionada.")),
+        new("children", "ReactNode", null, L.T("The <option> elements.", "Los elementos <option>.")),
+        new("placeholder", "string", null, L.T("Disabled first option shown while nothing is selected.", "Primera opción deshabilitada que se muestra mientras no hay nada seleccionado.")),
+        new("label", "string", null, L.T("Visible label.", "Etiqueta visible.")),
+        new("helperText", "string", null, L.T("Hint below the field.", "Ayuda debajo del campo.")),
+        new("error", "string", null, L.T("Error message.", "Mensaje de error.")),
+        new("required", "boolean", "false", L.T("Shows an asterisk next to the label and sets aria-required. It does not add the native required attribute.", "Muestra un asterisco junto a la etiqueta y agrega aria-required. No agrega el atributo nativo required.")),
+        new("disabled", "boolean", "false", L.T("Disables the field.", "Deshabilita el campo.")),
+        new("leadingIcon", "ReactNode", null, L.T("Icon inside the field, on the left.", "Ícono dentro del campo, a la izquierda.")),
+        new("id", "string", "generated", L.T("Id of the select.", "Id del select.")),
+        new("className", "string", null, L.T("Extra CSS classes for the field wrapper.", "Clases CSS adicionales para el contenedor del campo.")),
+        new("...rest", "ComponentPropsWithRef<'select'>", null, L.T("Any other select attribute except multiple, including ref and onChange.", "Cualquier otro atributo de select salvo multiple, incluidos ref y onChange.")),
     ];
 }

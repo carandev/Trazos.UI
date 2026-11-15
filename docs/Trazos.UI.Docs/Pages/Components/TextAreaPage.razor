@@ -3,7 +3,7 @@
 <DocPage Title="TextArea" Category="@L.T("Forms", "Formularios")"
          Lead="@L.T("A labelled multi-line input with the same helper and error behavior as TextInput.", "Un campo de varias líneas con etiqueta, con el mismo comportamiento de ayuda y error que TextInput.")">
 
-    <DemoBlock Code="@Code">
+    <DemoBlock Code="@Code" React="text-area/basic">
         <div class="docs-stack">
             <TextArea Label="@L.T("Feedback", "Comentarios")"
                       Placeholder="@L.T("Tell us what you think…", "Cuéntanos qué opinas…")"
@@ -14,7 +14,7 @@
         </div>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -44,5 +44,23 @@
         new("Id", "string", "generated", L.T("Id of the textarea.", "Id del textarea.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra attributes for the <textarea>.", "Atributos adicionales para el <textarea>.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("value", "string", null, L.T("Controlled value. Pair it with onValueChange.", "Valor controlado. Úsalo junto con onValueChange.")),
+        new("defaultValue", "string", null, L.T("Initial value for uncontrolled use.", "Valor inicial para uso no controlado.")),
+        new("onValueChange", "(value: string) => void", null, L.T("Called with the new value on every input.", "Se llama con el nuevo valor en cada cambio.")),
+        new("rows", "number", "4", L.T("Visible text lines.", "Líneas de texto visibles.")),
+        new("label", "string", null, L.T("Visible label.", "Etiqueta visible.")),
+        new("placeholder", "string", null, L.T("Placeholder text.", "Texto de marcador de posición.")),
+        new("helperText", "string", null, L.T("Hint below the field.", "Ayuda debajo del campo.")),
+        new("error", "string", null, L.T("Error message.", "Mensaje de error.")),
+        new("required", "boolean", "false", L.T("Shows an asterisk next to the label and sets aria-required. It does not add the native required attribute.", "Muestra un asterisco junto a la etiqueta y agrega aria-required. No agrega el atributo nativo required.")),
+        new("disabled", "boolean", "false", L.T("Disables the field.", "Deshabilita el campo.")),
+        new("readOnly", "boolean", "false", L.T("Makes the field read-only.", "Hace que el campo sea de solo lectura.")),
+        new("id", "string", "generated", L.T("Id of the textarea.", "Id del textarea.")),
+        new("className", "string", null, L.T("Extra CSS classes for the field wrapper.", "Clases CSS adicionales para el contenedor del campo.")),
+        new("...rest", "ComponentPropsWithRef<'textarea'>", null, L.T("Any other textarea attribute, including ref and onChange.", "Cualquier otro atributo de textarea, incluidos ref y onChange.")),
     ];
 }

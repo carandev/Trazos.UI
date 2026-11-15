@@ -3,7 +3,7 @@
 <DocPage Title="RadioCardGroup" Category="@L.T("Forms", "Formularios")"
          Lead="@L.T("Mutually exclusive options rendered as cards with a title, a description and an icon. Built on native radios, so it is keyboard and screen-reader friendly.", "Opciones mutuamente excluyentes que se muestran como tarjetas con título, descripción e ícono. Usa radios nativos, así que funciona bien con teclado y lectores de pantalla.")">
 
-    <DemoBlock Code="@Code">
+    <DemoBlock Code="@Code" React="radio-card-group/basic">
         <div class="docs-stack">
             <RadioCardGroup TValue="string"
                             Label="@L.T("Event visibility", "Visibilidad del evento")"
@@ -14,14 +14,14 @@
         </div>
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("Enum values", "Valores de enum")" Code="@EnumCode">
+    <DemoBlock Title="@F.Pick(L.T("Enum values", "Valores de enum"), L.T("Typed values", "Valores tipados"))" Description="@(F.IsReact ? L.T("Any value type works; options are matched with Object.is.", "Funciona con cualquier tipo de valor; las opciones se comparan con Object.is.") : null)" Code="@EnumCode" React="radio-card-group/union-values">
         <div class="docs-stack">
             <RadioCardGroup TValue="Frequency" Label="@L.T("Frequency", "Frecuencia")" Options="_frequencies" @bind-Value="_frequency" />
         </div>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
-    <ApiTable Title="RadioCardOption<TValue>" Params="OptionParams" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
+    <ApiTable Title="@F.Pick("RadioCardOption<TValue>", "RadioCardOption<T>")" Params="OptionParams" ReactParams="ReactOptionParams" />
 </DocPage>
 
 @code {
@@ -94,5 +94,29 @@
         new("Title", "string", "required", L.T("Main text.", "Texto principal.")),
         new("Description", "string?", "null", L.T("Short explanation of the choice.", "Breve explicación de la opción.")),
         new("Icon", "RenderFragment?", "null", L.T("Icon shown on the left.", "Ícono que se muestra a la izquierda.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("options", "RadioCardOption<T>[]", "required", L.T("Options to render.", "Opciones que se van a mostrar.")),
+        new("value", "T", null, L.T("Controlled selected value, matched with Object.is. Pair it with onValueChange.", "Valor seleccionado controlado, comparado con Object.is. Úsalo junto con onValueChange.")),
+        new("defaultValue", "T", null, L.T("Initial selected value for uncontrolled use.", "Valor seleccionado inicial para uso no controlado.")),
+        new("onValueChange", "(value: T) => void", null, L.T("Called with the value of the option the user selects.", "Se llama con el valor de la opción que elige el usuario.")),
+        new("columns", "1 | 2", "2", L.T("Columns from 640px up; mobile always uses one.", "Columnas a partir de 640px; en móvil siempre se usa una.")),
+        new("label", "string", null, L.T("Group legend.", "Leyenda del grupo.")),
+        new("helperText", "string", null, L.T("Hint below the group.", "Ayuda debajo del grupo.")),
+        new("error", "string", null, L.T("Error message.", "Mensaje de error.")),
+        new("required", "boolean", "false", L.T("Shows an asterisk next to the legend.", "Muestra un asterisco junto a la leyenda.")),
+        new("disabled", "boolean", "false", L.T("Disables every option.", "Deshabilita todas las opciones.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'fieldset'>", null, L.T("Any other fieldset attribute, including ref.", "Cualquier otro atributo de fieldset, incluido ref.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactOptionParams =>
+    [
+        new("value", "T", "required", L.T("Value represented by the option.", "Valor que representa la opción.")),
+        new("title", "string", "required", L.T("Main text.", "Texto principal.")),
+        new("description", "string", null, L.T("Short explanation of the choice.", "Breve explicación de la opción.")),
+        new("icon", "ReactNode", null, L.T("Icon shown on the left.", "Ícono que se muestra a la izquierda.")),
     ];
 }
