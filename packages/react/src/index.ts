@@ -18,6 +18,11 @@ export * from './components/FormSection';
 export * from './components/Input';
 export * from './components/RadioCardGroup';
 export * from './components/Autocomplete';
+export * from './components/NumberInput';
+export * from './components/DateInput';
+export * from './components/SearchInput';
+export * from './components/PhoneInput';
+export * from './components/FileInput';
 
 // Data and navigation
 export * from './components/DataTable';
@@ -45,5 +50,5 @@ export * from './components/LinkList';
 export * from './components/Theme';
 export * from './components/SiteHeader';
 
-// Layout
+// Layout and page structure
 export * from './components/AppShell';

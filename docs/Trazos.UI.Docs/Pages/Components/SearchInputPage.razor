@@ -1,9 +1,9 @@
 @page "/components/search-input"
 
 <DocPage Title="SearchInput" Category="@L.T("Forms", "Formularios")"
-         Lead="@L.T("A search box for filtering lists, with a clear button, Escape to clear, and a debounced ValueChanged so the list filters once the user pauses.", "Un buscador para filtrar listas, con botón para limpiar, Escape para borrar y un ValueChanged con retardo, así la lista se filtra cuando el usuario hace una pausa.")">
+         Lead="@F.Pick(L.T("A search box for filtering lists, with a clear button, Escape to clear, and a debounced ValueChanged so the list filters once the user pauses.", "Un buscador para filtrar listas, con botón para limpiar, Escape para borrar y un ValueChanged con retardo, así la lista se filtra cuando el usuario hace una pausa."), L.T("A search box for filtering lists, with a clear button, Escape to clear, and a debounced onValueChange so the list filters once the user pauses.", "Un buscador para filtrar listas, con botón para limpiar, Escape para borrar y un onValueChange con retardo, así la lista se filtra cuando el usuario hace una pausa."))">
 
-    <DemoBlock Code="@Code">
+    <DemoBlock Code="@Code" React="search-input/basic">
         <div class="docs-stack">
             <SearchInput Placeholder="@L.T("Search employees", "Buscar empleados")" AriaLabel="@L.T("Search employees", "Buscar empleados")"
                          ClearLabel="@L.T("Clear search", "Limpiar búsqueda")" @bind-Value="_query" />
@@ -16,12 +16,81 @@
         </div>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <p>
+        @L.T("Use SearchInput above a list or table to narrow it down as the user types: employees, invoices, products. It does not search by itself; it tells you the text and you filter. When the user must pick one item from the results as the value of a form field, use Autocomplete instead.",
+             "Usa SearchInput encima de una lista o tabla para acotarla mientras el usuario escribe: empleados, facturas, productos. No busca por sí solo; te entrega el texto y tú filtras. Cuando el usuario debe elegir un elemento de los resultados como valor de un campo del formulario, usa Autocomplete.")
+    </p>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li>@F.Pick(L.T("Bind the query with @bind-Value. ValueChanged fires once the user pauses for Debounce milliseconds (300 by default), and at once when the box is cleared.", "Enlaza la consulta con @bind-Value. ValueChanged se dispara cuando el usuario hace una pausa de Debounce milisegundos (300 por defecto), y de inmediato al limpiar la caja."), L.T("Keep the query in state and pass value and onValueChange. onValueChange runs once the user pauses for debounce milliseconds (300 by default), and at once when the box is cleared. The box shows every key right away.", "Guarda la consulta en el estado y pasa value y onValueChange. onValueChange se ejecuta cuando el usuario hace una pausa de debounce milisegundos (300 por defecto), y de inmediato al limpiar la caja. La caja muestra cada tecla al instante."))</li>
+        <li>@L.T("Filter your list with the query: in memory for short lists, or send it to the server. Ignore case and trim spaces.", "Filtra tu lista con la consulta: en memoria para listas cortas, o envíala al servidor. Ignora mayúsculas y recorta espacios.")</li>
+        <li>@F.Pick(L.T("Without a visible Label, set AriaLabel to say what is searched (\"Search employees\"). Translate ClearLabel too.", "Sin una Label visible, usa AriaLabel para decir qué se busca (\"Buscar empleados\"). Traduce también ClearLabel."), L.T("Without a visible label, set ariaLabel to say what is searched (\"Search employees\"). Translate clearLabel too.", "Sin un label visible, usa ariaLabel para decir qué se busca (\"Buscar empleados\"). Traduce también clearLabel."))</li>
+        <li>@L.T("Show an empty state when nothing matches, so people know the search ran.", "Muestra un estado vacío cuando nada coincide, para que las personas sepan que la búsqueda se hizo.")</li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Searching on the server", "Búsqueda en el servidor")</h3>
+    <p>
+        @L.T("The debounce already avoids a request per key. Still, answers can arrive out of order, so keep only the response for the latest query.", "El retardo ya evita una petición por tecla. Aun así, las respuestas pueden llegar en desorden, así que conserva solo la respuesta de la última consulta.")
+    </p>
+    <CodeBlock Language="@F.Pick("razor", "tsx")" Code="@F.Pick(ServerCode, ReactServerCode)" />
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li>@L.T("It is an input with type=\"search\", announced as a search box. Escape clears it; the clear button is a real button with its own label and appears only while there is text.", "Es un input con type=\"search\", que se anuncia como cuadro de búsqueda. Escape lo limpia; el botón de limpiar es un botón real con su propia etiqueta y solo aparece mientras hay texto.")</li>
+        <li>@L.T("After the clear button is used, focus goes back to the box so the user can type again.", "Después de usar el botón de limpiar, el foco vuelve a la caja para que el usuario pueda escribir de nuevo.")</li>
+        <li>@L.T("The search icon is decorative and hidden from screen readers. Consider announcing the number of results in a polite live region.", "El ícono de búsqueda es decorativo y se oculta a los lectores de pantalla. Considera anunciar la cantidad de resultados en una región viva cortés (aria-live=\"polite\").")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@L.T("Setting Debounce to 0 for a server search: every key then sends a request.", "Usar un retardo de 0 para una búsqueda en el servidor: cada tecla envía una petición.")</li>
+        <li>@L.T("Filtering with the exact case: \"ana\" should find \"Ana María\".", "Filtrar respetando mayúsculas: \"ana\" debería encontrar \"Ana María\".")</li>
+        <li>@L.T("Forgetting to reset the page of a paginated list when the query changes.", "Olvidar volver a la primera página de una lista paginada cuando cambia la consulta.")</li>
+    </ul>
+
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
     private string? _query;
     private readonly string[] _names = ["Ana María Restrepo", "Julián Ospina", "Luisa Fernanda Gil", "Tomás Arango", "Valentina Ríos"];
+
+    private const string ServerCode = """
+        <SearchInput AriaLabel="Search employees" Value="_query" ValueChanged="SearchAsync" />
+
+        @code {
+            private string? _query;
+            private IReadOnlyList<Employee> _results = [];
+            private int _request;
+
+            private async Task SearchAsync(string? query)
+            {
+                _query = query;
+                var request = ++_request;
+                var results = await Api.SearchEmployeesAsync(query ?? "");
+                if (request == _request) _results = results; // ignore older answers
+            }
+        }
+        """;
+
+    private const string ReactServerCode = """
+        const [query, setQuery] = useState('');
+        const [results, setResults] = useState<Employee[]>([]);
+
+        useEffect(() => {
+          let latest = true;
+          searchEmployees(query).then((found) => {
+            if (latest) setResults(found); // ignore older answers
+          });
+          return () => { latest = false; };
+        }, [query]);
+
+        <SearchInput ariaLabel="Search employees" value={query} onValueChange={setQuery} />
+        """;
 
     private const string Code = """
         <SearchInput Placeholder="Search employees" @bind-Value="_query" />
@@ -42,5 +111,18 @@
         new("AriaLabel", "string", "\"Search\"", L.T("Accessible name when there is no Label.", "Nombre accesible cuando no hay Label.")),
         new("ClearLabel", "string", "\"Clear search\"", L.T("Accessible name of the clear button.", "Nombre accesible del botón de limpiar.")),
         new("Label, HelperText, Error, Disabled", "", null, L.T("Same as TextInput.", "Igual que en TextInput.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("value", "string", null, L.T("Controlled committed text. A new value from the parent replaces the text in the box.", "Texto confirmado controlado. Un valor nuevo del padre reemplaza el texto de la caja.")),
+        new("defaultValue", "string", "''", L.T("Initial text for uncontrolled use.", "Texto inicial para uso no controlado.")),
+        new("onValueChange", "(value: string) => void", null, L.T("Called after the debounce, or at once when clearing.", "Se llama tras el retardo, o de inmediato al limpiar.")),
+        new("debounce", "number", "300", L.T("Milliseconds to wait after the last key. 0 calls onValueChange on every key.", "Milisegundos de espera tras la última tecla. 0 llama a onValueChange en cada tecla.")),
+        new("placeholder", "string", null, L.T("Placeholder text.", "Texto de marcador de posición.")),
+        new("ariaLabel", "string", "'Search'", L.T("Accessible name when there is no label.", "Nombre accesible cuando no hay label.")),
+        new("clearLabel", "string", "'Clear search'", L.T("Accessible name of the clear button.", "Nombre accesible del botón de limpiar.")),
+        new("label, helperText, error, disabled", "", null, L.T("Same as TextInput. The clear button is hidden while disabled.", "Igual que en TextInput. El botón de limpiar se oculta mientras está deshabilitado.")),
+        new("...rest", "ComponentPropsWithRef<'input'>", null, L.T("Any other input attribute, including ref, name, onChange and onKeyDown.", "Cualquier otro atributo de input, incluidos ref, name, onChange y onKeyDown.")),
     ];
 }

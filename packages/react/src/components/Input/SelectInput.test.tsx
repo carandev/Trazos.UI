@@ -138,6 +138,92 @@ describe('SelectInput', () => {
     expect(container.firstElementChild).toHaveClass('extra');
   });
 
+  it('renders typed options before the children, with their labels and disabled state', () => {
+    render(
+      <SelectInput
+        label="Country"
+        options={[
+          { value: 'co', label: 'Colombia' },
+          { value: 'pe', label: 'Peru', disabled: true },
+        ]}
+      >
+        <option value="other">Other</option>
+      </SelectInput>,
+    );
+    const options = screen.getAllByRole('option');
+    expect(options.map((o) => o.textContent)).toEqual(['Colombia', 'Peru', 'Other']);
+    expect(options.map((o) => o.getAttribute('value'))).toEqual(['co', 'pe', 'other']);
+    expect(options[1]).toBeDisabled();
+    expect(options[0]).not.toBeDisabled();
+  });
+
+  it('binds numeric option values as numbers', async () => {
+    const onValueChange = vi.fn<(value: number) => void>();
+    function Controlled() {
+      const [value, setValue] = useState<number | null>(null);
+      return (
+        <>
+          <SelectInput<number>
+            label="Plan"
+            placeholder="Choose"
+            value={value}
+            onValueChange={(v) => {
+              onValueChange(v);
+              setValue(v);
+            }}
+            options={[
+              { value: 1, label: 'Basic' },
+              { value: 2, label: 'Pro' },
+            ]}
+          />
+          <output>{JSON.stringify(value)}</output>
+        </>
+      );
+    }
+    render(<Controlled />);
+    const select = screen.getByLabelText('Plan');
+    expect(select).toHaveValue('');
+    expect(screen.getByRole('option', { name: 'Choose' })).toHaveProperty('selected', true);
+    await userEvent.selectOptions(select, 'Pro');
+    expect(onValueChange).toHaveBeenCalledWith(2);
+    expect(screen.getByRole('status')).toHaveTextContent('2');
+    expect(select).toHaveValue('2');
+  });
+
+  it('selects the option matching a typed defaultValue', () => {
+    render(
+      <SelectInput<number>
+        label="Plan"
+        defaultValue={2}
+        options={[
+          { value: 1, label: 'Basic' },
+          { value: 2, label: 'Pro' },
+        ]}
+      />,
+    );
+    expect(screen.getByLabelText('Plan')).toHaveValue('2');
+  });
+
+  it('still reports the raw string of children options when options are also given', async () => {
+    const onValueChange = vi.fn();
+    render(
+      <SelectInput label="Country" options={[{ value: 'co', label: 'Colombia' }]} onValueChange={onValueChange}>
+        <option value="other">Other</option>
+      </SelectInput>,
+    );
+    await userEvent.selectOptions(screen.getByLabelText('Country'), 'other');
+    expect(onValueChange).toHaveBeenCalledWith('other');
+  });
+
+  it('keeps the children-only string API: a null value selects the placeholder', () => {
+    render(
+      <SelectInput label="Country" placeholder="Choose" value={null} onValueChange={() => undefined}>
+        <Options />
+      </SelectInput>,
+    );
+    expect(screen.getByLabelText('Country')).toHaveValue('');
+  });
+
   it('has no accessibility violations', async () => {
     const { container } = render(
       <SelectInput label="Country" placeholder="Choose" helperText="Help" required>

@@ -4,15 +4,33 @@ import { cx } from '../../internal/cx';
 import './TextInput.css';
 import './SelectInput.css';
 
-export interface SelectInputProps
+/** Value types a SelectInput can bind. */
+export type SelectInputValue = string | number;
+
+/** One typed option of a SelectInput. */
+export interface SelectOption<T extends SelectInputValue = string> {
+  /** Value reported by onValueChange when the option is chosen. */
+  value: T;
+  /** Visible text. */
+  label: string;
+  /** Shows the option but does not let the user choose it. */
+  disabled?: boolean;
+}
+
+export interface SelectInputProps<T extends SelectInputValue = string>
   extends Omit<ComponentPropsWithRef<'select'>, 'value' | 'defaultValue' | 'multiple'> {
   label?: string;
-  /** Controlled value; `''` selects the placeholder. */
-  value?: string;
+  /** Controlled value; `''` or `null` selects the placeholder. */
+  value?: T | null;
   /** Initial value for uncontrolled use. */
-  defaultValue?: string;
-  /** Called with the selected option value. */
-  onValueChange?: (value: string) => void;
+  defaultValue?: T | null;
+  /**
+   * Called with the selected value. A typed option reports its own `value`
+   * (a number stays a number); an `<option>` child reports its string value.
+   */
+  onValueChange?: (value: T) => void;
+  /** Typed options, rendered before any `<option>` children. */
+  options?: readonly SelectOption<T>[];
   /** Text of a disabled, empty-valued first option selected while there is no value. */
   placeholder?: string;
   helperText?: string;
@@ -25,7 +43,10 @@ export interface SelectInputProps
   children?: ReactNode;
 }
 
-export function SelectInput({
+const toOptionValue = (value: SelectInputValue | null | undefined): string | undefined =>
+  value === undefined ? undefined : value === null ? '' : String(value);
+
+export function SelectInput<T extends SelectInputValue = string>({
   id,
   label,
   value,
@@ -38,11 +59,12 @@ export function SelectInput({
   required = false,
   disabled = false,
   leadingIcon,
+  options,
   className,
   children,
   'aria-describedby': ariaDescribedBy,
   ...rest
-}: SelectInputProps) {
+}: SelectInputProps<T>) {
   const generatedId = `trazos-select-${useId()}`;
   const selectId = id ?? generatedId;
   const hasError = Boolean(error);
@@ -52,11 +74,15 @@ export function SelectInput({
   const describedBy =
     cx(ariaDescribedBy, showHelper && helperId, hasError && errorId) || undefined;
   // Razor selects the placeholder while the value is empty; uncontrolled use does the same.
-  const initialValue = defaultValue ?? (placeholder ? '' : undefined);
+  const initialValue = toOptionValue(defaultValue) ?? (placeholder ? '' : undefined);
+  const selectedValue = toOptionValue(value);
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     onChange?.(event);
-    onValueChange?.(event.target.value);
+    const raw = event.target.value;
+    const typed = options?.find((option) => String(option.value) === raw);
+    // <option> children carry string values; T is string unless typed options are used.
+    onValueChange?.(typed ? typed.value : (raw as T));
   };
 
   return (
@@ -80,7 +106,7 @@ export function SelectInput({
           id={selectId}
           className="trazos-select-control"
           disabled={disabled}
-          {...(value !== undefined ? { value } : { defaultValue: initialValue })}
+          {...(selectedValue !== undefined ? { value: selectedValue } : { defaultValue: initialValue })}
           onChange={handleChange}
           aria-required={required || undefined}
           aria-invalid={hasError || undefined}
@@ -91,6 +117,11 @@ export function SelectInput({
               {placeholder}
             </option>
           )}
+          {options?.map((option) => (
+            <option key={String(option.value)} value={String(option.value)} disabled={option.disabled}>
+              {option.label}
+            </option>
+          ))}
           {children}
         </select>
 

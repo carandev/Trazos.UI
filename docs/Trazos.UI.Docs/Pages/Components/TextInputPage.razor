@@ -20,7 +20,7 @@
         </div>
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("Prefix and suffix", "Prefijo y sufijo")" Description="@L.T("Short text inside the field, such as a unit or a currency code.", "Texto corto dentro del campo, como una unidad o un código de moneda.")" Code="@AffixCode">
+    <DemoBlock Title="@L.T("Prefix and suffix", "Prefijo y sufijo")" Description="@L.T("Short text inside the field, such as a unit or a currency code.", "Texto corto dentro del campo, como una unidad o un código de moneda.")" Code="@AffixCode" React="text-input/affixes">
         <div class="docs-grid-2">
             <TextInput Label="@L.T("Bank account", "Cuenta bancaria")" Prefix="@L.T("No.", "N.º")" @bind-Value="_account" />
             <TextInput Label="@L.T("Website", "Sitio web")" Prefix="https://" Suffix=".com" @bind-Value="_site" />
@@ -34,6 +34,45 @@
         </div>
     </DemoBlock>
 
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <p>
+        @L.T("Use TextInput for short, free text on one line: names, emails, codes, URLs, document numbers. For several lines use TextArea. For numbers and money use NumberInput, which formats and validates them; for dates use DateInput; for phones PhoneInput; for filtering a list SearchInput; and when the answer comes from a fixed list use SelectInput or a choice group.",
+             "Usa TextInput para texto libre y corto en una línea: nombres, correos, códigos, URL, números de documento. Para varias líneas usa TextArea. Para números y dinero usa NumberInput, que los formatea y valida; para fechas, DateInput; para teléfonos, PhoneInput; para filtrar una lista, SearchInput; y cuando la respuesta sale de una lista fija, SelectInput o un grupo de opciones.")
+    </p>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li>@L.T("Give it a Label. It is linked to the input with for/id, so clicking the label focuses the field and screen readers announce it. Do not rely on Placeholder as the label: it disappears as soon as the user types.", "Dale una etiqueta (Label). Se vincula al campo con for/id, así que al hacer clic en ella el campo recibe el foco y los lectores de pantalla la anuncian. No uses Placeholder como etiqueta: desaparece en cuanto el usuario escribe.")</li>
+        <li>@F.Pick(L.T("Bind the value with @bind-Value. Outside a form you can also pass Value and ValueChanged by hand.", "Enlaza el valor con @bind-Value. Fuera de un formulario también puedes pasar Value y ValueChanged a mano."), L.T("Keep the text in state and pass value and onValueChange (controlled), or pass defaultValue and read it later (uncontrolled). onValueChange receives the string; onChange still gets the native event.", "Guarda el texto en el estado y pasa value y onValueChange (controlado), o pasa defaultValue y léelo después (no controlado). onValueChange recibe el texto; onChange sigue recibiendo el evento nativo."))</li>
+        <li>@F.Pick(L.T("Set Type for the native keyboard and autofill: email, tel, url, password. Add autocomplete through AdditionalAttributes, for example autocomplete=\"email\".", "Usa Type para el teclado nativo y el autocompletado: email, tel, url, password. Agrega autocomplete con AdditionalAttributes, por ejemplo autocomplete=\"email\"."), L.T("Set type for the native keyboard and autofill: email, tel, url, password. Any other input attribute, such as autoComplete=\"email\" or maxLength, passes through.", "Usa type para el teclado nativo y el autocompletado: email, tel, url, password. Cualquier otro atributo de input, como autoComplete=\"email\" o maxLength, se pasa tal cual."))</li>
+        <li>@F.Pick(L.T("Add HelperText for hints, and Prefix or Suffix for short units such as $, COP, kg or https://. Use LeadingIcon or TrailingIcon for an icon.", "Agrega HelperText para pistas, y Prefix o Suffix para unidades cortas como $, COP, kg o https://. Usa LeadingIcon o TrailingIcon para un ícono."), L.T("Add helperText for hints, and prefix or suffix for short units such as $, COP, kg or https://. Use leadingIcon or trailingIcon for an icon.", "Agrega helperText para pistas, y prefix o suffix para unidades cortas como $, COP, kg o https://. Usa leadingIcon o trailingIcon para un ícono."))</li>
+        <li>@F.Pick(L.T("Validate: inside an EditForm the field shows its validation message by itself; outside, pass Error.", "Valida: dentro de un EditForm el campo muestra su mensaje de validación por sí solo; por fuera, pasa Error."), L.T("Validate: compute the message from your state and pass it as error. Pass undefined when the value is valid.", "Valida: calcula el mensaje a partir de tu estado y pásalo en error. Pasa undefined cuando el valor sea válido."))</li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Binding and validation", "Enlace y validación")</h3>
+    <p>
+        @F.Pick(L.T("With @bind-Value inside an EditForm, the field notifies the EditContext on every key, reads the first validation message for its property, and adds the modified, valid and invalid classes. An explicit Error always wins, which is handy for errors returned by the server. See Forms and validation.", "Con @bind-Value dentro de un EditForm, el campo notifica al EditContext en cada tecla, lee el primer mensaje de validación de su propiedad y agrega las clases modified, valid e invalid. Un Error explícito siempre gana, útil para errores que devuelve el servidor. Consulta Formularios y validación."),
+                L.T("React has no EditForm: you own the rules. A common pattern is to validate on submit and then on every change, and pass each message as error. The error replaces the helper text, sets aria-invalid and is announced as an alert. See Forms and validation for a full form.", "React no tiene EditForm: tú defines las reglas. Un patrón común es validar al enviar y luego en cada cambio, y pasar cada mensaje en error. El error reemplaza el texto de ayuda, agrega aria-invalid y se anuncia como alerta. Consulta Formularios y validación para ver un formulario completo."))
+    </p>
+    <CodeBlock Language="@F.Pick("razor", "tsx")" Code="@F.Pick(BindCode, ReactBindCode)" />
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li>@L.T("It is a native input, so Tab, text selection, autofill and the mobile keyboard work as usual.", "Es un input nativo, así que Tab, la selección de texto, el autocompletado y el teclado móvil funcionan como siempre.")</li>
+        <li>@L.T("The helper text or the error is linked with aria-describedby, and an error also sets aria-invalid=\"true\" and role=\"alert\".", "El texto de ayuda o el error se vinculan con aria-describedby, y un error también agrega aria-invalid=\"true\" y role=\"alert\".")</li>
+        <li>@L.T("Required shows a visual asterisk hidden from screen readers and sets aria-required. It does not add the native required attribute, so the browser does not show its own bubbles.", "Required muestra un asterisco visual oculto para los lectores de pantalla y agrega aria-required. No agrega el atributo nativo required, así que el navegador no muestra sus propios globos.")</li>
+        <li>@L.T("Prefix and suffix are decoration and are hidden from screen readers. If the unit matters, say it in the label too: \"Weight (kg)\".", "El prefijo y el sufijo son decoración y se ocultan a los lectores de pantalla. Si la unidad importa, dila también en la etiqueta: \"Peso (kg)\".")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@L.T("Using Type=\"number\" for money or amounts: the browser drops group separators and accepts \"e\". Use NumberInput instead.", "Usar Type=\"number\" para dinero o cantidades: el navegador descarta los separadores de miles y acepta \"e\". Usa NumberInput.")</li>
+        <li>@L.T("Putting the unit inside the value (\"25 kg\"): keep the value clean and show the unit with Suffix.", "Poner la unidad dentro del valor (\"25 kg\"): deja el valor limpio y muestra la unidad con Suffix.")</li>
+        <li>@F.Pick(L.T("Passing Value without ValueChanged or @bind-Value: the field then cannot report what the user types.", "Pasar Value sin ValueChanged ni @bind-Value: el campo no puede informar lo que escribe el usuario."), L.T("Passing value without onValueChange: React then keeps the input read-only. Pass defaultValue if you do not need to control it.", "Pasar value sin onValueChange: React deja el campo como de solo lectura. Pasa defaultValue si no necesitas controlarlo."))</li>
+    </ul>
+
     <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
@@ -42,6 +81,37 @@
     private string? _email = "not-an-email";
     private string? _account;
     private string? _site;
+
+    private const string BindCode = """
+        <EditForm Model="_contact" OnValidSubmit="Save">
+            <DataAnnotationsValidator />
+            <TextInput Label="Email" Type="email" Required="true" @bind-Value="_contact.Email" />
+            <Button Type="submit">Save</Button>
+        </EditForm>
+
+        @code {
+            private readonly Contact _contact = new();
+
+            private sealed class Contact
+            {
+                [Required(ErrorMessage = "Enter your email."), EmailAddress(ErrorMessage = "Enter a valid email address.")]
+                public string? Email { get; set; }
+            }
+        }
+        """;
+
+    private const string ReactBindCode = """
+        const [email, setEmail] = useState('');
+        const [submitted, setSubmitted] = useState(false);
+
+        const error = !submitted ? undefined
+          : email.trim() === '' ? 'Enter your email.'
+          : !email.includes('@') ? 'Enter a valid email address.'
+          : undefined;
+
+        <TextInput label="Email" type="email" required
+                   value={email} onValueChange={setEmail} error={error} />
+        """;
 
     private const string AffixCode = """
         <TextInput Label="Bank account" Prefix="No." @bind-Value="_account" />
@@ -116,6 +186,8 @@
         new("required", "boolean", "false", L.T("Shows an asterisk next to the label and sets aria-required. It does not add the native required attribute.", "Muestra un asterisco junto a la etiqueta y agrega aria-required. No agrega el atributo nativo required.")),
         new("disabled", "boolean", "false", L.T("Disables the field.", "Deshabilita el campo.")),
         new("readOnly", "boolean", "false", L.T("Makes the field read-only.", "Hace que el campo sea de solo lectura.")),
+        new("prefix", "string", null, L.T("Text inside the field before the value, such as $ or COP. Hidden from screen readers.", "Texto dentro del campo antes del valor, como $ o COP. Oculto para los lectores de pantalla.")),
+        new("suffix", "string", null, L.T("Text inside the field after the value, such as % or kg. Hidden from screen readers.", "Texto dentro del campo después del valor, como % o kg. Oculto para los lectores de pantalla.")),
         new("leadingIcon", "ReactNode", null, L.T("Icon inside the field, on the left.", "Ícono dentro del campo, a la izquierda.")),
         new("trailingIcon", "ReactNode", null, L.T("Icon inside the field, on the right.", "Ícono dentro del campo, a la derecha.")),
         new("id", "string", "generated", L.T("Id of the input, used by the label.", "Id del input, usado por la etiqueta.")),

@@ -1,0 +1,36 @@
+/* ========================================
+   PHONE INPUT - Trazos UI
+   The frame comes from the shared field rules in Input/TextInput.css;
+   this styles the country picker inside it.
+   ======================================== */
+
+.trazos-phone-country {
+    flex-shrink: 0;
+    max-width: 8.5rem;
+    align-self: stretch;
+    padding: 0 0.5rem 0 0.875rem;
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--trazos-text-light);
+    background: transparent;
+    border: 0;
+    border-right: 1.5px dashed var(--trazos-border-soft);
+    outline: none;
+    cursor: pointer;
+    text-overflow: ellipsis;
+}
+
+.trazos-phone-country:focus-visible {
+    color: var(--trazos-text);
+    background: var(--trazos-hover-tint-strong);
+}
+
+.trazos-phone-country:disabled {
+    cursor: not-allowed;
+}
+
+.trazos-phone-country option {
+    color: var(--trazos-text);
+    background: var(--trazos-surface);
+}

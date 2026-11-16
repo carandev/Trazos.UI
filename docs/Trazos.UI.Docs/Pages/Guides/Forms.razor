@@ -2,11 +2,11 @@
 @using System.ComponentModel.DataAnnotations
 
 <DocPage Title="@L.T("Forms and validation", "Formularios y validación")" Category="@L.T("Getting started", "Primeros pasos")"
-         Lead="@L.T("Every Trazos field works inside a Blazor EditForm. Bind it with @bind-Value and the field shows its validation message, its state classes and its ARIA attributes on its own.", "Cada campo de Trazos funciona dentro de un EditForm de Blazor. Enlázalo con @bind-Value y el campo muestra su mensaje de validación, sus clases de estado y sus atributos ARIA por sí solo.")">
+         Lead="@F.Pick(L.T("Every Trazos field works inside a Blazor EditForm. Bind it with @bind-Value and the field shows its validation message, its state classes and its ARIA attributes on its own.", "Cada campo de Trazos funciona dentro de un EditForm de Blazor. Enlázalo con @bind-Value y el campo muestra su mensaje de validación, sus clases de estado y sus atributos ARIA por sí solo."), L.T("React has no EditForm, so you own the rules: keep the values in state, compute the messages, and pass each one to its field through the error prop. The field then shows the message and sets its ARIA attributes on its own.", "React no tiene EditForm, así que las reglas son tuyas: guarda los valores en el estado, calcula los mensajes y pasa cada uno a su campo con la prop error. El campo muestra el mensaje y define sus atributos ARIA por sí solo."))">
 
-    <DemoBlock Title="@L.T("EditForm with DataAnnotations", "EditForm con DataAnnotations")"
-               Description="@L.T("Submit the empty form: each field reads its error from the EditContext. No Error parameter is passed by hand.", "Envía el formulario vacío: cada campo lee su error del EditContext. No se pasa ningún parámetro Error a mano.")"
-               Code="@Code">
+    <DemoBlock Title="@F.Pick(L.T("EditForm with DataAnnotations", "EditForm con DataAnnotations"), L.T("Validation with the error prop", "Validación con la prop error"))"
+               Description="@F.Pick(L.T("Submit the empty form: each field reads its error from the EditContext. No Error parameter is passed by hand.", "Envía el formulario vacío: cada campo lee su error del EditContext. No se pasa ningún parámetro Error a mano."), L.T("Submit the empty form: one validate function returns a message per field, and each field gets its message through error. After the first submit the messages update on every change.", "Envía el formulario vacío: una función validate devuelve un mensaje por campo, y cada campo recibe el suyo con error. Después del primer envío, los mensajes se actualizan con cada cambio."))"
+               Code="@Code" React="forms/validation">
         <EditForm Model="_employee" OnValidSubmit="Save" class="docs-stack">
             <DataAnnotationsValidator />
             <TextInput Label="@L.T("Full name", "Nombre completo")" Required="true" @bind-Value="_employee.Name" />
@@ -28,15 +28,36 @@
         </EditForm>
     </DemoBlock>
 
-    <h2 class="docs-h2">@L.T("How it works", "Cómo funciona")</h2>
-    <ul>
-        <li>@L.T("@bind-Value also passes ValueExpression, which tells the field which model property it edits.", "@bind-Value también pasa ValueExpression, que le dice al campo qué propiedad del modelo edita.")</li>
-        <li>@L.T("On every change the field calls NotifyFieldChanged, so validators such as DataAnnotationsValidator or FluentValidation run for that field.", "En cada cambio el campo llama a NotifyFieldChanged, así que validadores como DataAnnotationsValidator o FluentValidation se ejecutan para ese campo.")</li>
-        <li>@L.T("The first validation message is shown below the field, linked with aria-describedby and aria-invalid.", "El primer mensaje de validación se muestra debajo del campo, vinculado con aria-describedby y aria-invalid.")</li>
-        <li>@L.T("The EditContext state classes (modified, valid, invalid) are added to the field root, so a custom FieldCssClassProvider also applies.", "Las clases de estado del EditContext (modified, valid, invalid) se agregan a la raíz del campo, así que también aplica un FieldCssClassProvider propio.")</li>
-        <li>@L.T("An explicit Error parameter always wins, which is useful for server-side errors.", "Un parámetro Error explícito siempre gana, útil para errores del servidor.")</li>
-        <li>@L.T("Outside an EditForm nothing changes: fields stay plain Value / ValueChanged components.", "Fuera de un EditForm nada cambia: los campos siguen siendo componentes simples de Value / ValueChanged.")</li>
-    </ul>
+    @if (!F.IsReact)
+    {
+        <h2 class="docs-h2">@L.T("How it works", "Cómo funciona")</h2>
+        <ul>
+            <li>@L.T("@bind-Value also passes ValueExpression, which tells the field which model property it edits.", "@bind-Value también pasa ValueExpression, que le dice al campo qué propiedad del modelo edita.")</li>
+            <li>@L.T("On every change the field calls NotifyFieldChanged, so validators such as DataAnnotationsValidator or FluentValidation run for that field.", "En cada cambio el campo llama a NotifyFieldChanged, así que validadores como DataAnnotationsValidator o FluentValidation se ejecutan para ese campo.")</li>
+            <li>@L.T("The first validation message is shown below the field, linked with aria-describedby and aria-invalid.", "El primer mensaje de validación se muestra debajo del campo, vinculado con aria-describedby y aria-invalid.")</li>
+            <li>@L.T("The EditContext state classes (modified, valid, invalid) are added to the field root, so a custom FieldCssClassProvider also applies.", "Las clases de estado del EditContext (modified, valid, invalid) se agregan a la raíz del campo, así que también aplica un FieldCssClassProvider propio.")</li>
+            <li>@L.T("An explicit Error parameter always wins, which is useful for server-side errors.", "Un parámetro Error explícito siempre gana, útil para errores del servidor.")</li>
+            <li>@L.T("Outside an EditForm nothing changes: fields stay plain Value / ValueChanged components.", "Fuera de un EditForm nada cambia: los campos siguen siendo componentes simples de Value / ValueChanged.")</li>
+        </ul>
+    }
+    else
+    {
+        <h2 class="docs-h2">@L.T("How it works", "Cómo funciona")</h2>
+        <ul>
+            <li>@L.T("Every field takes an error prop. When it is a non-empty string, the field shows it instead of the helper text, marks itself with aria-invalid=\"true\", links the message with aria-describedby and announces it with role=\"alert\". Pass undefined when the value is valid.", "Cada campo recibe una prop error. Cuando es un texto no vacío, el campo lo muestra en lugar del texto de ayuda, se marca con aria-invalid=\"true\", vincula el mensaje con aria-describedby y lo anuncia con role=\"alert\". Pasa undefined cuando el valor es válido.")</li>
+            <li>@L.T("Keep the rules in one function that takes the values and returns a message per field. The same function decides whether the form can be sent, and can also run on the server.", "Guarda las reglas en una función que recibe los valores y devuelve un mensaje por campo. La misma función decide si el formulario se puede enviar, y también puede ejecutarse en el servidor.")</li>
+            <li>@L.T("Show the messages after the first submit (or after a field loses focus), not while the user types the first time. From then on, recompute them on every change so they disappear as soon as the value is fixed.", "Muestra los mensajes después del primer envío (o cuando un campo pierde el foco), no mientras el usuario escribe por primera vez. Desde ahí, recalcúlalos con cada cambio para que desaparezcan en cuanto se corrige el valor.")</li>
+            <li>@L.T("Add noValidate to the <form> so the browser does not show its own bubbles. required on a field only shows the asterisk and sets aria-required; it never blocks the submit.", "Agrega noValidate al <form> para que el navegador no muestre sus propios globos. required en un campo solo muestra el asterisco y agrega aria-required; nunca bloquea el envío.")</li>
+            <li>@L.T("NumberInput and DateInput also show their own parse error when the text is not a number or a date; your error prop wins over it. Errors returned by the server go through error too.", "NumberInput y DateInput también muestran su propio error de lectura cuando el texto no es un número o una fecha; tu prop error tiene prioridad. Los errores que devuelve el servidor también se pasan con error.")</li>
+            <li>@L.T("The values each field reports are plain data: string for text, number | null for NumberInput, 'yyyy-MM-dd' | null for DateInput, the option value for SelectInput, boolean for Checkbox and File[] for FileInput.", "Los valores que informa cada campo son datos simples: string para texto, number | null para NumberInput, 'yyyy-MM-dd' | null para DateInput, el valor de la opción para SelectInput, boolean para Checkbox y File[] para FileInput.")</li>
+        </ul>
+
+        <h2 class="docs-h2">@L.T("Using a form library", "Con una librería de formularios")</h2>
+        <p>
+            @L.T("Libraries such as React Hook Form or Formik work the same way: connect each field through value and onValueChange (their Controller or field helpers), and pass the library's message for that field as error.", "Librerías como React Hook Form o Formik funcionan igual: conecta cada campo con value y onValueChange (su Controller o sus ayudas de campo) y pasa como error el mensaje que la librería tenga para ese campo.")
+        </p>
+        <CodeBlock Language="tsx" Code="@LibraryCode" />
+    }
 </DocPage>
 
 @code {
@@ -67,6 +88,25 @@
         [Range(typeof(bool), "true", "true", ErrorMessage = "Confirm the data before saving.")]
         public bool Checked { get; set; }
     }
+
+    private const string LibraryCode = """
+        import { Controller, useForm } from 'react-hook-form';
+
+        const { control, handleSubmit } = useForm<{ salary: number | null }>({
+          defaultValues: { salary: null },
+        });
+
+        <Controller
+          name="salary"
+          control={control}
+          rules={{ required: 'Enter the base salary.' }}
+          render={({ field, fieldState }) => (
+            <NumberInput label="Base salary" mode="currency" currency="COP" locale="es-CO"
+                         value={field.value} onValueChange={field.onChange}
+                         onBlur={field.onBlur} error={fieldState.error?.message} />
+          )}
+        />
+        """;
 
     private const string Code = """
         <EditForm Model="_employee" OnValidSubmit="Save">

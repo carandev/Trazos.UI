@@ -1,7 +1,7 @@
 @page "/components/select-input"
 
 <DocPage Title="SelectInput" Category="@L.T("Forms", "Formularios")"
-         Lead="@L.T("A styled native select bound to any type: strings, enums, ids such as int or Guid, and their nullable forms. It stays a native select, so keyboard and mobile pickers work out of the box.", "Un select nativo con estilos enlazado a cualquier tipo: textos, enums, ids como int o Guid, y sus versiones anulables. Sigue siendo un select nativo, así que el teclado y los selectores móviles funcionan sin configuración adicional.")">
+         Lead="@F.Pick(L.T("A styled native select bound to any type: strings, enums, ids such as int or Guid, and their nullable forms. It stays a native select, so keyboard and mobile pickers work out of the box.", "Un select nativo con estilos enlazado a cualquier tipo: textos, enums, ids como int o Guid, y sus versiones anulables. Sigue siendo un select nativo, así que el teclado y los selectores móviles funcionan sin configuración adicional."), L.T("A styled native select for string or number values, from typed options or <option> children. It stays a native select, so keyboard and mobile pickers work out of the box.", "Un select nativo con estilos para valores de texto o numéricos, a partir de opciones tipadas o de hijos <option>. Sigue siendo un select nativo, así que el teclado y los selectores móviles funcionan sin configuración adicional."))">
 
     <DemoBlock Code="@Code" React="select-input/basic">
         <div class="docs-stack">
@@ -15,8 +15,8 @@
     </DemoBlock>
 
     <DemoBlock Title="@L.T("Typed values", "Valores tipados")"
-               Description="@L.T("Options builds the list from typed values. SelectOption.ForEnum and ForNullableEnum create one option per enum member; pass a function to translate the text.", "Options arma la lista con valores tipados. SelectOption.ForEnum y ForNullableEnum crean una opción por cada miembro del enum; pasa una función para traducir el texto.")"
-               Code="@TypedCode">
+               Description="@F.Pick(L.T("Options builds the list from typed values. SelectOption.ForEnum and ForNullableEnum create one option per enum member; pass a function to translate the text.", "Options arma la lista con valores tipados. SelectOption.ForEnum y ForNullableEnum crean una opción por cada miembro del enum; pasa una función para traducir el texto."), L.T("options builds the list from { value, label, disabled } objects. A number value comes back as a number, and a string union keeps its type.", "options arma la lista con objetos { value, label, disabled }. Un valor numérico vuelve como número, y una unión de textos conserva su tipo."))"
+               Code="@TypedCode" React="select-input/typed">
         <div class="docs-grid-2">
             <SelectInput Label="@L.T("Pay frequency", "Frecuencia de pago")" Placeholder="@L.T("Choose", "Elige")"
                          Options="SelectOption.ForNullableEnum<PayFrequency>(FrequencyText)" @bind-Value="_frequency" />
@@ -34,6 +34,43 @@
             <SelectInput TValue="string" Label="@L.T("Disabled", "Deshabilitado")" Placeholder="@L.T("Unavailable", "No disponible")" Disabled="true" />
         </div>
     </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <p>
+        @L.T("Use SelectInput to pick one value from a known list of about 5 to 30 options: a team, a company, a pay frequency, a department. With two to five options that people should compare at a glance, a radio group shows them all at once. With hundreds of options, or when people know what they are looking for, use Autocomplete so they can type.",
+             "Usa SelectInput para elegir un valor de una lista conocida de unas 5 a 30 opciones: un equipo, una empresa, una frecuencia de pago, un área. Con dos a cinco opciones que conviene comparar de un vistazo, un grupo de radio las muestra todas a la vez. Con cientos de opciones, o cuando las personas saben lo que buscan, usa Autocomplete para que puedan escribir.")
+    </p>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li>@F.Pick(L.T("Choose the bound type: string, an enum, an id such as int or Guid, or a nullable form. Use a nullable type (PayFrequency?, int?) when the field can start empty.", "Elige el tipo enlazado: string, un enum, un id como int o Guid, o una versión anulable. Usa un tipo anulable (PayFrequency?, int?) cuando el campo pueda empezar vacío."), L.T("Choose the value type: a string, a string union such as 'weekly' | 'monthly', or a number id. Keep it in state as T | null, where null means nothing is selected yet.", "Elige el tipo del valor: un texto, una unión de textos como 'weekly' | 'monthly', o un id numérico. Guárdalo en el estado como T | null, donde null significa que aún no hay selección."))</li>
+        <li>@F.Pick(L.T("Build the options: Options with SelectOption<T>(Value, Text, Disabled), SelectOption.ForEnum for enums, or plain <option> children. Options render first, then the children.", "Arma las opciones: Options con SelectOption<T>(Value, Text, Disabled), SelectOption.ForEnum para enums, o hijos <option> simples. Primero se muestran Options y luego los hijos."), L.T("Build the options: pass options as { value, label, disabled } objects, or plain <option> children. Options render first, then the children. Write SelectInput<number> when TypeScript cannot infer the type.", "Arma las opciones: pasa options como objetos { value, label, disabled }, o hijos <option> simples. Primero se muestran options y luego los hijos. Escribe SelectInput<number> cuando TypeScript no pueda inferir el tipo."))</li>
+        <li>@F.Pick(L.T("Add a Placeholder such as \"Choose\". It is a disabled first option shown while the value is empty, so the form never preselects an answer for the user.", "Agrega un Placeholder como \"Elige\". Es una primera opción deshabilitada que se muestra mientras el valor está vacío, así el formulario nunca elige una respuesta por el usuario."), L.T("Add a placeholder such as \"Choose\". It is a disabled first option shown while the value is null or '', so the form never preselects an answer for the user.", "Agrega un placeholder como \"Elige\". Es una primera opción deshabilitada que se muestra mientras el valor es null o '', así el formulario nunca elige una respuesta por el usuario."))</li>
+        <li>@F.Pick(L.T("Bind with @bind-Value and validate inside an EditForm, or pass Error by hand.", "Enlaza con @bind-Value y valida dentro de un EditForm, o pasa Error a mano."), L.T("Pass value and onValueChange, or defaultValue for uncontrolled use, and pass error when the selection is missing or invalid.", "Pasa value y onValueChange, o defaultValue para uso no controlado, y pasa error cuando falte la selección o no sea válida."))</li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Binding and validation", "Enlace y validación")</h3>
+    <p>
+        @F.Pick(L.T("Inside an EditForm, [Required] on a nullable property such as PayFrequency? works out of the box: the placeholder keeps the value null until the user chooses. With a non-nullable enum or int, the default value (the first member, or 0) already counts as an answer, so prefer nullable types for required choices.", "Dentro de un EditForm, [Required] sobre una propiedad anulable como PayFrequency? funciona sin más: el placeholder deja el valor en null hasta que el usuario elige. Con un enum o int no anulable, el valor por defecto (el primer miembro, o 0) ya cuenta como respuesta, así que usa tipos anulables para las elecciones obligatorias."),
+                L.T("A typed option reports its own value, so a number stays a number. <option> children always report their string value. To require a choice, check for null and pass the message as error.", "Una opción tipada informa su propio valor, así que un número sigue siendo número. Los hijos <option> siempre informan su valor como texto. Para exigir una elección, revisa si es null y pasa el mensaje en error."))
+    </p>
+    <CodeBlock Language="@F.Pick("razor", "tsx")" Code="@F.Pick(BindCode, ReactBindCode)" />
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li>@L.T("It is a native select: arrow keys change the option, typing a letter jumps to it, and phones open their own picker.", "Es un select nativo: las flechas cambian la opción, escribir una letra salta a ella y los teléfonos abren su propio selector.")</li>
+        <li>@L.T("The label, helper text and error are linked with for/id and aria-describedby; an error also sets aria-invalid.", "La etiqueta, el texto de ayuda y el error se vinculan con for/id y aria-describedby; un error también agrega aria-invalid.")</li>
+        <li>@L.T("Disabled options are announced as unavailable and cannot be chosen.", "Las opciones deshabilitadas se anuncian como no disponibles y no se pueden elegir.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@F.Pick(L.T("Omitting TValue when there is no Value or Options to infer it from: set TValue=\"string\".", "Omitir TValue cuando no hay Value ni Options para inferirlo: usa TValue=\"string\"."), L.T("Mixing number options with <option> children: the children report strings, so the handler gets both types.", "Mezclar opciones numéricas con hijos <option>: los hijos informan textos, así que el manejador recibe ambos tipos."))</li>
+        <li>@L.T("Two options with the same value: the select cannot tell them apart.", "Dos opciones con el mismo valor: el select no puede distinguirlas.")</li>
+        <li>@L.T("Showing enum member names to users: pass translated text instead.", "Mostrar a los usuarios los nombres de los miembros del enum: pasa textos traducidos.")</li>
+    </ul>
 
     <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
@@ -58,6 +95,37 @@
         PayFrequency.Biweekly => L.T("Biweekly", "Quincenal"),
         _ => L.T("Monthly", "Mensual"),
     };
+
+    private const string BindCode = """
+        <EditForm Model="_employee" OnValidSubmit="Save">
+            <DataAnnotationsValidator />
+            <SelectInput Label="Pay frequency" Placeholder="Choose"
+                         Options="SelectOption.ForNullableEnum<PayFrequency>()"
+                         @bind-Value="_employee.Frequency" />
+        </EditForm>
+
+        @code {
+            private sealed class Employee
+            {
+                [Required(ErrorMessage = "Choose a pay frequency.")]
+                public PayFrequency? Frequency { get; set; }
+            }
+        }
+        """;
+
+    private const string ReactBindCode = """
+        const companies: SelectOption<number>[] = [
+          { value: 1, label: 'Acme S.A.S.' },
+          { value: 2, label: 'Globex Ltda.' },
+        ];
+
+        const [companyId, setCompanyId] = useState<number | null>(null);
+
+        <SelectInput<number> label="Company" placeholder="Choose" required
+                             options={companies}
+                             value={companyId} onValueChange={setCompanyId}
+                             error={submitted && companyId === null ? 'Choose a company.' : undefined} />
+        """;
 
     private const string TypedCode = """
         <SelectInput Label="Pay frequency" Placeholder="Choose"
@@ -120,10 +188,12 @@
 
     private IReadOnlyList<ApiParam> ReactParams =>
     [
-        new("value", "string", null, L.T("Controlled selected value; '' selects the placeholder. Pair it with onValueChange.", "Valor seleccionado controlado; '' selecciona el marcador de posición. Úsalo junto con onValueChange.")),
-        new("defaultValue", "string", null, L.T("Initial value for uncontrolled use.", "Valor inicial para uso no controlado.")),
-        new("onValueChange", "(value: string) => void", null, L.T("Called with the selected option value.", "Se llama con el valor de la opción seleccionada.")),
-        new("children", "ReactNode", null, L.T("The <option> elements.", "Los elementos <option>.")),
+        new("T", "string | number", "string", L.T("Value type. Inferred from value or options; write SelectInput<number> when it cannot be inferred.", "Tipo del valor. Se infiere de value u options; escribe SelectInput<number> cuando no se pueda inferir.")),
+        new("value", "T | null", null, L.T("Controlled selected value; '' or null selects the placeholder. Pair it with onValueChange.", "Valor seleccionado controlado; '' o null selecciona el marcador de posición. Úsalo junto con onValueChange.")),
+        new("defaultValue", "T | null", null, L.T("Initial value for uncontrolled use.", "Valor inicial para uso no controlado.")),
+        new("onValueChange", "(value: T) => void", null, L.T("Called with the selected value. A typed option reports its own value; an <option> child reports its string value.", "Se llama con el valor seleccionado. Una opción tipada informa su propio valor; un hijo <option> informa su valor como texto.")),
+        new("options", "SelectOption<T>[]", null, L.T("Typed options { value, label, disabled? }. Rendered before the children.", "Opciones tipadas { value, label, disabled? }. Se muestran antes de los hijos.")),
+        new("children", "ReactNode", null, L.T("<option> elements.", "Elementos <option>.")),
         new("placeholder", "string", null, L.T("Disabled first option shown while nothing is selected.", "Primera opción deshabilitada que se muestra mientras no hay nada seleccionado.")),
         new("label", "string", null, L.T("Visible label.", "Etiqueta visible.")),
         new("helperText", "string", null, L.T("Hint below the field.", "Ayuda debajo del campo.")),

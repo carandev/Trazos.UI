@@ -1,11 +1,11 @@
 @page "/components/date-input"
 
 <DocPage Title="DateInput" Category="@L.T("Forms", "Formularios")"
-         Lead="@L.T("A date field for DateOnly, DateTime and their nullable forms, built on the native picker. MonthOnly turns it into a month picker.", "Un campo de fecha para DateOnly, DateTime y sus versiones anulables, construido sobre el selector nativo. MonthOnly lo convierte en un selector de mes.")">
+         Lead="@F.Pick(L.T("A date field for DateOnly, DateTime and their nullable forms, built on the native picker. MonthOnly turns it into a month picker.", "Un campo de fecha para DateOnly, DateTime y sus versiones anulables, construido sobre el selector nativo. MonthOnly lo convierte en un selector de mes."), L.T("A date field built on the native picker. Values are ISO date strings, 'yyyy-MM-dd', or null. monthOnly turns it into a month picker.", "Un campo de fecha construido sobre el selector nativo. Los valores son textos de fecha ISO, 'yyyy-MM-dd', o null. monthOnly lo convierte en un selector de mes."))">
 
     <DemoBlock Title="@L.T("Dates and months", "Fechas y meses")"
-               Description="@L.T("The picker follows the browser's language. A DateTime keeps its time of day when the date changes; a month binds its first day.", "El selector sigue el idioma del navegador. Un DateTime conserva su hora cuando cambia la fecha; un mes enlaza su primer día.")"
-               Code="@Code">
+               Description="@F.Pick(L.T("The picker follows the browser's language. A DateTime keeps its time of day when the date changes; a month binds its first day.", "El selector sigue el idioma del navegador. Un DateTime conserva su hora cuando cambia la fecha; un mes enlaza su primer día."), L.T("The picker follows the browser's language, but the value is always 'yyyy-MM-dd'. A month reports its first day.", "El selector sigue el idioma del navegador, pero el valor siempre es 'yyyy-MM-dd'. Un mes informa su primer día."))"
+               Code="@Code" React="date-input/basic">
         <div class="docs-grid-2">
             <DateInput Label="@L.T("Start date", "Fecha de ingreso")" Min="new DateOnly(2020, 1, 1)" @bind-Value="_start" />
             <DateInput Label="@L.T("Payroll period", "Periodo de nómina")" MonthOnly="true" @bind-Value="_period" />
@@ -13,12 +13,73 @@
         <p class="docs-demo-output">@L.T("Values:", "Valores:") <strong>@(_start?.ToString("yyyy-MM-dd") ?? "null")</strong> · <strong>@_period.ToString("yyyy-MM-dd")</strong></p>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <p>
+        @L.T("Use DateInput for a single known date: a start date, a birth date, a due date, or a month such as a payroll period. The native picker follows the language of the browser and gives phones their own wheel or calendar. For picking a day while seeing a whole month, events or availability, use MonthCalendar. For a time of day, use a TextInput with type time.",
+             "Usa DateInput para una fecha concreta: una fecha de ingreso, de nacimiento, de vencimiento, o un mes como un periodo de nómina. El selector nativo sigue el idioma del navegador y en los teléfonos abre su propia rueda o calendario. Para elegir un día viendo el mes completo, eventos o disponibilidad, usa MonthCalendar. Para una hora del día, usa un TextInput con type time.")
+    </p>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li>@F.Pick(L.T("Bind a DateOnly? (or DateTime?) with @bind-Value. Use the nullable form when the field can start empty.", "Enlaza un DateOnly? (o DateTime?) con @bind-Value. Usa la versión anulable cuando el campo pueda empezar vacío."), L.T("Keep the value in state as string | null in ISO format, 'yyyy-MM-dd', and pass value and onValueChange (or defaultValue). Clearing the picker reports null.", "Guarda el valor en el estado como string | null en formato ISO, 'yyyy-MM-dd', y pasa value y onValueChange (o defaultValue). Borrar el selector informa null."))</li>
+        <li>@F.Pick(L.T("Limit the range with Min and Max (DateOnly). The picker greys out the other days.", "Limita el rango con Min y Max (DateOnly). El selector atenúa los demás días."), L.T("Limit the range with min and max, also as 'yyyy-MM-dd'. The picker greys out the other days.", "Limita el rango con min y max, también como 'yyyy-MM-dd'. El selector atenúa los demás días."))</li>
+        <li>@F.Pick(L.T("Set MonthOnly for a month picker. The bound value is the first day of the chosen month.", "Usa MonthOnly para un selector de mes. El valor enlazado es el primer día del mes elegido."), L.T("Set monthOnly for a month picker. The value is the first day of the chosen month, '2026-11-01'.", "Usa monthOnly para un selector de mes. El valor es el primer día del mes elegido, '2026-11-01'."))</li>
+        <li>@F.Pick(L.T("Validate inside an EditForm or with Error. Min and Max only guide the picker: check the range in your validation too.", "Valida dentro de un EditForm o con Error. Min y Max solo guían al selector: revisa el rango también en tu validación."), L.T("Validate with error. min and max only guide the picker: check the range in your validation too. ISO strings compare correctly as text: start <= end.", "Valida con error. min y max solo guían al selector: revisa el rango también en tu validación. Los textos ISO se comparan bien como texto: start <= end."))</li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Binding and validation", "Enlace y validación")</h3>
+    <CodeBlock Language="@F.Pick("razor", "tsx")" Code="@F.Pick(BindCode, ReactBindCode)" />
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li>@L.T("It is a native date input: Tab moves between day, month and year, arrow keys change the focused part, and typing digits fills it. The calendar button opens the browser's picker.", "Es un input de fecha nativo: Tab se mueve entre día, mes y año, las flechas cambian la parte enfocada y al escribir dígitos se completa. El botón de calendario abre el selector del navegador.")</li>
+        <li>@L.T("The order of day, month and year and the month names follow the language of the browser, not the page. The value sent to your code never changes format.", "El orden de día, mes y año y los nombres de los meses siguen el idioma del navegador, no el de la página. El valor que recibe tu código nunca cambia de formato.")</li>
+        <li>@L.T("Label, helper text and error are linked with for/id and aria-describedby; an error sets aria-invalid.", "La etiqueta, el texto de ayuda y el error se vinculan con for/id y aria-describedby; un error agrega aria-invalid.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@F.Pick(L.T("Converting a DateOnly to DateTime at midnight UTC and back: time zones can move it to the day before. Keep dates as DateOnly.", "Convertir un DateOnly a DateTime a medianoche UTC y de vuelta: las zonas horarias pueden moverlo al día anterior. Guarda las fechas como DateOnly."), L.T("Turning the string into a Date with new Date('2026-03-15'): that is midnight UTC, which is the day before in the Americas. Keep the string, or build the date with new Date(year, month - 1, day).", "Convertir el texto en Date con new Date('2026-03-15'): eso es medianoche UTC, que en América es el día anterior. Guarda el texto, o arma la fecha con new Date(year, month - 1, day)."))</li>
+        <li>@L.T("Formatting the value for display with the server's culture: show it with the user's locale instead.", "Formatear el valor para mostrarlo con la cultura del servidor: muéstralo con el locale del usuario.")</li>
+        <li>@L.T("Old browsers without a date picker show a text box. The field then checks the yyyy-mm-dd format and shows the parse error message.", "Los navegadores antiguos sin selector de fecha muestran una caja de texto. El campo revisa entonces el formato aaaa-mm-dd y muestra el mensaje de error de lectura.")</li>
+    </ul>
+
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
     private DateOnly? _start;
     private DateOnly _period = new(2026, 11, 1);
+
+    private const string BindCode = """
+        <EditForm Model="_contract" OnValidSubmit="Save">
+            <DataAnnotationsValidator />
+            <DateInput Label="Start date" Min="new DateOnly(2020, 1, 1)" @bind-Value="_contract.Start" />
+        </EditForm>
+
+        @code {
+            private sealed class Contract
+            {
+                [Required(ErrorMessage = "Enter the start date.")]
+                public DateOnly? Start { get; set; }
+            }
+        }
+        """;
+
+    private const string ReactBindCode = """
+        // ISO strings: '2026-03-15'
+        const [start, setStart] = useState<string | null>(null);
+        const [end, setEnd] = useState<string | null>(null);
+
+        const endError = start && end && end < start
+          ? 'The end date must be after the start date.'
+          : undefined;
+
+        <DateInput label="Start date" min="2020-01-01" value={start} onValueChange={setStart} />
+        <DateInput label="End date" min={start ?? undefined} value={end} onValueChange={setEnd} error={endError} />
+        """;
 
     private const string Code = """
         <DateInput Label="Start date" Min="new DateOnly(2020, 1, 1)" @bind-Value="_start" />
@@ -41,5 +102,18 @@
         new("ParseErrorMessage", "string", "\"Enter a valid date.\"", L.T("Shown when the browser sends a value that is not a date.", "Se muestra cuando el navegador envía un valor que no es una fecha.")),
         new("Label, HelperText, Error, Required, Disabled, ReadOnly", "", null, L.T("Same as TextInput.", "Igual que en TextInput.")),
         new("LeadingIcon / TrailingIcon", "RenderFragment?", null, L.T("Icons inside the field.", "Íconos dentro del campo.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("value", "string | null", null, L.T("Controlled value as an ISO date, 'yyyy-MM-dd'; null is empty. Pair it with onValueChange.", "Valor controlado como fecha ISO, 'yyyy-MM-dd'; null es vacío. Úsalo junto con onValueChange.")),
+        new("defaultValue", "string | null", "null", L.T("Initial value for uncontrolled use, as 'yyyy-MM-dd'.", "Valor inicial para uso no controlado, como 'yyyy-MM-dd'.")),
+        new("onValueChange", "(value: string | null) => void", null, L.T("Called with 'yyyy-MM-dd' when a full date is picked, or null when the field is cleared.", "Se llama con 'yyyy-MM-dd' cuando se elige una fecha completa, o con null cuando se borra el campo.")),
+        new("monthOnly", "boolean", "false", L.T("Picks a month. The value is the first day of that month.", "Elige un mes. El valor es el primer día de ese mes.")),
+        new("min / max", "string", null, L.T("Earliest and latest date the picker offers, as 'yyyy-MM-dd'.", "Fecha más temprana y más tardía que ofrece el selector, como 'yyyy-MM-dd'.")),
+        new("parseErrorMessage", "string", "'Enter a valid date.'", L.T("Shown on blur when a browser without a date picker gets text that is not a date.", "Se muestra al perder el foco cuando un navegador sin selector de fecha recibe un texto que no es una fecha.")),
+        new("label, helperText, error, required, disabled, readOnly", "", null, L.T("Same as TextInput.", "Igual que en TextInput.")),
+        new("leadingIcon / trailingIcon", "ReactNode", null, L.T("Icons inside the field.", "Íconos dentro del campo.")),
+        new("...rest", "ComponentPropsWithRef<'input'>", null, L.T("Any other input attribute, including ref, name and onChange.", "Cualquier otro atributo de input, incluidos ref, name y onChange.")),
     ];
 }
