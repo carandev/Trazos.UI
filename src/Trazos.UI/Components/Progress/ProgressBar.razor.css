@@ -1,0 +1,71 @@
+/* ========================================
+   PROGRESS BAR - Trazos UI
+   ======================================== */
+
+.trazos-progress {
+    --trazos-progress-fill: var(--trazos-olive-bar);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    width: 100%;
+}
+
+.trazos-progress-gold { --trazos-progress-fill: var(--trazos-gold); }
+.trazos-progress-wine { --trazos-progress-fill: var(--trazos-wine); }
+.trazos-progress-sky { --trazos-progress-fill: var(--trazos-sky); }
+
+.trazos-progress-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.8125rem;
+}
+
+.trazos-progress-label {
+    font-weight: 600;
+    color: var(--trazos-text-light);
+}
+
+.trazos-progress-value {
+    color: var(--trazos-text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.trazos-progress-track {
+    position: relative;
+    height: 0.625rem;
+    overflow: hidden;
+    background: var(--trazos-track);
+    border: 1px solid var(--trazos-border-soft);
+    border-radius: 999px 40px 999px 40px / 40px 999px 40px 999px;
+}
+
+.trazos-progress-fill {
+    height: 100%;
+    background: var(--trazos-progress-fill);
+    border-radius: inherit;
+    transition: width 0.3s ease;
+}
+
+.trazos-progress.is-indeterminate .trazos-progress-fill {
+    width: 35%;
+    animation: trazos-progress-slide 1.3s ease-in-out infinite;
+}
+
+@keyframes trazos-progress-slide {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(300%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .trazos-progress-fill {
+        transition: none;
+    }
+
+    .trazos-progress.is-indeterminate .trazos-progress-fill {
+        width: 100%;
+        opacity: 0.45;
+        animation: none;
+    }
+}

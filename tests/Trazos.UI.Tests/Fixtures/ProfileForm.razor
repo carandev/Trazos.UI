@@ -1,0 +1,14 @@
+<EditForm Model="Model" OnValidSubmit="() => Submitted = true">
+    <DataAnnotationsValidator />
+    <TextInput Id="name" Label="Name" HelperText="Your full name" Error="@NameError" @bind-Value="Model.Name" />
+    <TextArea Id="notes" Label="Notes" @bind-Value="Model.Notes" />
+    <Checkbox Id="accept" Label="Accept" @bind-Value="Model.Accept" />
+    <button type="submit">Save</button>
+</EditForm>
+
+@code {
+    [Parameter] public ProfileModel Model { get; set; } = new();
+    [Parameter] public string? NameError { get; set; }
+
+    public bool Submitted { get; private set; }
+}

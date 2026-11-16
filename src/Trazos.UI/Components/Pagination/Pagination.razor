@@ -1,0 +1,57 @@
+@namespace Trazos.UI.Components
+
+<nav class="trazos-pagination @Class" aria-label="@Label" @attributes="AdditionalAttributes">
+    <p class="trazos-pagination-summary">@Summary</p>
+
+    <div class="trazos-pagination-controls">
+        @if (PageSizeOptions is { Count: > 0 })
+        {
+            <label class="trazos-pagination-size">
+                <span>@PageSizeLabel</span>
+                <select class="trazos-pagination-select" value="@PageSize" @onchange="OnPageSizeChanged">
+                    @foreach (var size in PageSizeOptions)
+                    {
+                        <option value="@size">@size</option>
+                    }
+                </select>
+            </label>
+        }
+
+        <button type="button" class="trazos-pagination-button trazos-pagination-previous" aria-label="@PreviousLabel"
+                disabled="@(CurrentPage <= 1)" @onclick="() => GoToAsync(CurrentPage - 1)">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+            </svg>
+        </button>
+
+        <ol class="trazos-pagination-pages">
+            @foreach (var page in VisiblePages)
+            {
+                if (page is null)
+                {
+                    <li class="trazos-pagination-gap" aria-hidden="true">…</li>
+                }
+                else
+                {
+                    var number = page.Value;
+                    <li>
+                        <button type="button"
+                                class="trazos-pagination-button trazos-pagination-page @(number == CurrentPage ? "is-current" : "")"
+                                aria-current="@(number == CurrentPage ? "page" : null)"
+                                aria-label="@string.Format(PageLabelFormat, number)"
+                                @onclick="() => GoToAsync(number)">
+                            @number
+                        </button>
+                    </li>
+                }
+            }
+        </ol>
+
+        <button type="button" class="trazos-pagination-button trazos-pagination-next" aria-label="@NextLabel"
+                disabled="@(CurrentPage >= PageCount)" @onclick="() => GoToAsync(CurrentPage + 1)">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+        </button>
+    </div>
+</nav>

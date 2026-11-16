@@ -1,0 +1,84 @@
+@namespace Trazos.UI.Components
+
+<div class="trazos-stat @Class" @attributes="AdditionalAttributes">
+    <div class="trazos-stat-text">
+        <p class="trazos-stat-label">@Label</p>
+        <p class="trazos-stat-value">@Value</p>
+        @if (!string.IsNullOrEmpty(Delta))
+        {
+            <p class="trazos-stat-delta is-@Trend.ToString().ToLowerInvariant() @(Inverted ? "is-inverted" : "")">
+                @if (Trend is StatTrend.Up or StatTrend.Down or StatTrend.Flat)
+                {
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                        @if (Trend == StatTrend.Up)
+                        {
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                        }
+                        else if (Trend == StatTrend.Down)
+                        {
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        }
+                        else
+                        {
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                        }
+                    </svg>
+                }
+                <span>@Delta</span>
+                @if (!string.IsNullOrEmpty(TrendLabel))
+                {
+                    <VisuallyHidden Class="trazos-visually-hidden-text">@TrendLabel</VisuallyHidden>
+                }
+            </p>
+        }
+        @if (!string.IsNullOrEmpty(Hint))
+        {
+            <p class="trazos-stat-hint">@Hint</p>
+        }
+    </div>
+    @if (Icon != null)
+    {
+        <span class="trazos-stat-icon trazos-stat-icon-@Tone.ToString().ToLowerInvariant()" aria-hidden="true">@Icon</span>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Label { get; set; } = string.Empty;
+
+    /// <summary>The number, already formatted, such as <c>$ 148M</c> or <c>42</c>.</summary>
+    [Parameter, EditorRequired]
+    public string Value { get; set; } = string.Empty;
+
+    /// <summary>Change against a reference, such as <c>+4.2%</c>.</summary>
+    [Parameter]
+    public string? Delta { get; set; }
+
+    [Parameter]
+    public StatTrend Trend { get; set; } = StatTrend.None;
+
+    /// <summary>Colors a rise as bad and a fall as good, for costs or absences.</summary>
+    [Parameter]
+    public bool Inverted { get; set; }
+
+    /// <summary>Screen-reader text for the delta, such as "up from last month".</summary>
+    [Parameter]
+    public string? TrendLabel { get; set; }
+
+    /// <summary>Small muted line at the bottom.</summary>
+    [Parameter]
+    public string? Hint { get; set; }
+
+    [Parameter]
+    public RenderFragment? Icon { get; set; }
+
+    /// <summary>Color of the icon well.</summary>
+    [Parameter]
+    public IconBoxVariant Tone { get; set; } = IconBoxVariant.Primary;
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

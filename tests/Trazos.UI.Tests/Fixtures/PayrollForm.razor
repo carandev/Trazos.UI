@@ -1,0 +1,10 @@
+<EditForm Model="Model">
+    <DataAnnotationsValidator />
+    <NumberInput Id="salary" Label="Salary" Mode="NumberInputMode.Currency" @bind-Value="Model.Salary" />
+    <DateInput Id="start" Label="Start" @bind-Value="Model.StartDate" />
+    <button type="submit">Save</button>
+</EditForm>
+
+@code {
+    [Parameter] public PayrollModel Model { get; set; } = new();
+}

@@ -1,0 +1,133 @@
+/* ========================================
+   CHOICE GROUPS - Trazos UI
+   Compact radio and checkbox lists drawn like the Checkbox component.
+   ======================================== */
+
+.trazos-choice-group {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.trazos-choice-legend {
+    margin-bottom: 0.5rem;
+    padding: 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--trazos-text-light);
+}
+
+.trazos-choice-required {
+    margin-left: 0.15rem;
+    color: var(--trazos-danger);
+}
+
+.trazos-choice-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.trazos-choice-group.trazos-choice-group-inline .trazos-choice-options {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+}
+
+.trazos-choice {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.875rem;
+    color: var(--trazos-text);
+    cursor: pointer;
+}
+
+.trazos-choice.trazos-choice-is-disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.trazos-choice-input {
+    appearance: none;
+    -webkit-appearance: none;
+    flex-shrink: 0;
+    display: grid;
+    place-content: center;
+    width: 1.15rem;
+    height: 1.15rem;
+    margin: 0;
+    background: var(--trazos-field);
+    border: 1.5px solid var(--trazos-border-input);
+    cursor: inherit;
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.trazos-choice-input.trazos-choice-input-radio {
+    border-radius: 50% 46% 52% 48% / 48% 52% 46% 50%;
+}
+
+.trazos-choice-input.trazos-choice-input-checkbox {
+    border-radius: 5px 6px 4px 6px / 6px 4px 6px 5px;
+}
+
+.trazos-choice-input::before {
+    content: "";
+    transform: scale(0);
+    transition: transform 0.12s ease;
+}
+
+.trazos-choice-input.trazos-choice-input-radio::before {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--trazos-olive-strong);
+}
+
+.trazos-choice-input.trazos-choice-input-checkbox::before {
+    width: 0.65rem;
+    height: 0.65rem;
+    background: var(--trazos-on-accent);
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.trazos-choice-input:checked {
+    border-color: var(--trazos-olive);
+}
+
+.trazos-choice-input.trazos-choice-input-checkbox:checked {
+    background: var(--trazos-olive-solid);
+    border-color: var(--trazos-olive-edge);
+}
+
+.trazos-choice-input:checked::before {
+    transform: scale(1);
+}
+
+.trazos-choice-input:focus-visible {
+    outline: none;
+    border-color: var(--trazos-focus);
+    box-shadow: 0 0 0 3px var(--trazos-focus-ring);
+}
+
+.trazos-choice-group[aria-invalid="true"] .trazos-choice-input {
+    border-color: var(--trazos-danger);
+}
+
+.trazos-choice-helper,
+.trazos-choice-error {
+    margin: 0.5rem 0 0;
+    font-size: 0.75rem;
+}
+
+.trazos-choice-helper {
+    color: var(--trazos-text-muted);
+}
+
+.trazos-choice-error {
+    font-weight: 600;
+    color: var(--trazos-danger);
+}

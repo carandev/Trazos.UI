@@ -1,0 +1,27 @@
+@namespace Trazos.UI.Components
+@typeparam TItem
+@typeparam TValue
+@inherits FormFieldBase<TValue>
+
+<Autocomplete TItem="TItem"
+              Id="@Id"
+              Items="Items"
+              SearchFunc="SearchFunc"
+              ItemText="ItemText"
+              ItemTemplate="ItemTemplate"
+              SelectedItem="SelectedItem"
+              SelectedItemChanged="OnSelectedAsync"
+              Label="@Label"
+              Placeholder="@Placeholder"
+              HelperText="@HelperText"
+              Error="@ErrorMessage"
+              Required="@Required"
+              Disabled="@Disabled"
+              MinChars="MinChars"
+              DebounceMs="DebounceMs"
+              MaxResults="MaxResults"
+              NoResultsText="@NoResultsText"
+              SearchingText="@SearchingText"
+              ClearText="@ClearText"
+              Class="@($"{FieldStateClass} {Class}".Trim())"
+              AdditionalAttributes="AdditionalAttributes" />

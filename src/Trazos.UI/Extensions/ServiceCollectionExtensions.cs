@@ -20,6 +20,9 @@ public static class ServiceCollectionExtensions
 
         services.TryAddSingleton(options);
         services.TryAddScoped<IDialogService, DialogService>();
+        // The prompt shares the confirm service instance, so one container shows both.
+        services.TryAddScoped<IPromptDialogService>(sp =>
+            sp.GetRequiredService<IDialogService>() as IPromptDialogService ?? new DialogService());
         services.TryAddScoped<IThemeService, ThemeService>();
 
         return services;

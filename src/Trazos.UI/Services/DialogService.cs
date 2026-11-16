@@ -4,9 +4,22 @@ using Trazos.UI.Components;
 
 namespace Trazos.UI.Services;
 
-public class DialogService : IDialogService
+public class DialogService : IDialogService, IPromptDialogService
 {
     public event Func<ConfirmDialogOptions, Task<bool>>? OnConfirmRequested;
+
+    public event Func<PromptDialogOptions, Task<PromptResult>>? OnPromptRequested;
+
+    public async Task<PromptResult> PromptAsync(PromptDialogOptions options)
+    {
+        if (OnPromptRequested != null)
+        {
+            return await OnPromptRequested.Invoke(options);
+        }
+
+        // Without a container there is nobody to answer, so it is a cancel.
+        return PromptResult.Cancelled;
+    }
 
     public async Task<bool> ConfirmAsync(ConfirmDialogOptions options)
     {

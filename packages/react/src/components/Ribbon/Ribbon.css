@@ -1,0 +1,59 @@
+/* ========================================
+   RIBBON - Trazos UI (ported from Components/Ribbon/Ribbon.razor.css)
+   A diagonal status band across a corner of a card or document.
+   The parent needs position: relative.
+   ======================================== */
+
+.trazos-ribbon {
+    --trazos-ribbon-fill: var(--trazos-olive-solid);
+    --trazos-ribbon-edge: var(--trazos-olive-edge);
+    position: absolute;
+    top: 0;
+    z-index: 2;
+    width: 7.5rem;
+    height: 7.5rem;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.trazos-ribbon.trazos-ribbon-top-right {
+    right: 0;
+    border-top-right-radius: inherit;
+}
+
+.trazos-ribbon.trazos-ribbon-top-left {
+    left: 0;
+    border-top-left-radius: inherit;
+}
+
+.trazos-ribbon-wine { --trazos-ribbon-fill: var(--trazos-wine-solid); --trazos-ribbon-edge: var(--trazos-wine-edge); }
+.trazos-ribbon-gold { --trazos-ribbon-fill: var(--trazos-gold); --trazos-ribbon-edge: var(--trazos-gold-text-strong); }
+.trazos-ribbon-sky { --trazos-ribbon-fill: var(--trazos-sky); --trazos-ribbon-edge: var(--trazos-sky-text); }
+.trazos-ribbon-neutral { --trazos-ribbon-fill: var(--trazos-ink-solid); --trazos-ribbon-edge: var(--trazos-ink-edge); }
+
+.trazos-ribbon-band {
+    position: absolute;
+    top: 1.6rem;
+    width: 10.5rem;
+    padding: 0.3rem 0;
+    font-family: var(--trazos-font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--trazos-on-accent);
+    background: var(--trazos-ribbon-fill);
+    border-block: 1.5px solid var(--trazos-ribbon-edge);
+    box-shadow: 0 3px 0 rgb(var(--trazos-shadow-rgb) / calc(0.12 * var(--trazos-shadow-strength)));
+}
+
+.trazos-ribbon.trazos-ribbon-top-right .trazos-ribbon-band {
+    right: -2.6rem;
+    transform: rotate(45deg);
+}
+
+.trazos-ribbon.trazos-ribbon-top-left .trazos-ribbon-band {
+    left: -2.6rem;
+    transform: rotate(-45deg);
+}

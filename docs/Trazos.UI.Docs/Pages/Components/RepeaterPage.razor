@@ -1,0 +1,262 @@
+@page "/components/repeater"
+
+<DocPage Title="Repeater" Category="@L.T("Forms", "Formularios")"
+         Lead="@F.Pick(L.T("An editable list of rows with add and remove buttons, for tiered tables such as rate brackets, price tiers or schedules. The template gets IsLast, so the last tier can stay open-ended.", "Una lista editable de filas con botones para agregar y quitar, para tablas por tramos como tarifas, precios o horarios. La plantilla recibe IsLast, así el último tramo puede quedar abierto."), L.T("An editable list of rows with add and remove buttons, for tiered tables such as rate brackets, price tiers or schedules. renderItem gets isLast, so the last tier can stay open-ended.", "Una lista editable de filas con botones para agregar y quitar, para tablas por tramos como tarifas, precios o horarios. renderItem recibe isLast, así el último tramo puede quedar abierto."))">
+
+    <DemoBlock Title="@L.T("Tiered table", "Tabla por tramos")"
+               Description="@L.T("A header with column titles, a minimum of one row and a maximum of six. The last tier reads \"and above\".", "Un encabezado con títulos de columna, mínimo una fila y máximo seis. El último tramo dice \"en adelante\".")"
+               Code="@Code" React="repeater/brackets">
+        <div class="docs-stack">
+            <Repeater TItem="Bracket" @bind-Items="_brackets" CreateItem="NewBracket" MinItems="1" MaxItems="6"
+                      Label="@L.T("Withholding brackets", "Tramos de retención")" AddText="@L.T("Add bracket", "Agregar tramo")"
+                      RemoveLabelFormat="@L.T("Remove bracket {0}", "Quitar tramo {0}")"
+                      style="--trazos-repeater-columns: 1fr 1fr 8rem">
+                <Header>
+                    <span>@L.T("From (UVT)", "Desde (UVT)")</span>
+                    <span>@L.T("To (UVT)", "Hasta (UVT)")</span>
+                    <span>@L.T("Rate", "Tarifa")</span>
+                </Header>
+                <ItemTemplate>
+                    <NumberInput TValue="decimal" aria-label="@L.T("From", "Desde")" Min="0" @bind-Value="context.Item.From" />
+                    @if (context.IsLast)
+                    {
+                        <TextInput aria-label="@L.T("To", "Hasta")" Value="@L.T("and above", "en adelante")" ReadOnly="true" />
+                    }
+                    else
+                    {
+                        <NumberInput TValue="decimal?" aria-label="@L.T("To", "Hasta")" Min="0" @bind-Value="context.Item.To" />
+                    }
+                    <NumberInput TValue="decimal" aria-label="@L.T("Rate", "Tarifa")" Mode="NumberInputMode.Percent" Min="0" Max="1" @bind-Value="context.Item.Rate" />
+                </ItemTemplate>
+            </Repeater>
+            <p class="docs-demo-output">@L.T("Brackets:", "Tramos:") <strong>@_brackets.Count</strong></p>
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Empty state and labelled fields", "Estado vacío y campos con etiqueta")"
+               Description="@L.T("Without a header each cell can carry its own label. EmptyContent shows while there are no rows, and the add button turns off at MaxItems.", "Sin encabezado cada celda puede llevar su propia etiqueta. EmptyContent se muestra mientras no hay filas, y el botón de agregar se apaga en MaxItems.")"
+               Code="@ContactsCode" React="repeater/contacts">
+        <div class="docs-stack">
+            <Repeater TItem="Contact" @bind-Items="_contacts" CreateItem="() => new Contact()" MaxItems="3"
+                      Label="@L.T("Emergency contacts", "Contactos de emergencia")" AddText="@L.T("Add contact", "Agregar contacto")"
+                      RemoveLabelFormat="@L.T("Remove contact {0}", "Quitar contacto {0}")">
+                <EmptyContent>@L.T("No emergency contacts yet.", "Aún no hay contactos de emergencia.")</EmptyContent>
+                <ItemTemplate>
+                    <TextInput Label="@L.T("Name", "Nombre")" @bind-Value="context.Item.Name" />
+                    <SelectInput TValue="string" Label="@L.T("Relation", "Parentesco")" Placeholder="@L.T("Choose", "Elige")" @bind-Value="context.Item.Relation">
+                        <option value="partner">@L.T("Partner", "Pareja")</option>
+                        <option value="parent">@L.T("Parent", "Padre o madre")</option>
+                        <option value="friend">@L.T("Friend", "Amigo")</option>
+                    </SelectInput>
+                </ItemTemplate>
+            </Repeater>
+            <p class="docs-demo-output">@L.T("Contacts:", "Contactos:") <strong>@_contacts.Count</strong> / 3</p>
+        </div>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <ul>
+        <li>@L.T("For a short list of records edited together with the rest of a form: rate brackets, price tiers, schedules, emergency contacts, invoice lines.", "Para una lista corta de registros que se editan junto con el resto de un formulario: tramos de tarifa, precios por volumen, horarios, contactos de emergencia, líneas de factura.")</li>
+        <li>@L.T("Not for long lists or lists that need sorting, paging or search: use a DataTable with a form in a Drawer or Modal.", "No para listas largas o que necesitan orden, paginación o búsqueda: usa un DataTable con un formulario en un Drawer o un Modal.")</li>
+        <li>@L.T("Not for choosing items from a catalog: use CheckboxGroup or an Autocomplete with ClearOnSelect.", "No para elegir elementos de un catálogo: usa CheckboxGroup o un Autocomplete con limpiar al seleccionar.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    @if (F.IsReact)
+    {
+        <ol>
+            <li><Tr><En>Keep the rows in state and pass <code>items</code> plus <code>onItemsChange</code>. Every add or remove gives you a new array. For a list you only read on submit, use <code>defaultItems</code>.</En><Es>Guarda las filas en el estado y pasa <code>items</code> junto con <code>onItemsChange</code>. Cada vez que se agrega o se quita una fila recibes un arreglo nuevo. Para una lista que solo lees al enviar, usa <code>defaultItems</code>.</Es></Tr></li>
+            <li><Tr><En>Render the cells with <code>renderItem={({ item, index, isLast }) => …}</code>. Edit a cell by replacing that row with a copy: <code>items.map((r, i) => i === index ? { ...r, ...patch } : r)</code>.</En><Es>Dibuja las celdas con <code>renderItem={({ item, index, isLast }) => …}</code>. Edita una celda reemplazando esa fila por una copia: <code>items.map((r, i) => i === index ? { ...r, ...patch } : r)</code>.</Es></Tr></li>
+            <li><Tr><En>Pass <code>createItem(items)</code> to show the add button; it receives the current rows, so a new tier can start where the last one ends.</En><Es>Pasa <code>createItem(items)</code> para mostrar el botón de agregar; recibe las filas actuales, así un tramo nuevo puede empezar donde termina el último.</Es></Tr></li>
+            <li><Tr><En>Lay out the cells with the CSS variable <code>--trazos-repeater-columns</code> in <code>style</code>, and put column titles in <code>header</code>.</En><Es>Ubica las celdas con la variable CSS <code>--trazos-repeater-columns</code> en <code>style</code> y pon los títulos de columna en <code>header</code>.</Es></Tr></li>
+        </ol>
+        <CodeBlock Language="tsx" Code="@ReactStepsCode" />
+    }
+    else
+    {
+        <ol>
+            <li><Tr><En>Bind a <code>List&lt;TItem&gt;</code> with <code>@@bind-Items</code>. The list is changed in place and <code>ItemsChanged</code> is raised, so it can be a property of your EditForm model.</En><Es>Enlaza una <code>List&lt;TItem&gt;</code> con <code>@@bind-Items</code>. La lista se cambia en el mismo lugar y se dispara <code>ItemsChanged</code>, así puede ser una propiedad del modelo de tu EditForm.</Es></Tr></li>
+            <li><Tr><En>Write the cells in <code>ItemTemplate</code> and bind each field to <code>context.Item</code>. Use <code>context.Index</code> and <code>context.IsLast</code> for numbering or an open-ended last row.</En><Es>Escribe las celdas en <code>ItemTemplate</code> y enlaza cada campo a <code>context.Item</code>. Usa <code>context.Index</code> y <code>context.IsLast</code> para numerar o para una última fila abierta.</Es></Tr></li>
+            <li><Tr><En>Pass <code>CreateItem</code> to show the add button, and <code>MinItems</code> / <code>MaxItems</code> to set the limits.</En><Es>Pasa <code>CreateItem</code> para mostrar el botón de agregar, y <code>MinItems</code> / <code>MaxItems</code> para fijar los límites.</Es></Tr></li>
+            <li><Tr><En>Lay out the cells with <code>style="--trazos-repeater-columns: 1fr 1fr 8rem"</code> and put column titles in <code>Header</code>.</En><Es>Ubica las celdas con <code>style="--trazos-repeater-columns: 1fr 1fr 8rem"</code> y pon los títulos de columna en <code>Header</code>.</Es></Tr></li>
+        </ol>
+    }
+
+    <h3 class="docs-h3">@L.T("Validation", "Validación")</h3>
+    @if (F.IsReact)
+    {
+        <p><Tr><En>Validate the array in your form and pass each message to the field that owns it, using the row <code>index</code>: <code>error={errors[index]?.from}</code>. For a rule about the whole list (for example, "add at least one contact"), show the message next to the Repeater, for example with an Alert.</En><Es>Valida el arreglo en tu formulario y pasa cada mensaje al campo correspondiente usando el <code>index</code> de la fila: <code>error={errors[index]?.from}</code>. Para una regla sobre toda la lista (por ejemplo, "agrega al menos un contacto"), muestra el mensaje junto al Repeater, por ejemplo con un Alert.</Es></Tr></p>
+    }
+    else
+    {
+        <p><Tr><En>Fields bound to <code>context.Item.Property</code> validate inside an EditForm like any other field, so per-row messages work with a validator that reaches nested objects (for example FluentValidation or <code>ObjectGraphDataAnnotationsValidator</code>). For a rule about the whole list, add a rule on the list property and show it with <code>ValidationMessage</code>.</En><Es>Los campos enlazados a <code>context.Item.Propiedad</code> se validan dentro de un EditForm como cualquier otro campo, así que los mensajes por fila funcionan con un validador que llegue a objetos anidados (por ejemplo FluentValidation u <code>ObjectGraphDataAnnotationsValidator</code>). Para una regla sobre toda la lista, agrega una regla en la propiedad de la lista y muéstrala con <code>ValidationMessage</code>.</Es></Tr></p>
+    }
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li><Tr><En>Rows are an ordered list (<code>ol</code>) named by <code>Label</code>, so screen readers announce "list, 3 items" and the position of each row.</En><Es>Las filas son una lista ordenada (<code>ol</code>) con el nombre de <code>Label</code>, así los lectores de pantalla anuncian "lista, 3 elementos" y la posición de cada fila.</Es></Tr></li>
+        <li>@L.T("Each remove button has its own name, such as \"Remove row 2\", so it is clear which row it deletes. Change it with RemoveLabelFormat; {0} is the row number, from 1.", "Cada botón de quitar tiene su propio nombre, como \"Quitar fila 2\", así queda claro qué fila elimina. Cámbialo con RemoveLabelFormat; {0} es el número de fila, desde 1.")</li>
+        <li>@L.T("The header is hidden from assistive technology, because a header row is not linked to the cells. Give every field its own label or aria-label.", "El encabezado está oculto para las tecnologías de asistencia, porque una fila de títulos no queda vinculada a las celdas. Dale a cada campo su propia etiqueta o aria-label.")</li>
+        <li>@L.T("Tab moves through the fields of a row and then to its remove button. Buttons at the limits are disabled, not hidden.", "Tab recorre los campos de una fila y luego su botón de quitar. Los botones en los límites se deshabilitan, no se ocultan.")</li>
+        <li>@L.T("On phones the header is hidden and the cells stack in one column.", "En teléfonos el encabezado se oculta y las celdas se apilan en una columna.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        @if (F.IsReact)
+        {
+            <li><Tr><En>Passing <code>items</code> without updating them in <code>onItemsChange</code>: nothing is added or removed on screen.</En><Es>Pasar <code>items</code> sin actualizarlos en <code>onItemsChange</code>: en pantalla no se agrega ni se quita nada.</Es></Tr></li>
+            <li><Tr><En>Calling <code>setState</code> inside <code>createItem</code>: the new array from <code>onItemsChange</code> replaces it. Adjust other rows in <code>onItemsChange</code> instead, as the tiered demo does.</En><Es>Llamar a <code>setState</code> dentro de <code>createItem</code>: el arreglo nuevo de <code>onItemsChange</code> lo reemplaza. Ajusta las demás filas en <code>onItemsChange</code>, como hace la demostración por tramos.</Es></Tr></li>
+            <li><Tr><En>Do not add your own <code>key</code>: the Repeater keeps a key per row apart from the items, so each row keeps its input state when an earlier row is removed, even when two rows hold equal values. Changes made from outside (reordering, replacing the array) keep the keys by position.</En><Es>No agregues tu propia <code>key</code>: el Repeater guarda una clave por fila aparte de los elementos, así cada fila conserva el estado de sus campos cuando se quita una fila anterior, aun si dos filas tienen valores iguales. Los cambios hechos desde fuera (reordenar, reemplazar el arreglo) conservan las claves por posición.</Es></Tr></li>
+        }
+        else
+        {
+            <li><Tr><En>Row keys follow positions when the list changes from outside: reordering or replacing the bound list does not move field state with the items. Add and remove rows with the Repeater buttons.</En><Es>Cuando la lista cambia desde fuera, las claves de las filas siguen las posiciones: reordenar o reemplazar la lista enlazada no mueve el estado de los campos con los elementos. Agrega y quita filas con los botones del Repeater.</Es></Tr></li>
+            <li><Tr><En>Without <code>CreateItem</code> there is no add button; that is on purpose for lists that only allow removal.</En><Es>Sin <code>CreateItem</code> no hay botón de agregar; es a propósito para listas que solo permiten quitar.</Es></Tr></li>
+        }
+        <li>@L.T("Set MinItems to 1 when the form needs at least one row; otherwise the user can remove them all.", "Pon MinItems en 1 cuando el formulario necesita al menos una fila; si no, el usuario puede quitarlas todas.")</li>
+        <li>@L.T("Keep the column template and the header in the same order and count, or the titles will not line up.", "Mantén la plantilla de columnas y el encabezado con el mismo orden y cantidad, o los títulos no quedarán alineados.")</li>
+    </ul>
+
+    <ApiTable Params="Params" ReactParams="ReactParams" />
+</DocPage>
+
+@code {
+    private sealed class Bracket
+    {
+        public decimal From { get; set; }
+        public decimal? To { get; set; }
+        public decimal Rate { get; set; }
+    }
+
+    private sealed class Contact
+    {
+        public string? Name { get; set; }
+        public string? Relation { get; set; }
+    }
+
+    private List<Bracket> _brackets =
+    [
+        new() { From = 0, To = 95, Rate = 0 },
+        new() { From = 95, To = 150, Rate = 0.19m },
+        new() { From = 150, Rate = 0.28m },
+    ];
+
+    private List<Contact> _contacts = [];
+
+    private Bracket NewBracket()
+    {
+        // The previous open-ended tier gets an upper bound, and the new one starts there.
+        var last = _brackets.LastOrDefault();
+        var start = last is null ? 0 : last.From + 100;
+        if (last is not null)
+        {
+            last.To = start;
+        }
+
+        return new Bracket { From = start };
+    }
+
+    private const string Code = """
+        <Repeater TItem="Bracket" @bind-Items="_brackets" CreateItem="NewBracket" MinItems="1"
+                  AddText="Add bracket" style="--trazos-repeater-columns: 1fr 1fr 8rem">
+            <Header>
+                <span>From (UVT)</span>
+                <span>To (UVT)</span>
+                <span>Rate</span>
+            </Header>
+            <ItemTemplate>
+                <NumberInput TValue="decimal" aria-label="From" @bind-Value="context.Item.From" />
+                @if (context.IsLast)
+                {
+                    <TextInput aria-label="To" Value="and above" ReadOnly="true" />
+                }
+                else
+                {
+                    <NumberInput TValue="decimal?" aria-label="To" @bind-Value="context.Item.To" />
+                }
+                <NumberInput TValue="decimal" aria-label="Rate" Mode="NumberInputMode.Percent" @bind-Value="context.Item.Rate" />
+            </ItemTemplate>
+        </Repeater>
+        """;
+
+    private const string ContactsCode = """
+        <Repeater TItem="Contact" @bind-Items="_model.Contacts" CreateItem="() => new Contact()" MaxItems="3"
+                  Label="Emergency contacts" AddText="Add contact" RemoveLabelFormat="Remove contact {0}">
+            <EmptyContent>No emergency contacts yet.</EmptyContent>
+            <ItemTemplate>
+                <TextInput Label="Name" @bind-Value="context.Item.Name" />
+                <SelectInput TValue="string" Label="Relation" Placeholder="Choose" @bind-Value="context.Item.Relation">
+                    <option value="partner">Partner</option>
+                    <option value="parent">Parent</option>
+                </SelectInput>
+            </ItemTemplate>
+        </Repeater>
+        """;
+
+    private const string ReactStepsCode = """
+        import { useState, type CSSProperties } from 'react';
+        import { Repeater, TextInput } from '@carandev/trazos-ui';
+
+        interface Tier { upTo: string; price: string }
+
+        export function PriceTiers() {
+          const [tiers, setTiers] = useState<Tier[]>([{ upTo: '10', price: '5' }]);
+          const update = (index: number, patch: Partial<Tier>) =>
+            setTiers((list) => list.map((t, i) => (i === index ? { ...t, ...patch } : t)));
+
+          return (
+            <Repeater<Tier>
+              label="Price tiers"
+              items={tiers}
+              onItemsChange={setTiers}
+              createItem={() => ({ upTo: '', price: '' })}
+              minItems={1}
+              style={{ '--trazos-repeater-columns': '1fr 1fr' } as CSSProperties}
+              header={<><span>Up to (units)</span><span>Price</span></>}
+              renderItem={({ item, index, isLast }) => (
+                <>
+                  <TextInput aria-label="Up to" value={isLast ? 'and above' : item.upTo} readOnly={isLast}
+                             onValueChange={(upTo) => update(index, { upTo })} />
+                  <TextInput aria-label="Price" type="number" value={item.price}
+                             onValueChange={(price) => update(index, { price })} />
+                </>
+              )}
+            />
+          );
+        }
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Items", "List<TItem>", "required", L.T("Rows. Changed in place; supports @bind-Items.", "Filas. Se cambian en el mismo lugar; admite @bind-Items.")),
+        new("ItemTemplate", "RenderFragment<RepeaterContext<TItem>>", "required", L.T("Row cells. context.Item, context.Index and context.IsLast.", "Celdas de la fila. context.Item, context.Index y context.IsLast.")),
+        new("CreateItem", "Func<TItem>?", null, L.T("Builds a new row. No add button when null.", "Crea una fila nueva. Sin botón de agregar si es null.")),
+        new("Header", "RenderFragment?", null, L.T("Column titles, laid out like the cells. Hidden on phones.", "Títulos de columna, ubicados como las celdas. Ocultos en teléfonos.")),
+        new("MinItems / MaxItems", "int / int?", "0 / null", L.T("Disable remove and add at the limits.", "Deshabilitan quitar y agregar en los límites.")),
+        new("EmptyContent", "RenderFragment?", null, L.T("Shown when there are no rows.", "Se muestra cuando no hay filas.")),
+        new("Label, AddText, RemoveLabelFormat", "string", null, L.T("List name, add button text and remove button names ({0} is the row number).", "Nombre de la lista, texto del botón de agregar y nombres de los botones de quitar ({0} es el número de fila).")),
+        new("--trazos-repeater-columns", "CSS", "auto-fit", L.T("grid-template-columns for the cells.", "grid-template-columns de las celdas.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("items", "readonly T[]", null, L.T("Controlled rows. Pair it with onItemsChange.", "Filas controladas. Úsalo junto con onItemsChange.")),
+        new("defaultItems", "readonly T[]", "[]", L.T("Initial rows for uncontrolled use.", "Filas iniciales para uso no controlado.")),
+        new("onItemsChange", "(items: T[]) => void", null, L.T("Called with a new array after a row is added or removed.", "Se llama con un arreglo nuevo después de agregar o quitar una fila.")),
+        new("renderItem", "(context: RepeaterContext<T>) => ReactNode", "required", L.T("Row cells. Receives { item, index, isLast }.", "Celdas de la fila. Recibe { item, index, isLast }.")),
+        new("createItem", "(items: readonly T[]) => T", null, L.T("Builds the new row from the current rows. No add button when absent.", "Crea la fila nueva a partir de las filas actuales. Sin botón de agregar si no se pasa.")),
+        new("header", "ReactNode", null, L.T("Column titles, laid out like the cells. Hidden on phones and from assistive technology.", "Títulos de columna, ubicados como las celdas. Ocultos en teléfonos y para las tecnologías de asistencia.")),
+        new("emptyContent", "ReactNode", null, L.T("Shown when there are no rows.", "Se muestra cuando no hay filas.")),
+        new("minItems", "number", "0", L.T("Remove buttons are disabled at this count.", "Los botones de quitar se deshabilitan con esta cantidad.")),
+        new("maxItems", "number", null, L.T("The add button is disabled at this count.", "El botón de agregar se deshabilita con esta cantidad.")),
+        new("disabled", "boolean", "false", L.T("Disables every add and remove button.", "Deshabilita todos los botones de agregar y quitar.")),
+        new("label", "string", null, L.T("Accessible name of the list of rows.", "Nombre accesible de la lista de filas.")),
+        new("addText", "string", "'Add row'", L.T("Text of the add button.", "Texto del botón de agregar.")),
+        new("removeLabelFormat", "string", "'Remove row {0}'", L.T("Accessible name of each remove button. {0} is the row number, from 1.", "Nombre accesible de cada botón de quitar. {0} es el número de fila, desde 1.")),
+        new("style['--trazos-repeater-columns']", "CSS", "auto-fit", L.T("grid-template-columns for the cells.", "grid-template-columns de las celdas.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other attribute for the root div, including ref, className and style.", "Cualquier otro atributo para el div raíz, incluidos ref, className y style.")),
+    ];
+}

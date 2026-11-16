@@ -1,0 +1,176 @@
+@page "/components/number-input"
+@using System.Globalization
+
+<DocPage Title="NumberInput" Category="@L.T("Forms", "Formularios")"
+         Lead="@F.Pick(L.T("A numeric field for int, long, decimal, double and their nullable forms. It formats with a culture, has currency and percent modes, clamps to Min and Max, and steps with the arrow keys.", "Un campo numérico para int, long, decimal, double y sus versiones anulables. Formatea según una cultura, tiene modos de moneda y porcentaje, limita a Min y Max, y avanza con las flechas del teclado."), L.T("A numeric field that reports number | null. It formats with a locale through Intl.NumberFormat, has currency and percent modes, clamps to min and max, and steps with the arrow keys.", "Un campo numérico que informa number | null. Formatea según un locale con Intl.NumberFormat, tiene modos de moneda y porcentaje, limita a min y max, y avanza con las flechas del teclado."))">
+
+    <DemoBlock Title="@L.T("Currency", "Moneda")"
+               Description="@F.Pick(L.T("The value is formatted when the field loses focus. Currency mode shows the culture's symbol, or CurrencySymbol, as a prefix.", "El valor se formatea cuando el campo pierde el foco. El modo moneda muestra el símbolo de la cultura, o CurrencySymbol, como prefijo."), L.T("The value is formatted when the field loses focus or on Enter. Currency mode shows the symbol of currency, or currencySymbol, as a prefix.", "El valor se formatea cuando el campo pierde el foco o con Enter. El modo moneda muestra el símbolo de currency, o currencySymbol, como prefijo."))"
+               Code="@CurrencyCode" React="number-input/currency">
+        <div class="docs-grid-2">
+            <NumberInput Label="@L.T("Base salary", "Salario base")" Mode="NumberInputMode.Currency" CurrencySymbol="COP" Decimals="0"
+                         Culture="_colombia" Min="0" @bind-Value="_salary" />
+            <NumberInput Label="@L.T("Bonus (USD)", "Bonificación (USD)")" Mode="NumberInputMode.Currency" Culture="_us" @bind-Value="_bonus" />
+        </div>
+        <p class="docs-demo-output">@L.T("Values:", "Valores:") <strong>@_salary</strong> · <strong>@(_bonus?.ToString(CultureInfo.InvariantCulture) ?? "null")</strong></p>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Percent, steps and limits", "Porcentaje, pasos y límites")"
+               Description="@F.Pick(L.T("Percent mode binds the fraction: 0.04 reads 4 %. Use the arrow keys to add or remove Step.", "El modo porcentaje enlaza la fracción: 0.04 se lee 4 %. Usa las flechas para sumar o restar Step."), L.T("Percent mode reports the fraction: 0.04 reads 4 %. Use the arrow keys to add or remove step.", "El modo porcentaje informa la fracción: 0.04 se lee 4 %. Usa las flechas para sumar o restar step."))"
+               Code="@PercentCode" React="number-input/percent">
+        <div class="docs-grid-2">
+            <NumberInput Label="@L.T("Pension contribution", "Aporte a pensión")" Mode="NumberInputMode.Percent" Decimals="1" Min="0" Max="1" Step="0.5m" @bind-Value="_pension" />
+            <NumberInput Label="@L.T("Overtime hours", "Horas extra")" Min="0" Max="48" Suffix="h" HelperText="@L.T("Between 0 and 48.", "Entre 0 y 48.")" @bind-Value="_hours" />
+        </div>
+        <p class="docs-demo-output">@L.T("Values:", "Valores:") <strong>@_pension.ToString(CultureInfo.InvariantCulture)</strong> · <strong>@_hours</strong></p>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <p>
+        @L.T("Use NumberInput for quantities people type and you calculate with: salaries, prices, hours, percentages, rates. It shows the number the way people read it in their country (1.234.567,50 in Colombia, 1,234,567.50 in the United States) and gives your code a clean number. Do not use it for identifiers that only look like numbers, such as document numbers, account numbers, ZIP codes or phone numbers: they can start with 0 and are never added up, so use TextInput or PhoneInput.",
+             "Usa NumberInput para cantidades que las personas escriben y con las que calculas: salarios, precios, horas, porcentajes, tasas. Muestra el número como se lee en cada país (1.234.567,50 en Colombia, 1,234,567.50 en Estados Unidos) y le entrega a tu código un número limpio. No lo uses para identificadores que solo parecen números, como números de documento, de cuenta, códigos postales o teléfonos: pueden empezar con 0 y nunca se suman, así que usa TextInput o PhoneInput.")
+    </p>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li>@F.Pick(L.T("Pick the bound type: int or long for whole numbers, decimal for money, decimal or double for rates. Use the nullable form (decimal?) when the field may be empty.", "Elige el tipo enlazado: int o long para enteros, decimal para dinero, decimal o double para tasas. Usa la versión anulable (decimal?) cuando el campo pueda quedar vacío."), L.T("Keep the value in state as number | null: null is an empty field. Pass value and onValueChange, or defaultValue for uncontrolled use.", "Guarda el valor en el estado como number | null: null es un campo vacío. Pasa value y onValueChange, o defaultValue para uso no controlado."))</li>
+        <li>@F.Pick(L.T("Set Culture to the culture of your users, for example CultureInfo.GetCultureInfo(\"es-CO\"). Without it the field uses CultureInfo.CurrentCulture.", "Asigna Culture con la cultura de tus usuarios, por ejemplo CultureInfo.GetCultureInfo(\"es-CO\"). Sin ella, el campo usa CultureInfo.CurrentCulture."), L.T("Set locale to the locale of your users, for example 'es-CO'. Without it the field uses the browser's locale, so the same page can read 1.500 as one thousand five hundred or as one and a half.", "Asigna locale con el locale de tus usuarios, por ejemplo 'es-CO'. Sin él, el campo usa el locale del navegador, así que la misma página puede leer 1.500 como mil quinientos o como uno y medio."))</li>
+        <li>@F.Pick(L.T("Choose the Mode: Number, Currency (the culture's symbol or CurrencySymbol as prefix) or Percent (the value is a fraction).", "Elige el Mode: Number, Currency (el símbolo de la cultura o CurrencySymbol como prefijo) o Percent (el valor es una fracción)."), L.T("Choose the mode: 'number', 'currency' (pass currency, an ISO code such as 'COP', for its symbol and digits; currencySymbol overrides the symbol) or 'percent' (the value is a fraction).", "Elige el mode: 'number', 'currency' (pasa currency, un código ISO como 'COP', para su símbolo y sus decimales; currencySymbol reemplaza el símbolo) o 'percent' (el valor es una fracción)."))</li>
+        <li>@F.Pick(L.T("Fix the precision with Decimals, limit the range with Min and Max, and set Step for the arrow keys.", "Fija la precisión con Decimals, limita el rango con Min y Max y define Step para las flechas."), L.T("Fix the precision with decimals (decimals={0} for whole numbers), limit the range with min and max, and set step for the arrow keys.", "Fija la precisión con decimals (decimals={0} para enteros), limita el rango con min y max y define step para las flechas."))</li>
+        <li>@F.Pick(L.T("Validate with an EditForm ([Required], [Range]) or pass Error.", "Valida con un EditForm ([Required], [Range]) o pasa Error."), L.T("Validate your state (for example value === null when it is required) and pass the message as error.", "Valida tu estado (por ejemplo value === null cuando es obligatorio) y pasa el mensaje en error."))</li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("How typing works", "Cómo funciona la escritura")</h3>
+    <ul>
+        <li>@L.T("While the user types, the text stays as typed. The value is read and formatted when the field loses focus or on Enter, so the cursor never jumps.", "Mientras el usuario escribe, el texto queda tal cual. El valor se lee y se formatea cuando el campo pierde el foco o con Enter, así el cursor nunca salta.")</li>
+        <li>@L.T("Group separators, the currency symbol, the prefix, the suffix and % are ignored when reading, so pasting \"$ 2.500,75\" works in es-CO.", "Al leer se ignoran los separadores de miles, el símbolo de moneda, el prefijo, el sufijo y %, así que pegar \"$ 2.500,75\" funciona en es-CO.")</li>
+        <li>@L.T("Values outside the range are clamped to the limit, and extra decimals are rounded half away from zero.", "Los valores fuera del rango se ajustan al límite, y los decimales de más se redondean alejándose de cero en el punto medio.")</li>
+        <li>@F.Pick(L.T("Text that is not a number keeps showing what was typed, plus ParseErrorMessage; the bound value does not change. Empty text sets a nullable value to null.", "Un texto que no es número sigue mostrando lo que se escribió, junto con ParseErrorMessage; el valor enlazado no cambia. El texto vacío deja un valor anulable en null."), L.T("Text that is not a number keeps showing what was typed, plus parseErrorMessage; onValueChange is not called. Empty text reports null.", "Un texto que no es número sigue mostrando lo que se escribió, junto con parseErrorMessage; no se llama a onValueChange. El texto vacío informa null."))</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Binding and validation", "Enlace y validación")</h3>
+    <CodeBlock Language="@F.Pick("razor", "tsx")" Code="@F.Pick(BindCode, ReactBindCode)" />
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li>@L.T("ArrowUp and ArrowDown add or remove the step, within the limits. From an empty field they start at the minimum, or 0.", "ArrowUp y ArrowDown suman o restan el paso, dentro de los límites. Desde un campo vacío empiezan en el mínimo, o en 0.")</li>
+        <li>@F.Pick(L.T("The input has role=\"spinbutton\" with aria-valuenow, aria-valuemin and aria-valuemax, in bound units.", "El input tiene role=\"spinbutton\" con aria-valuenow, aria-valuemin y aria-valuemax, en unidades del valor enlazado."), L.T("The input has role=\"spinbutton\" with aria-valuenow, aria-valuemin and aria-valuemax in bound units, and aria-valuetext with the formatted text and its affixes (\"4 %\"), which screen readers announce.", "El input tiene role=\"spinbutton\" con aria-valuenow, aria-valuemin y aria-valuemax en unidades del valor, y aria-valuetext con el texto formateado y sus afijos (\"4 %\"), que es lo que anuncian los lectores de pantalla."))</li>
+        <li>@L.T("Phones show a numeric keypad (inputmode numeric for whole numbers, decimal otherwise). The prefix and suffix are hidden from screen readers, so name the unit in the label when it matters.", "Los teléfonos muestran un teclado numérico (inputmode numeric para enteros, decimal en los demás casos). El prefijo y el sufijo se ocultan a los lectores de pantalla, así que nombra la unidad en la etiqueta cuando importe.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@F.Pick(L.T("Percent mode with an int: 15 % is stored as 0.15, so it needs decimal, double or float. The component throws a clear error otherwise.", "El modo porcentaje con int: 15 % se guarda como 0.15, así que necesita decimal, double o float. Si no, el componente lanza un error claro."), L.T("Percent mode with whole-number thinking: 15 % is reported as 0.15, and min, max and the stored value are fractions too (max={1} is 100 %).", "Pensar el modo porcentaje en enteros: 15 % se informa como 0.15, y min, max y el valor guardado también son fracciones (max={1} es 100 %)."))</li>
+        <li>@F.Pick(L.T("Money in double: use decimal so cents do not drift.", "Dinero en double: usa decimal para que los centavos no se desvíen."), L.T("Money as floating point: JavaScript numbers are binary floats, so for amounts with cents store the rounded value (decimals) or convert to integer cents before sending it to the server.", "Dinero como punto flotante: los números de JavaScript son flotantes binarios, así que para montos con centavos guarda el valor redondeado (decimals) o conviértelo a centavos enteros antes de enviarlo al servidor."))</li>
+        <li>@L.T("Leaving the culture to the browser or server default: users in another country would read and type a different decimal separator.", "Dejar la cultura al valor por defecto del navegador o del servidor: usuarios de otro país leerían y escribirían otro separador decimal.")</li>
+        <li>@L.T("Expecting a change on every key: the value updates on blur, Enter or an arrow key.", "Esperar un cambio en cada tecla: el valor se actualiza al perder el foco, con Enter o con una flecha.")</li>
+    </ul>
+
+    <ApiTable Params="Params" ReactParams="ReactParams" />
+</DocPage>
+
+@code {
+    private readonly CultureInfo _colombia = CultureInfo.GetCultureInfo("es-CO");
+    private readonly CultureInfo _us = CultureInfo.GetCultureInfo("en-US");
+    private decimal _salary = 3_500_000m;
+    private decimal? _bonus;
+    private decimal _pension = 0.04m;
+    private int _hours = 6;
+
+    private const string BindCode = """
+        <EditForm Model="_payroll" OnValidSubmit="Save">
+            <DataAnnotationsValidator />
+            <NumberInput Label="Base salary" Mode="NumberInputMode.Currency" Decimals="0"
+                         Culture="@CultureInfo.GetCultureInfo("es-CO")" @bind-Value="_payroll.Salary" />
+        </EditForm>
+
+        @code {
+            private sealed class Payroll
+            {
+                [Required(ErrorMessage = "Enter the base salary.")]
+                [Range(1, 1_000_000_000, ErrorMessage = "Enter the base salary.")]
+                public decimal? Salary { get; set; }
+            }
+        }
+        """;
+
+    private const string ReactBindCode = """
+        const [salary, setSalary] = useState<number | null>(null);
+        const [submitted, setSubmitted] = useState(false);
+
+        const error = submitted && (salary === null || salary <= 0)
+          ? 'Enter the base salary.'
+          : undefined;
+
+        <NumberInput label="Base salary" mode="currency" currency="COP" locale="es-CO"
+                     decimals={0} min={0} required
+                     value={salary} onValueChange={setSalary} error={error} />
+        """;
+
+    private const string CurrencyCode = """
+        <NumberInput Label="Base salary" Mode="NumberInputMode.Currency" CurrencySymbol="COP" Decimals="0"
+                     Culture="@CultureInfo.GetCultureInfo("es-CO")" Min="0" @bind-Value="_salary" />
+
+        <NumberInput Label="Bonus (USD)" Mode="NumberInputMode.Currency"
+                     Culture="@CultureInfo.GetCultureInfo("en-US")" @bind-Value="_bonus" />
+
+        @code {
+            private decimal _salary = 3_500_000m;
+            private decimal? _bonus;
+        }
+        """;
+
+    private const string PercentCode = """
+        <NumberInput Label="Pension contribution" Mode="NumberInputMode.Percent"
+                     Decimals="1" Min="0" Max="1" Step="0.5m" @bind-Value="_pension" />
+
+        <NumberInput Label="Overtime hours" Min="0" Max="48" Suffix="h" @bind-Value="_hours" />
+
+        @code {
+            private decimal _pension = 0.04m; // 4 %
+            private int _hours = 6;
+        }
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("TValue", "int, long, short, decimal, double, float (or nullable)", L.T("inferred", "inferido"), L.T("Bound type. Empty text clears a nullable value.", "Tipo enlazado. El texto vacío limpia un valor anulable.")),
+        new("Value", "TValue", null, L.T("Current value. Supports @bind-Value.", "Valor actual. Admite @bind-Value.")),
+        new("ValueChanged", "EventCallback<TValue>", null, L.T("Raised when the field loses focus with a new value, or on an arrow key.", "Se dispara cuando el campo pierde el foco con un valor nuevo, o con una flecha.")),
+        new("ValueExpression", "Expression<Func<TValue>>?", null, L.T("Set by @bind-Value. Links the field to the EditContext of an EditForm.", "Lo asigna @bind-Value. Vincula el campo al EditContext de un EditForm.")),
+        new("Mode", "NumberInputMode", "Number", L.T("Number, Currency or Percent. Percent binds the fraction (0.15 = 15 %), so it needs decimal, double or float.", "Number, Currency o Percent. Percent enlaza la fracción (0.15 = 15 %), así que necesita decimal, double o float.")),
+        new("Min", "decimal?", null, L.T("Smallest value, in bound units. Typed and stepped values are clamped.", "Valor mínimo, en unidades del valor enlazado. Lo escrito y los pasos se limitan.")),
+        new("Max", "decimal?", null, L.T("Largest value, in bound units. Typed and stepped values are clamped.", "Valor máximo, en unidades del valor enlazado. Lo escrito y los pasos se limitan.")),
+        new("Step", "decimal", "1", L.T("Added or removed by ArrowUp and ArrowDown. Percentage points in percent mode.", "Se suma o resta con ArrowUp y ArrowDown. Puntos porcentuales en modo porcentaje.")),
+        new("Decimals", "int?", L.T("by type", "según el tipo"), L.T("Fixed decimals. Defaults to 0 for integers and to the culture's currency digits in currency mode.", "Decimales fijos. Por defecto 0 para enteros y los dígitos de moneda de la cultura en modo moneda.")),
+        new("Grouping", "bool", "true", L.T("Shows group separators.", "Muestra separadores de miles.")),
+        new("Culture", "CultureInfo?", L.T("current culture", "cultura actual"), L.T("Culture used to format and parse.", "Cultura usada para formatear y leer.")),
+        new("CurrencySymbol", "string?", null, L.T("Currency prefix, such as COP. Defaults to the culture's symbol.", "Prefijo de moneda, como COP. Por defecto, el símbolo de la cultura.")),
+        new("Prefix / Suffix", "string?", null, L.T("Text inside the field, before or after the value.", "Texto dentro del campo, antes o después del valor.")),
+        new("ParseErrorMessage", "string", "\"Enter a valid number.\"", L.T("Shown when the text is not a number.", "Se muestra cuando el texto no es un número.")),
+        new("Label, HelperText, Error, Required, Disabled, ReadOnly, Placeholder", "", null, L.T("Same as TextInput.", "Igual que en TextInput.")),
+        new("LeadingIcon / TrailingIcon", "RenderFragment?", null, L.T("Icons inside the field.", "Íconos dentro del campo.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("value", "number | null", null, L.T("Controlled value; null is an empty field. Pair it with onValueChange.", "Valor controlado; null es un campo vacío. Úsalo junto con onValueChange.")),
+        new("defaultValue", "number | null", "null", L.T("Initial value for uncontrolled use.", "Valor inicial para uso no controlado.")),
+        new("onValueChange", "(value: number | null) => void", null, L.T("Called on blur or Enter after typing, and on every ArrowUp or ArrowDown. Empty text reports null.", "Se llama al perder el foco o con Enter después de escribir, y con cada ArrowUp o ArrowDown. El texto vacío informa null.")),
+        new("mode", "'number' | 'currency' | 'percent'", "'number'", L.T("Percent reports the fraction (0.15 = 15 %).", "Percent informa la fracción (0.15 = 15 %).")),
+        new("locale", "string", L.T("browser locale", "locale del navegador"), L.T("BCP 47 locale used to format and parse, such as 'es-CO'.", "Locale BCP 47 usado para formatear y leer, como 'es-CO'.")),
+        new("currency", "string", "'USD'", L.T("ISO 4217 code for currency mode. Its symbol and digits are the defaults.", "Código ISO 4217 para el modo moneda. Su símbolo y sus decimales son los valores por defecto.")),
+        new("currencySymbol", "string", null, L.T("Currency prefix, such as COP. Defaults to the symbol of currency.", "Prefijo de moneda, como COP. Por defecto, el símbolo de currency.")),
+        new("min / max", "number", null, L.T("Range in bound units (fractions in percent mode). Typed and stepped values are clamped.", "Rango en unidades del valor (fracciones en modo porcentaje). Lo escrito y los pasos se limitan.")),
+        new("step", "number", "1", L.T("Added or removed by ArrowUp and ArrowDown. Percentage points in percent mode.", "Se suma o resta con ArrowUp y ArrowDown. Puntos porcentuales en modo porcentaje.")),
+        new("decimals", "number", L.T("by mode", "según el modo"), L.T("Fixed decimals. Defaults to the currency digits in currency mode and to as many as needed otherwise; use 0 for whole numbers.", "Decimales fijos. Por defecto, los decimales de la moneda en modo moneda y los necesarios en los demás; usa 0 para enteros.")),
+        new("grouping", "boolean", "true", L.T("Shows group separators.", "Muestra separadores de miles.")),
+        new("prefix / suffix", "string", null, L.T("Text inside the field, before or after the value. Override the currency symbol and the percent sign.", "Texto dentro del campo, antes o después del valor. Reemplazan el símbolo de moneda y el signo de porcentaje.")),
+        new("parseErrorMessage", "string", "'Enter a valid number.'", L.T("Shown when the text is not a number. error wins over it.", "Se muestra cuando el texto no es un número. error tiene prioridad.")),
+        new("label, helperText, error, required, disabled, readOnly, placeholder", "", null, L.T("Same as TextInput.", "Igual que en TextInput.")),
+        new("leadingIcon / trailingIcon", "ReactNode", null, L.T("Icons inside the field.", "Íconos dentro del campo.")),
+        new("...rest", "ComponentPropsWithRef<'input'>", null, L.T("Any other input attribute, including ref, name, onBlur and onKeyDown.", "Cualquier otro atributo de input, incluidos ref, name, onBlur y onKeyDown.")),
+    ];
+}

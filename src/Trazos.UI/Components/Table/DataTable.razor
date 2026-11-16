@@ -1,14 +1,25 @@
 @namespace Trazos.UI.Components
 @typeparam TItem
 
+<CascadingValue TValue="IDataTableSortContext" Value="this" IsFixed="true">
 <div class="trazos-table-wrapper @Class">
+    @if (Toolbar != null)
+    {
+        <div class="trazos-table-toolbar">@Toolbar</div>
+    }
     <div class="trazos-table-container">
-        <table class="trazos-table">
+        <table class="trazos-table" aria-label="@AriaLabel">
             @if (TableHeader != null)
             {
                 <thead class="trazos-table-head">
                     <tr>
                         @TableHeader
+                        @if (RowActions != null)
+                        {
+                            <th class="trazos-table-actions-head" scope="col">
+                                <VisuallyHidden>@ActionsLabel</VisuallyHidden>
+                            </th>
+                        }
                     </tr>
                 </thead>
             }
@@ -44,13 +55,39 @@
                 {
                     @foreach (var item in Items)
                     {
-                        <tr class="trazos-table-row @(OnRowClick.HasDelegate ? "interactive" : "")"
-                            @onclick="() => HandleRowClick(item)">
+                        <tr class="trazos-table-row @(IsInteractive ? "interactive" : "")"
+                            tabindex="@(IsInteractive ? "0" : null)"
+                            @onclick="() => HandleRowClick(item)"
+                            @onkeydown="e => HandleRowKeyDown(e, item)">
                             @RowTemplate(item)
+                            @if (RowActions != null)
+                            {
+                                <td class="trazos-table-actions" @onclick:stopPropagation="true" @onkeydown:stopPropagation="true">
+                                    <div class="trazos-table-actions-inner">@RowActions(item)</div>
+                                </td>
+                            }
                         </tr>
                     }
                 }
             </tbody>
+
+            @if (TableFooter != null)
+            {
+                <tfoot class="trazos-table-foot">
+                    <tr>
+                        @TableFooter
+                        @if (RowActions != null)
+                        {
+                            <td></td>
+                        }
+                    </tr>
+                </tfoot>
+            }
         </table>
     </div>
+    @if (Pagination != null)
+    {
+        <div class="trazos-table-pagination">@Pagination</div>
+    }
 </div>
+</CascadingValue>

@@ -1,0 +1,66 @@
+@namespace Trazos.UI.Components
+@typeparam TItem
+@inherits FormFieldBase<List<TItem>>
+
+<fieldset id="@Id" class="trazos-choice-group @(Inline ? "is-inline" : "") @FieldStateClass @Class"
+          role="group" aria-invalid="@AriaInvalid" aria-describedby="@DescribedBy" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <legend class="trazos-choice-legend">
+            @Label
+            @if (Required)
+            {
+                <span class="trazos-choice-required" aria-hidden="true">*</span>
+            }
+        </legend>
+    }
+    <div class="trazos-choice-options">
+        @for (var i = 0; i < Options.Count; i++)
+        {
+            var option = Options[i];
+            var inputId = $"{Id}-{i}";
+            var isChecked = Value?.Contains(option.Value) == true;
+            var isDisabled = Disabled || option.Disabled;
+            <label for="@inputId" class="trazos-choice @(isDisabled ? "is-disabled" : "")">
+                <input type="checkbox" id="@inputId" class="trazos-choice-input is-checkbox"
+                       checked="@isChecked" disabled="@isDisabled" @onchange="e => ToggleAsync(option.Value, e)" />
+                <span class="trazos-choice-text">@option.Text</span>
+            </label>
+        }
+    </div>
+    @if (HasError)
+    {
+        <p id="@ErrorId" class="trazos-choice-error" role="alert">@ErrorMessage</p>
+    }
+    else if (HasHelperText)
+    {
+        <p id="@HelperId" class="trazos-choice-helper">@HelperText</p>
+    }
+</fieldset>
+
+@code {
+    public CheckboxGroup() : base("trazos-checks") { }
+
+    [Parameter, EditorRequired]
+    public IReadOnlyList<SelectOption<TItem>> Options { get; set; } = [];
+
+    /// <summary>Lays the options out in a row that wraps.</summary>
+    [Parameter]
+    public bool Inline { get; set; }
+
+    // A new list in option order, so the bound value never aliases the old one.
+    private Task ToggleAsync(TItem item, ChangeEventArgs e)
+    {
+        var selected = new HashSet<TItem>(Value ?? []);
+        if (e.Value is true || string.Equals(e.Value?.ToString(), "true", StringComparison.OrdinalIgnoreCase))
+        {
+            selected.Add(item);
+        }
+        else
+        {
+            selected.Remove(item);
+        }
+
+        return SetValueAsync(Options.Select(o => o.Value).Where(selected.Contains).ToList());
+    }
+}

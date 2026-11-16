@@ -1,7 +1,74 @@
 @page "/components/data-table"
 
 <DocPage Title="DataTable" Category="@L.T("Display", "Visualización")"
-         Lead="@L.T("A generic, responsive table with loading skeletons, an empty state and optional row clicks.", "Una tabla genérica y adaptable con esqueletos de carga, un estado vacío y clic opcional en las filas.")">
+         Lead="@L.T("A generic, responsive table with loading skeletons, an empty state, row clicks, sortable columns, a toolbar, a totals row, row actions and pagination.", "Una tabla genérica y adaptable con esqueletos de carga, estado vacío, clic en filas, columnas ordenables, barra de herramientas, fila de totales, acciones por fila y paginación.")">
+
+    <DemoBlock Title="@L.T("Sorting, toolbar, totals, actions and pagination", "Orden, barra, totales, acciones y paginación")"
+               Description="@F.Pick(L.T("SortHeader reports the sort through SortChanged; the app sorts and pages the data, so the same markup works with a server. Add trazos-cell-numeric to right-align amounts.", "SortHeader informa el orden con SortChanged; la app ordena y pagina los datos, así que el mismo marcado sirve con un servidor. Agrega trazos-cell-numeric para alinear montos a la derecha."), L.T("SortHeader reports the sort through onSortChange; the app sorts and pages the data, so the same markup works with a server. Add trazos-cell-numeric to right-align amounts.", "SortHeader informa el orden con onSortChange; la app ordena y pagina los datos, así que el mismo marcado sirve con un servidor. Agrega trazos-cell-numeric para alinear montos a la derecha."))"
+               Code="@PayrollCode" React="data-table/payroll">
+        <div class="docs-stack">
+        <DataTable TItem="Payslip" Items="PageItems" Sort="_sort" SortChanged="s => _sort = s"
+                   ActionsLabel="@L.T("Actions", "Acciones")" AriaLabel="@L.T("Payslips", "Desprendibles")">
+            <Toolbar>
+                <TextInput Placeholder="@L.T("Filter by name", "Filtrar por nombre")" @bind-Value="Filter" Class="docs-table-filter" />
+            </Toolbar>
+            <TableHeader>
+                <SortHeader Field="name">@L.T("Employee", "Empleado")</SortHeader>
+                <SortHeader Field="net" Align="TableAlign.End">@L.T("Net pay", "Neto a pagar")</SortHeader>
+            </TableHeader>
+            <RowTemplate Context="slip">
+                <td>@slip.Name</td>
+                <td class="trazos-cell-numeric">@slip.Net.ToString("N0")</td>
+            </RowTemplate>
+            <RowActions Context="slip">
+                <Button Size="ButtonSize.Small" Variant="ButtonVariant.Ghost" OnClick="() => _opened = slip.Name">@L.T("View", "Ver")</Button>
+            </RowActions>
+            <TableFooter>
+                <td>@L.T("Total", "Total")</td>
+                <td class="trazos-cell-numeric">@Filtered.Sum(x => x.Net).ToString("N0")</td>
+            </TableFooter>
+            <Pagination>
+                <Pagination @bind-Page="_page" @bind-PageSize="_pageSize" TotalCount="Filtered.Count" PageSizeOptions="[3, 5, 10]"
+                            Label="@L.T("Pagination", "Paginación")" PreviousLabel="@L.T("Previous page", "Página anterior")" NextLabel="@L.T("Next page", "Página siguiente")"
+                            PageLabelFormat="@L.T("Page {0}", "Página {0}")" PageSizeLabel="@L.T("Rows per page", "Filas por página")" SummaryFormat="@L.T("{0}–{1} of {2}", "{0}–{1} de {2}")" />
+            </Pagination>
+        </DataTable>
+        <p class="docs-demo-output">@L.T("Opened:", "Abierto:") <strong>@(_opened ?? L.T("none", "ninguno"))</strong></p>
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Server-side sorting and paging", "Orden y paginación en el servidor")"
+               Description="@L.T("The sort and the page become the API query. The table shows skeleton rows while the request runs, and a new sort goes back to page 1.", "El orden y la página se convierten en la consulta a la API. La tabla muestra filas esqueleto mientras corre la petición, y un orden nuevo vuelve a la página 1.")"
+               Code="@ServerCode" React="data-table/server">
+        <div class="docs-stack">
+            <DataTable TItem="Order" Items="_orders" Loading="_ordersLoading" LoadingRows="_orderPageSize"
+                       Sort="_orderSort" SortChanged="OnOrderSortAsync" AriaLabel="@L.T("Orders", "Pedidos")">
+                <TableHeader>
+                    <SortHeader Field="id">@L.T("Order", "Pedido")</SortHeader>
+                    <SortHeader Field="customer">@L.T("Customer", "Cliente")</SortHeader>
+                    <th class="trazos-cell-center">@L.T("Status", "Estado")</th>
+                    <SortHeader Field="total" Align="TableAlign.End">@L.T("Total", "Total")</SortHeader>
+                </TableHeader>
+                <RowTemplate Context="order">
+                    <td>#@order.Id</td>
+                    <td>@order.Customer</td>
+                    <td class="trazos-cell-center">
+                        <Badge Variant="@(order.Shipped ? BadgeVariant.Success : BadgeVariant.Info)">
+                            @(order.Shipped ? L.T("Shipped", "Enviado") : L.T("Preparing", "En preparación"))
+                        </Badge>
+                    </td>
+                    <td class="trazos-cell-numeric">@order.Total.ToString("N0")</td>
+                </RowTemplate>
+                <Pagination>
+                    <Pagination Page="_orderPage" PageChanged="OnOrderPageAsync" PageSize="_orderPageSize" PageSizeChanged="OnOrderPageSizeAsync"
+                                TotalCount="_orderTotal" PageSizeOptions="[5, 10, 20]"
+                                Label="@L.T("Pagination", "Paginación")" PreviousLabel="@L.T("Previous page", "Página anterior")" NextLabel="@L.T("Next page", "Página siguiente")"
+                                PageLabelFormat="@L.T("Page {0}", "Página {0}")" PageSizeLabel="@L.T("Rows per page", "Filas por página")" SummaryFormat="@L.T("{0}–{1} of {2}", "{0}–{1} de {2}")" />
+                </Pagination>
+            </DataTable>
+            <p class="docs-demo-output">@L.T("Request:", "Petición:") <code>/api/orders?@OrderQuery</code></p>
+        </div>
+    </DemoBlock>
 
     <DemoBlock Title="@L.T("Rows and row clicks", "Filas y clic en filas")" Code="@BasicCode" React="data-table/rows">
         <div class="docs-stack">
@@ -53,11 +120,294 @@
         </div>
     </DemoBlock>
 
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <p>
+        @L.T("Use DataTable for records people compare across columns: employees, invoices, orders, payslips. Each row is one item and each column one attribute. For a handful of key-value pairs about one item use DescriptionList, and for rich cards with images use a grid of Card components instead.",
+             "Usa DataTable para registros que las personas comparan entre columnas: empleados, facturas, pedidos, desprendibles. Cada fila es un elemento y cada columna un atributo. Para unos pocos pares clave-valor de un solo elemento usa DescriptionList, y para tarjetas con imágenes usa una cuadrícula de Card.")
+    </p>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li>@F.Pick(L.T("Pass the rows in Items and set TItem when it cannot be inferred.", "Pasa las filas en Items y define TItem cuando no se pueda inferir."), L.T("Pass the rows in items; give getRowKey a stable id so React keeps rows apart when they are sorted or paged.", "Pasa las filas en items; dale a getRowKey un id estable para que React distinga las filas al ordenar o paginar."))</li>
+        <li>@F.Pick(L.T("Write the header cells in TableHeader and the cells of one row in RowTemplate. The table provides every <tr>; write only <th> and <td>.", "Escribe las celdas del encabezado en TableHeader y las de una fila en RowTemplate. La tabla pone cada <tr>; escribe solo <th> y <td>."), L.T("Write the header cells in tableHeader and the cells of one row in rowTemplate. The table provides every <tr>; write only <th> and <td> inside a fragment.", "Escribe las celdas del encabezado en tableHeader y las de una fila en rowTemplate. La tabla pone cada <tr>; escribe solo <th> y <td> dentro de un fragmento."))</li>
+        <li>@F.Pick(L.T("For sortable columns use <SortHeader Field=\"...\"> instead of <th>, keep a TableSort? field and bind Sort and SortChanged. Sort Items yourself with Field and Descending.", "Para columnas ordenables usa <SortHeader Field=\"...\"> en lugar de <th>, guarda un campo TableSort? y enlaza Sort y SortChanged. Ordena Items tú mismo con Field y Descending."), L.T("For sortable columns use <SortHeader field=\"...\"> instead of <th>, keep a TableSort | null in state and pass sort and onSortChange. Sort items yourself with field and descending.", "Para columnas ordenables usa <SortHeader field=\"...\"> en lugar de <th>, guarda un TableSort | null en el estado y pasa sort y onSortChange. Ordena items tú mismo con field y descending."))</li>
+        <li>@F.Pick(L.T("Put filters or a search box in Toolbar and a Pagination in the Pagination slot; both sit inside the table frame.", "Pon filtros o un buscador en Toolbar y un Pagination en el slot Pagination; ambos quedan dentro del marco de la tabla."), L.T("Put filters or a search box in toolbar and a Pagination in pagination; both sit inside the table frame.", "Pon filtros o un buscador en toolbar y un Pagination en pagination; ambos quedan dentro del marco de la tabla."))</li>
+        <li>@F.Pick(L.T("Add RowActions for per-row buttons, TableFooter for totals and Loading while data is on its way.", "Agrega RowActions para botones por fila, TableFooter para totales y Loading mientras llegan los datos."), L.T("Add rowActions for per-row buttons, tableFooter for totals and loading while data is on its way.", "Agrega rowActions para botones por fila, tableFooter para totales y loading mientras llegan los datos."))</li>
+        <li>@F.Pick(L.T("Name the table with AriaLabel and translate EmptyMessage and ActionsLabel.", "Nombra la tabla con AriaLabel y traduce EmptyMessage y ActionsLabel."), L.T("Name the table with ariaLabel and translate emptyMessage and actionsLabel.", "Nombra la tabla con ariaLabel y traduce emptyMessage y actionsLabel."))</li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Client-side or server-side sorting and paging", "Orden y paginación en el cliente o en el servidor")</h3>
+    <p>
+        @L.T("The table never reorders or slices the rows: it only reports what the user asked for. A new column sorts ascending, clicking the same column again flips the direction. With every row in memory, sort the list with the reported field and direction, then take the current page. With a server, turn the sort and the page into the query, show Loading while it runs, and pass the total from the response to Pagination. Go back to page 1 when the sort or a filter changes.",
+             "La tabla nunca reordena ni recorta las filas: solo informa lo que pidió el usuario. Una columna nueva ordena de forma ascendente y volver a hacer clic en la misma invierte el sentido. Con todas las filas en memoria, ordena la lista con el campo y el sentido informados y luego toma la página actual. Con un servidor, convierte el orden y la página en la consulta, muestra Loading mientras corre y pasa a Pagination el total de la respuesta. Vuelve a la página 1 cuando cambien el orden o un filtro.")
+    </p>
+    <CodeBlock Language="@F.Pick("razor", "tsx")" Code="@F.Pick(QueryCode, ReactQueryCode)" />
+
+    <h3 class="docs-h3">@L.T("Row clicks or row actions", "Clic en la fila o acciones por fila")</h3>
+    <ul>
+        <li>@F.Pick(L.T("OnRowClick suits one obvious action per row, usually opening the detail. Rows get a pointer cursor, become focusable and open with Enter.", "OnRowClick sirve para una acción evidente por fila, normalmente abrir el detalle. Las filas muestran el cursor de mano, reciben foco y se abren con Enter."), L.T("onRowClick suits one obvious action per row, usually opening the detail. Rows get a pointer cursor, become focusable and open with Enter or Space.", "onRowClick sirve para una acción evidente por fila, normalmente abrir el detalle. Las filas muestran el cursor de mano, reciben foco y se abren con Enter o Espacio."))</li>
+        <li>@F.Pick(L.T("RowActions suits several or destructive actions (edit, approve, delete). They go in a last column whose header has a screen-reader name (ActionsLabel); clicks and keys there never raise OnRowClick.", "RowActions sirve para varias acciones o acciones destructivas (editar, aprobar, eliminar). Van en una última columna cuyo encabezado tiene un nombre para lectores de pantalla (ActionsLabel); los clics y teclas allí nunca disparan OnRowClick."), L.T("rowActions suits several or destructive actions (edit, approve, delete). They go in a last column whose header has a screen-reader name (actionsLabel); clicks and keys there never call onRowClick.", "rowActions sirve para varias acciones o acciones destructivas (editar, aprobar, eliminar). Van en una última columna cuyo encabezado tiene un nombre para lectores de pantalla (actionsLabel); los clics y teclas allí nunca llaman a onRowClick."))</li>
+        <li>@L.T("Both can be combined. Do not put links or buttons inside regular cells of a clickable row: use the actions column for them.", "Ambos se pueden combinar. No pongas enlaces ni botones en las celdas normales de una fila clicable: usa la columna de acciones.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Totals rows and alignment", "Filas de totales y alineación")</h3>
+    <p>
+        @F.Pick(L.T("TableFooter renders a <tfoot> row in bold over a muted background. Write one <td> per column; the table adds the empty cell under the actions column. Compute totals from the filtered rows, not only the visible page, when the total is about the whole result.", "TableFooter renderiza una fila <tfoot> en negrita sobre un fondo suave. Escribe una <td> por columna; la tabla agrega la celda vacía bajo la columna de acciones. Calcula los totales con las filas filtradas, no solo con la página visible, cuando el total se refiere a todo el resultado."), L.T("tableFooter renders a <tfoot> row in bold over a muted background. Write one <td> per column; the table adds the empty cell under the actions column. Compute totals from the filtered rows, not only the visible page, when the total is about the whole result.", "tableFooter renderiza una fila <tfoot> en negrita sobre un fondo suave. Escribe una <td> por columna; la tabla agrega la celda vacía bajo la columna de acciones. Calcula los totales con las filas filtradas, no solo con la página visible, cuando el total se refiere a todo el resultado."))
+        @L.T("Add trazos-cell-numeric to amounts (right-aligned, tabular figures, no wrapping), trazos-cell-end to right-align anything else and trazos-cell-center to center badges or icons. Use the same class on the header, body and footer cells of a column.", "Agrega trazos-cell-numeric a los montos (alineados a la derecha, cifras tabulares, sin salto de línea), trazos-cell-end para alinear a la derecha cualquier otra cosa y trazos-cell-center para centrar insignias o íconos. Usa la misma clase en las celdas de encabezado, cuerpo y pie de una columna.")
+    </p>
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li>@L.T("Sortable headers are buttons inside the <th>: Tab reaches them, Enter or Space sorts. The <th> carries aria-sort (none, ascending or descending), so screen readers announce the current order.", "Los encabezados ordenables son botones dentro del <th>: Tab llega a ellos y Enter o Espacio ordenan. El <th> lleva aria-sort (none, ascending o descending), así los lectores de pantalla anuncian el orden actual.")</li>
+        <li>@L.T("Clickable rows join the tab order and show a focus bar on the left. Buttons in the actions column keep their own keyboard behavior.", "Las filas clicables entran en el orden de tabulación y muestran una barra de foco a la izquierda. Los botones de la columna de acciones conservan su propio comportamiento de teclado.")</li>
+        <li>@L.T("Give every table an accessible name, especially when a page has more than one, and make action button text specific (\"Edit Ana\") or add an aria-label.", "Dale a cada tabla un nombre accesible, sobre todo si la página tiene más de una, y haz específico el texto de los botones de acción (\"Editar Ana\") o agrega un aria-label.")</li>
+        <li>@L.T("Wide tables scroll horizontally inside their frame instead of breaking the page.", "Las tablas anchas se desplazan en horizontal dentro de su marco en lugar de romper la página.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@L.T("Expecting the table to sort: it only reports the sort; without your own sorting the order never changes.", "Esperar que la tabla ordene: solo informa el orden; si no ordenas tú, el orden nunca cambia.")</li>
+        <li>@L.T("Writing <tr> in the header, row or footer template: the table already renders it, so the markup ends up nested and invalid.", "Escribir <tr> en la plantilla del encabezado, de la fila o del pie: la tabla ya lo renderiza, así que el marcado queda anidado e inválido.")</li>
+        <li>@L.T("A header with fewer cells than the rows: keep one header cell per column so columns line up and screen readers can name each cell.", "Un encabezado con menos celdas que las filas: mantén una celda de encabezado por columna para que las columnas se alineen y los lectores de pantalla puedan nombrar cada celda.")</li>
+        <li>@L.T("Forgetting to return to page 1 after a new sort or filter, which can leave the user on an empty page.", "Olvidar volver a la página 1 después de un orden o un filtro nuevos, lo que puede dejar al usuario en una página vacía.")</li>
+        <li>@L.T("The default empty message is in Spanish (\"No hay registros disponibles.\"); set it for other languages.", "El mensaje vacío predeterminado está en español (\"No hay registros disponibles.\"); defínelo para otros idiomas.")</li>
+    </ul>
+
     <ApiTable Params="Params" ReactParams="ReactParams" />
+    <ApiTable Title="SortHeader" Params="SortHeaderParams" ReactParams="ReactSortHeaderParams" />
 </DocPage>
 
 @code {
     private sealed record Person(string Name, string Group, bool Active);
+    private sealed record Payslip(string Name, decimal Net);
+
+    private static readonly Payslip[] Payslips =
+    [
+        new("Ana María Restrepo", 3_210_000), new("Julián Ospina", 4_580_000), new("Luisa Fernanda Gil", 2_890_000),
+        new("Tomás Arango", 5_120_000), new("Valentina Ríos", 3_760_000), new("Mateo Cárdenas", 2_450_000),
+        new("Sofía Londoño", 6_030_000), new("Samuel Duque", 3_340_000),
+    ];
+
+    private TableSort? _sort = new("name");
+    private int _page = 1;
+    private int _pageSize = 3;
+    private string? _filter;
+    private string? _opened;
+
+    private string? Filter
+    {
+        get => _filter;
+        set { _filter = value; _page = 1; }
+    }
+
+    private List<Payslip> Filtered
+    {
+        get
+        {
+            IEnumerable<Payslip> rows = Payslips.Where(p => string.IsNullOrWhiteSpace(_filter) || p.Name.Contains(_filter, StringComparison.CurrentCultureIgnoreCase));
+            rows = (_sort?.Field, _sort?.Descending) switch
+            {
+                ("net", true) => rows.OrderByDescending(p => p.Net),
+                ("net", _) => rows.OrderBy(p => p.Net),
+                ("name", true) => rows.OrderByDescending(p => p.Name),
+                _ => rows.OrderBy(p => p.Name),
+            };
+            return rows.ToList();
+        }
+    }
+
+    private IEnumerable<Payslip> PageItems => Filtered.Skip((_page - 1) * _pageSize).Take(_pageSize);
+
+    private const string PayrollCode = """
+        <DataTable TItem="Payslip" Items="PageItems" Sort="_sort" SortChanged="s => _sort = s">
+            <Toolbar>
+                <TextInput Placeholder="Filter by name" @bind-Value="Filter" />
+            </Toolbar>
+            <TableHeader>
+                <SortHeader Field="name">Employee</SortHeader>
+                <SortHeader Field="net" Align="TableAlign.End">Net pay</SortHeader>
+            </TableHeader>
+            <RowTemplate Context="slip">
+                <td>@slip.Name</td>
+                <td class="trazos-cell-numeric">@slip.Net.ToString("N0")</td>
+            </RowTemplate>
+            <RowActions Context="slip">
+                <Button Size="ButtonSize.Small" Variant="ButtonVariant.Ghost" OnClick="() => Open(slip)">View</Button>
+            </RowActions>
+            <TableFooter>
+                <td>Total</td>
+                <td class="trazos-cell-numeric">@Filtered.Sum(x => x.Net).ToString("N0")</td>
+            </TableFooter>
+            <Pagination>
+                <Pagination @bind-Page="_page" @bind-PageSize="_pageSize"
+                            TotalCount="Filtered.Count" PageSizeOptions="[10, 25, 50]" />
+            </Pagination>
+        </DataTable>
+
+        @code {
+            private TableSort? _sort = new("name");
+            private int _page = 1;
+            private int _pageSize = 10;
+
+            // Sort with _sort.Field / _sort.Descending, then Skip/Take for the page,
+            // in memory or in your API query.
+        }
+        """;
+
+    private sealed record Order(int Id, string Customer, decimal Total, bool Shipped);
+
+    private static readonly string[] Customers = ["Ana", "Julián", "Luisa", "Tomás", "Valentina", "Mateo", "Sofía", "Samuel"];
+
+    private static readonly Order[] OrderDatabase =
+        Enumerable.Range(0, 42).Select(i => new Order(5001 + i, Customers[i % Customers.Length], (i * 7919 % 900) * 1000m + 50_000m, i % 4 != 0)).ToArray();
+
+    private TableSort? _orderSort = new("id", Descending: true);
+    private int _orderPage = 1;
+    private int _orderPageSize = 5;
+    private int _orderTotal;
+    private bool _ordersLoading = true;
+    private IReadOnlyList<Order> _orders = [];
+
+    private string OrderQuery =>
+        $"sortBy={_orderSort?.Field ?? "id"}&desc={(_orderSort?.Descending ?? false).ToString().ToLowerInvariant()}&page={_orderPage}&pageSize={_orderPageSize}";
+
+    protected override async Task OnInitializedAsync()
+    {
+        _people = Seed;
+        await LoadOrdersAsync();
+    }
+
+    private async Task OnOrderSortAsync(TableSort? sort)
+    {
+        _orderSort = sort;
+        _orderPage = 1;
+        await LoadOrdersAsync();
+    }
+
+    private async Task OnOrderPageAsync(int page)
+    {
+        _orderPage = page;
+        await LoadOrdersAsync();
+    }
+
+    private Task OnOrderPageSizeAsync(int size)
+    {
+        // Pagination raises PageChanged(1) right after, which reloads.
+        _orderPageSize = size;
+        return Task.CompletedTask;
+    }
+
+    // Stands in for an HTTP call: the "server" sorts and pages.
+    private async Task LoadOrdersAsync()
+    {
+        _ordersLoading = true;
+        StateHasChanged();
+        await Task.Delay(600);
+        IEnumerable<Order> rows = (_orderSort?.Field, _orderSort?.Descending ?? false) switch
+        {
+            ("total", true) => OrderDatabase.OrderByDescending(o => o.Total),
+            ("total", false) => OrderDatabase.OrderBy(o => o.Total),
+            ("customer", true) => OrderDatabase.OrderByDescending(o => o.Customer),
+            ("customer", false) => OrderDatabase.OrderBy(o => o.Customer),
+            (_, true) => OrderDatabase.OrderByDescending(o => o.Id),
+            _ => OrderDatabase.OrderBy(o => o.Id),
+        };
+        _orders = rows.Skip((_orderPage - 1) * _orderPageSize).Take(_orderPageSize).ToList();
+        _orderTotal = OrderDatabase.Length;
+        _ordersLoading = false;
+    }
+
+    private const string ServerCode = """
+        <DataTable TItem="Order" Items="_orders" Loading="_loading" LoadingRows="_pageSize"
+                   Sort="_sort" SortChanged="OnSortAsync" AriaLabel="Orders">
+            <TableHeader>
+                <SortHeader Field="id">Order</SortHeader>
+                <SortHeader Field="customer">Customer</SortHeader>
+                <th class="trazos-cell-center">Status</th>
+                <SortHeader Field="total" Align="TableAlign.End">Total</SortHeader>
+            </TableHeader>
+            <RowTemplate Context="order">…</RowTemplate>
+            <Pagination>
+                <Pagination Page="_page" PageChanged="OnPageAsync" @bind-PageSize="_pageSize"
+                            TotalCount="_totalCount" PageSizeOptions="[5, 10, 20]" />
+            </Pagination>
+        </DataTable>
+
+        @code {
+            private TableSort? _sort = new("id", Descending: true);
+            private int _page = 1, _pageSize = 5, _totalCount;
+            private bool _loading;
+            private IReadOnlyList<Order> _orders = [];
+
+            protected override Task OnInitializedAsync() => LoadAsync();
+
+            private async Task OnSortAsync(TableSort? sort) { _sort = sort; _page = 1; await LoadAsync(); }
+
+            private async Task OnPageAsync(int page) { _page = page; await LoadAsync(); }
+
+            private async Task LoadAsync()
+            {
+                _loading = true;
+                // GET /api/orders?sortBy=total&desc=true&page=2&pageSize=5
+                var result = await Api.GetOrdersAsync(_sort?.Field, _sort?.Descending ?? false, _page, _pageSize);
+                _orders = result.Items;
+                _totalCount = result.TotalCount;
+                _loading = false;
+            }
+        }
+        """;
+
+    private const string QueryCode = """
+        // In memory: sort, then take the page.
+        IEnumerable<Payslip> rows = (_sort?.Field, _sort?.Descending) switch
+        {
+            ("net", true) => all.OrderByDescending(p => p.Net),
+            ("net", _) => all.OrderBy(p => p.Net),
+            ("name", true) => all.OrderByDescending(p => p.Name),
+            _ => all.OrderBy(p => p.Name),
+        };
+        var page = rows.Skip((_page - 1) * _pageSize).Take(_pageSize);
+
+        // On a server: send the same state as the query.
+        var url = $"/api/payslips?sortBy={_sort?.Field}&desc={_sort?.Descending}&page={_page}&pageSize={_pageSize}";
+        """;
+
+    private const string ReactQueryCode = """
+        // In memory: sort, then take the page.
+        const sorted = [...all].sort((a, b) => {
+          const order = sort?.field === 'net' ? a.net - b.net : a.name.localeCompare(b.name);
+          return sort?.descending ? -order : order;
+        });
+        const pageItems = sorted.slice((page - 1) * pageSize, page * pageSize);
+
+        // On a server: send the same state as the query.
+        const query = new URLSearchParams({
+          sortBy: sort?.field ?? 'name',
+          desc: String(sort?.descending ?? false),
+          page: String(page),
+          pageSize: String(pageSize),
+        });
+        fetch(`/api/payslips?${query}`);
+        """;
+
+    private IReadOnlyList<ApiParam> SortHeaderParams =>
+    [
+        new("Field", "string", "required", L.T("Name reported in TableSort.Field.", "Nombre informado en TableSort.Field.")),
+        new("Align", "TableAlign", "Start", L.T("Start, Center or End; End also flips the icon to the left of the text.", "Start, Center o End; End además pasa el ícono a la izquierda del texto.")),
+        new("ChildContent", "RenderFragment?", null, L.T("Header text.", "Texto del encabezado.")),
+        new("Class", "string?", null, L.T("Extra CSS classes on the <th>.", "Clases CSS adicionales en el <th>.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactSortHeaderParams =>
+    [
+        new("field", "string", "required", L.T("Name reported in TableSort.field.", "Nombre informado en TableSort.field.")),
+        new("align", "'start' | 'center' | 'end'", "'start'", L.T("Column alignment; 'end' also flips the icon to the left of the text.", "Alineación de la columna; 'end' además pasa el ícono a la izquierda del texto.")),
+        new("children", "ReactNode", null, L.T("Header text.", "Texto del encabezado.")),
+        new("className", "string", null, L.T("Extra CSS classes on the <th>.", "Clases CSS adicionales en el <th>.")),
+        new("...rest", "ComponentPropsWithRef<'th'>", null, L.T("Any other attribute of the <th>.", "Cualquier otro atributo del <th>.")),
+    ];
 
     private List<Person> Seed =>
     [
@@ -71,7 +421,6 @@
     private bool _loading;
     private Person? _selected;
 
-    protected override void OnInitialized() => _people = Seed;
 
     private async Task ReloadAsync()
     {
@@ -120,7 +469,17 @@
         new("EmptyMessage", "string", "\"No hay registros disponibles.\"", L.T("Default empty message.", "Mensaje vacío predeterminado.")),
         new("Loading", "bool", "false", L.T("Shows skeleton rows instead of data.", "Muestra filas esqueleto en lugar de datos.")),
         new("LoadingRows", "int", "3", L.T("Number of skeleton rows while loading.", "Cantidad de filas esqueleto mientras carga.")),
-        new("OnRowClick", "EventCallback<TItem>", null, L.T("Makes rows interactive and reports the clicked item.", "Hace las filas interactivas e informa el elemento en el que se hizo clic.")),
+        new("OnRowClick", "EventCallback<TItem>", null, L.T("Makes rows interactive and reports the clicked item. Rows become focusable and open with Enter.", "Hace las filas interactivas e informa el elemento en el que se hizo clic. Las filas reciben foco y se abren con Enter.")),
+        new("Sort", "TableSort?", null, L.T("Current sort (Field, Descending). The table does not sort Items.", "Orden actual (Field, Descending). La tabla no ordena Items.")),
+        new("SortChanged", "EventCallback<TableSort?>", null, L.T("Raised by SortHeader: a new column sorts ascending, the same column flips.", "Lo dispara SortHeader: una columna nueva ordena ascendente; la misma columna invierte el orden.")),
+        new("Toolbar", "RenderFragment?", null, L.T("Content above the table, such as filters.", "Contenido encima de la tabla, como filtros.")),
+        new("TableFooter", "RenderFragment?", null, L.T("Footer cells, such as totals. The <tr> is provided.", "Celdas del pie, como totales. El <tr> ya se incluye.")),
+        new("RowActions", "RenderFragment<TItem>?", null, L.T("Buttons in a last column. Their clicks do not raise OnRowClick.", "Botones en una última columna. Sus clics no disparan OnRowClick.")),
+        new("ActionsLabel", "string", "\"Actions\"", L.T("Screen-reader name of the actions column.", "Nombre para lectores de pantalla de la columna de acciones.")),
+        new("Pagination", "RenderFragment?", null, L.T("Content below the table, normally a Pagination.", "Contenido debajo de la tabla, normalmente un Pagination.")),
+        new("AriaLabel", "string?", null, L.T("Accessible name of the table.", "Nombre accesible de la tabla.")),
+        new("SortHeader", "Field, Align", null, L.T("Sortable <th> with aria-sort. Align: Start, Center or End.", "<th> ordenable con aria-sort. Align: Start, Center o End.")),
+        new("trazos-cell-numeric / -end / -center", "CSS class", null, L.T("Alignment for th and td. numeric also uses tabular figures.", "Alineación para th y td. numeric además usa cifras tabulares.")),
         new("Class", "string?", null, L.T("Extra CSS classes on the wrapper.", "Clases CSS adicionales en el contenedor.")),
     ];
 
@@ -135,6 +494,16 @@
         new("loading", "boolean", "false", L.T("Shows skeleton rows instead of data.", "Muestra filas esqueleto en lugar de datos.")),
         new("loadingRows", "number", "3", L.T("Number of skeleton rows while loading.", "Cantidad de filas esqueleto mientras carga.")),
         new("onRowClick", "(item: T) => void", null, L.T("Makes rows interactive (focusable, Enter and Space activate) and reports the clicked item.", "Hace las filas interactivas (enfocables, Enter y Espacio las activan) e informa el elemento en el que se hizo clic.")),
+        new("sort", "TableSort | null", null, L.T("Current sort { field, descending } (controlled). The table does not sort items.", "Orden actual { field, descending } (controlado). La tabla no ordena items.")),
+        new("defaultSort", "TableSort | null", "null", L.T("Initial sort when uncontrolled.", "Orden inicial sin control.")),
+        new("onSortChange", "(sort: TableSort) => void", null, L.T("Called by SortHeader: a new column sorts ascending, the same column flips.", "Lo llama SortHeader: una columna nueva ordena ascendente; la misma columna invierte el orden.")),
+        new("toolbar", "ReactNode", null, L.T("Content above the table, such as filters.", "Contenido encima de la tabla, como filtros.")),
+        new("tableFooter", "ReactNode", null, L.T("Footer cells (<td>), such as totals. The <tr> is provided.", "Celdas del pie (<td>), como totales. El <tr> ya se incluye.")),
+        new("rowActions", "(item: T) => ReactNode", null, L.T("Buttons in a last column. Their clicks and keys do not call onRowClick.", "Botones en una última columna. Sus clics y teclas no llaman a onRowClick.")),
+        new("actionsLabel", "string", "'Actions'", L.T("Screen-reader name of the actions column.", "Nombre para lectores de pantalla de la columna de acciones.")),
+        new("pagination", "ReactNode", null, L.T("Content below the table, normally a Pagination.", "Contenido debajo de la tabla, normalmente un Pagination.")),
+        new("ariaLabel", "string", null, L.T("Accessible name of the <table>.", "Nombre accesible de la <table>.")),
+        new("trazos-cell-numeric / -end / -center", "CSS class", null, L.T("Alignment for th and td. numeric also uses tabular figures.", "Alineación para th y td. numeric además usa cifras tabulares.")),
         new("className", "string", null, L.T("Extra CSS classes on the wrapper.", "Clases CSS adicionales en el contenedor.")),
         new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other attribute of the wrapper div, including ref.", "Cualquier otro atributo del div contenedor, incluido ref.")),
     ];

@@ -1,0 +1,146 @@
+@page "/components/phone-input"
+
+<DocPage Title="PhoneInput" Category="@L.T("Forms", "Formularios")"
+         Lead="@L.T("A country code picker plus the national number, bound as one string: \"+57 3001234567\". Spaces and dashes typed by the user are dropped.", "Un selector de indicativo más el número nacional, enlazados como un solo texto: \"+57 3001234567\". Los espacios y guiones que escribe el usuario se descartan.")">
+
+    <DemoBlock Code="@Code" React="phone-input/basic">
+        <div class="docs-stack">
+            <PhoneInput Label="@L.T("Mobile phone", "Celular")" Placeholder="300 123 4567" CountryLabel="@L.T("Country code", "Indicativo")" @bind-Value="_phone" />
+            <p class="docs-demo-output">@L.T("Value:", "Valor:") <strong>@(_phone ?? "null")</strong></p>
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Your own country list", "Tu propia lista de países")"
+               Description="@F.Pick(L.T("Pass Countries with translated names, in the order your users expect, and DefaultDialCode for the code shown while the value is empty.", "Pasa Countries con nombres traducidos, en el orden que esperan tus usuarios, y DefaultDialCode para el indicativo que se muestra mientras el valor está vacío."), L.T("Pass countries with translated names, in the order your users expect, and defaultDialCode for the code shown while the value is empty.", "Pasa countries con nombres traducidos, en el orden que esperan tus usuarios, y defaultDialCode para el indicativo que se muestra mientras el valor está vacío."))"
+               Code="@CountriesCode" React="phone-input/countries">
+        <div class="docs-stack">
+            <PhoneInput Label="@L.T("Phone", "Teléfono")" Countries="_countries" DefaultDialCode="+34" CountryLabel="@L.T("Country code", "Indicativo")" @bind-Value="_other" />
+            <p class="docs-demo-output">@L.T("Value:", "Valor:") <strong>@(_other ?? "null")</strong></p>
+        </div>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <p>
+        @L.T("Use PhoneInput when you need a phone number people can be called or messaged at, possibly from another country: contacts, employees, customers. It keeps the country code apart from the number, so your app always stores the same shape. For an internal extension or a number that is always local, a TextInput with type tel is enough.",
+             "Usa PhoneInput cuando necesitas un número al que se pueda llamar o escribir, quizá de otro país: contactos, empleados, clientes. Separa el indicativo del número, así tu aplicación siempre guarda la misma forma. Para una extensión interna o un número siempre local, basta con un TextInput con type tel.")
+    </p>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li>@F.Pick(L.T("Bind a string? with @bind-Value. The value is the dial code, a space and the digits: \"+57 3001234567\". An empty number binds null.", "Enlaza un string? con @bind-Value. El valor es el indicativo, un espacio y los dígitos: \"+57 3001234567\". Un número vacío enlaza null."), L.T("Keep a string | null in state and pass value and onValueChange (or defaultValue). The value is the dial code, a space and the digits: \"+57 3001234567\". An empty number reports null.", "Guarda un string | null en el estado y pasa value y onValueChange (o defaultValue). El valor es el indicativo, un espacio y los dígitos: \"+57 3001234567\". Un número vacío informa null."))</li>
+        <li>@F.Pick(L.T("Pass Countries with your own list (PhoneCountry(DialCode, Name)), translated and ordered for your users. The default list, PhoneCountry.Defaults, is short on purpose.", "Pasa Countries con tu propia lista (PhoneCountry(DialCode, Name)), traducida y ordenada para tus usuarios. La lista por defecto, PhoneCountry.Defaults, es corta a propósito."), L.T("Pass countries with your own list ({ dialCode, name }), translated and ordered for your users. The default list, defaultPhoneCountries, is short on purpose.", "Pasa countries con tu propia lista ({ dialCode, name }), traducida y ordenada para tus usuarios. La lista por defecto, defaultPhoneCountries, es corta a propósito."))</li>
+        <li>@F.Pick(L.T("Set DefaultDialCode for the code selected while the value is empty; otherwise the first country is used.", "Usa DefaultDialCode para el indicativo elegido mientras el valor está vacío; si no, se usa el primer país."), L.T("Set defaultDialCode for the code selected while the value is empty; otherwise the first country is used.", "Usa defaultDialCode para el indicativo elegido mientras el valor está vacío; si no, se usa el primer país."))</li>
+        <li>@L.T("Validate the length of the digits for the countries you serve (10 digits for a Colombian mobile, for example) and pass the message as the error.", "Valida la longitud de los dígitos para los países que atiendes (10 dígitos para un celular colombiano, por ejemplo) y pasa el mensaje como error.")</li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Binding and validation", "Enlace y validación")</h3>
+    <CodeBlock Language="@F.Pick("razor", "tsx")" Code="@F.Pick(BindCode, ReactBindCode)" />
+
+    <h3 class="docs-h3">@L.T("What the field does with the value", "Qué hace el campo con el valor")</h3>
+    <ul>
+        <li>@L.T("Spaces, dashes, dots and parentheses typed or pasted by the user are dropped: only digits are kept.", "Los espacios, guiones, puntos y paréntesis que el usuario escribe o pega se descartan: solo se conservan los dígitos.")</li>
+        <li>@L.T("A value whose dial code is not in the list (\"+44 7700900123\") stays selectable: the code is added at the top of the picker.", "Un valor cuyo indicativo no está en la lista (\"+44 7700900123\") sigue siendo seleccionable: el indicativo se agrega al inicio del selector.")</li>
+        <li>@L.T("A value without a dial code (\"3001234567\") takes the default dial code.", "Un valor sin indicativo (\"3001234567\") toma el indicativo por defecto.")</li>
+        <li>@L.T("Changing the country keeps the digits and reports the new value.", "Cambiar el país conserva los dígitos e informa el nuevo valor.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li>@L.T("The country picker is a native select named by CountryLabel (\"Country code\" by default); the number is a tel input named by Label. Tab moves from one to the other.", "El selector de país es un select nativo con el nombre de CountryLabel (\"Country code\" por defecto); el número es un input tel con el nombre de Label. Tab pasa de uno al otro.")</li>
+        <li>@L.T("Phones open the dial pad and browsers can autofill the national number (autocomplete=\"tel-national\").", "Los teléfonos abren el teclado de marcación y los navegadores pueden autocompletar el número nacional (autocomplete=\"tel-national\").")</li>
+        <li>@L.T("Helper text and error are linked to the number with aria-describedby.", "El texto de ayuda y el error se vinculan al número con aria-describedby.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@L.T("Storing the number without the dial code: you lose the country when you need to call or send a message.", "Guardar el número sin el indicativo: pierdes el país cuando necesitas llamar o enviar un mensaje.")</li>
+        <li>@L.T("Using NumberInput for phones: it would add separators and drop leading zeros.", "Usar NumberInput para teléfonos: agregaría separadores y quitaría los ceros iniciales.")</li>
+        <li>@L.T("Leaving the country names untranslated: pass your own list in the user's language.", "Dejar los nombres de los países sin traducir: pasa tu propia lista en el idioma del usuario.")</li>
+    </ul>
+
+    <ApiTable Params="Params" ReactParams="ReactParams" />
+</DocPage>
+
+@code {
+    private string? _phone = "+57 3001234567";
+    private string? _other;
+
+    private IReadOnlyList<PhoneCountry> _countries =>
+    [
+        new("+57", "Colombia"),
+        new("+1", L.T("United States", "Estados Unidos")),
+        new("+34", L.T("Spain", "España")),
+    ];
+
+    private const string CountriesCode = """
+        <PhoneInput Label="Phone" Countries="_countries" DefaultDialCode="+34" @bind-Value="_phone" />
+
+        @code {
+            private string? _phone;
+
+            private readonly IReadOnlyList<PhoneCountry> _countries =
+            [
+                new("+57", "Colombia"),
+                new("+1", "United States"),
+                new("+34", "Spain"),
+            ];
+        }
+        """;
+
+    private const string BindCode = """
+        <EditForm Model="_contact" OnValidSubmit="Save">
+            <DataAnnotationsValidator />
+            <PhoneInput Label="Mobile phone" Required="true" @bind-Value="_contact.Phone" />
+        </EditForm>
+
+        @code {
+            private sealed class Contact
+            {
+                [Required(ErrorMessage = "Enter a phone number.")]
+                [RegularExpression(@"^\+\d{1,4} \d{7,12}$", ErrorMessage = "Enter a complete phone number.")]
+                public string? Phone { get; set; }
+            }
+        }
+        """;
+
+    private const string ReactBindCode = """
+        const [phone, setPhone] = useState<string | null>(null);
+
+        const digits = phone?.split(' ')[1] ?? '';
+        const error = submitted && phone === null ? 'Enter a phone number.'
+          : phone !== null && digits.length < 7 ? 'Enter a complete phone number.'
+          : undefined;
+
+        <PhoneInput label="Mobile phone" required value={phone} onValueChange={setPhone} error={error} />
+        """;
+
+    private const string Code = """
+        <PhoneInput Label="Mobile phone" Placeholder="300 123 4567" @bind-Value="_phone" />
+
+        <!-- Your own, translated list -->
+        <PhoneInput Label="Phone" Countries="@([new("+57", "Colombia"), new("+1", "Estados Unidos")])" @bind-Value="_phone" />
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Value", "string?", null, L.T("\"+57 3001234567\", or null when the number is empty. Supports @bind-Value.", "\"+57 3001234567\", o null cuando el número está vacío. Admite @bind-Value.")),
+        new("Countries", "IReadOnlyList<PhoneCountry>?", "PhoneCountry.Defaults", L.T("PhoneCountry(DialCode, Name) choices.", "Opciones PhoneCountry(DialCode, Name).")),
+        new("DefaultDialCode", "string?", L.T("first country", "primer país"), L.T("Code selected while the value is empty.", "Indicativo elegido mientras el valor está vacío.")),
+        new("CountryLabel", "string", "\"Country code\"", L.T("Accessible name of the picker.", "Nombre accesible del selector.")),
+        new("Label, HelperText, Error, Required, Disabled, Placeholder", "", null, L.T("Same as TextInput.", "Igual que en TextInput.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("value", "string | null", null, L.T("'+57 3001234567', or null when the number is empty. Pair it with onValueChange.", "'+57 3001234567', o null cuando el número está vacío. Úsalo junto con onValueChange.")),
+        new("defaultValue", "string | null", "null", L.T("Initial value for uncontrolled use.", "Valor inicial para uso no controlado.")),
+        new("onValueChange", "(value: string | null) => void", null, L.T("Called on every change of the number or the country.", "Se llama con cada cambio del número o del país.")),
+        new("countries", "readonly PhoneCountry[]", "defaultPhoneCountries", L.T("{ dialCode, name } choices. defaultPhoneCountries is exported.", "Opciones { dialCode, name }. defaultPhoneCountries se exporta.")),
+        new("defaultDialCode", "string", L.T("first country", "primer país"), L.T("Code selected while the value is empty.", "Indicativo elegido mientras el valor está vacío.")),
+        new("countryLabel", "string", "'Country code'", L.T("Accessible name of the picker.", "Nombre accesible del selector.")),
+        new("label, helperText, error, required, disabled, placeholder", "", null, L.T("Same as TextInput.", "Igual que en TextInput.")),
+        new("...rest", "ComponentPropsWithRef<'input'>", null, L.T("Any other attribute for the number input, including ref and name.", "Cualquier otro atributo para el input del número, incluidos ref y name.")),
+    ];
+}

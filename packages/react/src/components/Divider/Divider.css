@@ -1,0 +1,48 @@
+/* ========================================
+   DIVIDER - Trazos UI (ported from Components/Divider/Divider.razor.css)
+   ======================================== */
+
+.trazos-divider {
+    --trazos-divider-style: solid;
+    flex-shrink: 0;
+    border: 0 var(--trazos-divider-style) var(--trazos-border-soft);
+}
+
+.trazos-divider.trazos-divider-dashed {
+    --trazos-divider-style: dashed;
+}
+
+.trazos-divider.trazos-divider-horizontal {
+    width: 100%;
+    margin: 1.25rem 0;
+    border-top-width: 1.5px;
+}
+
+.trazos-divider.trazos-divider-vertical {
+    align-self: stretch;
+    width: 0;
+    min-height: 1em;
+    margin: 0 0.75rem;
+    border-left-width: 1.5px;
+}
+
+.trazos-divider.trazos-divider-labeled {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-top-width: 0;
+}
+
+.trazos-divider-line {
+    flex: 1;
+    border-top: 1.5px var(--trazos-divider-style) var(--trazos-border-soft);
+}
+
+.trazos-divider-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--trazos-text-muted);
+    white-space: nowrap;
+}

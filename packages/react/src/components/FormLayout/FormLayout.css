@@ -1,0 +1,107 @@
+/* ========================================
+   FORM GRID - Trazos UI
+   ======================================== */
+
+.trazos-form-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem 1.25rem;
+    align-items: start;
+}
+
+@media (min-width: 640px) {
+    .trazos-form-grid-cols-2,
+    .trazos-form-grid-cols-3,
+    .trazos-form-grid-cols-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .trazos-form-grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .trazos-form-grid-cols-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+.trazos-form-grid > .trazos-form-full {
+    grid-column: 1 / -1;
+}
+
+/* ========================================
+   FORM ACTIONS - Trazos UI
+   ======================================== */
+
+.trazos-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.625rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1.5px dashed var(--trazos-border-soft);
+}
+
+.trazos-form-actions.trazos-form-actions-end { justify-content: flex-end; }
+.trazos-form-actions.trazos-form-actions-start { justify-content: flex-start; }
+.trazos-form-actions.trazos-form-actions-between { justify-content: flex-end; }
+
+.trazos-form-actions.trazos-form-actions-between > :first-child {
+    margin-right: auto;
+}
+
+@media (max-width: 640px) {
+    .trazos-form-actions > * {
+        flex: 1 1 auto;
+    }
+
+    .trazos-form-actions.trazos-form-actions-sticky {
+        position: sticky;
+        bottom: 0;
+        z-index: 5;
+        margin-inline: -1rem;
+        padding: 0.875rem 1rem calc(0.875rem + env(safe-area-inset-bottom));
+        background: var(--trazos-panel);
+        border-top-style: solid;
+        box-shadow: 0 -6px 16px -8px rgb(var(--trazos-shadow-rgb) / calc(0.12 * var(--trazos-shadow-strength)));
+    }
+}
+
+/* ========================================
+   FILTER BAR - Trazos UI
+   Fields grow to fill the row and wrap on narrow screens.
+   ======================================== */
+
+.trazos-filter-bar {
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.trazos-filter-bar-fields {
+    display: flex;
+    flex: 1 1 24rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+.trazos-filter-bar-fields > * {
+    flex: 1 1 12rem;
+    min-width: 0;
+}
+
+.trazos-filter-bar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}

@@ -22,8 +22,19 @@ export interface AutocompleteProps<T> extends Omit<ComponentPropsWithRef<'div'>,
   error?: string;
   required?: boolean;
   disabled?: boolean;
-  /** Queried while the user types, after `debounceMs` of inactivity. */
-  searchFn: AutocompleteSearchFn<T>;
+  /**
+   * Queried while the user types, after `debounceMs` of inactivity.
+   * Optional when `items` is set; when both are set, `searchFn` wins.
+   */
+  searchFn?: AutocompleteSearchFn<T>;
+  /**
+   * Preloaded list filtered in memory by `itemText` (case-insensitive
+   * "contains"). Used when there is no `searchFn`. With `minChars` at 0,
+   * focusing the field lists the items.
+   */
+  items?: readonly T[];
+  /** Most results shown from `items`. */
+  maxResults?: number;
   /** Text that represents an item (used when there is no `renderItem`). */
   itemText: (item: T) => string;
   /** Renders each suggestion and the selected item. */
@@ -57,6 +68,8 @@ export function Autocomplete<T>({
   required = false,
   disabled = false,
   searchFn,
+  items,
+  maxResults = 50,
   itemText,
   renderItem,
   selectedItem,
@@ -113,10 +126,19 @@ export function Autocomplete<T>({
     setActiveIndex(-1);
   };
 
+  const search = (term: string, signal: AbortSignal): Iterable<T> | Promise<Iterable<T>> => {
+    if (searchFn) return searchFn(term, signal);
+    if (!items) throw new Error('Autocomplete needs searchFn or items.');
+    const needle = term.toLocaleLowerCase();
+    const matches =
+      needle === '' ? items : items.filter((item) => itemText(item).toLocaleLowerCase().includes(needle));
+    return matches.slice(0, Math.max(1, maxResults));
+  };
+
   const runSearch = async (term: string, controller: AbortController) => {
     const isCurrent = () => abortRef.current === controller && !controller.signal.aborted;
     try {
-      const found = Array.from(await searchFn(term, controller.signal));
+      const found = Array.from(await search(term, controller.signal));
       if (!isCurrent()) return;
       setResults(found);
       setActiveIndex(found.length > 0 ? 0 : -1);
@@ -133,6 +155,11 @@ export function Autocomplete<T>({
     const value = event.target.value;
     setQuery(value);
     setHasFocus(true);
+    startSearch(value, debounceMs);
+  };
+
+  // `delay` null runs the search at once (focus); typing always goes through the debounce timer.
+  const startSearch = (value: string, delay: number | null) => {
     setActiveIndex(-1);
     cancelSearch();
 
@@ -147,10 +174,20 @@ export function Autocomplete<T>({
     const controller = new AbortController();
     abortRef.current = controller;
     setIsSearching(true);
+    if (delay === null) {
+      void runSearch(term, controller);
+      return;
+    }
     timerRef.current = setTimeout(() => {
       timerRef.current = undefined;
       void runSearch(term, controller);
-    }, debounceMs);
+    }, delay);
+  };
+
+  const handleFocus = () => {
+    setHasFocus(true);
+    // With minChars at 0 the list opens on focus, like a select.
+    if (minChars <= 0 && !hasSearched && !isSearching) startSearch(query, null);
   };
 
   const select = (item: T) => {
@@ -265,7 +302,7 @@ export function Autocomplete<T>({
               value={query}
               onChange={handleInput}
               onKeyDown={handleKeyDown}
-              onFocus={() => { setHasFocus(true); }}
+              onFocus={handleFocus}
               onBlur={() => { setHasFocus(false); }}
             />
           </div>

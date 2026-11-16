@@ -1,0 +1,49 @@
+/* ========================================
+   DESCRIPTION LIST - Trazos UI
+   Read-only detail views: tiles (default) or a plain label/value grid.
+   Item styles live in DescriptionItem.razor.css.
+   ======================================== */
+
+/* Items auto-fit by --trazos-dl-min; --trazos-dl-cols caps the count, so the
+   track minimum is the larger of the min width and an even share of the row.
+   The list is a size container so items can widen their span only when the
+   list itself is wide enough, wherever it is placed. */
+.trazos-dl {
+    /* A size container has no intrinsic width, so fill the parent explicitly
+       or a flex row would shrink the list to a sliver. */
+    box-sizing: border-box;
+    width: 100%;
+    --trazos-dl-cols: 2;
+    --trazos-dl-gap: 0.875rem;
+    container: trazos-dl / inline-size;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, max(var(--trazos-dl-min, 12rem), (100% - (var(--trazos-dl-cols) - 1) * var(--trazos-dl-gap)) / var(--trazos-dl-cols))), 1fr));
+    gap: var(--trazos-dl-gap);
+    margin: 0;
+}
+
+.trazos-dl-cols-1 {
+    --trazos-dl-cols: 1;
+}
+
+.trazos-dl-cols-2 {
+    --trazos-dl-cols: 2;
+}
+
+.trazos-dl-cols-3 {
+    --trazos-dl-cols: 3;
+}
+
+.trazos-dl-cols-4 {
+    --trazos-dl-cols: 4;
+}
+
+.trazos-dl-plain {
+    --trazos-dl-gap: 1.5rem;
+    row-gap: 1.125rem;
+}
+
+.trazos-dl-plain.is-bordered ::deep .trazos-dl-item {
+    padding-bottom: 0.875rem;
+    border-bottom: 1px dashed var(--trazos-border-soft);
+}

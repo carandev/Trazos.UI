@@ -95,16 +95,30 @@ export function RenameFlow() {
 | `WhatsAppButton` | `phoneNumber`, `defaultCountryCode` (`57`), `showPhone` |
 | `EmptyState` | `title`, `description`, `icon`, `iconVariant`, `actions`, `compact` |
 | `FormSection` | `title`, `description`, `step` |
-| `TextInput`, `TextArea`, `SelectInput` | `label`, `helperText`, `error`, `required`; `value` + `onValueChange` or `defaultValue` |
+| `TextInput`, `TextArea`, `SelectInput` | `label`, `helperText`, `error`, `required`; `value` + `onValueChange` or `defaultValue`. `TextInput` takes text `prefix` / `suffix`; `SelectInput` takes typed `options` |
+| `NumberInput` | `value: number \| null`, `mode`: `number` `currency` `percent` (percent binds the fraction), `locale`, `currency`, `min`, `max`, `step` (arrow keys), `decimals` |
+| `DateInput` | ISO `'yyyy-MM-dd'` values, `monthOnly`, `min`, `max` |
+| `SearchInput` | Debounced `onValueChange` (`debounce`, default 300 ms), clear button, Escape clears |
+| `PhoneInput` | Country code picker + number, value `"+57 3001234567"`, `countries` |
+| `FileInput` | Drop zone: `accept`, `maxFileSize`, `multiple`, `maxFiles`, file list with remove, rejection messages |
+| `RadioGroup<T>`, `CheckboxGroup<T>` | Compact native choice lists from `options`; `CheckboxGroup` value is an array in option order |
+| `Repeater<T>` | Editable rows: `items` + `onItemsChange`, `renderItem({ item, index, isLast })`, `createItem`, `minItems`, `maxItems` |
+| `FormGrid`, `FormActions`, `FilterBar` | Responsive field grid (`columns`, `trazos-form-full`), submit bar (`align`, `sticky`), filter row (`role="search"`, `actions`) |
 | `Checkbox` | `checked` + `onCheckedChange` or `defaultChecked` |
 | `RadioCardGroup<T>` | `options: RadioCardOption<T>[]`, `value` + `onValueChange`, `columns` |
+| `AutocompleteSelect<T, V>` | Searchable select bound to an id: `items`, `valueSelector`, `value` + `onValueChange`, `resolveItem` |
 | `Autocomplete<T>` | `searchFn(query, signal)`, `itemText`, `renderItem`, `selectedItem` + `onSelectedItemChange`, `clearOnSelect`, `minChars`, `debounceMs` |
-| `DataTable<T>` | `items`, `tableHeader`, `rowTemplate`, `loading`, `emptyMessage`, `onRowClick` |
+| `DataTable<T>` | `items`, `tableHeader`, `rowTemplate`, `loading`, `emptyMessage`, `onRowClick`; `SortHeader` + `sort`/`onSortChange`, `toolbar`, `tableFooter`, `rowActions`, `pagination`, `trazos-cell-numeric` |
+| `Pagination` | `page` + `onPageChange`, `pageSize` + `onPageSizeChange`, `totalCount`, `pageSizeOptions`, labels as props |
+| `DescriptionList` + `DescriptionItem` | Label/value grid: `columns`, `bordered`, `hint`, `emptyText`, `fullWidth` |
+| `Stat` | `label`, `value`, `delta`, `trend`, `inverted`, `icon` |
+| `ProgressBar`, `Stepper` | Progress with `valueText` or `indeterminate`; steps with `current` |
 | `Tabs` / `TabItem` | `variant`: `underline` `pills` `contained`; controlled by `activeIndex` or `activeKey` (`TabItem tabKey`) |
 | `MonthCalendar<T>` | `items` + `startSelector`/`endSelector`/`titleSelector`/`toneSelector`, `month`, `selectedDate`, `onItemClick`; helpers `getGridStart`, `getGridEndExclusive` |
 | `Modal` | `open` + `onOpenChange`, `title`, `footer`, `size`, `closeOnBackdropClick` |
 | `Drawer` | `open` + `onOpenChange`, `title`, `header` |
-| `ConfirmDialogProvider` + `useConfirm()` | `await confirm(message, overrides?)` or `confirm(options)` → `Promise<boolean>` |
+| `ConfirmDialogProvider` + `useConfirm()` | `await confirm(message, overrides?)` or `confirm(options)` → `Promise<boolean>`. `usePrompt()` asks for a typed reason → `{ confirmed, text }` |
+| `Alert` | Inline persistent message: `tone`, `title`, `actions`, `dismissible` + `onDismiss` |
 | `ToastProvider` + `useToast()` | `showSuccess` `showError` `showWarning` `showInfo` `(message, title?)` |
 | `SketchUnderline`, `SketchCircle`, `SketchArrow`, `SketchSquiggle` | Decorative hand-drawn strokes: `color`, `strokeWidth`, `animated` |
 | `Tape` | Decorative tape, needs a positioned parent: `color`, `rotate`, `position`: `top` `top-left` `top-right` |
@@ -117,6 +131,8 @@ export function RenameFlow() {
 | `LinkList` + `LinkListItem` | Compact link rows: `href`, `meta`, `icon` |
 | `ThemeToggle`, `useTheme()`, `createThemeScript()` | Light and dark switching; see [Dark mode](#dark-mode) |
 | `SiteHeader`, `useScrollSpy(ids)` | Top bar for public sites: `links`, `navLabel`, `openMenuLabel`, `closeMenuLabel` (all required), `logo`, `actions`, `activeHref`, `currentType` |
+| `PageHeader`, `Breadcrumbs`, `Divider` | Page title with breadcrumbs or back link and actions; trail with `aria-current`; separator with optional `label` |
+| `Ribbon`, `NoPrint`, `PrintOnly` | Corner status band; print helpers. Printed pages always use the light tokens |
 | `AppShell` | `brand`, `sidebar`, `topBar`, `drawerHeader`, `drawerContent`, `isDevelopment`, `environmentName`, `showEnvironmentBadge` |
 
 Every component forwards `ref`, `className` and native attributes to its root element (form controls: to the native `<input>`, `<textarea>` or `<select>`). Variant unions mirror the Blazor `*Variant` enums (`ButtonVariant.Primary` → `'primary'`). Default texts (aria-labels, "Confirmar", "Sin resultados", month names) match the Blazor library, which is Spanish-first; override them with props. Newer website components (`CopyButton`, `ThemeToggle`, `SiteHeader`) have no default texts, so their labels are required props. `CopyButton` and `ThemeToggle` forward native attributes to the button, and `LinkListItem` to the link.

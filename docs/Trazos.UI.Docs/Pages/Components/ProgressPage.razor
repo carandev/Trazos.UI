@@ -1,0 +1,196 @@
+@page "/components/progress"
+
+<DocPage Title="ProgressBar & Stepper" Category="@L.T("Display", "Visualización")"
+         Lead="@L.T("ProgressBar shows how far a long operation got. Stepper shows where the user is in a multi-step workflow.", "ProgressBar muestra cuánto avanzó una operación larga. Stepper muestra en qué paso de un flujo de varios pasos está el usuario.")">
+
+    <DemoBlock Title="ProgressBar"
+               Description="@L.T("A known amount with a custom value text, and an indeterminate bar for work of unknown length.", "Una cantidad conocida con un texto de valor propio, y una barra indeterminada para trabajo de duración desconocida.")"
+               Code="@ProgressCode" React="progress/progress-bar">
+        <div class="docs-stack">
+            <ProgressBar Label="@L.T("Calculating payroll", "Calculando nómina")" Value="_done" Max="7"
+                         ValueText="@L.T($"{_done} of 7 employees", $"{_done} de 7 empleados")" />
+            <ProgressBar Label="@L.T("Sending payslips", "Enviando desprendibles")" Indeterminate="true" Tone="ProgressTone.Sky" />
+            <div>
+                <Button Variant="ButtonVariant.Outline" Size="ButtonSize.Small" OnClick="() => _done = _done >= 7 ? 0 : _done + 1">@L.T("Advance", "Avanzar")</Button>
+            </div>
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Tones and hidden label", "Tonos y etiqueta oculta")"
+               Description="@F.Pick(L.T("Without a visible Label, AriaLabel names the bar for screen readers.", "Sin una Label visible, AriaLabel le da nombre a la barra para los lectores de pantalla."), L.T("Without a visible label, ariaLabel names the bar for screen readers.", "Sin un label visible, ariaLabel le da nombre a la barra para los lectores de pantalla."))"
+               Code="@TonesCode" React="progress/tones">
+        <div class="docs-stack">
+            <ProgressBar Label="@L.T("Vacation used", "Vacaciones usadas")" Value="40" />
+            <ProgressBar Label="@L.T("Budget used", "Presupuesto usado")" Value="75" Tone="ProgressTone.Gold" />
+            <ProgressBar Label="@L.T("Overtime limit", "Límite de horas extra")" Value="95" Tone="ProgressTone.Wine" />
+            <ProgressBar AriaLabel="@L.T("Upload", "Carga")" Value="60" Tone="ProgressTone.Sky" ShowValue="false" />
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="Stepper" Code="@StepperCode" React="progress/stepper">
+        <div class="docs-stack">
+            <Stepper Steps="_steps" Current="_step" Label="@L.T("New employee", "Nuevo empleado")" CompletedLabel="@L.T("Completed", "Completado")" />
+            <div>
+                <Button Variant="ButtonVariant.Outline" Size="ButtonSize.Small" OnClick="() => _step = _step >= 3 ? 0 : _step + 1">@L.T("Next step", "Siguiente paso")</Button>
+            </div>
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Vertical stepper", "Stepper vertical")"
+               Description="@L.T("Stacked steps fit side panels and long descriptions.", "Los pasos apilados encajan en paneles laterales y con descripciones largas.")"
+               Code="@VerticalCode" React="progress/stepper-vertical">
+        <Stepper Steps="_runSteps" Current="2" Vertical="true" Label="@L.T("Payroll run", "Liquidación de nómina")" CompletedLabel="@L.T("Completed", "Completado")" />
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use each one", "Cuándo usar cada uno")</h3>
+    <ul>
+        <li>@L.T("ProgressBar: an operation that takes more than a couple of seconds (calculating payroll, importing a file), or a quantity against a limit (vacation days used).", "ProgressBar: una operación que tarda más de un par de segundos (calcular nómina, importar un archivo), o una cantidad frente a un límite (días de vacaciones usados).")</li>
+        <li>@L.T("Indeterminate ProgressBar: work whose length you cannot know. For a short wait inside a button, LoadingSpinner is lighter.", "ProgressBar indeterminada: trabajo cuya duración no puedes conocer. Para una espera corta dentro de un botón, LoadingSpinner es más liviano.")</li>
+        <li>@L.T("Stepper: a wizard or a process with fixed steps, such as hiring an employee or a payroll run. It shows the position; it does not navigate.", "Stepper: un asistente o un proceso con pasos fijos, como contratar un empleado o una liquidación de nómina. Muestra la posición; no navega.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step: ProgressBar", "Paso a paso: ProgressBar")</h3>
+    <ol>
+        <li><Tr><En>Pass <code>@N("Value")</code> and <code>@N("Max")</code> (default 100). The value is clamped to 0..max, and a max of 0 shows an empty bar.</En><Es>Pasa <code>@N("Value")</code> y <code>@N("Max")</code> (por defecto 100). El valor se limita a 0..max, y un max de 0 muestra una barra vacía.</Es></Tr></li>
+        <li><Tr><En>Give it a visible <code>@N("Label")</code>; it is also the accessible name. Without one, set <code>@N("AriaLabel")</code>.</En><Es>Dale un <code>@N("Label")</code> visible; también es el nombre accesible. Si no hay, usa <code>@N("AriaLabel")</code>.</Es></Tr></li>
+        <li><Tr><En>The value shows as a rounded percentage. Set <code>@N("ValueText")</code> for units that mean more, such as "3 of 7 employees"; screen readers hear the same text. Hide it with <code>@N("ShowValue")</code> = false.</En><Es>El valor se muestra como un porcentaje redondeado. Usa <code>@N("ValueText")</code> para unidades con más sentido, como "3 de 7 empleados"; los lectores de pantalla escuchan el mismo texto. Ocúltalo con <code>@N("ShowValue")</code> = false.</Es></Tr></li>
+        <li><Tr><En>Set <code>@N("Indeterminate")</code> while the total is unknown, then switch to a value when it is. Pick a <code>@N("Tone")</code> by meaning: wine near a limit, gold for caution.</En><Es>Activa <code>@N("Indeterminate")</code> mientras el total es desconocido y cambia a un valor cuando se conozca. Elige un <code>@N("Tone")</code> por significado: vino cerca de un límite, dorado para precaución.</Es></Tr></li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Step by step: Stepper", "Paso a paso: Stepper")</h3>
+    <ol>
+        <li>
+            @if (F.IsReact)
+            {
+                <Tr><En>Build the <code>steps</code> array of <code>{ title, description? }</code> objects.</En><Es>Arma el arreglo <code>steps</code> de objetos <code>{ title, description? }</code>.</Es></Tr>
+            }
+            else
+            {
+                <Tr><En>Build the <code>Steps</code> list of <code>StepperStep(Title, Description)</code>.</En><Es>Arma la lista <code>Steps</code> de <code>StepperStep(Title, Description)</code>.</Es></Tr>
+            }
+        </li>
+        <li><Tr><En>Set <code>@N("Current")</code> to the zero-based index of the current step. Earlier steps show a check mark; later ones show their number.</En><Es>Pon en <code>@N("Current")</code> el índice, desde cero, del paso actual. Los pasos anteriores muestran una marca de verificación; los siguientes, su número.</Es></Tr></li>
+        <li><Tr><En>Name the workflow with <code>@N("Label")</code> and translate <code>@N("CompletedLabel")</code>.</En><Es>Nombra el flujo con <code>@N("Label")</code> y traduce <code>@N("CompletedLabel")</code>.</Es></Tr></li>
+        <li><Tr><En>Use <code>@N("Vertical")</code> in narrow spaces. On phones the horizontal stepper hides the descriptions.</En><Es>Usa <code>@N("Vertical")</code> en espacios angostos. En teléfonos, el stepper horizontal oculta las descripciones.</Es></Tr></li>
+        <li>@L.T("Put the step content and the Back/Next buttons below it; the stepper only reflects the current index.", "Pon el contenido del paso y los botones Atrás/Siguiente debajo; el stepper solo refleja el índice actual.")</li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li><Tr><En>ProgressBar uses <code>role="progressbar"</code> with <code>aria-valuenow</code>, <code>aria-valuemin</code>, <code>aria-valuemax</code> and <code>aria-valuetext</code>. Indeterminate bars leave the values out, which is how screen readers know the length is unknown.</En><Es>ProgressBar usa <code>role="progressbar"</code> con <code>aria-valuenow</code>, <code>aria-valuemin</code>, <code>aria-valuemax</code> y <code>aria-valuetext</code>. Las barras indeterminadas omiten los valores, así los lectores de pantalla saben que la duración es desconocida.</Es></Tr></li>
+        <li>@L.T("With reduced motion turned on, the indeterminate bar stops sliding and shows a static, faded fill.", "Con movimiento reducido activado, la barra indeterminada deja de deslizarse y muestra un relleno estático y atenuado.")</li>
+        <li><Tr><En>Stepper is an ordered list: the current step has <code>aria-current="step"</code> and completed steps include the hidden completed text. The numbers and check marks are hidden from screen readers.</En><Es>Stepper es una lista ordenada: el paso actual tiene <code>aria-current="step"</code> y los pasos completados incluyen el texto oculto de completado. Los números y las marcas están ocultos para los lectores de pantalla.</Es></Tr></li>
+        <li>@L.T("Neither component is focusable. If progress must be announced while it changes, add a polite live region (VisuallyHidden with aria-live) with milestones such as \"50% done\".", "Ninguno de los dos recibe foco. Si el avance debe anunciarse mientras cambia, agrega una región viva cortés (VisuallyHidden con aria-live) con hitos como \"50% completado\".")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@L.T("A ProgressBar without Label or AriaLabel: screen readers announce an unnamed progress bar.", "Una ProgressBar sin Label ni AriaLabel: los lectores de pantalla anuncian una barra de progreso sin nombre.")</li>
+        <li>@L.T("A Current index that is one-based: the first step is 0.", "Un índice Current que empieza en uno: el primer paso es 0.")</li>
+        <li>@L.T("Using Stepper as navigation: its steps are not links. Add your own buttons to move between steps.", "Usar Stepper como navegación: sus pasos no son enlaces. Agrega tus propios botones para moverte entre pasos.")</li>
+    </ul>
+
+    <ApiTable Title="@F.Pick(L.T("ProgressBar parameters", "Parámetros de ProgressBar"), L.T("ProgressBar props", "Props de ProgressBar"))" Params="ProgressParams" ReactParams="ReactProgressParams" />
+    <ApiTable Title="@F.Pick(L.T("Stepper parameters", "Parámetros de Stepper"), L.T("Stepper props", "Props de Stepper"))" Params="StepperParams" ReactParams="ReactStepperParams" />
+</DocPage>
+
+@code {
+    private int _done = 3;
+    private int _step = 1;
+
+    private string N(string name) => !F.IsReact ? name : char.ToLowerInvariant(name[0]) + name[1..];
+
+    private IReadOnlyList<StepperStep> _steps => [
+        new(L.T("Personal data", "Datos personales")),
+        new(L.T("Contract", "Contrato"), L.T("Type and dates", "Tipo y fechas")),
+        new(L.T("Payment", "Pago"), L.T("Bank and frequency", "Banco y frecuencia")),
+        new(L.T("Review", "Revisión")),
+    ];
+
+    private IReadOnlyList<StepperStep> _runSteps => [
+        new(L.T("Load novelties", "Cargar novedades"), L.T("Overtime, absences and bonuses", "Horas extra, ausencias y bonificaciones")),
+        new(L.T("Calculate", "Calcular"), L.T("Earnings and deductions", "Devengados y deducciones")),
+        new(L.T("Approve", "Aprobar"), L.T("Payroll manager", "Jefe de nómina")),
+        new(L.T("Pay", "Pagar"), L.T("Bank file", "Archivo del banco")),
+    ];
+
+    private const string ProgressCode = """
+        <ProgressBar Label="Calculating payroll" Value="_done" Max="7" ValueText="@($"{_done} of 7 employees")" />
+        <ProgressBar Label="Sending payslips" Indeterminate="true" Tone="ProgressTone.Sky" />
+        """;
+
+    private const string TonesCode = """
+        <ProgressBar Label="Vacation used" Value="40" />
+        <ProgressBar Label="Budget used" Value="75" Tone="ProgressTone.Gold" />
+        <ProgressBar Label="Overtime limit" Value="95" Tone="ProgressTone.Wine" />
+        <ProgressBar AriaLabel="Upload" Value="60" Tone="ProgressTone.Sky" ShowValue="false" />
+        """;
+
+    private const string StepperCode = """
+        <Stepper Steps="_steps" Current="1" Label="New employee" />
+
+        @code {
+            private readonly IReadOnlyList<StepperStep> _steps =
+            [
+                new("Personal data"),
+                new("Contract", "Type and dates"),
+                new("Payment", "Bank and frequency"),
+                new("Review"),
+            ];
+        }
+        """;
+
+    private const string VerticalCode = """
+        <Stepper Steps="_steps" Current="2" Vertical="true" Label="Payroll run" />
+        """;
+
+    private IReadOnlyList<ApiParam> ProgressParams =>
+    [
+        new("Value / Max", "double", "0 / 100", L.T("Progress, clamped to 0..Max.", "Avance, limitado a 0..Max.")),
+        new("Label", "string?", null, L.T("Visible label and accessible name.", "Etiqueta visible y nombre accesible.")),
+        new("AriaLabel", "string?", null, L.T("Accessible name when there is no Label.", "Nombre accesible cuando no hay Label.")),
+        new("ValueText", "string?", L.T("percentage", "porcentaje"), L.T("Shown value and aria-valuetext, such as \"3 of 7\".", "Valor mostrado y aria-valuetext, como \"3 de 7\".")),
+        new("ShowValue", "bool", "true", L.T("Shows the value next to the label.", "Muestra el valor junto a la etiqueta.")),
+        new("Indeterminate", "bool", "false", L.T("Animated bar with no value. Static with reduced motion.", "Barra animada sin valor. Estática con movimiento reducido.")),
+        new("Tone", "ProgressTone", "Olive", L.T("Olive, Gold, Wine or Sky.", "Olive, Gold, Wine o Sky.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> StepperParams =>
+    [
+        new("Steps", "IReadOnlyList<StepperStep>", "required", L.T("StepperStep(Title, Description).", "StepperStep(Title, Description).")),
+        new("Current", "int", "0", L.T("Zero-based current step; it gets aria-current=\"step\".", "Paso actual empezando en cero; recibe aria-current=\"step\".")),
+        new("Label", "string?", null, L.T("Accessible name of the list.", "Nombre accesible de la lista.")),
+        new("CompletedLabel", "string", "\"Completed\"", L.T("Screen-reader text for completed steps.", "Texto para lectores de pantalla en los pasos completados.")),
+        new("Vertical", "bool", "false", L.T("Stacks the steps.", "Apila los pasos.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactProgressParams =>
+    [
+        new("value / max", "number", "0 / 100", L.T("Progress, clamped to 0..max.", "Avance, limitado a 0..max.")),
+        new("label", "string", null, L.T("Visible label and accessible name (aria-labelledby).", "Etiqueta visible y nombre accesible (aria-labelledby).")),
+        new("ariaLabel", "string", null, L.T("Accessible name when there is no label.", "Nombre accesible cuando no hay label.")),
+        new("valueText", "string", L.T("percentage", "porcentaje"), L.T("Shown value and aria-valuetext, such as \"3 of 7\".", "Valor mostrado y aria-valuetext, como \"3 de 7\".")),
+        new("showValue", "boolean", "true", L.T("Shows the value next to the label.", "Muestra el valor junto a la etiqueta.")),
+        new("indeterminate", "boolean", "false", L.T("Animated bar with no value. Static with reduced motion.", "Barra animada sin valor. Estática con movimiento reducido.")),
+        new("tone", "ProgressTone", "'olive'", L.T("'olive', 'gold', 'wine' or 'sky'.", "'olive', 'gold', 'wine' o 'sky'.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other div attribute, including ref. It goes on the wrapper, not on the progressbar element.", "Cualquier otro atributo de div, incluido ref. Va en el contenedor, no en el elemento progressbar.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactStepperParams =>
+    [
+        new("steps", "readonly StepperStep[]", "required", L.T("{ title, description? } objects.", "Objetos { title, description? }.")),
+        new("current", "number", "0", L.T("Zero-based current step; it gets aria-current=\"step\".", "Paso actual empezando en cero; recibe aria-current=\"step\".")),
+        new("label", "string", null, L.T("Accessible name of the list.", "Nombre accesible de la lista.")),
+        new("completedLabel", "string", "'Completed'", L.T("Screen-reader text for completed steps.", "Texto para lectores de pantalla en los pasos completados.")),
+        new("vertical", "boolean", "false", L.T("Stacks the steps.", "Apila los pasos.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'ol'>", null, L.T("Any other ol attribute, including ref.", "Cualquier otro atributo de ol, incluido ref.")),
+    ];
+}

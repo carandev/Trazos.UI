@@ -1,0 +1,28 @@
+<DataTable TItem="Row" Items="Items" Sort="Sort" SortChanged="s => { Sort = s; SortChanges++; }"
+           OnRowClick="r => Clicked = r.Name" ActionsLabel="Acciones">
+    <Toolbar><input class="filter" /></Toolbar>
+    <TableHeader>
+        <SortHeader Field="name">Name</SortHeader>
+        <SortHeader Field="salary" Align="TableAlign.End">Salary</SortHeader>
+        <th>Area</th>
+    </TableHeader>
+    <RowTemplate>
+        <td>@context.Name</td>
+        <td class="trazos-cell-numeric">@context.Salary</td>
+        <td>@context.Area</td>
+    </RowTemplate>
+    <RowActions><button class="edit" @onclick="() => Edited = context.Name">Edit</button></RowActions>
+    <TableFooter><td>Total</td><td class="trazos-cell-numeric">300</td><td></td></TableFooter>
+    <Pagination><span class="pager">pager</span></Pagination>
+</DataTable>
+
+@code {
+    public sealed record Row(string Name, int Salary, string Area);
+
+    [Parameter] public IReadOnlyList<Row> Items { get; set; } = [new("Ada", 100, "IT"), new("Grace", 200, "HR")];
+
+    public TableSort? Sort { get; set; }
+    public int SortChanges { get; private set; }
+    public string? Clicked { get; private set; }
+    public string? Edited { get; private set; }
+}

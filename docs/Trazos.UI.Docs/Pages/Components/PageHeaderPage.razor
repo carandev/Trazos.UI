@@ -1,0 +1,161 @@
+@page "/components/page-header"
+
+<DocPage Title="PageHeader" Category="@L.T("Page structure", "Estructura de página")"
+         Lead="@L.T("The top of an application page: breadcrumbs or a back link, the title, a subtitle, metadata and a right-aligned action area that moves below the title on narrow screens.", "La parte superior de una página de aplicación: migas de pan o un enlace para volver, el título, un subtítulo, metadatos y un área de acciones alineada a la derecha que pasa debajo del título en pantallas angostas.")">
+
+    <DemoBlock Title="@L.T("Detail page", "Página de detalle")"
+               Description="@L.T("Breadcrumbs on top, badges as metadata and the page actions on the right. Resize the window below 640px: the actions take the full width.", "Migas de pan arriba, insignias como metadatos y las acciones de la página a la derecha. Reduce la ventana a menos de 640px: las acciones ocupan todo el ancho.")"
+               Code="@DetailCode" React="page-header/detail">
+        <PageHeader Title="Ana María Restrepo" Subtitle="@L.T("Payroll analyst · Bogotá", "Analista de nómina · Bogotá")" Level="2"
+                    Breadcrumbs="_trail" BreadcrumbsLabel="@L.T("Breadcrumb", "Migas de pan")">
+            <Meta>
+                <Badge Variant="BadgeVariant.Success">@L.T("Active", "Activa")</Badge>
+                <Badge Variant="BadgeVariant.Info">@L.T("Open-ended contract", "Contrato indefinido")</Badge>
+            </Meta>
+            <Actions>
+                <Button Variant="ButtonVariant.Outline">@L.T("Edit", "Editar")</Button>
+                <Button>@L.T("New novelty", "Nueva novedad")</Button>
+            </Actions>
+        </PageHeader>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Back link", "Enlace para volver")"
+               Description="@F.Pick(L.T("For create and edit pages that have one obvious parent. BackHref is ignored when Breadcrumbs has items.", "Para páginas de creación y edición que tienen un padre evidente. BackHref se ignora cuando Breadcrumbs tiene elementos."), L.T("For create and edit pages that have one obvious parent. backHref is ignored when breadcrumbs has items.", "Para páginas de creación y edición que tienen un padre evidente. backHref se ignora cuando breadcrumbs tiene elementos."))"
+               Code="@BackCode" React="page-header/back-link">
+        <PageHeader Title="@L.T("New employee", "Nuevo empleado")" Subtitle="@L.T("Fields marked with * are required.", "Los campos con * son obligatorios.")"
+                    Level="2" BackHref="components/page-header" BackLabel="@L.T("Employees", "Empleados")" />
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("With tabs", "Con pestañas")"
+               Description="@F.Pick(L.T("ChildContent renders below the header row, the place for page tabs.", "ChildContent se renderiza debajo de la fila del encabezado, el lugar para las pestañas de la página."), L.T("children render below the header row, the place for page tabs.", "children se renderiza debajo de la fila del encabezado, el lugar para las pestañas de la página."))"
+               Code="@TabsCode" React="page-header/with-tabs">
+        <PageHeader Title="@L.T("Payroll · November 2026", "Nómina · Noviembre 2026")" Level="2">
+            <Actions>
+                <Button>@L.T("Approve", "Aprobar")</Button>
+            </Actions>
+            <ChildContent>
+                <Tabs Variant="TabsVariant.Underline">
+                    <TabItem Title="@L.T("Summary", "Resumen")"><p>@L.T("Totals of the period.", "Totales del periodo.")</p></TabItem>
+                    <TabItem Title="@L.T("Employees", "Empleados")"><p>@L.T("One row per employee.", "Una fila por empleado.")</p></TabItem>
+                </Tabs>
+            </ChildContent>
+        </PageHeader>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <ul>
+        <li>@L.T("Once per page, at the top of list, detail and form pages of an application.", "Una vez por página, arriba de las páginas de listado, detalle y formulario de una aplicación.")</li>
+        <li>@L.T("Use SectionHeading instead for marketing pages or for sections inside a page.", "Usa SectionHeading en su lugar para páginas de marketing o para secciones dentro de una página.")</li>
+        <li>@L.T("Use FormSection to split a long form into steps below the page header.", "Usa FormSection para dividir un formulario largo en pasos debajo del encabezado de página.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li><Tr><En>Give it a <code>@N("Title")</code>. It renders as an <code>h1</code>; change <code>@N("Level")</code> only when the page already has an <code>h1</code>, such as inside a layout with its own title.</En><Es>Dale un <code>@N("Title")</code>. Se renderiza como <code>h1</code>; cambia <code>@N("Level")</code> solo cuando la página ya tiene un <code>h1</code>, por ejemplo dentro de un layout con su propio título.</Es></Tr></li>
+        <li><Tr><En>Add a <code>@N("Subtitle")</code> for context (role, period, record count) and badges or dates in <code>@N("Meta")</code>.</En><Es>Agrega un <code>@N("Subtitle")</code> para dar contexto (cargo, periodo, número de registros) e insignias o fechas en <code>@N("Meta")</code>.</Es></Tr></li>
+        <li><Tr><En>Show where the page lives: pass <code>@N("Breadcrumbs")</code> for deep hierarchies, or <code>@N("BackHref")</code> and <code>@N("BackLabel")</code> when there is a single parent. If both are set, the breadcrumbs win.</En><Es>Muestra dónde está la página: pasa <code>@N("Breadcrumbs")</code> para jerarquías profundas, o <code>@N("BackHref")</code> y <code>@N("BackLabel")</code> cuando hay un solo padre. Si se usan ambos, ganan las migas de pan.</Es></Tr></li>
+        <li><Tr><En>Put the page actions in <code>@N("Actions")</code>, the primary one last. On phones they move below the title and stretch to the full width.</En><Es>Pon las acciones de la página en <code>@N("Actions")</code>, la principal al final. En teléfonos pasan debajo del título y se estiran a todo el ancho.</Es></Tr></li>
+        <li><Tr><En>Use <code>@N("ChildContent")</code> for tabs or filters that belong to the whole page.</En><Es>Usa <code>@N("ChildContent")</code> para pestañas o filtros que pertenecen a toda la página.</Es></Tr></li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li><Tr><En>It renders a <code>header</code> element with a real heading, so screen-reader users can jump to the page title with the heading shortcut.</En><Es>Renderiza un elemento <code>header</code> con un encabezado real, así que quienes usan lector de pantalla pueden saltar al título de la página con el atajo de encabezados.</Es></Tr></li>
+        <li><Tr><En>The breadcrumbs are a <code>nav</code> landmark named by <code>@N("BreadcrumbsLabel")</code>; translate it. The back link is a normal link and its arrow icon is hidden from screen readers.</En><Es>Las migas de pan son un landmark <code>nav</code> con el nombre de <code>@N("BreadcrumbsLabel")</code>; tradúcelo. El enlace para volver es un enlace normal y su ícono de flecha está oculto para los lectores de pantalla.</Es></Tr></li>
+        <li>@L.T("The Tab order follows the visual order: breadcrumbs or back link, then the actions.", "El orden de Tab sigue el orden visual: migas de pan o enlace para volver y luego las acciones.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@L.T("Two h1 headings on a page: keep one PageHeader per page and lower the level of any other title.", "Dos encabezados h1 en una página: deja un solo PageHeader por página y baja el nivel de cualquier otro título.")</li>
+        <li>@L.T("Too many actions: more than two or three buttons wrap badly on phones. Move secondary ones to a menu or into the page.", "Demasiadas acciones: más de dos o tres botones se acomodan mal en teléfonos. Pasa las secundarias a un menú o al contenido de la página.")</li>
+        <li>@L.T("Repeating the title as the last breadcrumb and as the title is expected: the last breadcrumb marks the current page.", "Repetir el título como última miga y como título es lo esperado: la última miga marca la página actual.")</li>
+    </ul>
+
+    <ApiTable Params="Params" ReactParams="ReactParams" />
+</DocPage>
+
+@code {
+    private string N(string name) => !F.IsReact ? name : name == "ChildContent" ? "children" : char.ToLowerInvariant(name[0]) + name[1..];
+
+    private IReadOnlyList<BreadcrumbItem> _trail => [
+        new(L.T("Home", "Inicio"), ""),
+        new(L.T("Employees", "Empleados"), "components/page-header"),
+        new("Ana María Restrepo"),
+    ];
+
+    private const string DetailCode = """
+        <PageHeader Title="Ana María Restrepo" Subtitle="Payroll analyst · Bogotá"
+                    Breadcrumbs="_trail">
+            <Meta>
+                <Badge Variant="BadgeVariant.Success">Active</Badge>
+            </Meta>
+            <Actions>
+                <Button Variant="ButtonVariant.Outline">Edit</Button>
+                <Button>New novelty</Button>
+            </Actions>
+        </PageHeader>
+
+        @code {
+            private readonly IReadOnlyList<BreadcrumbItem> _trail =
+            [
+                new("Home", "/"),
+                new("Employees", "/employees"),
+                new("Ana María Restrepo"),
+            ];
+        }
+        """;
+
+    private const string BackCode = """
+        <PageHeader Title="New employee" Subtitle="Fields marked with * are required."
+                    BackHref="/employees" BackLabel="Employees" />
+        """;
+
+    private const string TabsCode = """
+        <PageHeader Title="Payroll · November 2026">
+            <Actions>
+                <Button>Approve</Button>
+            </Actions>
+            <ChildContent>
+                <Tabs Variant="TabsVariant.Underline">
+                    <TabItem Title="Summary">…</TabItem>
+                    <TabItem Title="Employees">…</TabItem>
+                </Tabs>
+            </ChildContent>
+        </PageHeader>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Title", "string", "required", L.T("Page title.", "Título de la página.")),
+        new("Subtitle", "string?", null, L.T("Muted line under the title.", "Línea atenuada debajo del título.")),
+        new("Level", "int", "1", L.T("Heading level of the title, 1 to 6.", "Nivel de encabezado del título, de 1 a 6.")),
+        new("Breadcrumbs", "IReadOnlyList<BreadcrumbItem>?", null, L.T("Trail above the title. Takes precedence over BackHref.", "Ruta encima del título. Tiene prioridad sobre BackHref.")),
+        new("BreadcrumbsLabel", "string", "\"Breadcrumb\"", L.T("Accessible name of the breadcrumb navigation.", "Nombre accesible de la navegación de migas.")),
+        new("BackHref", "string?", null, L.T("Target of a back link above the title.", "Destino de un enlace para volver encima del título.")),
+        new("BackLabel", "string", "\"Back\"", L.T("Text of the back link.", "Texto del enlace para volver.")),
+        new("Meta", "RenderFragment?", null, L.T("Badges, dates or other details under the subtitle.", "Insignias, fechas u otros detalles debajo del subtítulo.")),
+        new("Actions", "RenderFragment?", null, L.T("Buttons aligned to the right. Full width on phones.", "Botones alineados a la derecha. Ancho completo en teléfonos.")),
+        new("ChildContent", "RenderFragment?", null, L.T("Content below the header row, such as Tabs.", "Contenido debajo de la fila del encabezado, como Tabs.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("title", "ReactNode", "required", L.T("Page title.", "Título de la página.")),
+        new("subtitle", "ReactNode", null, L.T("Muted line under the title.", "Línea atenuada debajo del título.")),
+        new("level", "number", "1", L.T("Heading level of the title, clamped to 1..6.", "Nivel de encabezado del título, limitado a 1..6.")),
+        new("breadcrumbs", "readonly BreadcrumbItem[]", null, L.T("Trail above the title, { text, href? }. Takes precedence over backHref.", "Ruta encima del título, { text, href? }. Tiene prioridad sobre backHref.")),
+        new("breadcrumbsLabel", "string", "'Breadcrumb'", L.T("Accessible name of the breadcrumb navigation.", "Nombre accesible de la navegación de migas.")),
+        new("backHref", "string", null, L.T("Target of a back link above the title.", "Destino de un enlace para volver encima del título.")),
+        new("backLabel", "string", "'Back'", L.T("Text of the back link.", "Texto del enlace para volver.")),
+        new("meta", "ReactNode", null, L.T("Badges, dates or other details under the subtitle.", "Insignias, fechas u otros detalles debajo del subtítulo.")),
+        new("actions", "ReactNode", null, L.T("Buttons aligned to the right. Full width on phones.", "Botones alineados a la derecha. Ancho completo en teléfonos.")),
+        new("children", "ReactNode", null, L.T("Content below the header row, such as Tabs.", "Contenido debajo de la fila del encabezado, como Tabs.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'header'>", null, L.T("Any other header attribute, including ref.", "Cualquier otro atributo de header, incluido ref.")),
+    ];
+}

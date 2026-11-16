@@ -1,0 +1,152 @@
+/* ========================================
+   ALERT - Trazos UI
+   Inline message. Same frame as Toast, but tinted and static.
+   ======================================== */
+
+.trazos-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    color: var(--trazos-text);
+    border: 1.5px solid var(--trazos-border);
+    border-left-width: 4px;
+    border-radius: var(--trazos-radius-sketch-sm);
+    box-shadow: var(--trazos-shadow-sketch);
+}
+
+.trazos-alert-info {
+    background: var(--trazos-sky-soft);
+    border-color: var(--trazos-sky-border);
+    border-left-color: var(--trazos-sky);
+}
+
+.trazos-alert-success {
+    background: var(--trazos-olive-soft);
+    border-color: var(--trazos-olive-border);
+    border-left-color: var(--trazos-olive-bar);
+}
+
+.trazos-alert-warning {
+    background: var(--trazos-gold-soft);
+    border-color: var(--trazos-gold-border);
+    border-left-color: var(--trazos-gold);
+}
+
+.trazos-alert-danger {
+    background: var(--trazos-wine-soft);
+    border-color: var(--trazos-wine-border);
+    border-left-color: var(--trazos-danger);
+}
+
+.trazos-alert-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid transparent;
+    border-radius: 8px 10px 7px 9px / 9px 7px 10px 8px;
+}
+
+.trazos-alert-icon svg,
+.trazos-alert-icon ::deep svg {
+    width: 1.1rem;
+    height: 1.1rem;
+}
+
+.trazos-alert-info .trazos-alert-icon {
+    background: var(--trazos-sky-tint);
+    color: var(--trazos-sky-text);
+    border-color: var(--trazos-sky-border);
+}
+
+.trazos-alert-success .trazos-alert-icon {
+    background: var(--trazos-olive-tint-alt);
+    color: var(--trazos-olive-text);
+    border-color: var(--trazos-olive-border);
+}
+
+.trazos-alert-warning .trazos-alert-icon {
+    background: var(--trazos-gold-tint);
+    color: var(--trazos-gold-text);
+    border-color: var(--trazos-gold-border);
+}
+
+.trazos-alert-danger .trazos-alert-icon {
+    background: var(--trazos-wine-tint);
+    color: var(--trazos-wine-text);
+    border-color: var(--trazos-wine-border);
+}
+
+.trazos-alert-content {
+    flex: 1;
+    min-width: 0;
+    padding-top: 0.2rem;
+}
+
+.trazos-alert-title {
+    margin: 0 0 0.2rem;
+    font-family: var(--trazos-font-display);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--trazos-text);
+}
+
+.trazos-alert-body {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--trazos-text-light);
+}
+
+.trazos-alert-body ::deep p {
+    margin: 0;
+}
+
+.trazos-alert-body ::deep p + p {
+    margin-top: 0.5rem;
+}
+
+.trazos-alert-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.trazos-alert-dismiss {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    margin: -0.25rem -0.25rem 0 0;
+    padding: 0;
+    color: var(--trazos-text-light);
+    background: var(--trazos-surface-raised);
+    border: 1.5px solid var(--trazos-border-control);
+    border-radius: 10px 12px 9px 11px / 11px 9px 12px 10px;
+    box-shadow: 1px 2px 0 rgb(var(--trazos-shadow-rgb) / calc(0.04 * var(--trazos-shadow-strength)));
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.trazos-alert-dismiss:hover {
+    color: var(--trazos-text);
+    background: var(--trazos-surface-raised-hover);
+    border-color: var(--trazos-border-control-hover);
+}
+
+.trazos-alert-dismiss:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--trazos-focus-ring);
+    border-color: var(--trazos-focus);
+}
+
+.trazos-alert-dismiss svg {
+    width: 1rem;
+    height: 1rem;
+}

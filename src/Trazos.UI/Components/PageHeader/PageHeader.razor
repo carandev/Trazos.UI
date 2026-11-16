@@ -1,0 +1,38 @@
+@namespace Trazos.UI.Components
+
+<header class="trazos-page-header @Class" @attributes="AdditionalAttributes">
+    @if (Breadcrumbs is { Count: > 0 })
+    {
+        <Breadcrumbs Items="Breadcrumbs" Label="@BreadcrumbsLabel" Class="trazos-page-header-breadcrumbs" />
+    }
+    else if (!string.IsNullOrEmpty(BackHref))
+    {
+        <a class="trazos-page-header-back" href="@BackHref">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+            @BackLabel
+        </a>
+    }
+
+    <div class="trazos-page-header-row">
+        <div class="trazos-page-header-text">
+            @Heading
+            @if (!string.IsNullOrEmpty(Subtitle))
+            {
+                <p class="trazos-page-header-subtitle">@Subtitle</p>
+            }
+            @if (Meta != null)
+            {
+                <div class="trazos-page-header-meta">@Meta</div>
+            }
+        </div>
+
+        @if (Actions != null)
+        {
+            <div class="trazos-page-header-actions">@Actions</div>
+        }
+    </div>
+
+    @ChildContent
+</header>

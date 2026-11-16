@@ -1,50 +1,20 @@
 @namespace Trazos.UI.Components
+@inherits FormFieldBase<string?>
 
-<div class="trazos-input-group @Class">
-    @if (!string.IsNullOrEmpty(Label))
-    {
-        <label class="trazos-input-label" for="@Id">
-            @Label
-            @if (Required)
-            {
-                <span class="trazos-input-required" aria-hidden="true">*</span>
-            }
-        </label>
-    }
-
-    <div class="trazos-input-wrapper @(HasError ? "has-error" : "") @(Disabled ? "disabled" : "")">
-        @if (LeadingIcon != null)
-        {
-            <div class="trazos-input-icon leading">
-                @LeadingIcon
-            </div>
-        }
-
-        <input id="@Id"
-               type="@Type"
-               class="trazos-input-control"
-               placeholder="@Placeholder"
-               disabled="@Disabled"
-               readonly="@ReadOnly"
-               value="@Value"
-               @oninput="OnInputChanged"
-               @attributes="AdditionalAttributes" />
-
-        @if (TrailingIcon != null)
-        {
-            <div class="trazos-input-icon trailing">
-                @TrailingIcon
-            </div>
-        }
-    </div>
-
-    @if (!string.IsNullOrEmpty(HelperText) && !HasError)
-    {
-        <p class="trazos-input-helper">@HelperText</p>
-    }
-
-    @if (HasError)
-    {
-        <p class="trazos-input-error" role="alert">@Error</p>
-    }
-</div>
+<FieldShell For="@Id" Label="@Label" Required="@Required" Disabled="@Disabled"
+            HelperText="@HelperText" HelperId="@HelperId" ErrorMessage="@ErrorMessage" ErrorId="@ErrorId"
+            StateClass="@FieldStateClass" Class="@Class" Prefix="@Prefix" Suffix="@Suffix"
+            LeadingIcon="@LeadingIcon" TrailingIcon="@TrailingIcon">
+    <input id="@Id"
+           type="@Type"
+           class="trazos-input-control"
+           placeholder="@Placeholder"
+           disabled="@Disabled"
+           readonly="@ReadOnly"
+           value="@CurrentValueAsString"
+           aria-invalid="@AriaInvalid"
+           aria-describedby="@DescribedBy"
+           aria-required="@(Required ? "true" : null)"
+           @oninput="OnInputChanged"
+           @attributes="AdditionalAttributes" />
+</FieldShell>

@@ -1,0 +1,70 @@
+@namespace Trazos.UI.Components
+@inherits FormFieldBase<IReadOnlyList<IBrowserFile>?>
+@using Microsoft.AspNetCore.Components.Forms
+
+<div class="trazos-file @FieldStateClass @Class">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="trazos-file-label" for="@Id">
+            @Label
+            @if (Required)
+            {
+                <span class="trazos-file-required" aria-hidden="true">*</span>
+            }
+        </label>
+    }
+
+    <div class="trazos-file-zone @(HasError ? "has-error" : "") @(Disabled ? "is-disabled" : "")">
+        <InputFile id="@Id" class="trazos-file-native" accept="@Accept" multiple="@Multiple" disabled="@Disabled"
+                   aria-invalid="@AriaInvalid" aria-describedby="@DescribedBy" OnChange="OnFilesSelected"
+                   @attributes="AdditionalAttributes" />
+        <span class="trazos-file-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+            </svg>
+        </span>
+        <span class="trazos-file-prompt"><strong>@ButtonText</strong> @DropText</span>
+        @if (!string.IsNullOrEmpty(Hint))
+        {
+            <span class="trazos-file-hint">@Hint</span>
+        }
+    </div>
+
+    @if (Files.Count > 0)
+    {
+        <ul class="trazos-file-list">
+            @foreach (var file in Files)
+            {
+                <li class="trazos-file-item">
+                    <span class="trazos-file-item-name">@file.Name</span>
+                    <span class="trazos-file-item-size">@FormatSize(file.Size)</span>
+                    <button type="button" class="trazos-file-remove" aria-label="@string.Format(RemoveLabelFormat, file.Name)"
+                            disabled="@Disabled" @onclick="() => RemoveAsync(file)">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.25" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </li>
+            }
+        </ul>
+    }
+
+    @if (_rejected.Count > 0)
+    {
+        <ul class="trazos-file-rejected" role="alert">
+            @foreach (var message in _rejected)
+            {
+                <li>@message</li>
+            }
+        </ul>
+    }
+
+    @if (HasHelperText)
+    {
+        <p id="@HelperId" class="trazos-file-helper">@HelperText</p>
+    }
+    @if (HasError)
+    {
+        <p id="@ErrorId" class="trazos-file-error" role="alert">@ErrorMessage</p>
+    }
+</div>

@@ -1,0 +1,38 @@
+/* ========================================
+   FORM ACTIONS - Trazos UI
+   ======================================== */
+
+.trazos-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.625rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1.5px dashed var(--trazos-border-soft);
+}
+
+.trazos-form-actions.is-end { justify-content: flex-end; }
+.trazos-form-actions.is-start { justify-content: flex-start; }
+.trazos-form-actions.is-between { justify-content: flex-end; }
+
+.trazos-form-actions.is-between ::deep > :first-child {
+    margin-right: auto;
+}
+
+@media (max-width: 640px) {
+    .trazos-form-actions ::deep > * {
+        flex: 1 1 auto;
+    }
+
+    .trazos-form-actions.is-sticky {
+        position: sticky;
+        bottom: 0;
+        z-index: 5;
+        margin-inline: -1rem;
+        padding: 0.875rem 1rem calc(0.875rem + env(safe-area-inset-bottom));
+        background: var(--trazos-panel);
+        border-top-style: solid;
+        box-shadow: 0 -6px 16px -8px rgb(var(--trazos-shadow-rgb) / calc(0.12 * var(--trazos-shadow-strength)));
+    }
+}

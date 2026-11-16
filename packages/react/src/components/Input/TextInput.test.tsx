@@ -121,6 +121,43 @@ describe('TextInput', () => {
     expect(container.firstElementChild).toHaveClass('trazos-input-group', 'extra');
   });
 
+  it('renders prefix and suffix text affixes inside the wrapper, hidden from assistive tech', () => {
+    const { container } = render(<TextInput label="Website" prefix="https://" suffix=".com" />);
+    const input = screen.getByLabelText('Website');
+    const wrapper = input.parentElement;
+    const leading = container.querySelector('.trazos-input-affix.trazos-input-affix-leading');
+    const trailing = container.querySelector('.trazos-input-affix.trazos-input-affix-trailing');
+    expect(leading).toHaveTextContent('https://');
+    expect(trailing).toHaveTextContent('.com');
+    expect(leading).toHaveAttribute('aria-hidden', 'true');
+    expect(trailing).toHaveAttribute('aria-hidden', 'true');
+    expect(wrapper).toContainElement(leading as HTMLElement);
+    expect(wrapper?.firstElementChild).toBe(leading);
+    expect(wrapper?.lastElementChild).toBe(trailing);
+    expect(input).not.toHaveAttribute('prefix');
+  });
+
+  it('places affixes between the icons and the input', () => {
+    const { container } = render(
+      <TextInput label="Price" prefix="$" suffix="COP" leadingIcon={<svg data-testid="lead" />} trailingIcon={<svg data-testid="trail" />} />,
+    );
+    const wrapper = screen.getByLabelText('Price').parentElement as HTMLElement;
+    const order = [...wrapper.children].map((el) => el.className || el.tagName);
+    expect(order).toEqual([
+      'trazos-input-icon leading',
+      'trazos-input-affix trazos-input-affix-leading',
+      'trazos-input-control',
+      'trazos-input-affix trazos-input-affix-trailing',
+      'trazos-input-icon trailing',
+    ]);
+    expect(container.querySelectorAll('.trazos-input-affix')).toHaveLength(2);
+  });
+
+  it('renders no affixes when prefix and suffix are empty', () => {
+    const { container } = render(<TextInput label="Name" prefix="" />);
+    expect(container.querySelector('.trazos-input-affix')).not.toBeInTheDocument();
+  });
+
   it('has no accessibility violations', async () => {
     const { container } = render(<TextInput label="Name" helperText="Help" required error="Wrong" />);
     await expectNoA11yViolations(container);

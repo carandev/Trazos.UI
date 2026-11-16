@@ -1,0 +1,26 @@
+<EditForm Model="Model">
+    <DataAnnotationsValidator />
+    <RadioGroup Id="shift" Label="Shift" Options="Shifts" @bind-Value="Model.Shift" />
+    <CheckboxGroup Id="benefits" Label="Benefits" Options="Benefits" @bind-Value="Model.Benefits" />
+    <PhoneInput Id="phone" Label="Phone" @bind-Value="Model.Phone" />
+    <button type="submit">Save</button>
+</EditForm>
+
+@code {
+    public sealed class ChoicesModel
+    {
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Choose a shift.")]
+        public string? Shift { get; set; }
+
+        [System.ComponentModel.DataAnnotations.MinLength(1, ErrorMessage = "Choose at least one benefit.")]
+        public List<int> Benefits { get; set; } = [];
+
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Enter a phone.")]
+        public string? Phone { get; set; }
+    }
+
+    [Parameter] public ChoicesModel Model { get; set; } = new();
+
+    private static readonly IReadOnlyList<SelectOption<string?>> Shifts = [new("am", "Morning"), new("pm", "Afternoon"), new("night", "Night", Disabled: true)];
+    private static readonly IReadOnlyList<SelectOption<int>> Benefits = [new(1, "Food"), new(2, "Transport"), new(3, "Gym")];
+}

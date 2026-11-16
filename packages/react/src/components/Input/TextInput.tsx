@@ -1,9 +1,9 @@
-import { useId, type ChangeEvent, type ComponentPropsWithRef, type ReactNode } from 'react';
-import { cx } from '../../internal/cx';
+import { type ChangeEvent, type ComponentPropsWithRef, type ReactNode } from 'react';
+import { FieldShell, useFieldIds } from '../../internal/field/FieldShell';
 import './TextInput.css';
 
 export interface TextInputProps
-  extends Omit<ComponentPropsWithRef<'input'>, 'value' | 'defaultValue'> {
+  extends Omit<ComponentPropsWithRef<'input'>, 'value' | 'defaultValue' | 'prefix'> {
   label?: string;
   /** Controlled value. */
   value?: string;
@@ -16,6 +16,10 @@ export interface TextInputProps
   error?: string;
   /** Shows the required marker next to the label. */
   required?: boolean;
+  /** Text shown inside the field before the value, such as `$` or `COP`. Hidden from assistive tech. */
+  prefix?: string;
+  /** Text shown inside the field after the value, such as `%` or `kg`. Hidden from assistive tech. */
+  suffix?: string;
   leadingIcon?: ReactNode;
   trailingIcon?: ReactNode;
 }
@@ -33,20 +37,15 @@ export function TextInput({
   required = false,
   disabled = false,
   readOnly = false,
+  prefix,
+  suffix,
   leadingIcon,
   trailingIcon,
   className,
   'aria-describedby': ariaDescribedBy,
   ...rest
 }: TextInputProps) {
-  const generatedId = `trazos-input-${useId()}`;
-  const inputId = id ?? generatedId;
-  const hasError = Boolean(error);
-  const showHelper = Boolean(helperText) && !hasError;
-  const helperId = `${inputId}-helper`;
-  const errorId = `${inputId}-error`;
-  const describedBy =
-    cx(ariaDescribedBy, showHelper && helperId, hasError && errorId) || undefined;
+  const ids = useFieldIds('trazos-input', id, helperText, error, ariaDescribedBy);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     onChange?.(event);
@@ -54,50 +53,33 @@ export function TextInput({
   };
 
   return (
-    <div className={cx('trazos-input-group', className)}>
-      {label && (
-        <label className="trazos-input-label" htmlFor={inputId}>
-          {label}
-          {required && (
-            <span className="trazos-input-required" aria-hidden="true">
-              *
-            </span>
-          )}
-        </label>
-      )}
-
-      <div className={cx('trazos-input-wrapper', hasError && 'trazos-input-has-error', disabled && 'trazos-input-is-disabled')}>
-        {leadingIcon != null && <div className="trazos-input-icon leading">{leadingIcon}</div>}
-
-        <input
-          {...rest}
-          id={inputId}
-          type={type}
-          className="trazos-input-control"
-          disabled={disabled}
-          readOnly={readOnly}
-          value={value}
-          defaultValue={defaultValue}
-          onChange={handleChange}
-          aria-required={required || undefined}
-          aria-invalid={hasError || undefined}
-          aria-describedby={describedBy}
-        />
-
-        {trailingIcon != null && <div className="trazos-input-icon trailing">{trailingIcon}</div>}
-      </div>
-
-      {showHelper && (
-        <p id={helperId} className="trazos-input-helper">
-          {helperText}
-        </p>
-      )}
-
-      {hasError && (
-        <p id={errorId} className="trazos-input-error" role="alert">
-          {error}
-        </p>
-      )}
-    </div>
+    <FieldShell
+      ids={ids}
+      label={label}
+      required={required}
+      disabled={disabled}
+      helperText={helperText}
+      error={error}
+      className={className}
+      prefix={prefix}
+      suffix={suffix}
+      leadingIcon={leadingIcon}
+      trailingIcon={trailingIcon}
+    >
+      <input
+        {...rest}
+        id={ids.inputId}
+        type={type}
+        className="trazos-input-control"
+        disabled={disabled}
+        readOnly={readOnly}
+        value={value}
+        defaultValue={defaultValue}
+        onChange={handleChange}
+        aria-required={required || undefined}
+        aria-invalid={ids.hasError || undefined}
+        aria-describedby={ids.describedBy}
+      />
+    </FieldShell>
   );
 }

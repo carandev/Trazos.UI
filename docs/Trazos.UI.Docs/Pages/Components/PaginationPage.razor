@@ -1,0 +1,185 @@
+@page "/components/pagination"
+
+<DocPage Title="Pagination" Category="@L.T("Navigation", "Navegación")"
+         Lead="@L.T("Page buttons with ellipses, previous and next, a page-size selector and a summary of the visible range. It only raises events, so it works with client or server paging, alone or inside DataTable.", "Botones de página con elipsis, anterior y siguiente, un selector de tamaño de página y un resumen del rango visible. Solo dispara eventos, así que funciona con paginación en el cliente o en el servidor, sola o dentro de DataTable.")">
+
+    <DemoBlock Title="@L.T("Page and page size", "Página y tamaño de página")"
+               Description="@F.Pick(L.T("Bind Page and PageSize; picking a new size goes back to page 1.", "Enlaza Page y PageSize; elegir otro tamaño vuelve a la página 1."), L.T("Keep page and pageSize in state; picking a new size calls onPageSizeChange and then onPageChange(1).", "Guarda page y pageSize en el estado; elegir otro tamaño llama a onPageSizeChange y luego a onPageChange(1)."))"
+               Code="@Code" React="pagination/basic">
+        <div class="docs-stack">
+            <Pagination @bind-Page="_page" @bind-PageSize="_size" TotalCount="248" PageSizeOptions="[10, 25, 50]"
+                        Label="@L.T("Pagination", "Paginación")" PreviousLabel="@L.T("Previous page", "Página anterior")" NextLabel="@L.T("Next page", "Página siguiente")"
+                        PageLabelFormat="@L.T("Page {0}", "Página {0}")" PageSizeLabel="@L.T("Rows per page", "Filas por página")" SummaryFormat="@L.T("{0}–{1} of {2}", "{0}–{1} de {2}")" />
+            <p class="docs-demo-output">@L.T("Page:", "Página:") <strong>@_page</strong> · @L.T("Size:", "Tamaño:") <strong>@_size</strong></p>
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Paging a plain list", "Paginar una lista simple")"
+               Description="@L.T("Without a page-size selector and with no siblings: a compact pager under any list. The app slices the items for the current page.", "Sin selector de tamaño y sin páginas vecinas: un paginador compacto bajo cualquier lista. La app recorta los elementos de la página actual.")"
+               Code="@ListCode" React="pagination/list">
+        <div class="docs-stack">
+            <ul class="docs-stack" style="list-style: none; margin: 0; padding: 0;">
+                @foreach (var invoice in Invoices.Skip((_listPage - 1) * ListPageSize).Take(ListPageSize))
+                {
+                    <li class="docs-row">
+                        <strong>@invoice.Id</strong>
+                        <Badge Variant="@(invoice.Paid ? BadgeVariant.Success : BadgeVariant.Warning)">
+                            @(invoice.Paid ? L.T("Paid", "Pagada") : L.T("Pending", "Pendiente"))
+                        </Badge>
+                    </li>
+                }
+            </ul>
+            <Pagination @bind-Page="_listPage" PageSize="ListPageSize" TotalCount="Invoices.Length" Siblings="0"
+                        Label="@L.T("Invoice pages", "Páginas de facturas")" PreviousLabel="@L.T("Previous page", "Página anterior")" NextLabel="@L.T("Next page", "Página siguiente")"
+                        PageLabelFormat="@L.T("Page {0}", "Página {0}")" SummaryFormat="@L.T("{0}–{1} of {2} invoices", "{0}–{1} de {2} facturas")" />
+        </div>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <p>
+        @L.T("Use Pagination when a list or table has more items than fit comfortably on one screen and people need to reach a specific part of it: records, invoices, search results, audit logs. Do not use it for a few items that fit on one page, or for feeds people only scroll through; a \"Load more\" button suits those better.",
+             "Usa Pagination cuando una lista o tabla tiene más elementos de los que caben cómodamente en una pantalla y las personas necesitan llegar a una parte concreta: registros, facturas, resultados de búsqueda, bitácoras. No la uses para pocos elementos que caben en una página, ni para listas que solo se recorren con scroll; para esas encaja mejor un botón \"Cargar más\".")
+    </p>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li>@F.Pick(L.T("Keep the current page (from 1) and the page size in fields and bind them with @bind-Page and @bind-PageSize.", "Guarda la página actual (desde 1) y el tamaño de página en campos y enlázalos con @bind-Page y @bind-PageSize."), L.T("Keep the current page (from 1) and the page size in state and pass page/onPageChange and pageSize/onPageSizeChange.", "Guarda la página actual (desde 1) y el tamaño de página en el estado y pasa page/onPageChange y pageSize/onPageSizeChange."))</li>
+        <li>@F.Pick(L.T("Pass TotalCount: the number of items across every page, not the items on the current page.", "Pasa TotalCount: la cantidad de elementos en todas las páginas, no los de la página actual."), L.T("Pass totalCount: the number of items across every page, not the items on the current page.", "Pasa totalCount: la cantidad de elementos en todas las páginas, no los de la página actual."))</li>
+        <li>@L.T("Show only the current page: slice the list in memory, or ask the server for that page.", "Muestra solo la página actual: recorta la lista en memoria o pide esa página al servidor.")</li>
+        <li>@F.Pick(L.T("Add PageSizeOptions to offer a page-size selector. Changing the size raises PageSizeChanged and then PageChanged with 1.", "Agrega PageSizeOptions para ofrecer un selector de tamaño. Cambiar el tamaño dispara PageSizeChanged y luego PageChanged con 1."), L.T("Add pageSizeOptions to offer a page-size selector. Changing the size calls onPageSizeChange and then onPageChange(1).", "Agrega pageSizeOptions para ofrecer un selector de tamaño. Cambiar el tamaño llama a onPageSizeChange y luego a onPageChange(1)."))</li>
+        <li>@L.T("When a filter or search changes the results, set the page back to 1 yourself.", "Cuando un filtro o una búsqueda cambian los resultados, vuelve tú mismo la página a 1.")</li>
+        <li>@L.T("Translate every label: the defaults are English (\"Pagination\", \"Previous page\", \"Next page\", \"Page {0}\", \"Rows per page\", \"{0}–{1} of {2}\").", "Traduce todas las etiquetas: los valores predeterminados están en inglés (\"Pagination\", \"Previous page\", \"Next page\", \"Page {0}\", \"Rows per page\", \"{0}–{1} of {2}\").")</li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Client-side or server-side paging", "Paginación en el cliente o en el servidor")</h3>
+    <p>
+        @L.T("Pagination never touches your data. With everything in memory, slice it: skip (page - 1) × pageSize items and take pageSize. With a server, send the page and size in the request and use the total the API returns as the total count. If the API is 0-based or uses offset/limit, convert: offset = (page - 1) × pageSize.",
+             "Pagination nunca toca tus datos. Con todo en memoria, recórtalos: salta (page - 1) × pageSize elementos y toma pageSize. Con un servidor, envía la página y el tamaño en la petición y usa como total el que devuelve la API. Si la API empieza en 0 o usa offset/limit, convierte: offset = (page - 1) × pageSize.")
+    </p>
+    <CodeBlock Language="@F.Pick("razor", "tsx")" Code="@F.Pick(ServerCode, ReactServerCode)" />
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li>@L.T("It renders a <nav> landmark named by Label, so screen-reader users can jump to it. Give each pager on a page a different label.", "Renderiza un landmark <nav> con el nombre de Label, así los usuarios de lectores de pantalla pueden saltar a él. Da una etiqueta distinta a cada paginador de la página.")</li>
+        <li>@L.T("Every control is a native button or select: Tab moves between them, Enter or Space activates. Previous and next are disabled on the first and last page.", "Cada control es un botón o un select nativo: Tab se mueve entre ellos y Enter o Espacio los activan. Anterior y siguiente se deshabilitan en la primera y la última página.")</li>
+        <li>@L.T("The current page carries aria-current=\"page\" and each page button is announced with PageLabelFormat (\"Page 7\"). Ellipses are hidden from assistive technology.", "La página actual lleva aria-current=\"page\" y cada botón de página se anuncia con PageLabelFormat (\"Página 7\"). Las elipsis se ocultan a las tecnologías de asistencia.")</li>
+        <li>@L.T("On narrow screens only the current page, previous and next stay visible.", "En pantallas angostas solo quedan visibles la página actual, anterior y siguiente.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@L.T("Passing the length of the current page as the total count: the pager then always shows a single page.", "Pasar como total la cantidad de la página actual: el paginador siempre mostrará una sola página.")</li>
+        <li>@L.T("Not resetting the page after filtering: a page past the end is shown as the last page, but your own state still holds the old number.", "No volver a la página 1 después de filtrar: una página fuera de rango se muestra como la última, pero tu estado sigue guardando el número anterior.")</li>
+        <li>@L.T("Forgetting that pages start at 1, not 0.", "Olvidar que las páginas empiezan en 1, no en 0.")</li>
+        @if (F.IsReact)
+        {
+            <li>@L.T("Using it uncontrolled (defaultPage) when you need the page to fetch data: pass page and onPageChange instead.", "Usarlo sin controlar (defaultPage) cuando necesitas la página para pedir datos: pasa page y onPageChange.")</li>
+        }
+    </ul>
+
+    <ApiTable Params="Params" ReactParams="ReactParams" />
+</DocPage>
+
+@code {
+    private sealed record Invoice(string Id, bool Paid);
+
+    private static readonly Invoice[] Invoices =
+        Enumerable.Range(0, 23).Select(i => new Invoice($"INV-{1001 + i}", i % 3 != 0)).ToArray();
+
+    private const int ListPageSize = 5;
+    private int _listPage = 1;
+    private int _page = 7;
+    private int _size = 10;
+
+    private const string Code = """
+        <Pagination @bind-Page="_page" @bind-PageSize="_size" TotalCount="248"
+                    PageSizeOptions="[10, 25, 50]" />
+        """;
+
+    private const string ListCode = """
+        @foreach (var invoice in _invoices.Skip((_page - 1) * PageSize).Take(PageSize))
+        {
+            <InvoiceRow Invoice="invoice" />
+        }
+
+        <Pagination @bind-Page="_page" PageSize="PageSize" TotalCount="_invoices.Count" Siblings="0"
+                    Label="Invoice pages" SummaryFormat="{0}–{1} of {2} invoices" />
+        """;
+
+    private const string ServerCode = """
+        <Pagination Page="_page" PageChanged="LoadPageAsync" @bind-PageSize="_pageSize"
+                    TotalCount="_totalCount" PageSizeOptions="[10, 25, 50]" />
+
+        @code {
+            private int _page = 1;
+            private int _pageSize = 10;
+            private int _totalCount;
+            private List<Invoice> _items = [];
+
+            private async Task LoadPageAsync(int page)
+            {
+                _page = page;
+                // GET /api/invoices?page=3&pageSize=10 → { items: [...], totalCount: 248 }
+                var result = await Api.GetInvoicesAsync(page: _page, pageSize: _pageSize);
+                _items = result.Items;
+                _totalCount = result.TotalCount;
+            }
+        }
+        """;
+
+    private const string ReactServerCode = """
+        const [page, setPage] = useState(1);
+        const [pageSize, setPageSize] = useState(10);
+        const [data, setData] = useState({ items: [], totalCount: 0 });
+
+        useEffect(() => {
+          // GET /api/invoices?page=3&pageSize=10 → { items: [...], totalCount: 248 }
+          const query = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
+          fetch(`/api/invoices?${query}`).then((r) => r.json()).then(setData);
+        }, [page, pageSize]);
+
+        <Pagination
+          page={page}
+          onPageChange={setPage}
+          pageSize={pageSize}
+          onPageSizeChange={setPageSize}
+          totalCount={data.totalCount}
+          pageSizeOptions={[10, 25, 50]}
+        />
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Page", "int", "1", L.T("Current page, from 1. Supports @bind-Page.", "Página actual, desde 1. Admite @bind-Page.")),
+        new("PageChanged", "EventCallback<int>", null, L.T("Raised with the new page. Clicking the current page raises nothing.", "Se dispara con la nueva página. Hacer clic en la página actual no dispara nada.")),
+        new("PageSize", "int", "10", L.T("Items per page. Supports @bind-PageSize. Changing it goes back to page 1.", "Elementos por página. Admite @bind-PageSize. Cambiarlo vuelve a la página 1.")),
+        new("PageSizeChanged", "EventCallback<int>", null, L.T("Raised when the user picks a size; PageChanged(1) follows.", "Se dispara cuando el usuario elige un tamaño; luego se dispara PageChanged(1).")),
+        new("TotalCount", "int", "required", L.T("Total items across every page.", "Total de elementos en todas las páginas.")),
+        new("PageSizeOptions", "IReadOnlyList<int>?", null, L.T("Choices for the page-size selector. No selector when empty.", "Opciones del selector de tamaño. Sin selector si está vacío.")),
+        new("Siblings", "int", "1", L.T("Pages shown on each side of the current one.", "Páginas visibles a cada lado de la actual.")),
+        new("Label, PreviousLabel, NextLabel, PageSizeLabel", "string", L.T("English", "inglés"), L.T("Accessible names and visible text.", "Nombres accesibles y texto visible.")),
+        new("PageLabelFormat", "string", "\"Page {0}\"", L.T("Accessible name of each page button.", "Nombre accesible de cada botón de página.")),
+        new("SummaryFormat", "string", "\"{0}–{1} of {2}\"", L.T("First item, last item and total.", "Primer elemento, último y total.")),
+        new("Class", "string?", null, L.T("Extra CSS classes on the <nav>.", "Clases CSS adicionales en el <nav>.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("page", "number", null, L.T("Current page, from 1 (controlled).", "Página actual, desde 1 (controlada).")),
+        new("defaultPage", "number", "1", L.T("Initial page when uncontrolled.", "Página inicial sin control.")),
+        new("onPageChange", "(page: number) => void", null, L.T("Called with the new page. Clicking the current page calls nothing.", "Se llama con la nueva página. Hacer clic en la página actual no llama nada.")),
+        new("pageSize", "number", null, L.T("Items per page (controlled).", "Elementos por página (controlado).")),
+        new("defaultPageSize", "number", "10", L.T("Initial page size when uncontrolled.", "Tamaño de página inicial sin control.")),
+        new("onPageSizeChange", "(pageSize: number) => void", null, L.T("Called when the user picks a size; onPageChange(1) follows.", "Se llama cuando el usuario elige un tamaño; luego se llama onPageChange(1).")),
+        new("totalCount", "number", "required", L.T("Total items across every page.", "Total de elementos en todas las páginas.")),
+        new("pageSizeOptions", "readonly number[]", null, L.T("Choices for the page-size selector. No selector when empty.", "Opciones del selector de tamaño. Sin selector si está vacío.")),
+        new("siblings", "number", "1", L.T("Pages shown on each side of the current one.", "Páginas visibles a cada lado de la actual.")),
+        new("label, previousLabel, nextLabel, pageSizeLabel", "string", L.T("English", "inglés"), L.T("Accessible names and visible text.", "Nombres accesibles y texto visible.")),
+        new("pageLabelFormat", "string", "'Page {0}'", L.T("Accessible name of each page button.", "Nombre accesible de cada botón de página.")),
+        new("summaryFormat", "string", "'{0}–{1} of {2}'", L.T("First item, last item and total.", "Primer elemento, último y total.")),
+        new("className", "string", null, L.T("Extra CSS classes on the <nav>.", "Clases CSS adicionales en el <nav>.")),
+        new("...rest", "ComponentPropsWithRef<'nav'>", null, L.T("Any other attribute of the <nav>, including ref.", "Cualquier otro atributo del <nav>, incluido ref.")),
+    ];
+}

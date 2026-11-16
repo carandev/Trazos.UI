@@ -1,0 +1,105 @@
+@page "/components/stat"
+
+<DocPage Title="Stat" Category="@L.T("Display", "Visualización")"
+         Lead="@L.T("A dashboard number with a label, a delta, an optional icon and a hint.", "Un número de tablero con etiqueta, variación, ícono opcional y una nota.")">
+
+    <DemoBlock Title="@L.T("Dashboard", "Tablero")"
+               Description="@F.Pick(L.T("Trend sets the arrow and color. Inverted swaps the colors for numbers where a fall is good news.", "Trend define la flecha y el color. Inverted intercambia los colores para números en los que bajar es una buena noticia."), L.T("trend sets the arrow and color. inverted swaps the colors for numbers where a fall is good news.", "trend define la flecha y el color. inverted intercambia los colores para números en los que bajar es una buena noticia."))"
+               Code="@Code" React="stat/dashboard">
+        <div class="docs-grid-2">
+            <Stat Label="@L.T("Net payroll", "Nómina neta")" Value="$ 148,2M" Delta="+4,2%" Trend="StatTrend.Up"
+                  TrendLabel="@L.T("up from last month", "más que el mes pasado")" Hint="@L.T("November 2026", "Noviembre 2026")">
+                <Icon>@Icons.Calendar</Icon>
+            </Stat>
+            <Stat Label="@L.T("Absences", "Ausencias")" Value="12" Delta="-3" Trend="StatTrend.Down" Inverted="true"
+                  TrendLabel="@L.T("down from last month", "menos que el mes pasado")" Tone="IconBoxVariant.Wine">
+                <Icon>@Icons.User</Icon>
+            </Stat>
+            <Stat Label="@L.T("Employees", "Empleados")" Value="42" Delta="0" Trend="StatTrend.Flat"
+                  TrendLabel="@L.T("same as last month", "igual que el mes pasado")" Tone="IconBoxVariant.Lavender">
+                <Icon>@Icons.User</Icon>
+            </Stat>
+            <Stat Label="@L.T("Pending novelties", "Novedades pendientes")" Value="7" Hint="@L.T("Due November 25", "Vencen el 25 de noviembre")" />
+        </div>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <ul>
+        <li>@L.T("The few key numbers at the top of a dashboard or a report: totals, counts, percentages.", "Los pocos números clave arriba de un tablero o un reporte: totales, conteos, porcentajes.")</li>
+        <li>@L.T("Not for long lists of figures (use DataTable or DescriptionList) or for progress toward a goal (use ProgressBar).", "No para listas largas de cifras (usa DataTable o DescriptionList) ni para el avance hacia una meta (usa ProgressBar).")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li><Tr><En>Set <code>@N("Label")</code> to what the number measures and <code>@N("Value")</code> to the number already formatted (currency, thousands separators, units).</En><Es>Pon en <code>@N("Label")</code> qué mide el número y en <code>@N("Value")</code> el número ya formateado (moneda, separadores de miles, unidades).</Es></Tr></li>
+        <li><Tr><En>Add a <code>@N("Delta")</code> such as "+4.2%" and its <code>@N("Trend")</code> (<code>@N("Up")</code>, <code>@N("Down")</code> or <code>@N("Flat")</code>). The trend only sets the arrow and color: up is olive and down is wine.</En><Es>Agrega una <code>@N("Delta")</code> como "+4,2%" y su <code>@N("Trend")</code> (<code>@N("Up")</code>, <code>@N("Down")</code> o <code>@N("Flat")</code>). La tendencia solo define la flecha y el color: subir es oliva y bajar es vino.</Es></Tr></li>
+        <li><Tr><En>For costs, absences or errors, where going down is good, set <code>@N("Inverted")</code>.</En><Es>Para costos, ausencias o errores, donde bajar es bueno, activa <code>@N("Inverted")</code>.</Es></Tr></li>
+        <li><Tr><En>Always add <code>@N("TrendLabel")</code>, such as "up from last month": screen readers hear it after the delta, because the arrow and the color are not read.</En><Es>Agrega siempre <code>@N("TrendLabel")</code>, como "más que el mes pasado": los lectores de pantalla lo escuchan después de la variación, porque la flecha y el color no se leen.</Es></Tr></li>
+        <li><Tr><En>Optionally add an <code>@N("Icon")</code> with a <code>@N("Tone")</code> (the IconBox colors) and a <code>@N("Hint")</code> with the period or the source.</En><Es>Opcionalmente agrega un <code>@N("Icon")</code> con un <code>@N("Tone")</code> (los colores de IconBox) y un <code>@N("Hint")</code> con el periodo o la fuente.</Es></Tr></li>
+        <li>@L.T("Place several stats in a grid; each tile keeps its own frame and shadow.", "Ubica varias estadísticas en una cuadrícula; cada tarjeta conserva su propio marco y sombra.")</li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li>@L.T("It is plain text, not focusable. Screen readers read the label, the value, the delta and the hidden trend label in that order.", "Es texto simple y no recibe foco. Los lectores de pantalla leen la etiqueta, el valor, la variación y la etiqueta oculta de tendencia en ese orden.")</li>
+        <li>@L.T("The arrow and the icon are hidden from assistive technology.", "La flecha y el ícono están ocultos para la tecnología de asistencia.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@L.T("Passing a raw number: format it first, the component does not format values.", "Pasar un número sin formato: formatéalo antes, el componente no formatea valores.")</li>
+        <li>@L.T("A delta without a trend label: color-blind and screen-reader users cannot tell whether it is good or bad.", "Una variación sin etiqueta de tendencia: las personas con daltonismo o que usan lector de pantalla no saben si es buena o mala.")</li>
+        <li>@L.T("Too many tiles: four to six key numbers are easier to scan than twelve.", "Demasiadas tarjetas: de cuatro a seis números clave se revisan más fácil que doce.")</li>
+    </ul>
+
+    <ApiTable Params="Params" ReactParams="ReactParams" />
+</DocPage>
+
+@code {
+    private string N(string name) => !F.IsReact ? name : char.ToLowerInvariant(name[0]) + name[1..];
+
+    private const string Code = """
+        <Stat Label="Net payroll" Value="$ 148,2M" Delta="+4,2%" Trend="StatTrend.Up"
+              TrendLabel="up from last month" Hint="November 2026">
+            <Icon><svg>…</svg></Icon>
+        </Stat>
+
+        <!-- Fewer absences is good news: Inverted colors a fall in olive. -->
+        <Stat Label="Absences" Value="12" Delta="-3" Trend="StatTrend.Down" Inverted="true"
+              TrendLabel="down from last month" Tone="IconBoxVariant.Wine" />
+
+        <Stat Label="Pending novelties" Value="7" Hint="Due November 25" />
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Label", "string", "required", L.T("What the number measures.", "Qué mide el número.")),
+        new("Value", "string", "required", L.T("The number, already formatted.", "El número, ya formateado.")),
+        new("Delta", "string?", null, L.T("Change against a reference, such as +4.2%.", "Variación frente a una referencia, como +4,2%.")),
+        new("Trend", "StatTrend", "None", L.T("Up, Down or Flat: sets the arrow and color.", "Up, Down o Flat: define la flecha y el color.")),
+        new("Inverted", "bool", "false", L.T("A rise is bad and a fall is good (costs, absences).", "Subir es malo y bajar es bueno (costos, ausencias).")),
+        new("TrendLabel", "string?", null, L.T("Screen-reader text for the delta.", "Texto para lectores de pantalla de la variación.")),
+        new("Hint", "string?", null, L.T("Muted line at the bottom.", "Línea atenuada al final.")),
+        new("Icon", "RenderFragment?", null, L.T("Icon in a tinted well.", "Ícono en un recuadro con tinte.")),
+        new("Tone", "IconBoxVariant", "Primary", L.T("Color of the icon well.", "Color del recuadro del ícono.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("label", "ReactNode", "required", L.T("What the number measures.", "Qué mide el número.")),
+        new("value", "ReactNode", "required", L.T("The number, already formatted.", "El número, ya formateado.")),
+        new("delta", "ReactNode", null, L.T("Change against a reference, such as +4.2%.", "Variación frente a una referencia, como +4,2%.")),
+        new("trend", "StatTrend", "'none'", L.T("'none', 'up', 'down' or 'flat': sets the arrow and color.", "'none', 'up', 'down' o 'flat': define la flecha y el color.")),
+        new("inverted", "boolean", "false", L.T("A rise is bad and a fall is good (costs, absences).", "Subir es malo y bajar es bueno (costos, ausencias).")),
+        new("trendLabel", "string", null, L.T("Screen-reader text for the delta.", "Texto para lectores de pantalla de la variación.")),
+        new("hint", "ReactNode", null, L.T("Muted line at the bottom.", "Línea atenuada al final.")),
+        new("icon", "ReactNode", null, L.T("Icon in a tinted well.", "Ícono en un recuadro con tinte.")),
+        new("tone", "StatTone", "'primary'", L.T("Color of the icon well: 'primary', 'lavender', 'cream', 'wine' or 'neutral'.", "Color del recuadro del ícono: 'primary', 'lavender', 'cream', 'wine' o 'neutral'.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other div attribute, including ref.", "Cualquier otro atributo de div, incluido ref.")),
+    ];
+}

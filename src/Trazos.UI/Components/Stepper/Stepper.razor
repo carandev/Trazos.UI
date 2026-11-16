@@ -1,0 +1,60 @@
+@namespace Trazos.UI.Components
+
+<ol class="trazos-stepper @(Vertical ? "is-vertical" : "is-horizontal") @Class" aria-label="@Label" @attributes="AdditionalAttributes">
+    @for (var i = 0; i < Steps.Count; i++)
+    {
+        var step = Steps[i];
+        var state = i < Current ? "complete" : i == Current ? "current" : "upcoming";
+        <li class="trazos-stepper-step is-@state" aria-current="@(i == Current ? "step" : null)">
+            <span class="trazos-stepper-marker" aria-hidden="true">
+                @if (i < Current)
+                {
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>
+                }
+                else
+                {
+                    @(i + 1)
+                }
+            </span>
+            <span class="trazos-stepper-text">
+                <span class="trazos-stepper-title">@step.Title</span>
+                @if (!string.IsNullOrEmpty(step.Description))
+                {
+                    <span class="trazos-stepper-description">@step.Description</span>
+                }
+                @if (i < Current)
+                {
+                    <VisuallyHidden Class="trazos-visually-hidden-text">@CompletedLabel</VisuallyHidden>
+                }
+            </span>
+        </li>
+    }
+</ol>
+
+@code {
+    [Parameter, EditorRequired]
+    public IReadOnlyList<StepperStep> Steps { get; set; } = [];
+
+    /// <summary>Zero-based index of the current step. Earlier steps show as complete.</summary>
+    [Parameter]
+    public int Current { get; set; }
+
+    /// <summary>Accessible name of the list, such as the name of the workflow.</summary>
+    [Parameter]
+    public string? Label { get; set; }
+
+    /// <summary>Screen-reader text added to completed steps.</summary>
+    [Parameter]
+    public string CompletedLabel { get; set; } = "Completed";
+
+    [Parameter]
+    public bool Vertical { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

@@ -1,0 +1,102 @@
+@page "/components/breadcrumbs"
+
+<DocPage Title="Breadcrumbs" Category="@L.T("Navigation", "Navegación")"
+         Lead="@L.T("A trail of links from the root to the current page. The last item is the current page, marked with aria-current and not linked.", "Una ruta de enlaces desde la raíz hasta la página actual. El último elemento es la página actual, marcado con aria-current y sin enlace.")">
+
+    <DemoBlock Code="@Code" React="breadcrumbs/basic">
+        <Breadcrumbs Items="_trail" Label="@L.T("Breadcrumb", "Migas de pan")" />
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Levels without a page", "Niveles sin página")"
+               Description="@L.T("An item without a link renders as plain text, for grouping levels that have no page of their own.", "Un elemento sin enlace se muestra como texto simple, para niveles de agrupación que no tienen página propia.")"
+               Code="@TextCode" React="breadcrumbs/no-links">
+        <Breadcrumbs Items="_settings" Label="@L.T("Breadcrumb", "Migas de pan")" />
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <ul>
+        <li>@L.T("In hierarchies of three or more levels, such as Home › Employees › Ana María.", "En jerarquías de tres o más niveles, como Inicio › Empleados › Ana María.")</li>
+        <li>@L.T("Not for a linear process (use Stepper) or for pages with a single parent (a back link in PageHeader is simpler).", "No para un proceso lineal (usa Stepper) ni para páginas con un solo padre (un enlace para volver en PageHeader es más simple).")</li>
+        <li>@L.T("Usually you do not render it alone: pass the trail to PageHeader and it places the breadcrumbs above the title.", "Normalmente no se renderiza solo: pasa la ruta a PageHeader y él ubica las migas encima del título.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li>
+            @if (F.IsReact)
+            {
+                <Tr><En>Build an array of <code>{ text, href? }</code> objects from the root to the current page.</En><Es>Arma un arreglo de objetos <code>{ text, href? }</code> desde la raíz hasta la página actual.</Es></Tr>
+            }
+            else
+            {
+                <Tr><En>Build a list of <code>BreadcrumbItem(Text, Href)</code> from the root to the current page.</En><Es>Arma una lista de <code>BreadcrumbItem(Text, Href)</code> desde la raíz hasta la página actual.</Es></Tr>
+            }
+        </li>
+        <li>@L.T("Give every item a link except the last one: the last item is always the current page and is never linked, even if it has a link.", "Dale enlace a todos los elementos menos al último: el último siempre es la página actual y nunca lleva enlace, aunque tenga uno.")</li>
+        <li><Tr><En>Translate <code>@F.Pick("Label", "label")</code>, the name screen readers announce for the navigation.</En><Es>Traduce <code>@F.Pick("Label", "label")</code>, el nombre que los lectores de pantalla anuncian para la navegación.</Es></Tr></li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li><Tr><En>It renders a <code>nav</code> landmark with an ordered list, so screen readers announce the number of levels.</En><Es>Renderiza un landmark <code>nav</code> con una lista ordenada, así los lectores de pantalla anuncian cuántos niveles hay.</Es></Tr></li>
+        <li><Tr><En>The current page gets <code>aria-current="page"</code>. The chevrons between items are hidden from screen readers.</En><Es>La página actual recibe <code>aria-current="page"</code>. Las flechas entre elementos están ocultas para los lectores de pantalla.</Es></Tr></li>
+        <li>@L.T("Only the links are focusable; Tab moves through them in order.", "Solo los enlaces reciben foco; Tab los recorre en orden.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@L.T("Leaving out the current page: the trail must end with it so the user knows where they are.", "Omitir la página actual: la ruta debe terminar en ella para que el usuario sepa dónde está.")</li>
+        <li>@L.T("Very long names: the current page is truncated with an ellipsis on one line, so keep the text short.", "Nombres muy largos: la página actual se recorta con puntos suspensivos en una línea, así que usa textos cortos.")</li>
+    </ul>
+
+    <ApiTable Params="Params" ReactParams="ReactParams" />
+</DocPage>
+
+@code {
+    private IReadOnlyList<BreadcrumbItem> _trail => [
+        new(L.T("Home", "Inicio"), ""),
+        new(L.T("Payroll", "Nómina"), "components/breadcrumbs"),
+        new(L.T("November 2026", "Noviembre 2026")),
+    ];
+
+    private IReadOnlyList<BreadcrumbItem> _settings => [
+        new(L.T("Settings", "Configuración")),
+        new(L.T("Company", "Empresa"), "components/breadcrumbs"),
+        new(L.T("Cost centers", "Centros de costo")),
+    ];
+
+    private const string Code = """
+        <Breadcrumbs Items="_trail" />
+
+        @code {
+            private readonly IReadOnlyList<BreadcrumbItem> _trail =
+            [
+                new("Home", "/"),
+                new("Payroll", "/payroll"),
+                new("November 2026"),
+            ];
+        }
+        """;
+
+    private const string TextCode = """
+        <Breadcrumbs Items="@([new("Settings"), new("Company", "/settings/company"), new("Cost centers")])" />
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Items", "IReadOnlyList<BreadcrumbItem>", "required", L.T("BreadcrumbItem(Text, Href). The last item is the current page.", "BreadcrumbItem(Text, Href). El último elemento es la página actual.")),
+        new("Label", "string", "\"Breadcrumb\"", L.T("Accessible name of the nav landmark.", "Nombre accesible del landmark nav.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("items", "readonly BreadcrumbItem[]", "required", L.T("{ text, href? } objects. The last item is the current page.", "Objetos { text, href? }. El último elemento es la página actual.")),
+        new("label", "string", "'Breadcrumb'", L.T("Accessible name of the nav landmark.", "Nombre accesible del landmark nav.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'nav'>", null, L.T("Any other nav attribute, including ref.", "Cualquier otro atributo de nav, incluido ref.")),
+    ];
+}

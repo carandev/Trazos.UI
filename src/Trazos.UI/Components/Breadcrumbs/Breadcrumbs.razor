@@ -1,0 +1,48 @@
+@namespace Trazos.UI.Components
+
+<nav class="trazos-breadcrumbs @Class" aria-label="@Label" @attributes="AdditionalAttributes">
+    <ol class="trazos-breadcrumbs-list">
+        @for (var i = 0; i < Items.Count; i++)
+        {
+            var item = Items[i];
+            var isCurrent = i == Items.Count - 1;
+            <li class="trazos-breadcrumbs-item">
+                @if (isCurrent)
+                {
+                    <span class="trazos-breadcrumbs-current" aria-current="page">@item.Text</span>
+                }
+                else if (!string.IsNullOrEmpty(item.Href))
+                {
+                    <a class="trazos-breadcrumbs-link" href="@item.Href">@item.Text</a>
+                }
+                else
+                {
+                    <span class="trazos-breadcrumbs-text">@item.Text</span>
+                }
+
+                @if (!isCurrent)
+                {
+                    <svg class="trazos-breadcrumbs-separator" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7" />
+                    </svg>
+                }
+            </li>
+        }
+    </ol>
+</nav>
+
+@code {
+    /// <summary>The trail, from the root to the current page.</summary>
+    [Parameter, EditorRequired]
+    public IReadOnlyList<BreadcrumbItem> Items { get; set; } = [];
+
+    /// <summary>Accessible name of the navigation landmark.</summary>
+    [Parameter]
+    public string Label { get; set; } = "Breadcrumb";
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

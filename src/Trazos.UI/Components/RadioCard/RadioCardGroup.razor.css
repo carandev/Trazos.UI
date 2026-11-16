@@ -162,3 +162,10 @@
     font-weight: 600;
     color: var(--trazos-danger);
 }
+
+/* EditForm state classes (modified, valid, invalid) land on the fieldset. The
+   group draws its own error state, so drop the outline Blazor templates add. */
+.trazos-radio-cards.valid,
+.trazos-radio-cards.invalid {
+    outline: none;
+}

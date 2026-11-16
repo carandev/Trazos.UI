@@ -1,7 +1,14 @@
 @namespace Trazos.UI.Components
 @typeparam TValue
+@inherits FormFieldBase<TValue>
 
-<fieldset class="trazos-radio-cards @Class" @attributes="AdditionalAttributes">
+<fieldset id="@Id"
+          class="trazos-radio-cards @FieldStateClass @Class"
+          role="radiogroup"
+          aria-invalid="@AriaInvalid"
+          aria-required="@(Required ? "true" : null)"
+          aria-describedby="@DescribedBy"
+          @attributes="AdditionalAttributes">
     @if (!string.IsNullOrEmpty(Label))
     {
         <legend class="trazos-radio-cards-label">
@@ -54,12 +61,12 @@
         }
     </div>
 
-    @if (!string.IsNullOrEmpty(Error))
+    @if (HasError)
     {
-        <p class="trazos-radio-cards-error" role="alert">@Error</p>
+        <p id="@ErrorId" class="trazos-radio-cards-error" role="alert">@ErrorMessage</p>
     }
-    else if (!string.IsNullOrEmpty(HelperText))
+    else if (HasHelperText)
     {
-        <p class="trazos-radio-cards-helper">@HelperText</p>
+        <p id="@HelperId" class="trazos-radio-cards-helper">@HelperText</p>
     }
 </fieldset>

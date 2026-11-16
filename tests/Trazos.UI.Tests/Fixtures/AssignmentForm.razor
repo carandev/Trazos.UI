@@ -1,0 +1,30 @@
+<EditForm Model="Model">
+    <DataAnnotationsValidator />
+    <SelectInput Id="frequency" Label="Frequency" Placeholder="Pick one" @bind-Value="Model.Frequency"
+                 Options="SelectOption.ForNullableEnum<PayFrequency>()" />
+    <SelectInput Id="company" Label="Company" Placeholder="Pick one" @bind-Value="Model.CompanyId" Options="Companies" />
+    <SelectInput Id="manager" Label="Manager" Placeholder="Nobody" @bind-Value="Model.ManagerId">
+        <option value="@ManagerGuid">Ada</option>
+    </SelectInput>
+    <RadioCardGroup Label="Contract" @bind-Value="Model.Contract" Options="Contracts" />
+    <button type="submit">Save</button>
+</EditForm>
+
+@code {
+    public static readonly Guid ManagerGuid = Guid.Parse("8c6d3c1e-6c33-4d1e-9a40-0f8f0c1f2a10");
+
+    [Parameter] public AssignmentModel Model { get; set; } = new();
+
+    private static readonly IReadOnlyList<SelectOption<int>> Companies =
+    [
+        new(1, "Acme"),
+        new(2, "Globex"),
+        new(3, "Initech", Disabled: true),
+    ];
+
+    private static readonly List<RadioCardOption<string?>> Contracts =
+    [
+        new("fixed", "Fixed term"),
+        new("open", "Open ended"),
+    ];
+}
