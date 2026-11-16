@@ -3,7 +3,7 @@
 <DocPage Title="Drawer" Category="@L.T("Navigation", "Navegación")"
          Lead="@L.T("A slide-out side panel with backdrop, swipe-to-close on touch devices and body scroll lock.", "Un panel lateral deslizable con fondo oscurecido, cierre por deslizamiento en pantallas táctiles y bloqueo del desplazamiento de la página.")">
 
-    <DemoBlock Code="@Code">
+    <DemoBlock Code="@Code" React="drawer/filters">
         <Button Variant="ButtonVariant.Outline" OnClick="() => _open = true">@L.T("Open drawer", "Abrir panel")</Button>
 
         <Drawer @bind-IsOpen="_open" Title="@L.T("Filters", "Filtros")">
@@ -18,7 +18,7 @@
         </Drawer>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -46,5 +46,20 @@
         new("ChildContent", "RenderFragment?", null, L.T("Drawer body.", "Cuerpo del panel.")),
         new("ShowCloseButton", "bool", "true", L.T("Shows the close button.", "Muestra el botón de cierre.")),
         new("CloseButtonAriaLabel", "string", "\"Cerrar menú\"", L.T("Accessible label of the close button.", "Etiqueta accesible del botón de cierre.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("open", "boolean", null, L.T("Controlled visibility. Pair it with onOpenChange.", "Visibilidad controlada. Úsala junto con onOpenChange.")),
+        new("defaultOpen", "boolean", "false", L.T("Initial visibility when uncontrolled.", "Visibilidad inicial cuando no está controlado.")),
+        new("onOpenChange", "(open: boolean) => void", null, L.T("Called when the drawer opens or closes, including swipe-to-open.", "Se llama cuando el panel se abre o se cierra, incluida la apertura por deslizamiento.")),
+        new("onClose", "() => void", null, L.T("Called after the drawer closes.", "Se llama después de que el panel se cierra.")),
+        new("title", "ReactNode", null, L.T("Header text.", "Texto del encabezado.")),
+        new("header", "ReactNode", null, L.T("Custom header. Replaces title.", "Encabezado personalizado. Reemplaza a title.")),
+        new("children", "ReactNode", null, L.T("Drawer body.", "Cuerpo del panel.")),
+        new("showCloseButton", "boolean", "true", L.T("Shows the close button.", "Muestra el botón de cierre.")),
+        new("closeButtonAriaLabel", "string", "'Cerrar menú'", L.T("Accessible label of the close button.", "Etiqueta accesible del botón de cierre.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'aside'>", null, L.T("Any other aside attribute, including ref.", "Cualquier otro atributo de aside, incluido ref.")),
     ];
 }

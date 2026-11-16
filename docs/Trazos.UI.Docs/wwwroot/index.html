@@ -29,6 +29,23 @@
                 document.documentElement.lang = lang;
                 if (!persist) return;
                 try { localStorage.setItem('trazos-docs-lang', lang); } catch (e) { }
+            },
+            // Blazor or React docs: a ?fw= link wins and is remembered, then the saved choice.
+            getFramework: function () {
+                var fw = null;
+                try { fw = new URLSearchParams(location.search).get('fw'); } catch (e) { }
+                if (fw === 'blazor' || fw === 'react') {
+                    window.trazosDocs.saveFramework(fw);
+                    return fw;
+                }
+                try {
+                    var saved = localStorage.getItem('trazos-docs-framework');
+                    if (saved === 'blazor' || saved === 'react') return saved;
+                } catch (e) { }
+                return 'blazor';
+            },
+            saveFramework: function (fw) {
+                try { localStorage.setItem('trazos-docs-framework', fw); } catch (e) { }
             }
         };
         // Set the language before the first paint so nothing flashes.

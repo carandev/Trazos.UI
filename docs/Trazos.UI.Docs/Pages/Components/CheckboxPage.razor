@@ -1,9 +1,9 @@
 @page "/components/checkbox"
 
 <DocPage Title="Checkbox" Category="@L.T("Forms", "Formularios")"
-         Lead="@L.T("A native checkbox with a hand-drawn look. Use Label for plain text or ChildContent for rich content such as links.", "Una casilla nativa con aspecto dibujado a mano. Usa Label para texto simple o ChildContent para contenido enriquecido, como enlaces.")">
+         Lead="@F.Pick(L.T("A native checkbox with a hand-drawn look. Use Label for plain text or ChildContent for rich content such as links.", "Una casilla nativa con aspecto dibujado a mano. Usa Label para texto simple o ChildContent para contenido enriquecido, como enlaces."), L.T("A native checkbox with a hand-drawn look. Use label for plain text or children for rich content such as links.", "Una casilla nativa con aspecto dibujado a mano. Usa label para texto simple o children para contenido enriquecido, como enlaces."))">
 
-    <DemoBlock Code="@Code">
+    <DemoBlock Code="@Code" React="checkbox/basic">
         <div class="docs-stack">
             <Checkbox Label="@L.T("Send me reminders before each event", "Envíame recordatorios antes de cada evento")" @bind-Value="_reminders" />
             <Checkbox @bind-Value="_terms" Error="@(_terms ? null : L.T("You must accept to continue.", "Debes aceptar para continuar."))">
@@ -17,7 +17,7 @@
         </div>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -47,5 +47,20 @@
         new("Id", "string", "generated", L.T("Id of the input.", "Id del input.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra attributes for the <input>.", "Atributos adicionales para el <input>.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("checked", "boolean", null, L.T("Controlled checked state. Pair it with onCheckedChange.", "Estado marcado controlado. Úsalo junto con onCheckedChange.")),
+        new("defaultChecked", "boolean", "false", L.T("Initial checked state for uncontrolled use.", "Estado marcado inicial para uso no controlado.")),
+        new("onCheckedChange", "(checked: boolean) => void", null, L.T("Called with the new checked state.", "Se llama con el nuevo estado marcado.")),
+        new("label", "string", null, L.T("Plain text label.", "Etiqueta de texto simple.")),
+        new("children", "ReactNode", null, L.T("Rich label. Takes precedence over label.", "Etiqueta enriquecida. Tiene prioridad sobre label.")),
+        new("helperText", "string", null, L.T("Hint below the checkbox.", "Ayuda debajo de la casilla.")),
+        new("error", "string", null, L.T("Error message.", "Mensaje de error.")),
+        new("disabled", "boolean", "false", L.T("Disables the checkbox.", "Deshabilita la casilla.")),
+        new("id", "string", "generated", L.T("Id of the input.", "Id del input.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'input'>", null, L.T("Any other input attribute except type, including ref and onChange.", "Cualquier otro atributo de input salvo type, incluidos ref y onChange.")),
     ];
 }

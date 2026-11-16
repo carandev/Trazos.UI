@@ -1,32 +1,66 @@
 @page "/components/app-shell"
 
 <DocPage Title="AppShell" Category="@L.T("Navigation", "Navegación")"
-         Lead="@L.T("A ready-made application layout: desktop sidebar, top bar, and a mobile drawer that reuses the sidebar. It also hosts the global Toast and confirm dialog slots.", "Un layout de aplicación listo para usar: barra lateral en escritorio, barra superior y un panel lateral móvil que reutiliza la barra lateral. También aloja los contenedores globales de Toast y del diálogo de confirmación.")">
+         Lead="@F.Pick(L.T("A ready-made application layout: desktop sidebar, top bar, and a mobile drawer that reuses the sidebar. It also hosts the global Toast and confirm dialog slots.", "Un layout de aplicación listo para usar: barra lateral en escritorio, barra superior y un panel lateral móvil que reutiliza la barra lateral. También aloja los contenedores globales de Toast y del diálogo de confirmación."), L.T("A ready-made application layout: desktop sidebar, top bar, and a mobile drawer that reuses the sidebar. It also wraps its content in ToastProvider and ConfirmDialogProvider.", "Un layout de aplicación listo para usar: barra lateral en escritorio, barra superior y un panel lateral móvil que reutiliza la barra lateral. También envuelve su contenido en ToastProvider y ConfirmDialogProvider."))">
 
     <div class="docs-note">
-        <Tr>
-            <En>You are looking at it: this documentation site is built with <code>AppShell</code>.
-                Resize the window below 768px to see the sidebar move into the drawer.</En>
-            <Es>Lo estás viendo: este sitio de documentación está construido con <code>AppShell</code>.
-                Reduce la ventana a menos de 768px para ver cómo la barra lateral pasa al panel lateral.</Es>
-        </Tr>
+        @if (F.IsReact)
+        {
+            <Tr>
+                <En>This documentation site uses the same layout, built with the Blazor <code>AppShell</code>; the React one renders
+                    the same markup and styles. The demo below runs the React <code>AppShell</code> in a framed preview: below 768px
+                    the sidebar moves into the drawer.</En>
+                <Es>Este sitio de documentación usa el mismo layout, construido con el <code>AppShell</code> de Blazor; el de React
+                    renderiza el mismo markup y los mismos estilos. La demo de abajo ejecuta el <code>AppShell</code> de React en una
+                    vista enmarcada: por debajo de 768px la barra lateral pasa al panel lateral.</Es>
+            </Tr>
+        }
+        else
+        {
+            <Tr>
+                <En>You are looking at it: this documentation site is built with <code>AppShell</code>.
+                    Resize the window below 768px to see the sidebar move into the drawer.</En>
+                <Es>Lo estás viendo: este sitio de documentación está construido con <code>AppShell</code>.
+                    Reduce la ventana a menos de 768px para ver cómo la barra lateral pasa al panel lateral.</Es>
+            </Tr>
+        }
     </div>
 
     <h2 class="docs-h2">@L.T("Usage", "Uso")</h2>
-    <p><Tr><En>Use it as the root of your <code>MainLayout</code>:</En><Es>Úsalo como raíz de tu <code>MainLayout</code>:</Es></Tr></p>
-    <CodeBlock Code="@LayoutCode" />
+    @if (F.IsReact)
+    {
+        <p><Tr><En>Use it as the root of your app and pass the page as its children:</En><Es>Úsalo como raíz de tu app y pasa la página como su contenido (children):</Es></Tr></p>
+        <DemoBlock React="app-shell/layout" ShowCode="true" />
+    }
+    else
+    {
+        <p><Tr><En>Use it as the root of your <code>MainLayout</code>:</En><Es>Úsalo como raíz de tu <code>MainLayout</code>:</Es></Tr></p>
+        <CodeBlock Code="@LayoutCode" />
+    }
 
     <h2 class="docs-h2">@L.T("Environment badge", "Insignia del entorno")</h2>
     <p>
-        <Tr>
-            <En>When <code>TrazosUIOptions.IsDevelopment</code> is true, a badge with the environment name appears next to
-                the brand. Configure it with <a href="installation">AddTrazosUI</a>.</En>
-            <Es>Cuando <code>TrazosUIOptions.IsDevelopment</code> es true, aparece una insignia con el nombre del entorno junto a
-                la marca. Configúrala con <a href="installation">AddTrazosUI</a>.</Es>
-        </Tr>
+        @if (F.IsReact)
+        {
+            <Tr>
+                <En>When <code>isDevelopment</code> is true, a badge with <code>environmentName</code> (default <code>DEV</code>) appears
+                    next to the brand. Set <code>showEnvironmentBadge</code> to false to hide it.</En>
+                <Es>Cuando <code>isDevelopment</code> es true, aparece una insignia con <code>environmentName</code> (por defecto <code>DEV</code>)
+                    junto a la marca. Usa <code>showEnvironmentBadge</code> en false para ocultarla.</Es>
+            </Tr>
+        }
+        else
+        {
+            <Tr>
+                <En>When <code>TrazosUIOptions.IsDevelopment</code> is true, a badge with the environment name appears next to
+                    the brand. Configure it with <a href="installation">AddTrazosUI</a>.</En>
+                <Es>Cuando <code>TrazosUIOptions.IsDevelopment</code> es true, aparece una insignia con el nombre del entorno junto a
+                    la marca. Configúrala con <a href="installation">AddTrazosUI</a>.</Es>
+            </Tr>
+        }
     </p>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
     <ApiTable Title="@L.T("Methods", "Métodos")" Params="Methods" />
 </DocPage>
 
@@ -67,5 +101,23 @@
         new("OpenDrawer()", "void", null, L.T("Opens the mobile drawer.", "Abre el panel lateral móvil.")),
         new("CloseDrawer()", "void", null, L.T("Closes the mobile drawer, for example after navigating.", "Cierra el panel lateral móvil, por ejemplo después de navegar.")),
         new("ToggleDrawer()", "void", null, L.T("Toggles the mobile drawer.", "Abre o cierra el panel lateral móvil.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("brand", "ReactNode", null, L.T("Logo or name in the top bar. Also used as the drawer header.", "Logo o nombre en la barra superior. También se usa como encabezado del panel lateral.")),
+        new("sidebar", "ReactNode", null, L.T("Navigation shown on desktop and, by default, inside the mobile drawer.", "Navegación que se muestra en escritorio y, por defecto, dentro del panel lateral móvil.")),
+        new("topBar", "ReactNode", null, L.T("Content on the right side of the top bar.", "Contenido del lado derecho de la barra superior.")),
+        new("drawerHeader", "ReactNode", null, L.T("Overrides brand in the drawer header.", "Reemplaza a brand en el encabezado del panel lateral.")),
+        new("drawerContent", "ReactNode", null, L.T("Overrides sidebar inside the drawer.", "Reemplaza a sidebar dentro del panel lateral.")),
+        new("children", "ReactNode", null, L.T("Page content.", "Contenido de la página.")),
+        new("containerClass", "string", "''", L.T("Extra classes for the content container (max width 72rem).", "Clases adicionales para el contenedor del contenido (ancho máximo de 72rem).")),
+        new("isDevelopment", "boolean", "false", L.T("Shows the environment badge next to the brand.", "Muestra la insignia del entorno junto a la marca.")),
+        new("environmentName", "string", null, L.T("Text of the environment badge, such as \"STAGING\"; DEV when not set.", "Texto de la insignia del entorno, como \"STAGING\"; DEV si no se indica.")),
+        new("showEnvironmentBadge", "boolean", "true", L.T("Set to false to hide the badge even in development.", "Usa false para ocultar la insignia incluso en desarrollo.")),
+        new("sidebarAriaLabel", "string", "'Navegación principal'", L.T("Accessible label of the sidebar.", "Etiqueta accesible de la barra lateral.")),
+        new("hamburgerAriaLabel", "string", "'Abrir menú de navegación'", L.T("Accessible label of the button that opens the drawer.", "Etiqueta accesible del botón que abre el panel lateral.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other div attribute, including ref.", "Cualquier otro atributo de div, incluido ref.")),
     ];
 }

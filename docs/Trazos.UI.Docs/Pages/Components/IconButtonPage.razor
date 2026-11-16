@@ -1,23 +1,23 @@
 @page "/components/icon-button"
 
 <DocPage Title="IconButton" Category="@L.T("Actions", "Acciones")"
-         Lead="@L.T("A square button that only shows an icon. Label is required, because an icon alone has no accessible name.", "Un botón cuadrado que solo muestra un ícono. Label es obligatorio, porque un ícono por sí solo no tiene nombre accesible.")">
+         Lead="@F.Pick(L.T("A square button that only shows an icon. Label is required, because an icon alone has no accessible name.", "Un botón cuadrado que solo muestra un ícono. Label es obligatorio, porque un ícono por sí solo no tiene nombre accesible."), L.T("A square button that only shows an icon. label is required, because an icon alone has no accessible name.", "Un botón cuadrado que solo muestra un ícono. label es obligatorio, porque un ícono por sí solo no tiene nombre accesible."))">
 
-    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@VariantsCode">
+    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@VariantsCode" React="icon-button/variants">
         @foreach (var variant in Enum.GetValues<ButtonVariant>())
         {
             <IconButton Label="@variant.ToString()" Variant="variant">@Icons.Plus</IconButton>
         }
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("Sizes and states", "Tamaños y estados")" Description="@L.T("Medium is 44px and Large is 52px.", "Medium mide 44 px y Large, 52 px.")" Code="@StatesCode">
+    <DemoBlock Title="@L.T("Sizes and states", "Tamaños y estados")" Description="@F.Pick(L.T("Medium is 44px and Large is 52px.", "Medium mide 44 px y Large, 52 px."), L.T("'medium' is 44px and 'large' is 52px.", "'medium' mide 44 px y 'large', 52 px."))" Code="@StatesCode" React="icon-button/states">
         <IconButton Label="@L.T("Add", "Agregar")" Variant="ButtonVariant.Outline">@Icons.Plus</IconButton>
         <IconButton Label="@L.T("Add", "Agregar")" Variant="ButtonVariant.Outline" Size="IconButtonSize.Large">@Icons.Plus</IconButton>
         <IconButton Label="@L.T("Saving", "Guardando")" Variant="ButtonVariant.Outline" Loading="true">@Icons.Plus</IconButton>
         <IconButton Label="@L.T("Add", "Agregar")" Variant="ButtonVariant.Outline" Disabled="true">@Icons.Plus</IconButton>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -45,5 +45,19 @@
         new("OnClick", "EventCallback<MouseEventArgs>", null, L.T("Raised when the button is clicked.", "Se dispara al hacer clic en el botón.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("label", "string", null, L.T("Accessible name, set as aria-label. Required.", "Nombre accesible, aplicado como aria-label. Obligatorio.")),
+        new("variant", "ButtonVariant", "'ghost'", L.T("Same variants as Button.", "Las mismas variantes de Button.")),
+        new("size", "IconButtonSize", "'medium'", L.T("'medium' or 'large'.", "'medium' o 'large'.")),
+        new("type", "'button' | 'submit' | 'reset'", "'button'", L.T("The button type attribute.", "El atributo type del botón.")),
+        new("disabled", "boolean", "false", L.T("Disables the button.", "Deshabilita el botón.")),
+        new("loading", "boolean", "false", L.T("Shows a spinner in place of the icon and disables the button.", "Muestra un indicador de carga en lugar del ícono y deshabilita el botón.")),
+        new("children", "ReactNode", null, L.T("The icon.", "El ícono.")),
+        new("onClick", "MouseEventHandler<HTMLButtonElement>", null, L.T("Called when the button is clicked.", "Se llama al hacer clic en el botón.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'button'>", null, L.T("Any other button attribute except aria-label, including ref.", "Cualquier otro atributo de button salvo aria-label, incluido ref.")),
     ];
 }

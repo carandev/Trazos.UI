@@ -3,20 +3,20 @@
 <DocPage Title="Button" Category="@L.T("Actions", "Acciones")"
          Lead="@L.T("Triggers an action. Seven variants, three sizes, optional icons and a built-in loading state.", "Dispara una acción. Siete variantes, tres tamaños, íconos opcionales y un estado de carga integrado.")">
 
-    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@VariantsCode">
+    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@VariantsCode" React="button/variants">
         @foreach (var variant in Enum.GetValues<ButtonVariant>())
         {
             <Button Variant="variant">@variant</Button>
         }
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("Sizes", "Tamaños")" Code="@SizesCode">
+    <DemoBlock Title="@L.T("Sizes", "Tamaños")" Code="@SizesCode" React="button/sizes">
         <Button Size="ButtonSize.Small">@L.T("Small", "Pequeño")</Button>
         <Button Size="ButtonSize.Medium">@L.T("Medium", "Mediano")</Button>
         <Button Size="ButtonSize.Large">@L.T("Large", "Grande")</Button>
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("Icons", "Íconos")" Description="@L.T("LeadingIcon and TrailingIcon accept any markup, usually an inline SVG.", "LeadingIcon y TrailingIcon aceptan cualquier marcado, normalmente un SVG en línea.")" Code="@IconsCode">
+    <DemoBlock Title="@L.T("Icons", "Íconos")" Description="@F.Pick(L.T("LeadingIcon and TrailingIcon accept any markup, usually an inline SVG.", "LeadingIcon y TrailingIcon aceptan cualquier marcado, normalmente un SVG en línea."), L.T("leadingIcon and trailingIcon accept any ReactNode, usually an inline SVG.", "leadingIcon y trailingIcon aceptan cualquier ReactNode, normalmente un SVG en línea."))" Code="@IconsCode" React="button/icons">
         <Button Variant="ButtonVariant.Primary">
             <LeadingIcon>@Icons.Plus</LeadingIcon>
             <ChildContent>@L.T("New event", "Nuevo evento")</ChildContent>
@@ -27,15 +27,15 @@
         </Button>
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("Loading and disabled", "Carga y deshabilitado")" Description="@L.T("Loading shows a spinner and blocks clicks until the work finishes.", "Loading muestra un indicador de carga y bloquea los clics hasta que termina el trabajo.")" Code="@LoadingCode">
+    <DemoBlock Title="@L.T("Loading and disabled", "Carga y deshabilitado")" Description="@F.Pick(L.T("Loading shows a spinner and blocks clicks until the work finishes.", "Loading muestra un indicador de carga y bloquea los clics hasta que termina el trabajo."), L.T("loading shows a spinner, hides both icons and blocks clicks until the work finishes.", "loading muestra un indicador de carga, oculta ambos íconos y bloquea los clics hasta que termina el trabajo."))" Code="@LoadingCode" React="button/loading">
         <Button Variant="ButtonVariant.Wine" Loading="_saving" OnClick="SaveAsync">
             @(_saving ? L.T("Saving…", "Guardando…") : L.T("Save changes", "Guardar cambios"))
         </Button>
         <Button Disabled="true">@L.T("Disabled", "Deshabilitado")</Button>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
-    <ApiTable Title="@L.T("Enums", "Enumeraciones")" Params="Enums" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
+    <ApiTable Title="@F.Pick(L.T("Enums", "Enumeraciones"), L.T("Types", "Tipos"))" Params="Enums" ReactParams="ReactTypes" />
 </DocPage>
 
 @code {
@@ -113,5 +113,26 @@
     [
         new("ButtonVariant", "enum", null, "Primary, Wine, Secondary, Outline, Cream, Lavender, Ghost."),
         new("ButtonSize", "enum", null, "Small, Medium, Large."),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("variant", "ButtonVariant", "'primary'", L.T("Visual style of the button.", "Estilo visual del botón.")),
+        new("size", "ButtonSize", "'medium'", L.T("Height, padding and font size.", "Altura, relleno y tamaño de fuente.")),
+        new("type", "'button' | 'submit' | 'reset'", "'button'", L.T("Native type attribute.", "Atributo type nativo.")),
+        new("disabled", "boolean", "false", L.T("Disables the button.", "Deshabilita el botón.")),
+        new("loading", "boolean", "false", L.T("Shows a spinner, disables the button and hides both icons.", "Muestra un indicador de carga, deshabilita el botón y oculta ambos íconos.")),
+        new("onClick", "MouseEventHandler<HTMLButtonElement>", null, L.T("Called when the button is clicked.", "Se llama al hacer clic en el botón.")),
+        new("leadingIcon", "ReactNode", null, L.T("Content rendered before the label.", "Contenido que se renderiza antes de la etiqueta.")),
+        new("trailingIcon", "ReactNode", null, L.T("Content rendered after the label.", "Contenido que se renderiza después de la etiqueta.")),
+        new("children", "ReactNode", null, L.T("Button label.", "Etiqueta del botón.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'button'>", null, L.T("Any other button attribute, including ref.", "Cualquier otro atributo de button, incluido ref.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactTypes =>
+    [
+        new("ButtonVariant", "type", null, "'primary' | 'wine' | 'secondary' | 'outline' | 'cream' | 'lavender' | 'ghost'"),
+        new("ButtonSize", "type", null, "'small' | 'medium' | 'large'"),
     ];
 }

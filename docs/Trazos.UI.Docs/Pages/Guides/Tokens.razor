@@ -1,7 +1,7 @@
 @page "/tokens"
 
 <DocPage Title="@L.T("Design tokens", "Tokens de diseño")" Category="@L.T("Getting started", "Primeros pasos")"
-         Lead="@L.T("Every component reads from the same CSS custom properties declared in trazos.css. Use them in your own styles to stay on-brand.", "Todos los componentes leen las mismas propiedades personalizadas de CSS declaradas en trazos.css. Úsalas en tus propios estilos para mantener la identidad visual.")">
+         Lead="@F.Pick(L.T("Every component reads from the same CSS custom properties declared in trazos.css. Use them in your own styles to stay on-brand.", "Todos los componentes leen las mismas propiedades personalizadas de CSS declaradas en trazos.css. Úsalas en tus propios estilos para mantener la identidad visual."), L.T("Every component reads from the same CSS custom properties included in styles.css. Use them in your own styles to stay on-brand.", "Todos los componentes leen las mismas propiedades personalizadas de CSS incluidas en styles.css. Úsalas en tus propios estilos para mantener la identidad visual."))">
 
     @foreach (var group in ColorGroups)
     {
@@ -49,6 +49,31 @@
     </div>
 
     <h2 class="docs-h2">@L.T("Using the tokens", "Uso de los tokens")</h2>
+    <p>
+        @if (F.IsReact)
+        {
+            <Tr>
+                <En>The tokens come with <code>@@carandev/trazos-ui/styles.css</code>. To use only the CSS variables, without the components, import <code>tokens.css</code> instead:</En>
+                <Es>Los tokens vienen con <code>@@carandev/trazos-ui/styles.css</code>. Para usar solo las variables CSS, sin los componentes, importa <code>tokens.css</code> en su lugar:</Es>
+            </Tr>
+        }
+        else
+        {
+            <Tr>
+                <En>The tokens load with <code>trazos.css</code>, the stylesheet you link during <a href="installation">installation</a>:</En>
+                <Es>Los tokens se cargan con <code>trazos.css</code>, la hoja de estilos que enlazas durante la <a href="installation">instalación</a>:</Es>
+            </Tr>
+        }
+    </p>
+    @if (F.IsReact)
+    {
+        <CodeBlock Language="tsx" Code="@ReactLoadCode" />
+    }
+    else
+    {
+        <CodeBlock Language="html" Code="@BlazorLoadCode" />
+    }
+    <p>@L.T("Then read them from your own CSS:", "Luego léelos desde tu propio CSS:")</p>
     <CodeBlock Language="css" Code="@UsageCode" />
 </DocPage>
 
@@ -103,6 +128,15 @@
         "--trazos-shadow-soft",
         "--trazos-shadow-deep",
     ];
+
+    private const string BlazorLoadCode = """
+        <link rel="stylesheet" href="_content/Trazos.UI/trazos.css" />
+        """;
+
+    private const string ReactLoadCode = """
+        // main.tsx: tokens only, without component styles
+        import '@carandev/trazos-ui/tokens.css';
+        """;
 
     private const string UsageCode = """
         .my-panel {

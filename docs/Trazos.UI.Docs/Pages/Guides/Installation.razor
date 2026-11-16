@@ -1,70 +1,176 @@
 @page "/installation"
 
 <DocPage Title="@L.T("Installation", "Instalación")" Category="@L.T("Getting started", "Primeros pasos")"
-         Lead="@L.T("Add the package, register the services and load the stylesheet. Three steps and you are drawing.", "Agrega el paquete, registra los servicios y carga la hoja de estilos. Tres pasos y ya estás dibujando.")">
+         Lead="@F.Pick(L.T("Add the package, register the services and load the stylesheet. Three steps and you are drawing.", "Agrega el paquete, registra los servicios y carga la hoja de estilos. Tres pasos y ya estás dibujando."), L.T("Install the package, import the stylesheet and load the fonts. Three steps and you are drawing.", "Instala el paquete, importa la hoja de estilos y carga las fuentes. Tres pasos y ya estás dibujando."))">
 
-    <h2 class="docs-h2">@L.T("1. Install the package", "1. Instala el paquete")</h2>
-    <p>
-        <Tr>
-            <En>Trazos.UI targets <code>net10.0</code> and works with Blazor Web App, Blazor WebAssembly and .NET MAUI Blazor Hybrid.</En>
-            <Es>Trazos.UI apunta a <code>net10.0</code> y funciona con Blazor Web App, Blazor WebAssembly y .NET MAUI Blazor Hybrid.</Es>
-        </Tr>
-    </p>
-    <CodeBlock Language="bash" Code="dotnet add package Trazos.UI" />
+    @if (F.IsReact)
+    {
+        <h2 class="docs-h2">@L.T("1. Install the package", "1. Instala el paquete")</h2>
+        <p>
+            <Tr>
+                <En><code>@@carandev/trazos-ui</code> is built for React 19: <code>react</code> and <code>react-dom</code> 19 are peer dependencies.
+                    It ships ESM with TypeScript types.</En>
+                <Es><code>@@carandev/trazos-ui</code> está hecho para React 19: <code>react</code> y <code>react-dom</code> 19 son dependencias peer.
+                    Se distribuye como ESM con tipos de TypeScript.</Es>
+            </Tr>
+        </p>
+        <CodeBlock Language="bash" Code="npm install @@carandev/trazos-ui" />
 
-    <h2 class="docs-h2">@L.T("2. Register the services", "2. Registra los servicios")</h2>
-    <p>
-        <Tr>
-            <En><code>AddTrazosUI</code> registers <code>IDialogService</code>, <code>IThemeService</code> and the <code>TrazosUIOptions</code> singleton
-                that <code>AppShell</code> reads to show the environment badge.</En>
-            <Es><code>AddTrazosUI</code> registra <code>IDialogService</code>, <code>IThemeService</code> y el singleton <code>TrazosUIOptions</code>,
-                que <code>AppShell</code> lee para mostrar la insignia del entorno.</Es>
-        </Tr>
-    </p>
-    <CodeBlock Language="csharp" Code="@ProgramCode" />
+        <h2 class="docs-h2">@L.T("2. Import the stylesheet", "2. Importa la hoja de estilos")</h2>
+        <p>
+            <Tr>
+                <En>Import <code>styles.css</code> once, at the root of your app. It contains the tokens, the utility classes and every component's styles.
+                    To use only the CSS variables, without components, import <code>@@carandev/trazos-ui/tokens.css</code> instead.</En>
+                <Es>Importa <code>styles.css</code> una sola vez, en la raíz de tu app. Contiene los tokens, las clases utilitarias y los estilos de todos los componentes.
+                    Para usar solo las variables CSS, sin componentes, importa <code>@@carandev/trazos-ui/tokens.css</code> en su lugar.</Es>
+            </Tr>
+        </p>
+        <CodeBlock Language="tsx" Code="@ReactStylesCode" />
 
-    <ApiTable Title="TrazosUIOptions" Params="OptionsParams" />
+        <h2 class="docs-h2">@L.T("3. Load the fonts", "3. Carga las fuentes")</h2>
+        <p>
+            <Tr>
+                <En>The design uses Marcellus, Caveat and Plus Jakarta Sans from Google Fonts. Load them in <code>index.html</code>, or wherever your app renders <code>&lt;head&gt;</code>:</En>
+                <Es>El diseño usa Marcellus, Caveat y Plus Jakarta Sans de Google Fonts. Cárgalas en <code>index.html</code>, o donde tu app renderice el <code>&lt;head&gt;</code>:</Es>
+            </Tr>
+        </p>
+        <CodeBlock Language="html" Code="@ReactFontsCode" />
 
-    <h2 class="docs-h2">@L.T("3. Import the namespaces", "3. Importa los espacios de nombres")</h2>
-    <p><Tr><En>Add them to your <code>_Imports.razor</code>:</En><Es>Agrégalos a tu <code>_Imports.razor</code>:</Es></Tr></p>
-    <CodeBlock Code="@ImportsCode" />
+        <div class="docs-note">
+            <Tr>
+                <En>Buttons and inputs do not inherit the page font by default. If your app has no CSS reset that does it,
+                    add the snippet below to your stylesheet.</En>
+                <Es>Los botones y campos no heredan la fuente de la página por defecto. Si tu app no tiene un reset de CSS que lo haga,
+                    agrega este fragmento a tu hoja de estilos.</Es>
+            </Tr>
+        </div>
+        <CodeBlock Language="css" Code="@FontInheritCode" />
 
-    <h2 class="docs-h2">@L.T("4. Load the styles and fonts", "4. Carga los estilos y las fuentes")</h2>
-    <p>
-        <Tr>
-            <En>The global tokens live in <code>trazos.css</code>. Component styles are scoped and travel inside your
-                app bundle (<code>{YourApp}.styles.css</code>), which Blazor templates already reference.
-                The design uses Marcellus, Caveat and Plus Jakarta Sans from Google Fonts.</En>
-            <Es>Los tokens globales están en <code>trazos.css</code>. Los estilos de los componentes son aislados y viajan
-                dentro del paquete de tu app (<code>{YourApp}.styles.css</code>), que las plantillas de Blazor ya referencian.
-                El diseño usa Marcellus, Caveat y Plus Jakarta Sans de Google Fonts.</Es>
-        </Tr>
-    </p>
-    <CodeBlock Language="html" Code="@HeadCode" />
+        <h2 class="docs-h2">@L.T("4. Add the providers", "4. Agrega los proveedores")</h2>
+        <p>
+            <Tr>
+                <En><code>useToast</code> and <code>useConfirm</code> read from <code>ToastProvider</code> and <code>ConfirmDialogProvider</code>.
+                    <code>AppShell</code> already includes both. If you build your own layout, wrap the app once:</En>
+                <Es><code>useToast</code> y <code>useConfirm</code> leen de <code>ToastProvider</code> y <code>ConfirmDialogProvider</code>.
+                    <code>AppShell</code> ya incluye ambos. Si armas tu propio layout, envuelve la app una sola vez:</Es>
+            </Tr>
+        </p>
+        <CodeBlock Language="tsx" Code="@ReactProvidersCode" />
 
-    <div class="docs-note">
-        <Tr>
-            <En>Buttons and inputs do not inherit the page font by default. If your app has no CSS reset that does it,
-                add the snippet below to your stylesheet.</En>
-            <Es>Los botones y campos no heredan la fuente de la página por defecto. Si tu app no tiene un reset de CSS que lo haga,
-                agrega este fragmento a tu hoja de estilos.</Es>
-        </Tr>
-    </div>
-    <CodeBlock Language="css" Code="@FontInheritCode" />
+        <h2 class="docs-h2">@L.T("5. Use a component", "5. Usa un componente")</h2>
+        <p>
+            <Tr>
+                <En>Import components by name. Form controls take <code>value</code> and <code>onValueChange</code>, or <code>defaultValue</code>.</En>
+                <Es>Importa los componentes por nombre. Los controles de formulario reciben <code>value</code> y <code>onValueChange</code>, o <code>defaultValue</code>.</Es>
+            </Tr>
+        </p>
+        <CodeBlock Language="tsx" Code="@ReactUsageCode" />
+    }
+    else
+    {
+        <h2 class="docs-h2">@L.T("1. Install the package", "1. Instala el paquete")</h2>
+        <p>
+            <Tr>
+                <En>Trazos.UI targets <code>net10.0</code> and works with Blazor Web App, Blazor WebAssembly and .NET MAUI Blazor Hybrid.</En>
+                <Es>Trazos.UI apunta a <code>net10.0</code> y funciona con Blazor Web App, Blazor WebAssembly y .NET MAUI Blazor Hybrid.</Es>
+            </Tr>
+        </p>
+        <CodeBlock Language="bash" Code="dotnet add package Trazos.UI" />
 
-    <h2 class="docs-h2">@L.T("5. Add the global slots", "5. Agrega los contenedores globales")</h2>
-    <p>
-        <Tr>
-            <En><code>Toast</code> and the confirm dialog render from a single container. <code>AppShell</code> already
-                includes both. If you build your own layout, place them once:</En>
-            <Es><code>Toast</code> y el diálogo de confirmación se renderizan desde un único contenedor. <code>AppShell</code> ya
-                incluye ambos. Si armas tu propio layout, colócalos una sola vez:</Es>
-        </Tr>
-    </p>
-    <CodeBlock Code="@SlotsCode" />
+        <h2 class="docs-h2">@L.T("2. Register the services", "2. Registra los servicios")</h2>
+        <p>
+            <Tr>
+                <En><code>AddTrazosUI</code> registers <code>IDialogService</code>, <code>IThemeService</code> and the <code>TrazosUIOptions</code> singleton
+                    that <code>AppShell</code> reads to show the environment badge.</En>
+                <Es><code>AddTrazosUI</code> registra <code>IDialogService</code>, <code>IThemeService</code> y el singleton <code>TrazosUIOptions</code>,
+                    que <code>AppShell</code> lee para mostrar la insignia del entorno.</Es>
+            </Tr>
+        </p>
+        <CodeBlock Language="csharp" Code="@ProgramCode" />
+
+        <ApiTable Title="TrazosUIOptions" Params="OptionsParams" />
+
+        <h2 class="docs-h2">@L.T("3. Import the namespaces", "3. Importa los espacios de nombres")</h2>
+        <p><Tr><En>Add them to your <code>_Imports.razor</code>:</En><Es>Agrégalos a tu <code>_Imports.razor</code>:</Es></Tr></p>
+        <CodeBlock Code="@ImportsCode" />
+
+        <h2 class="docs-h2">@L.T("4. Load the styles and fonts", "4. Carga los estilos y las fuentes")</h2>
+        <p>
+            <Tr>
+                <En>The global tokens live in <code>trazos.css</code>. Component styles are scoped and travel inside your
+                    app bundle (<code>{YourApp}.styles.css</code>), which Blazor templates already reference.
+                    The design uses Marcellus, Caveat and Plus Jakarta Sans from Google Fonts.</En>
+                <Es>Los tokens globales están en <code>trazos.css</code>. Los estilos de los componentes son aislados y viajan
+                    dentro del paquete de tu app (<code>{YourApp}.styles.css</code>), que las plantillas de Blazor ya referencian.
+                    El diseño usa Marcellus, Caveat y Plus Jakarta Sans de Google Fonts.</Es>
+            </Tr>
+        </p>
+        <CodeBlock Language="html" Code="@HeadCode" />
+
+        <div class="docs-note">
+            <Tr>
+                <En>Buttons and inputs do not inherit the page font by default. If your app has no CSS reset that does it,
+                    add the snippet below to your stylesheet.</En>
+                <Es>Los botones y campos no heredan la fuente de la página por defecto. Si tu app no tiene un reset de CSS que lo haga,
+                    agrega este fragmento a tu hoja de estilos.</Es>
+            </Tr>
+        </div>
+        <CodeBlock Language="css" Code="@FontInheritCode" />
+
+        <h2 class="docs-h2">@L.T("5. Add the global slots", "5. Agrega los contenedores globales")</h2>
+        <p>
+            <Tr>
+                <En><code>Toast</code> and the confirm dialog render from a single container. <code>AppShell</code> already
+                    includes both. If you build your own layout, place them once:</En>
+                <Es><code>Toast</code> y el diálogo de confirmación se renderizan desde un único contenedor. <code>AppShell</code> ya
+                    incluye ambos. Si armas tu propio layout, colócalos una sola vez:</Es>
+            </Tr>
+        </p>
+        <CodeBlock Code="@SlotsCode" />
+    }
 </DocPage>
 
 @code {
+    private const string ReactStylesCode = """
+        // main.tsx
+        import '@carandev/trazos-ui/styles.css';
+        """;
+
+    private const string ReactFontsCode = """
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Marcellus&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
+        """;
+
+    private const string ReactProvidersCode = """
+        import { ConfirmDialogProvider, ToastProvider } from '@carandev/trazos-ui';
+
+        <ToastProvider>
+          <ConfirmDialogProvider>
+            <App />
+          </ConfirmDialogProvider>
+        </ToastProvider>
+        """;
+
+    private const string ReactUsageCode = """
+        import { Button, TextInput, useToast } from '@carandev/trazos-ui';
+        import { useState } from 'react';
+
+        export function Greeting() {
+          const [name, setName] = useState('');
+          const toast = useToast();
+
+          return (
+            <>
+              <TextInput label="Your name" value={name} onValueChange={setName} />
+              <Button variant="primary" onClick={() => toast.showSuccess(`Hello, ${name}.`)}>
+                Save
+              </Button>
+            </>
+          );
+        }
+        """;
+
     private const string ProgramCode = """
         using Trazos.UI.Extensions;
 

@@ -3,7 +3,7 @@
 <DocPage Title="SiteHeader" Category="@L.T("Website helpers", "Ayudas para sitios web")"
          Lead="@L.T("A top navigation bar for public websites, with logo and actions slots, a blurred sticky style after scrolling, a mobile menu and an active link. AppShell covers dashboards with a sidebar.", "Una barra de navegación superior para sitios públicos, con espacios para logo y acciones, un estilo fijo con desenfoque al desplazarse, un menú móvil y un enlace activo. AppShell cubre los paneles con barra lateral.")">
 
-    <DemoBlock Title="@L.T("One-page site", "Sitio de una página")" Description="@L.T("ScrollSpy reports the section in the middle of the viewport. The menu and the scrolled style need an interactive render mode. With a base tag, write links as a path plus a fragment.", "ScrollSpy informa la sección que está en el centro de la pantalla. El menú y el estilo al desplazarse necesitan un modo de renderizado interactivo. Con una etiqueta base, escribe los enlaces como una ruta más un fragmento.")" Code="@HeaderCode">
+    <DemoBlock Title="@L.T("One-page site", "Sitio de una página")" Description="@F.Pick(L.T("ScrollSpy reports the section in the middle of the viewport. The menu and the scrolled style need an interactive render mode. With a base tag, write links as a path plus a fragment.", "ScrollSpy informa la sección que está en el centro de la pantalla. El menú y el estilo al desplazarse necesitan un modo de renderizado interactivo. Con una etiqueta base, escribe los enlaces como una ruta más un fragmento."), L.T("useScrollSpy returns the section in the middle of the viewport. With a base tag, as on this site, write links as a path plus a fragment.", "useScrollSpy devuelve la sección que está en el centro de la pantalla. Con una etiqueta base, como en este sitio, escribe los enlaces como una ruta más un fragmento."))" Code="@HeaderCode" React="site-header/one-page">
         <div style="width: 100%;">
             <SiteHeader Links="Links"
                         NavLabel="@L.T("Main", "Principal")"
@@ -24,8 +24,8 @@
         </div>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
-    <ApiTable Title="ScrollSpy" Params="SpyParams" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
+    <ApiTable Title="@F.Pick("ScrollSpy", "useScrollSpy(ids)")" Params="SpyParams" ReactParams="ReactSpyParams" />
 </DocPage>
 
 @code {
@@ -80,5 +80,25 @@
     [
         new("Ids", "IReadOnlyList<string>", null, L.T("The section ids to watch. Required.", "Los id de las secciones que se observan. Obligatorio.")),
         new("ActiveId", "string?", null, L.T("The active section. Use it with @bind-ActiveId.", "La sección activa. Úsalo con @bind-ActiveId.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("links", "SiteHeaderLink[]", null, L.T("The navigation links: href, label (ReactNode) and any other anchor attribute, such as className, target or onClick. Required.", "Los enlaces de navegación: href, label (ReactNode) y cualquier otro atributo de enlace, como className, target u onClick. Obligatorio.")),
+        new("navLabel", "string", null, L.T("Accessible name of the navigation. Required.", "Nombre accesible de la navegación. Obligatorio.")),
+        new("openMenuLabel", "string", null, L.T("Accessible name of the closed menu button. Required.", "Nombre accesible del botón con el menú cerrado. Obligatorio.")),
+        new("closeMenuLabel", "string", null, L.T("Accessible name of the open menu button. Required.", "Nombre accesible del botón con el menú abierto. Obligatorio.")),
+        new("logo", "ReactNode", null, L.T("Rendered at the start of the bar.", "Se renderiza al inicio de la barra.")),
+        new("actions", "ReactNode", null, L.T("Rendered beside the menu button, such as a ThemeToggle.", "Se renderiza junto al botón del menú, como un ThemeToggle.")),
+        new("activeHref", "string", null, L.T("The href of the current link.", "El href del enlace actual.")),
+        new("currentType", "'page' | 'location'", "'page'", L.T("The aria-current value of the active link. 'location' suits a one-page site with useScrollSpy.", "El valor de aria-current del enlace activo. 'location' sirve para un sitio de una página con useScrollSpy.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'header'>", null, L.T("Any other header attribute, including ref.", "Cualquier otro atributo de header, incluido ref.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactSpyParams =>
+    [
+        new("ids", "readonly string[]", null, L.T("The section ids to watch. A new array with the same ids does not restart the observer.", "Los id de las secciones que se observan. Un arreglo nuevo con los mismos id no reinicia el observador.")),
+        new(L.T("returns", "devuelve"), "string | null", "null", L.T("The id of the section that crosses the middle of the viewport.", "El id de la sección que cruza el centro de la pantalla.")),
     ];
 }

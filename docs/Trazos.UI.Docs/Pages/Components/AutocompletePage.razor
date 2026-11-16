@@ -3,7 +3,7 @@
 <DocPage Title="Autocomplete" Category="@L.T("Forms", "Formularios")"
          Lead="@L.T("Debounced async search with keyboard navigation and custom item templates. Keep the choice as a chip, or clear the field after each pick.", "Búsqueda asíncrona con debounce, navegación con teclado y plantillas personalizadas para cada resultado. Conserva la elección como un chip o limpia el campo después de cada selección.")">
 
-    <DemoBlock Title="@L.T("Single selection", "Selección única")" Description="@L.T("Type at least two letters. Arrow keys move, Enter selects, Escape closes.", "Escribe al menos dos letras. Las flechas te mueven, Enter selecciona y Escape cierra.")" Code="@SingleCode">
+    <DemoBlock Title="@L.T("Single selection", "Selección única")" Description="@L.T("Type at least two letters. Arrow keys move, Enter selects, Escape closes.", "Escribe al menos dos letras. Las flechas te mueven, Enter selecciona y Escape cierra.")" Code="@SingleCode" React="autocomplete/single">
         <div class="docs-stack">
             <Autocomplete TItem="Member"
                           Label="@L.T("Member", "Miembro")"
@@ -22,7 +22,7 @@
         </div>
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("Clear on select", "Limpiar al seleccionar")" Description="@L.T("Useful to add several items to a list.", "Útil para agregar varios elementos a una lista.")" Code="@MultiCode">
+    <DemoBlock Title="@L.T("Clear on select", "Limpiar al seleccionar")" Description="@L.T("Useful to add several items to a list.", "Útil para agregar varios elementos a una lista.")" Code="@MultiCode" React="autocomplete/clear-on-select">
         <div class="docs-stack">
             <Autocomplete TItem="Member"
                           Label="@L.T("Add participants", "Agregar participantes")"
@@ -54,7 +54,7 @@
         </div>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -180,5 +180,30 @@
         new("Id", "string", "generated", L.T("Id of the input.", "Id del campo.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("searchFn", "(query: string, signal: AbortSignal) => Iterable<T> | Promise<Iterable<T>>", "required", L.T("Runs the search. The signal is aborted when a newer query starts. It can return the items directly or as a promise.", "Ejecuta la búsqueda. La señal se aborta cuando empieza una consulta más reciente. Puede devolver los elementos directamente o como una promesa.")),
+        new("itemText", "(item: T) => string", "required", L.T("Text for an item when there is no renderItem.", "Texto de un elemento cuando no hay renderItem.")),
+        new("renderItem", "(item: T) => ReactNode", null, L.T("Custom markup for each result and for the selected item.", "Marcado personalizado para cada resultado y para el elemento seleccionado.")),
+        new("selectedItem", "T | null", null, L.T("Controlled selected item (null for none). Pair it with onSelectedItemChange.", "Elemento seleccionado controlado (null si no hay ninguno). Úsalo junto con onSelectedItemChange.")),
+        new("defaultSelectedItem", "T | null", "null", L.T("Initial selected item for uncontrolled use.", "Elemento seleccionado inicial para uso no controlado.")),
+        new("onSelectedItemChange", "(item: T | null) => void", null, L.T("Called on select, and with null on clear.", "Se llama al seleccionar, y con null al limpiar.")),
+        new("clearOnSelect", "boolean", "false", L.T("Empties the field after each pick instead of showing a chip.", "Vacía el campo después de cada selección en lugar de mostrar un chip.")),
+        new("minChars", "number", "2", L.T("Characters required before searching.", "Caracteres necesarios antes de buscar.")),
+        new("debounceMs", "number", "300", L.T("Delay after the last keystroke before searching.", "Espera tras la última pulsación de tecla antes de buscar.")),
+        new("noResultsText", "string", "'Sin resultados'", L.T("Text when the search returns nothing.", "Texto cuando la búsqueda no devuelve nada.")),
+        new("searchingText", "string", "'Buscando…'", L.T("Text while searching.", "Texto mientras se busca.")),
+        new("clearText", "string", "'Quitar selección'", L.T("Accessible label of the clear button.", "Etiqueta accesible del botón para limpiar.")),
+        new("label", "string", null, L.T("Visible label.", "Etiqueta visible.")),
+        new("placeholder", "string", null, L.T("Placeholder text.", "Texto de marcador de posición.")),
+        new("helperText", "string", null, L.T("Hint below the field.", "Ayuda debajo del campo.")),
+        new("error", "string", null, L.T("Error message.", "Mensaje de error.")),
+        new("required", "boolean", "false", L.T("Shows an asterisk next to the label and sets aria-required. It does not add the native required attribute.", "Muestra un asterisco junto a la etiqueta y agrega aria-required. No agrega el atributo nativo required.")),
+        new("disabled", "boolean", "false", L.T("Disables the field.", "Deshabilita el campo.")),
+        new("id", "string", "generated", L.T("Id of the input.", "Id del campo.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other attribute for the wrapper div, including ref.", "Cualquier otro atributo para el div contenedor, incluido ref.")),
     ];
 }

@@ -24,8 +24,9 @@ Change a token once, and both libraries pick it up.
 packages/tokens      CSS custom properties + shared utilities (private workspace)
 packages/react       React component library (npm)
 apps/playground      Vite app to try the React components
+apps/docs-react      Live React demos of the docs site (built into docs/Trazos.UI.Docs/wwwroot/react)
 src/Trazos.UI        Razor Class Library (NuGet)
-docs/Trazos.UI.Docs  Blazor documentation site
+docs/Trazos.UI.Docs  Documentation site for both libraries (Blazor WebAssembly)
 ```
 
 ## Develop
@@ -42,8 +43,11 @@ npm test                    # tokens tests + Vitest
 npm run build               # tokens (no build) + React dist + playground
 
 dotnet build src/Trazos.UI/Trazos.UI.csproj              # Razor library
-dotnet run --project docs/Trazos.UI.Docs                 # Blazor docs site
+npm run build -w @carandev/trazos-docs-react             # React demos for the docs site
+dotnet run --project docs/Trazos.UI.Docs                 # docs site
 ```
+
+The docs site documents both libraries on the same pages: the Blazor / React switch in the top bar picks one, and `?fw=react` or `?fw=blazor` opens a link in that mode. In React mode each demo is the real React component, rendered from `apps/docs-react/src/demos/<page>/<demo>.tsx`, and the code shown is that file. A page adds its React version with `React="<page>/<demo>"` on each `DemoBlock` and `ReactParams` on its `ApiTable`. Write demo text with `t('English', 'Español')`; the code shown replaces each call with the text. Rebuild the demos after changing them.
 
 ## Release
 
@@ -52,7 +56,7 @@ dotnet run --project docs/Trazos.UI.Docs                 # Blazor docs site
 | `publish-trazos-nuget.yml` | push to `main` (Razor or token changes), `v*` tags, manual | `Trazos.UI` to NuGet (`NUGET_API_KEY` secret) |
 | `js-packages.yml` | pull requests: lint, type-check, test, build, Razor build | — |
 | `js-packages.yml` | push to `main`, `v*` tags, manual | `@carandev/trazos-ui` to npm |
-| `docs-docker.yml` | push to `main` (docs, Razor or token changes), manual | `ghcr.io/carandev/trazos-ui-docs` image, then runs it on the self-hosted runner at port `18473` |
+| `docs-docker.yml` | push to `main` (docs, Razor, React or token changes), manual | `ghcr.io/carandev/trazos-ui-docs` image, then runs it on the self-hosted runner at port `18473` |
 
 The docs image can be built and run locally from the repository root:
 

@@ -3,7 +3,7 @@
 <DocPage Title="EmptyState" Category="@L.T("Display", "Visualización")"
          Lead="@L.T("A friendly placeholder for screens without data: what happened, why, and what to do next.", "Un marcador amigable para pantallas sin datos: qué pasó, por qué y qué hacer a continuación.")">
 
-    <DemoBlock Title="@L.T("Default", "Predeterminado")" Code="@DefaultCode">
+    <DemoBlock Title="@L.T("Default", "Predeterminado")" Code="@DefaultCode" React="empty-state/default">
         <EmptyState Title="@L.T("No events yet", "Aún no hay eventos")"
                     Description="@L.T("Create the first event of the month so your community can sign up.", "Crea el primer evento del mes para que tu comunidad pueda inscribirse.")">
             <Icon>@Icons.Calendar</Icon>
@@ -16,7 +16,7 @@
         </EmptyState>
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("Compact", "Compacto")" Description="@L.T("A tighter version for panels, tables and side columns.", "Una versión más ajustada para paneles, tablas y columnas laterales.")" Code="@CompactCode">
+    <DemoBlock Title="@L.T("Compact", "Compacto")" Description="@L.T("A tighter version for panels, tables and side columns.", "Una versión más ajustada para paneles, tablas y columnas laterales.")" Code="@CompactCode" React="empty-state/compact">
         <EmptyState Compact="true"
                     IconVariant="IconBoxVariant.Lavender"
                     Title="@L.T("Inbox is clear", "La bandeja está vacía")"
@@ -25,7 +25,7 @@
         </EmptyState>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -58,5 +58,17 @@
         new("Compact", "bool", "false", L.T("Smaller spacing and icon.", "Espaciado e ícono más pequeños.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("title", "string", "required", L.T("Main message.", "Mensaje principal.")),
+        new("description", "string", null, L.T("Explanation shown below the title.", "Explicación que se muestra debajo del título.")),
+        new("icon", "ReactNode", null, L.T("Icon rendered inside an IconBox.", "Ícono que se renderiza dentro de un IconBox.")),
+        new("iconVariant", "IconBoxVariant", "'cream'", L.T("Variant of the IconBox that frames the icon.", "Variante del IconBox que enmarca el ícono.")),
+        new("actions", "ReactNode", null, L.T("Next-step buttons or links.", "Botones o enlaces con los siguientes pasos.")),
+        new("compact", "boolean", "false", L.T("Smaller spacing and icon.", "Espaciado e ícono más pequeños.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other div attribute, including ref.", "Cualquier otro atributo de div, incluido ref.")),
     ];
 }

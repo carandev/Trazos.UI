@@ -1,19 +1,26 @@
 @page "/components/whatsapp-button"
 
 <DocPage Title="WhatsAppButton" Category="@L.T("Actions", "Acciones")"
-         Lead="@L.T("Opens a WhatsApp chat in a new tab. Only the digits of the number are used, a leading 0 is dropped and DefaultCountryCode is prepended when the number does not already start with it.", "Abre un chat de WhatsApp en una pestaña nueva. Solo se usan los dígitos del número, se elimina un 0 inicial y se antepone DefaultCountryCode cuando el número no empieza ya con él.")">
+         Lead="@F.Pick(L.T("Opens a WhatsApp chat in a new tab. Only the digits of the number are used, a leading 0 is dropped and DefaultCountryCode is prepended when the number does not already start with it.", "Abre un chat de WhatsApp en una pestaña nueva. Solo se usan los dígitos del número, se elimina un 0 inicial y se antepone DefaultCountryCode cuando el número no empieza ya con él."), L.T("Opens a WhatsApp chat in a new tab. Only the digits of the number are used, a leading 0 is dropped and defaultCountryCode is prepended when the number does not already start with it.", "Abre un chat de WhatsApp en una pestaña nueva. Solo se usan los dígitos del número, se elimina un 0 inicial y se antepone defaultCountryCode cuando el número no empieza ya con él."))">
 
-    <DemoBlock Title="@L.T("Icon only", "Solo ícono")" Code="@IconCode">
+    <DemoBlock Title="@L.T("Icon only", "Solo ícono")" Code="@IconCode" React="whatsapp-button/icon-only">
         <WhatsAppButton PhoneNumber="300 123 4567" />
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("With the number", "Con el número")" Code="@PhoneCode">
+    <DemoBlock Title="@L.T("With the number", "Con el número")" Code="@PhoneCode" React="whatsapp-button/with-phone">
         <WhatsAppButton PhoneNumber="+57 300 123 4567" ShowPhone="true" />
     </DemoBlock>
 
-    <div class="docs-note"><Tr><En>Nothing is rendered when <code>PhoneNumber</code> is null or empty.</En><Es>No se renderiza nada cuando <code>PhoneNumber</code> es null o está vacío.</Es></Tr></div>
+    @if (F.IsReact)
+    {
+        <div class="docs-note"><Tr><En>Nothing is rendered when <code>phoneNumber</code> is an empty string.</En><Es>No se renderiza nada cuando <code>phoneNumber</code> es una cadena vacía.</Es></Tr></div>
+    }
+    else
+    {
+        <div class="docs-note"><Tr><En>Nothing is rendered when <code>PhoneNumber</code> is null or empty.</En><Es>No se renderiza nada cuando <code>PhoneNumber</code> es null o está vacío.</Es></Tr></div>
+    }
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -25,5 +32,15 @@
         new("PhoneNumber", "string", "required", L.T("Phone number in any format. Only its digits are used.", "Número de teléfono en cualquier formato. Solo se usan sus dígitos.")),
         new("DefaultCountryCode", "string", "\"57\"", L.T("Prefix added to numbers without a country code.", "Prefijo que se agrega a los números sin código de país.")),
         new("ShowPhone", "bool", "false", L.T("Shows the number next to the icon.", "Muestra el número junto al ícono.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("phoneNumber", "string", "required", L.T("Phone number in any format. Only its digits are used.", "Número de teléfono en cualquier formato. Solo se usan sus dígitos.")),
+        new("defaultCountryCode", "string", "'57'", L.T("Prefix added to numbers without a country code.", "Prefijo que se agrega a los números sin código de país.")),
+        new("showPhone", "boolean", "false", L.T("Shows the number, as given, next to the icon.", "Muestra el número, tal como se dio, junto al ícono.")),
+        new("title", "string", "'Enviar mensaje por WhatsApp'", L.T("Tooltip of the link.", "Texto emergente del enlace.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'a'>", null, L.T("Any other anchor attribute except href and children, including ref. target and rel can be overridden.", "Cualquier otro atributo de enlace salvo href y children, incluido ref. target y rel se pueden reemplazar.")),
     ];
 }

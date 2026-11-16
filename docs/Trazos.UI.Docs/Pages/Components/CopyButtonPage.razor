@@ -1,9 +1,9 @@
 @page "/components/copy-button"
 
 <DocPage Title="CopyButton" Category="@L.T("Website helpers", "Ayudas para sitios web")"
-         Lead="@L.T("Copies a value to the clipboard, with a check icon, a handwritten note for two seconds and a screen-reader announcement. Labels are parameters, so the library stays language-neutral.", "Copia un valor al portapapeles, con un ícono de confirmación, una nota manuscrita durante dos segundos y un anuncio para lectores de pantalla. Las etiquetas son parámetros, así que la librería no depende de un idioma.")">
+         Lead="@F.Pick(L.T("Copies a value to the clipboard, with a check icon, a handwritten note for two seconds and a screen-reader announcement. Labels are parameters, so the library stays language-neutral.", "Copia un valor al portapapeles, con un ícono de confirmación, una nota manuscrita durante dos segundos y un anuncio para lectores de pantalla. Las etiquetas son parámetros, así que la librería no depende de un idioma."), L.T("Copies a value to the clipboard, with a check icon, a handwritten note for two seconds and a screen-reader announcement. Labels are required props, so the library stays language-neutral.", "Copia un valor al portapapeles, con un ícono de confirmación, una nota manuscrita durante dos segundos y un anuncio para lectores de pantalla. Las etiquetas son props obligatorias, así que la librería no depende de un idioma."))">
 
-    <DemoBlock Title="@L.T("Copy a value", "Copiar un valor")" Code="@CopyCode">
+    <DemoBlock Title="@L.T("Copy a value", "Copiar un valor")" Code="@CopyCode" React="copy-button/copy">
         <div style="padding-top: 2rem;">
             <CopyButton Value="hello@example.com"
                         Label="@L.T("Copy email", "Copiar correo")"
@@ -15,7 +15,7 @@
         </div>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -46,5 +46,24 @@
         new("OnClick", "EventCallback<MouseEventArgs>", null, L.T("Raised before copying.", "Se dispara antes de copiar.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("value", "string", null, L.T("The text to copy. Required.", "El texto que se copia. Obligatorio.")),
+        new("label", "string", null, L.T("Accessible name of the button. Required.", "Nombre accesible del botón. Obligatorio.")),
+        new("copiedLabel", "string", null, L.T("Shown and announced after copying. Required.", "Se muestra y se anuncia al copiar. Obligatorio.")),
+        new("errorLabel", "string", null, L.T("Shown and announced when copying fails and there is no fallback.", "Se muestra y se anuncia si falla la copia y no hay fallback.")),
+        new("fallback", "(value: string) => void | Promise<void>", null, L.T("Runs when the clipboard API is missing or refuses, such as opening a mailto: link.", "Se ejecuta si la API del portapapeles no existe o rechaza la copia, por ejemplo para abrir un enlace mailto:.")),
+        new("onCopied", "(value: string) => void", null, L.T("Runs after the value reached the clipboard.", "Se ejecuta cuando el valor llegó al portapapeles.")),
+        new("icon", "ReactNode", null, L.T("Replaces the copy icon.", "Reemplaza el ícono de copiar.")),
+        new("checkIcon", "ReactNode", null, L.T("Replaces the check icon.", "Reemplaza el ícono de confirmación.")),
+        new("variant", "ButtonVariant", "'ghost'", L.T("Same variants as Button.", "Las mismas variantes de Button.")),
+        new("size", "IconButtonSize", "'medium'", L.T("'medium' or 'large'.", "'medium' o 'large'.")),
+        new("disabled", "boolean", "false", L.T("Disables the button.", "Deshabilita el botón.")),
+        new("loading", "boolean", "false", L.T("Shows a spinner and disables the button.", "Muestra un indicador de carga y deshabilita el botón.")),
+        new("onClick", "MouseEventHandler<HTMLButtonElement>", null, L.T("Runs before copying.", "Se ejecuta antes de copiar.")),
+        new("className", "string", null, L.T("Extra CSS classes for the button.", "Clases CSS adicionales para el botón.")),
+        new("...rest", "ComponentPropsWithRef<'button'>", null, L.T("Any other button attribute, including ref. It goes to the button.", "Cualquier otro atributo de button, incluido ref. Va al botón.")),
     ];
 }

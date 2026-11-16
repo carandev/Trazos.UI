@@ -372,6 +372,11 @@ svg.h-6 { height: 1.5rem; }
     border-radius: var(--trazos-radius-sketch-card);
 }
 
+/* The React root adds no box: the demo's elements lay out in the preview like Blazor's. */
+.docs-react-host {
+    display: contents;
+}
+
 .docs-demo-preview.is-stack,
 .docs-demo-preview > .docs-stack {
     flex-direction: column;

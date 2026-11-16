@@ -3,7 +3,7 @@
 <DocPage Title="SectionHeading" Category="@L.T("Decoration", "Decoración")"
          Lead="@L.T("A section title with a handwritten eyebrow, a heading level you choose, an optional sketch underline and a slot for actions.", "Un título de sección con una línea manuscrita superior, el nivel de encabezado que elijas, un subrayado opcional y un espacio para acciones.")">
 
-    <DemoBlock Title="@L.T("Full example", "Ejemplo completo")" Code="@FullCode">
+    <DemoBlock Title="@L.T("Full example", "Ejemplo completo")" Code="@FullCode" React="section-heading/full">
         <SectionHeading style="width: 100%;"
                         Eyebrow="@L.T("Lately", "Últimamente")"
                         Title="@L.T("Selected work", "Trabajo seleccionado")"
@@ -13,7 +13,7 @@
         </SectionHeading>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -33,5 +33,16 @@
         new("Actions", "RenderFragment?", null, L.T("Rendered beside the title.", "Se renderiza junto al título.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("title", "ReactNode", null, L.T("The heading content. Required.", "El contenido del encabezado. Obligatorio.")),
+        new("eyebrow", "ReactNode", null, L.T("Handwritten line above the title.", "Línea manuscrita sobre el título.")),
+        new("as", "'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'", "'h2'", L.T("Heading element.", "Elemento del encabezado.")),
+        new("underline", "boolean", "false", L.T("Draws a sketch underline below the title.", "Dibuja un subrayado a mano bajo el título.")),
+        new("actions", "ReactNode", null, L.T("Rendered beside the title.", "Se renderiza junto al título.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other div attribute except title, including ref.", "Cualquier otro atributo de div salvo title, incluido ref.")),
     ];
 }

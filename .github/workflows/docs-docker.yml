@@ -1,5 +1,6 @@
 name: Docs (Docker)
-# Builds the docs site image on a GitHub-hosted runner, pushes it to GHCR,
+# Builds the docs site image (Blazor WebAssembly plus its live React demos)
+# on a GitHub-hosted runner, pushes it to GHCR,
 # then restarts the container on the self-hosted runner.
 # Deploy runs only on pushes to main or a manual run, never on pull requests:
 # the repository is public and the self-hosted runner is a real machine.
@@ -11,7 +12,11 @@ on:
     paths:
       - 'docs/**'
       - 'src/**'
-      - 'packages/tokens/*.css'
+      - 'packages/tokens/**'
+      - 'packages/react/src/**'
+      - 'apps/docs-react/**'
+      - 'package.json'
+      - 'package-lock.json'
       - 'Directory.Build.props'
       - '.dockerignore'
       - '.github/workflows/docs-docker.yml'

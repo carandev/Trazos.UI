@@ -3,7 +3,7 @@
 <DocPage Title="Skeleton" Category="@L.T("Overlays & feedback", "Superposiciones y avisos")"
          Lead="@L.T("Animated placeholders that preserve layout while content loads.", "Marcadores animados que conservan el layout mientras carga el contenido.")">
 
-    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@VariantsCode">
+    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@VariantsCode" React="skeleton/variants">
         <div class="docs-stack">
             <Skeleton Variant="SkeletonVariant.Text" Count="3" />
             <div class="docs-row">
@@ -14,7 +14,7 @@
         </div>
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("Composing a placeholder", "Componer un marcador")" Code="@ComposeCode">
+    <DemoBlock Title="@L.T("Composing a placeholder", "Componer un marcador")" Code="@ComposeCode" React="skeleton/compose">
         <div class="docs-grid-2">
             @for (var i = 0; i < 2; i++)
             {
@@ -29,7 +29,7 @@
         </div>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -55,5 +55,15 @@
         new("Height", "string?", null, L.T("Any CSS height.", "Cualquier alto CSS.")),
         new("Count", "int", "1", L.T("Number of placeholders to repeat.", "Cantidad de marcadores a repetir.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("variant", "SkeletonVariant", "'text'", L.T("'text', 'circular', 'card' or 'rounded'.", "'text', 'circular', 'card' o 'rounded'.")),
+        new("width", "string", null, L.T("Any CSS width, such as \"60%\" or \"8rem\".", "Cualquier ancho CSS, como \"60%\" o \"8rem\".")),
+        new("height", "string", null, L.T("Any CSS height.", "Cualquier alto CSS.")),
+        new("count", "number", "1", L.T("Number of placeholders to repeat.", "Cantidad de marcadores a repetir.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithoutRef<'div'>", null, L.T("Any other div attribute except children, applied to every placeholder; avoid id when count is above 1.", "Cualquier otro atributo de div salvo children, aplicado a cada marcador; evita id cuando count es mayor que 1.")),
     ];
 }

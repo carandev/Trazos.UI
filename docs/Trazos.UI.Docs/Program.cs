@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Trazos.UI.Docs;
+using Trazos.UI.Docs.Frameworks;
 using Trazos.UI.Docs.Localization;
 using Trazos.UI.Extensions;
 using Trazos.UI.Services;
@@ -18,8 +19,11 @@ builder.Services.AddTrazosUI(options =>
 });
 
 builder.Services.AddSingleton<DocsLanguage>();
+builder.Services.AddSingleton<DocsFramework>();
+builder.Services.AddSingleton<ReactDemos>();
 
 var host = builder.Build();
 await host.Services.GetRequiredService<DocsLanguage>().InitializeAsync();
+await host.Services.GetRequiredService<DocsFramework>().InitializeAsync();
 await host.Services.GetRequiredService<IThemeService>().InitializeAsync();
 await host.RunAsync();
