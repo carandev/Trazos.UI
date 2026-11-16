@@ -23,6 +23,9 @@ export * from './components/DateInput';
 export * from './components/SearchInput';
 export * from './components/PhoneInput';
 export * from './components/FileInput';
+export * from './components/ChoiceGroup';
+export * from './components/Repeater';
+export * from './components/FormLayout';
 
 // Data and navigation
 export * from './components/DataTable';
@@ -52,3 +55,4 @@ export * from './components/SiteHeader';
 
 // Layout and page structure
 export * from './components/AppShell';
+export * from './components/Divider';

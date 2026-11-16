@@ -1,7 +1,7 @@
 @page "/components/autocomplete"
 
 <DocPage Title="Autocomplete" Category="@L.T("Forms", "Formularios")"
-         Lead="@L.T("Debounced async search with keyboard navigation and custom item templates. Keep the choice as a chip, or clear the field after each pick.", "Búsqueda asíncrona con debounce, navegación con teclado y plantillas personalizadas para cada resultado. Conserva la elección como un chip o limpia el campo después de cada selección.")">
+         Lead="@L.T("Debounced async search or an in-memory filter over a preloaded list, with keyboard navigation and custom item templates. Keep the choice as a chip, clear the field after each pick, or bind an id with AutocompleteSelect.", "Búsqueda asíncrona con debounce o filtro en memoria sobre una lista precargada, con navegación con teclado y plantillas personalizadas. Conserva la elección como un chip, limpia el campo después de cada selección o enlaza un id con AutocompleteSelect.")">
 
     <DemoBlock Title="@L.T("Single selection", "Selección única")" Description="@L.T("Type at least two letters. Arrow keys move, Enter selects, Escape closes.", "Escribe al menos dos letras. Las flechas te mueven, Enter selecciona y Escape cierra.")" Code="@SingleCode" React="autocomplete/single">
         <div class="docs-stack">
@@ -42,9 +42,20 @@
         </div>
     </DemoBlock>
 
+    <DemoBlock Title="@L.T("Preloaded list", "Lista precargada")"
+               Description="@F.Pick(L.T("Without SearchFunc, Items is filtered in memory by ItemText: case-insensitive, matching anywhere in the text, at most MaxResults (50) results.", "Sin SearchFunc, Items se filtra en memoria por ItemText: sin distinguir mayúsculas, coincidiendo en cualquier parte del texto, con máximo MaxResults (50) resultados."), L.T("Without searchFn, items is filtered in memory by itemText: case-insensitive, matching anywhere in the text, at most maxResults (50) results.", "Sin searchFn, items se filtra en memoria por itemText: sin distinguir mayúsculas, coincidiendo en cualquier parte del texto, con máximo maxResults (50) resultados."))"
+               Code="@ItemsCode" React="autocomplete/items">
+        <div class="docs-stack">
+            <Autocomplete TItem="string" Label="@L.T("City", "Ciudad")" Placeholder="@L.T("Type a letter…", "Escribe una letra…")"
+                          Items="_cities" ItemText="c => c" MinChars="1" DebounceMs="0" @bind-SelectedItem="_city"
+                          NoResultsText="@L.T("No results", "Sin resultados")" ClearText="@L.T("Clear selection", "Quitar selección")" />
+            <p class="docs-demo-output">@L.T("Selected:", "Seleccionado:") <strong>@(_city ?? L.T("none", "ninguno"))</strong></p>
+        </div>
+    </DemoBlock>
+
     <DemoBlock Title="@L.T("As a searchable select (AutocompleteSelect)", "Como select con búsqueda (AutocompleteSelect)")"
-               Description="@L.T("AutocompleteSelect filters a preloaded list in memory and binds the id from ValueSelector. With MinChars at 0 the list opens on focus. It takes part in EditForm validation.", "AutocompleteSelect filtra una lista precargada en memoria y enlaza el id que devuelve ValueSelector. Con MinChars en 0 la lista se abre al enfocar. Participa en la validación de EditForm.")"
-               Code="@SelectCode">
+               Description="@F.Pick(L.T("AutocompleteSelect filters a preloaded list in memory and binds the id from ValueSelector. With MinChars at 0 the list opens on focus. It takes part in EditForm validation.", "AutocompleteSelect filtra una lista precargada en memoria y enlaza el id que devuelve ValueSelector. Con MinChars en 0 la lista se abre al enfocar. Participa en la validación de EditForm."), L.T("AutocompleteSelect filters a preloaded list in memory and holds the id from valueSelector. minChars defaults to 0, so the list opens on focus.", "AutocompleteSelect filtra una lista precargada en memoria y guarda el id que devuelve valueSelector. minChars es 0 por defecto, así la lista se abre al enfocar."))"
+               Code="@SelectCode" React="autocomplete/select">
         <div class="docs-stack">
             <AutocompleteSelect Label="@L.T("Company", "Empresa")" Placeholder="@L.T("Type to filter", "Escribe para filtrar")"
                                 Items="_companies" ItemText="c => c.Name" ValueSelector="c => (Guid?)c.Id"
@@ -54,7 +65,90 @@
         </div>
     </DemoBlock>
 
+    <DemoBlock Title="@L.T("Remote search with an existing value", "Búsqueda remota con un valor existente")"
+               Description="@F.Pick(L.T("The list comes from SearchFunc, so the item of a saved id is not loaded yet: ResolveItem fetches it once to show its name.", "La lista viene de SearchFunc, así que el elemento de un id guardado aún no está cargado: ResolveItem lo trae una vez para mostrar su nombre."), L.T("The list comes from searchFn, so the item of a saved id is not loaded yet: resolveItem fetches it once to show its name.", "La lista viene de searchFn, así que el elemento de un id guardado aún no está cargado: resolveItem lo trae una vez para mostrar su nombre."))"
+               Code="@RemoteSelectCode" React="autocomplete/remote-select">
+        <div class="docs-stack">
+            <AutocompleteSelect Label="@L.T("Manager", "Jefe directo")" Placeholder="@L.T("Type at least two letters", "Escribe al menos dos letras")"
+                                SearchFunc="SearchEmployeesAsync" ResolveItem="LoadEmployeeAsync" MinChars="2"
+                                ItemText="e => e.Name" ValueSelector="e => (int?)e.Id"
+                                NoResultsText="@L.T("No results", "Sin resultados")" SearchingText="@L.T("Searching…", "Buscando…")"
+                                ClearText="@L.T("Clear selection", "Quitar selección")"
+                                @bind-Value="_managerId" />
+            <p class="docs-demo-output">@L.T("Employee id:", "Id de empleado:") <strong>@(_managerId?.ToString() ?? "null")</strong></p>
+        </div>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("Which one to choose", "Cuál elegir")</h3>
+    <ul>
+        <li><Tr><En><strong>Autocomplete with a search function</strong>: the options live on the server and there are too many to load (people, products, addresses). It searches while the user types, after a short wait.</En><Es><strong>Autocomplete con función de búsqueda</strong>: las opciones están en el servidor y son demasiadas para cargarlas (personas, productos, direcciones). Busca mientras el usuario escribe, tras una espera breve.</Es></Tr></li>
+        <li><Tr><En><strong>Autocomplete with items</strong>: you already have the list (a few dozen to a few thousand items) and want the user to find one by typing. It filters in memory, with no request.</En><Es><strong>Autocomplete con items</strong>: ya tienes la lista (de unas decenas a unos miles de elementos) y quieres que el usuario encuentre uno escribiendo. Filtra en memoria, sin peticiones.</Es></Tr></li>
+        <li><Tr><En><strong>AutocompleteSelect</strong>: the form stores an id (employee id, company id), not the whole object. It works like a select with search and opens on focus.</En><Es><strong>AutocompleteSelect</strong>: el formulario guarda un id (id de empleado, id de empresa), no el objeto completo. Funciona como un select con búsqueda y se abre al enfocar.</Es></Tr></li>
+        <li>@L.T("Use a SelectInput for fewer than about ten options, and a RadioGroup when the options should all be visible.", "Usa un SelectInput para menos de unas diez opciones, y un RadioGroup cuando todas las opciones deben verse.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    @if (F.IsReact)
+    {
+        <ol>
+            <li><Tr><En>Give <code>itemText</code>, the text that represents an item. It is shown in the list and the chip, and the in-memory filter searches it.</En><Es>Pasa <code>itemText</code>, el texto que representa un elemento. Se muestra en la lista y en el chip, y es donde busca el filtro en memoria.</Es></Tr></li>
+            <li><Tr><En>Choose the source: <code>searchFn(query, signal)</code> for a server search, or <code>items</code> for a preloaded list. If you pass both, <code>searchFn</code> wins. Forward the <code>signal</code> to <code>fetch</code> so an outdated request is cancelled.</En><Es>Elige la fuente: <code>searchFn(query, signal)</code> para buscar en el servidor, o <code>items</code> para una lista precargada. Si pasas ambas, gana <code>searchFn</code>. Pasa la <code>signal</code> a <code>fetch</code> para cancelar una petición desactualizada.</Es></Tr></li>
+            <li><Tr><En>Hold the choice: <code>selectedItem</code> + <code>onSelectedItemChange</code> on Autocomplete (it receives <code>null</code> on clear), or <code>value</code> + <code>onValueChange</code> + <code>valueSelector</code> on AutocompleteSelect.</En><Es>Guarda la elección: <code>selectedItem</code> + <code>onSelectedItemChange</code> en Autocomplete (recibe <code>null</code> al limpiar), o <code>value</code> + <code>onValueChange</code> + <code>valueSelector</code> en AutocompleteSelect.</Es></Tr></li>
+            <li><Tr><En>Tune the search: <code>minChars</code> (2 on Autocomplete, 0 on AutocompleteSelect, where 0 opens the list on focus), <code>debounceMs</code> and <code>maxResults</code>.</En><Es>Ajusta la búsqueda: <code>minChars</code> (2 en Autocomplete, 0 en AutocompleteSelect, donde 0 abre la lista al enfocar), <code>debounceMs</code> y <code>maxResults</code>.</Es></Tr></li>
+            <li><Tr><En>With a remote search and a saved id, pass <code>resolveItem(value, signal)</code> so AutocompleteSelect can show the name of the saved value.</En><Es>Con búsqueda remota y un id guardado, pasa <code>resolveItem(value, signal)</code> para que AutocompleteSelect pueda mostrar el nombre del valor guardado.</Es></Tr></li>
+        </ol>
+        <CodeBlock Language="tsx" Code="@ReactStepsCode" />
+    }
+    else
+    {
+        <ol>
+            <li><Tr><En>Set <code>ItemText</code>, the text that represents an item. It is shown in the list and the chip, and the in-memory filter searches it.</En><Es>Asigna <code>ItemText</code>, el texto que representa un elemento. Se muestra en la lista y en el chip, y es donde busca el filtro en memoria.</Es></Tr></li>
+            <li><Tr><En>Choose the source: <code>SearchFunc</code> for a server search, or <code>Items</code> for a preloaded list. If you set both, <code>SearchFunc</code> wins. Pass the <code>CancellationToken</code> to <code>HttpClient</code> so an outdated request is cancelled.</En><Es>Elige la fuente: <code>SearchFunc</code> para buscar en el servidor, o <code>Items</code> para una lista precargada. Si asignas ambas, gana <code>SearchFunc</code>. Pasa el <code>CancellationToken</code> a <code>HttpClient</code> para cancelar una petición desactualizada.</Es></Tr></li>
+            <li><Tr><En>Bind the choice: <code>@@bind-SelectedItem</code> on Autocomplete, or <code>@@bind-Value</code> with <code>ValueSelector</code> on AutocompleteSelect. Use a nullable id type such as <code>int?</code> or <code>Guid?</code>, so "nothing chosen" is <code>null</code>.</En><Es>Enlaza la elección: <code>@@bind-SelectedItem</code> en Autocomplete, o <code>@@bind-Value</code> con <code>ValueSelector</code> en AutocompleteSelect. Usa un tipo de id anulable como <code>int?</code> o <code>Guid?</code>, así "sin elección" es <code>null</code>.</Es></Tr></li>
+            <li><Tr><En>Tune the search: <code>MinChars</code> (2 on Autocomplete, 0 on AutocompleteSelect, where 0 opens the list on focus), <code>DebounceMs</code> and <code>MaxResults</code>.</En><Es>Ajusta la búsqueda: <code>MinChars</code> (2 en Autocomplete, 0 en AutocompleteSelect, donde 0 abre la lista al enfocar), <code>DebounceMs</code> y <code>MaxResults</code>.</Es></Tr></li>
+            <li><Tr><En>With a remote search and a saved id, set <code>ResolveItem</code> so AutocompleteSelect can show the name of the saved value.</En><Es>Con búsqueda remota y un id guardado, asigna <code>ResolveItem</code> para que AutocompleteSelect pueda mostrar el nombre del valor guardado.</Es></Tr></li>
+        </ol>
+    }
+
+    <h3 class="docs-h3">@L.T("Validation", "Validación")</h3>
+    @if (F.IsReact)
+    {
+        <p><Tr><En>Pass the message in <code>error</code>: it replaces <code>helperText</code>, is announced with <code>role="alert"</code> and sets <code>aria-invalid</code> on the input. <code>required</code> shows the marker and sets <code>aria-required</code>; check the value yourself on submit, for example <code>value === null</code>.</En><Es>Pasa el mensaje en <code>error</code>: reemplaza a <code>helperText</code>, se anuncia con <code>role="alert"</code> y pone <code>aria-invalid</code> en el input. <code>required</code> muestra la marca y agrega <code>aria-required</code>; revisa el valor tú mismo al enviar, por ejemplo <code>value === null</code>.</Es></Tr></p>
+    }
+    else
+    {
+        <p><Tr><En>AutocompleteSelect is a form field: inside an <code>EditForm</code>, a rule such as <code>[Required]</code> on the id property shows its message below the field. Autocomplete binds an object, so pass its <code>Error</code> yourself.</En><Es>AutocompleteSelect es un campo de formulario: dentro de un <code>EditForm</code>, una regla como <code>[Required]</code> en la propiedad del id muestra su mensaje debajo del campo. Autocomplete enlaza un objeto, así que pasa su <code>Error</code> tú mismo.</Es></Tr></p>
+    }
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li><Tr><En>The input is a <code>combobox</code> with <code>aria-expanded</code> and <code>aria-controls</code> pointing to the <code>listbox</code>; the highlighted option is announced through <code>aria-activedescendant</code> while focus stays in the input.</En><Es>El input es un <code>combobox</code> con <code>aria-expanded</code> y <code>aria-controls</code> apuntando al <code>listbox</code>; la opción resaltada se anuncia con <code>aria-activedescendant</code> mientras el foco sigue en el input.</Es></Tr></li>
+        <li>@L.T("Arrow Down and Arrow Up move through the results and wrap around; Enter chooses the highlighted one; Escape closes the list and clears the text.", "Flecha abajo y flecha arriba recorren los resultados y dan la vuelta; Enter elige el resaltado; Escape cierra la lista y borra el texto.")</li>
+        <li>@L.T("After a pick the chip has a clear button with an accessible name (ClearText), reachable with Tab.", "Después de elegir, el chip tiene un botón para limpiar con nombre accesible (ClearText), al que se llega con Tab.")</li>
+        <li>@L.T("Leaving the field closes the list; coming back reopens the last results.", "Salir del campo cierra la lista; volver a él reabre los últimos resultados.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        @if (F.IsReact)
+        {
+            <li><Tr><En>Ignoring the <code>signal</code>: a slow, older response could otherwise arrive late. The component already discards stale results, but forwarding the signal also cancels the request.</En><Es>Ignorar la <code>signal</code>: una respuesta lenta y antigua podría llegar tarde. El componente ya descarta los resultados viejos, pero pasar la señal también cancela la petición.</Es></Tr></li>
+            <li><Tr><En>On AutocompleteSelect, clearing gives <code>null</code>; keep the value type as <code>V | null</code>.</En><Es>En AutocompleteSelect, limpiar entrega <code>null</code>; mantén el tipo del valor como <code>V | null</code>.</Es></Tr></li>
+            <li><Tr><En>Building <code>items</code> inside the component on every render is fine for small lists; for large ones, keep the array stable with <code>useMemo</code> or outside the component.</En><Es>Construir <code>items</code> dentro del componente en cada render sirve para listas pequeñas; para listas grandes, mantén estable el arreglo con <code>useMemo</code> o fuera del componente.</Es></Tr></li>
+        }
+        else
+        {
+            <li><Tr><En>Swallowing the <code>CancellationToken</code>: pass it to the HTTP call, or older searches keep running on the server.</En><Es>Ignorar el <code>CancellationToken</code>: pásalo a la llamada HTTP, o las búsquedas antiguas siguen corriendo en el servidor.</Es></Tr></li>
+            <li><Tr><En>Binding AutocompleteSelect to a non-nullable <code>int</code>: clearing sets it to <code>0</code>, which <code>[Required]</code> does not catch. Prefer <code>int?</code>.</En><Es>Enlazar AutocompleteSelect a un <code>int</code> no anulable: al limpiar queda en <code>0</code>, que <code>[Required]</code> no detecta. Prefiere <code>int?</code>.</Es></Tr></li>
+        }
+        <li>@L.T("The in-memory filter matches letters exactly apart from case: 'bogota' does not find 'Bogotá'. Use a search function if you need accent-insensitive matching.", "El filtro en memoria compara las letras exactas salvo mayúsculas: 'bogota' no encuentra 'Bogotá'. Usa una función de búsqueda si necesitas ignorar tildes.")</li>
+        <li>@L.T("The default texts of Autocomplete are in Spanish, and those of AutocompleteSelect in English; set NoResultsText, SearchingText and ClearText to match your app.", "Los textos por defecto de Autocomplete están en español y los de AutocompleteSelect en inglés; asigna NoResultsText, SearchingText y ClearText según tu aplicación.")</li>
+    </ul>
+
     <ApiTable Params="Params" ReactParams="ReactParams" />
+    <ApiTable Title="AutocompleteSelect" ReactParams="SelectReactParams" />
 </DocPage>
 
 @code {
@@ -69,6 +163,92 @@
     ];
 
     private Guid? _companyId;
+
+    private readonly string[] _cities = ["Barranquilla", "Bogotá", "Bucaramanga", "Cali", "Cartagena", "Manizales", "Medellín", "Pereira"];
+    private string? _city;
+
+    private sealed record Employee(int Id, string Name);
+
+    private static readonly Employee[] Directory =
+    [
+        new(1, "Ana María Restrepo"),
+        new(2, "Julián Ospina"),
+        new(3, "Luisa Fernanda Gil"),
+        new(4, "Tomás Arango"),
+    ];
+
+    private int? _managerId = 3;
+
+    // Simulates GET /employees?q=…
+    private static async Task<IEnumerable<Employee>> SearchEmployeesAsync(string query, CancellationToken cancellationToken)
+    {
+        await Task.Delay(300, cancellationToken);
+        return Directory.Where(e => e.Name.Contains(query, StringComparison.OrdinalIgnoreCase));
+    }
+
+    // Simulates GET /employees/{id} for a value saved earlier.
+    // ResolveItem returns Task<TItem?>; with an unconstrained TItem that is Task<Employee>, and null means "not found".
+    private static async Task<Employee> LoadEmployeeAsync(int? id, CancellationToken cancellationToken)
+    {
+        await Task.Delay(300, cancellationToken);
+        return Directory.FirstOrDefault(e => e.Id == id)!;
+    }
+
+    private const string ItemsCode = """
+        <Autocomplete TItem="string" Label="City" Items="_cities" ItemText="c => c"
+                      MinChars="1" DebounceMs="0" @bind-SelectedItem="_city" />
+
+        @code {
+            private readonly string[] _cities = ["Barranquilla", "Bogotá", "Cali", "Medellín"];
+            private string? _city;
+        }
+        """;
+
+    private const string RemoteSelectCode = """
+        <AutocompleteSelect Label="Manager" SearchFunc="SearchEmployeesAsync" ResolveItem="LoadEmployeeAsync"
+                            MinChars="2" ItemText="e => e.Name" ValueSelector="e => (int?)e.Id"
+                            @bind-Value="_model.ManagerId" />
+
+        @code {
+            private Task<IEnumerable<Employee>> SearchEmployeesAsync(string query, CancellationToken ct)
+                => Api.SearchEmployeesAsync(query, ct);
+
+            // Called once for a saved id that is not in the search results yet.
+            private Task<Employee?> LoadEmployeeAsync(int? id, CancellationToken ct)
+                => Api.GetEmployeeAsync(id!.Value, ct);
+        }
+        """;
+
+    private const string ReactStepsCode = """
+        import { useState } from 'react';
+        import { AutocompleteSelect } from '@carandev/trazos-ui';
+
+        interface Employee { id: number; name: string }
+
+        const search = async (query: string, signal: AbortSignal): Promise<Employee[]> =>
+          (await fetch(`/api/employees?q=${encodeURIComponent(query)}`, { signal })).json();
+
+        const load = async (id: number, signal: AbortSignal): Promise<Employee | null> =>
+          (await fetch(`/api/employees/${id}`, { signal })).json();
+
+        export function ManagerField({ initialId }: { initialId: number | null }) {
+          const [managerId, setManagerId] = useState(initialId);
+          return (
+            <AutocompleteSelect<Employee, number>
+              label="Manager"
+              required
+              searchFn={search}
+              resolveItem={load}
+              minChars={2}
+              itemText={(e) => e.name}
+              valueSelector={(e) => e.id}
+              value={managerId}
+              onValueChange={setManagerId}
+              error={managerId === null ? 'Choose a manager.' : undefined}
+            />
+          );
+        }
+        """;
 
     private const string SelectCode = """
         <AutocompleteSelect Label="Company" Items="_companies"
@@ -184,14 +364,16 @@
 
     private IReadOnlyList<ApiParam> ReactParams =>
     [
-        new("searchFn", "(query: string, signal: AbortSignal) => Iterable<T> | Promise<Iterable<T>>", "required", L.T("Runs the search. The signal is aborted when a newer query starts. It can return the items directly or as a promise.", "Ejecuta la búsqueda. La señal se aborta cuando empieza una consulta más reciente. Puede devolver los elementos directamente o como una promesa.")),
+        new("searchFn", "(query: string, signal: AbortSignal) => Iterable<T> | Promise<Iterable<T>>", null, L.T("Runs the search. The signal is aborted when a newer query starts. It can return the items directly or as a promise. Optional when items is set; it wins when both are set.", "Ejecuta la búsqueda. La señal se aborta cuando empieza una consulta más reciente. Puede devolver los elementos directamente o como una promesa. Opcional si se pasa items; gana si se pasan ambos.")),
+        new("items", "readonly T[]", null, L.T("Preloaded list filtered in memory by itemText (case-insensitive contains). With minChars at 0 it opens on focus.", "Lista precargada que se filtra en memoria por itemText (contiene, sin distinguir mayúsculas). Con minChars en 0 se abre al enfocar.")),
+        new("maxResults", "number", "50", L.T("Most results shown from items.", "Máximo de resultados mostrados de items.")),
         new("itemText", "(item: T) => string", "required", L.T("Text for an item when there is no renderItem.", "Texto de un elemento cuando no hay renderItem.")),
         new("renderItem", "(item: T) => ReactNode", null, L.T("Custom markup for each result and for the selected item.", "Marcado personalizado para cada resultado y para el elemento seleccionado.")),
         new("selectedItem", "T | null", null, L.T("Controlled selected item (null for none). Pair it with onSelectedItemChange.", "Elemento seleccionado controlado (null si no hay ninguno). Úsalo junto con onSelectedItemChange.")),
         new("defaultSelectedItem", "T | null", "null", L.T("Initial selected item for uncontrolled use.", "Elemento seleccionado inicial para uso no controlado.")),
         new("onSelectedItemChange", "(item: T | null) => void", null, L.T("Called on select, and with null on clear.", "Se llama al seleccionar, y con null al limpiar.")),
         new("clearOnSelect", "boolean", "false", L.T("Empties the field after each pick instead of showing a chip.", "Vacía el campo después de cada selección en lugar de mostrar un chip.")),
-        new("minChars", "number", "2", L.T("Characters required before searching.", "Caracteres necesarios antes de buscar.")),
+        new("minChars", "number", "2", L.T("Characters required before searching. At 0 the list opens on focus.", "Caracteres necesarios antes de buscar. En 0 la lista se abre al enfocar.")),
         new("debounceMs", "number", "300", L.T("Delay after the last keystroke before searching.", "Espera tras la última pulsación de tecla antes de buscar.")),
         new("noResultsText", "string", "'Sin resultados'", L.T("Text when the search returns nothing.", "Texto cuando la búsqueda no devuelve nada.")),
         new("searchingText", "string", "'Buscando…'", L.T("Text while searching.", "Texto mientras se busca.")),
@@ -205,5 +387,24 @@
         new("id", "string", "generated", L.T("Id of the input.", "Id del campo.")),
         new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other attribute for the wrapper div, including ref.", "Cualquier otro atributo para el div contenedor, incluido ref.")),
+    ];
+
+    private IReadOnlyList<ApiParam> SelectReactParams =>
+    [
+        new("value", "V | null", null, L.T("Controlled value, normally an id; null for none. Pair it with onValueChange.", "Valor controlado, normalmente un id; null si no hay ninguno. Úsalo junto con onValueChange.")),
+        new("defaultValue", "V | null", "null", L.T("Initial value for uncontrolled use.", "Valor inicial para uso no controlado.")),
+        new("onValueChange", "(value: V | null) => void", null, L.T("Called with valueSelector(item) on select, and with null on clear.", "Se llama con valueSelector(item) al seleccionar, y con null al limpiar.")),
+        new("valueSelector", "(item: T) => V", "required", L.T("The value bound for an item, normally its id. Compared with Object.is.", "El valor que se enlaza para un elemento, normalmente su id. Se compara con Object.is.")),
+        new("items", "readonly T[]", null, L.T("Items to choose from. Also used to show the item of the current value.", "Elementos para elegir. También se usan para mostrar el elemento del valor actual.")),
+        new("searchFn", "(query: string, signal: AbortSignal) => Iterable<T> | Promise<Iterable<T>>", null, L.T("Remote search, used instead of filtering items.", "Búsqueda remota, se usa en lugar de filtrar items.")),
+        new("resolveItem", "(value: V, signal: AbortSignal) => T | null | Promise<T | null>", null, L.T("Loads the item of a value that is not in items. Ignored when the item's value does not match.", "Carga el elemento de un valor que no está en items. Se ignora si el valor del elemento no coincide.")),
+        new("itemText, renderItem", "", null, L.T("Same as Autocomplete.", "Igual que en Autocomplete.")),
+        new("minChars", "number", "0", L.T("Characters required before searching; 0 opens the list on focus.", "Caracteres necesarios antes de buscar; 0 abre la lista al enfocar.")),
+        new("debounceMs", "number", "150", L.T("Delay after the last keystroke before searching.", "Espera tras la última pulsación de tecla antes de buscar.")),
+        new("maxResults", "number", "50", L.T("Most results shown from items.", "Máximo de resultados mostrados de items.")),
+        new("noResultsText", "string", "'No results'", L.T("Text when nothing matches.", "Texto cuando nada coincide.")),
+        new("searchingText", "string", "'Searching…'", L.T("Text while searching.", "Texto mientras se busca.")),
+        new("clearText", "string", "'Clear selection'", L.T("Accessible label of the clear button.", "Etiqueta accesible del botón para limpiar.")),
+        new("label, placeholder, helperText, error, required, disabled, id, className", "", null, L.T("Same as Autocomplete.", "Igual que en Autocomplete.")),
     ];
 }

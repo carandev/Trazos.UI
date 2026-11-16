@@ -1,9 +1,9 @@
 @page "/components/form-layout"
 
 <DocPage Title="@L.T("Form layout", "Diseño de formularios")" Category="@L.T("Forms", "Formularios")"
-         Lead="@L.T("FormGrid places fields in 1 to 4 responsive columns, Divider with a Label splits sections, FormActions aligns the submit bar, and FilterBar groups filters above a list.", "FormGrid ubica los campos en 1 a 4 columnas adaptables, Divider con Label separa secciones, FormActions alinea la barra de envío y FilterBar agrupa filtros encima de una lista.")">
+         Lead="@L.T("FormGrid places fields in 1 to 4 responsive columns, Divider with a label splits sections, FormActions aligns the submit bar, and FilterBar groups filters above a list.", "FormGrid ubica los campos en 1 a 4 columnas adaptables, Divider con una etiqueta separa secciones, FormActions alinea la barra de envío y FilterBar agrupa filtros encima de una lista.")">
 
-    <DemoBlock Title="FormGrid · Divider · FormActions" Code="@FormCode">
+    <DemoBlock Title="FormGrid · Divider · FormActions" Code="@FormCode" React="form-layout/form-grid">
         <div class="docs-stack">
             <FormGrid Columns="3">
                 <TextInput Label="@L.T("First name", "Nombres")" />
@@ -24,7 +24,7 @@
         </div>
     </DemoBlock>
 
-    <DemoBlock Title="FilterBar" Code="@FilterCode">
+    <DemoBlock Title="FilterBar" Code="@FilterCode" React="form-layout/filter-bar">
         <FilterBar Label="@L.T("Filter employees", "Filtrar empleados")">
             <ChildContent>
                 <SearchInput Placeholder="@L.T("Name or document", "Nombre o documento")" @bind-Value="_query" />
@@ -40,7 +40,55 @@
         </FilterBar>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <ul>
+        <li>@L.T("FormGrid: any form with more than three or four fields. Short related fields (first and last name, city and zip code) sit side by side; long ones (address, notes) span the row.", "FormGrid: cualquier formulario con más de tres o cuatro campos. Los campos cortos relacionados (nombres y apellidos, ciudad y código postal) van lado a lado; los largos (dirección, notas) ocupan la fila.")</li>
+        <li>@L.T("FormActions: the buttons that end a form or a step: submit, cancel, save draft.", "FormActions: los botones que cierran un formulario o un paso: enviar, cancelar, guardar borrador.")</li>
+        <li>@L.T("FilterBar: the filters above a table or a list of cards. Use it for filters that apply at once; for a search form with a submit button, use a regular form.", "FilterBar: los filtros encima de una tabla o de una lista de tarjetas. Úsalo para filtros que se aplican de inmediato; para un formulario de búsqueda con botón de enviar, usa un formulario normal.")</li>
+        <li>@L.T("Do not use FormGrid for page layout or cards; it is tuned for field widths and gaps.", "No uses FormGrid para el diseño de la página o de tarjetas; está ajustado a anchos y espacios de campos.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li><Tr><En>Wrap the fields in <code>FormGrid</code> and choose the columns for wide screens. Phones always show one column and tablets at most two, so you do not need breakpoints.</En><Es>Envuelve los campos en <code>FormGrid</code> y elige las columnas para pantallas anchas. Los teléfonos siempre muestran una columna y las tabletas como máximo dos, así no necesitas puntos de quiebre.</Es></Tr></li>
+        <li><Tr><En>Add the class <code>trazos-form-full</code> to a field that must span the row (@F.Pick("its Class parameter", "its className prop")). It must be a direct child of the grid.</En><Es>Agrega la clase <code>trazos-form-full</code> a un campo que debe ocupar toda la fila (@F.Pick("su parámetro Class", "su prop className")). Debe ser hijo directo de la cuadrícula.</Es></Tr></li>
+        <li><Tr><En>Split long forms into sections with <code>Divider</code> and a label, or with <code>FormSection</code> when each section needs a title and description.</En><Es>Divide los formularios largos en secciones con <code>Divider</code> y una etiqueta, o con <code>FormSection</code> cuando cada sección necesita título y descripción.</Es></Tr></li>
+        <li><Tr><En>End the form with <code>FormActions</code>. Put the main action last: with <code>@F.Pick("Align=\"FormActionsAlign.Between\"", "align=\"between\"")</code> the first button (usually Cancel) moves to the left and the rest stay on the right. Turn on <code>@F.Pick("Sticky", "sticky")</code> for long forms on phones, so the submit button stays at the bottom of the screen.</En><Es>Cierra el formulario con <code>FormActions</code>. Pon la acción principal al final: con <code>@F.Pick("Align=\"FormActionsAlign.Between\"", "align=\"between\"")</code> el primer botón (normalmente Cancelar) pasa a la izquierda y los demás quedan a la derecha. Activa <code>@F.Pick("Sticky", "sticky")</code> en formularios largos en teléfonos, para que el botón de enviar quede abajo en la pantalla.</Es></Tr></li>
+        <li><Tr><En>For filters, put the fields in <code>FilterBar</code> and the reset button in <code>@F.Pick("Actions", "actions")</code>. Give it a <code>@F.Pick("Label", "label")</code> such as "Filter employees"; fields without a visible label need an <code>aria-label</code>.</En><Es>Para filtros, pon los campos en <code>FilterBar</code> y el botón de limpiar en <code>@F.Pick("Actions", "actions")</code>. Dale un <code>@F.Pick("Label", "label")</code> como "Filtrar empleados"; los campos sin etiqueta visible necesitan un <code>aria-label</code>.</Es></Tr></li>
+    </ol>
+    @if (F.IsReact)
+    {
+        <CodeBlock Language="tsx" Code="@ReactStepsCode" />
+    }
+
+    <h3 class="docs-h3">@L.T("Binding and validation", "Enlace y validación")</h3>
+    @if (F.IsReact)
+    {
+        <p><Tr><En>These components only arrange their children; they hold no value. Bind and validate each field as usual (<code>value</code>/<code>onValueChange</code> and <code>error</code>), and put a <code>&lt;Button type="submit"&gt;</code> inside <code>FormActions</code> within your <code>&lt;form onSubmit&gt;</code>.</En><Es>Estos componentes solo organizan a sus hijos; no guardan ningún valor. Enlaza y valida cada campo como siempre (<code>value</code>/<code>onValueChange</code> y <code>error</code>) y pon un <code>&lt;Button type="submit"&gt;</code> dentro de <code>FormActions</code> en tu <code>&lt;form onSubmit&gt;</code>.</Es></Tr></p>
+    }
+    else
+    {
+        <p><Tr><En>These components only arrange their children; they hold no value. Inside an <code>EditForm</code>, bind each field with <code>@@bind-Value</code> as usual and put a <code>&lt;Button Type="submit"&gt;</code> inside <code>FormActions</code>.</En><Es>Estos componentes solo organizan a sus hijos; no guardan ningún valor. Dentro de un <code>EditForm</code>, enlaza cada campo con <code>@@bind-Value</code> como siempre y pon un <code>&lt;Button Type="submit"&gt;</code> dentro de <code>FormActions</code>.</Es></Tr></p>
+    }
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li>@L.T("FormGrid keeps the source order, so the Tab order follows reading order on every screen size. Write the fields in the order you want them read.", "FormGrid conserva el orden del código, así el orden de Tab sigue el orden de lectura en cualquier tamaño de pantalla. Escribe los campos en el orden en que quieres que se lean.")</li>
+        <li><Tr><En>FilterBar is a <code>role="search"</code> landmark named by its label, so screen-reader users can jump to it from the landmarks list.</En><Es>FilterBar es un landmark <code>role="search"</code> con el nombre de su etiqueta, así los usuarios de lectores de pantalla pueden saltar a él desde la lista de landmarks.</Es></Tr></li>
+        <li>@L.T("FormActions is a plain container: the buttons keep their own names and order. A sticky bar does not cover focused fields because the page scrolls above it.", "FormActions es un contenedor simple: los botones conservan sus nombres y su orden. Una barra fija no tapa los campos enfocados porque la página se desplaza por encima de ella.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li><Tr><En><code>trazos-form-full</code> only works on a direct child of <code>FormGrid</code>; wrapping the field in another element loses it.</En><Es><code>trazos-form-full</code> solo funciona en un hijo directo de <code>FormGrid</code>; envolver el campo en otro elemento hace que se pierda.</Es></Tr></li>
+        <li>@L.T("Four columns suit short fields such as dates and amounts; with long labels, two or three columns read better.", "Cuatro columnas sirven para campos cortos como fechas y montos; con etiquetas largas, dos o tres columnas se leen mejor.")</li>
+        <li>@L.T("Only use one sticky FormActions per screen, and not inside a Modal or Drawer, which already keep their footer visible.", "Usa una sola FormActions fija por pantalla, y no dentro de un Modal o un Drawer, que ya mantienen visible su pie.")</li>
+        <li>@L.T("Placing the main action first with Between: the first child always moves left, so keep the secondary action first.", "Poner la acción principal primero con Between: el primer hijo siempre pasa a la izquierda, así que deja primero la acción secundaria.")</li>
+    </ul>
+
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
@@ -84,6 +132,38 @@
             </Actions>
         </FilterBar>
         """;
+
+    private const string ReactStepsCode = """
+        import { Button, FormActions, FormGrid, TextInput } from '@carandev/trazos-ui';
+
+        export function EmployeeForm({ onSave }: { onSave: () => void }) {
+          return (
+            <form onSubmit={(e) => { e.preventDefault(); onSave(); }}>
+              <FormGrid columns={3}>
+                <TextInput label="First name" required />
+                <TextInput label="Last name" required />
+                <TextInput label="Birth date" type="date" />
+                <TextInput label="Address" className="trazos-form-full" />
+              </FormGrid>
+              <FormActions align="between" sticky>
+                <Button variant="ghost" type="button">Cancel</Button>
+                <Button type="submit">Save</Button>
+              </FormActions>
+            </form>
+          );
+        }
+        """;
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("FormGrid.columns", "number", "2", L.T("1 to 4 on wide screens (other numbers are clamped); one on phones, at most two on tablets. Add trazos-form-full to a child's className to span the row.", "De 1 a 4 en pantallas anchas (otros números se ajustan al rango); una en teléfonos y como máximo dos en tabletas. Agrega trazos-form-full al className de un hijo para ocupar la fila.")),
+        new("FormActions.align", "'end' | 'start' | 'between'", "'end'", L.T("Placement of the buttons; between pushes the first child to the left.", "Ubicación de los botones; between lleva el primer hijo a la izquierda.")),
+        new("FormActions.sticky", "boolean", "false", L.T("On phones the bar sticks to the bottom of the screen.", "En teléfonos la barra se queda fija abajo.")),
+        new("FilterBar.label", "string", null, L.T("Accessible name of the search landmark.", "Nombre accesible del landmark de búsqueda.")),
+        new("FilterBar.actions", "ReactNode", null, L.T("Buttons on the right, such as reset.", "Botones a la derecha, como limpiar.")),
+        new("children", "ReactNode", null, L.T("Fields or buttons of each container.", "Campos o botones de cada contenedor.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other attribute for the root div, including ref and className.", "Cualquier otro atributo para el div raíz, incluidos ref y className.")),
+    ];
 
     private IReadOnlyList<ApiParam> Params =>
     [

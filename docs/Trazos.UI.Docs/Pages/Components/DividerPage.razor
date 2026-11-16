@@ -3,7 +3,7 @@
 <DocPage Title="Divider" Category="@L.T("Page structure", "Estructura de página")"
          Lead="@L.T("A separator line, horizontal or vertical, with an optional label in the middle to split sections of a form or a document.", "Una línea separadora, horizontal o vertical, con una etiqueta opcional en el medio para dividir secciones de un formulario o un documento.")">
 
-    <DemoBlock Code="@Code">
+    <DemoBlock Title="@L.T("Variants", "Variantes")" Code="@Code" React="divider/variants">
         <div>
             <p>@L.T("Earnings", "Devengados")</p>
             <Divider />
@@ -13,14 +13,61 @@
                 <span>@L.T("Draft", "Borrador")</span>
                 <Divider Vertical="true" />
                 <span>@L.T("42 employees", "42 empleados")</span>
+                <Divider Vertical="true" Dashed="true" />
+                <span>@L.T("November 2026", "Noviembre 2026")</span>
             </div>
         </div>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <DemoBlock Title="@L.T("Between form fields", "Entre campos de formulario")"
+               Description="@L.T("A labeled divider names the next group of fields without adding a heading.", "Un divisor con etiqueta nombra el siguiente grupo de campos sin agregar un encabezado.")"
+               Code="@FormCode" React="divider/form-sections">
+        <div class="docs-stack">
+            <TextInput Label="@L.T("Full name", "Nombre completo")" @bind-Value="_name" />
+            <Divider Label="@L.T("Payment", "Pago")" />
+            <TextInput Label="@L.T("Bank", "Banco")" @bind-Value="_bank" />
+            <TextInput Label="@L.T("Account number", "Número de cuenta")" @bind-Value="_account" />
+        </div>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <ul>
+        <li>@L.T("To split groups of content that belong to the same card, form or document, such as earnings and deductions on a payslip.", "Para separar grupos de contenido que pertenecen a la misma tarjeta, formulario o documento, como devengados y deducciones en un desprendible.")</li>
+        <li>@L.T("Vertical, to separate short items in a row, such as a status and a count in a toolbar.", "Vertical, para separar elementos cortos en una fila, como un estado y un conteo en una barra de herramientas.")</li>
+        <li>@L.T("Not as a substitute for spacing: if white space is enough, skip the line. For a real section with a title, use FormSection or a heading.", "No como sustituto del espaciado: si el espacio en blanco basta, omite la línea. Para una sección real con título, usa FormSection o un encabezado.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li><Tr><En>Drop a <code>Divider</code> between two blocks. It takes the full width and adds vertical margin.</En><Es>Coloca un <code>Divider</code> entre dos bloques. Ocupa todo el ancho y agrega margen vertical.</Es></Tr></li>
+        <li><Tr><En>Add <code>@N("Label")</code> to name the next group, or <code>@N("Dashed")</code> for a cut mark on printable documents.</En><Es>Agrega <code>@N("Label")</code> para nombrar el siguiente grupo, o <code>@N("Dashed")</code> para una línea de corte en documentos imprimibles.</Es></Tr></li>
+        <li><Tr><En>For <code>@N("Vertical")</code>, place it inside a flex row with <code>align-items: center</code>: it stretches to the height of the row. The label is ignored on vertical dividers.</En><Es>Para <code>@N("Vertical")</code>, ponlo dentro de una fila flex con <code>align-items: center</code>: se estira a la altura de la fila. La etiqueta se ignora en los divisores verticales.</Es></Tr></li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li><Tr><En>It has <code>role="separator"</code>; vertical dividers add <code>aria-orientation="vertical"</code>. It is not focusable.</En><Es>Tiene <code>role="separator"</code>; los divisores verticales agregan <code>aria-orientation="vertical"</code>. No recibe foco.</Es></Tr></li>
+        <li>@L.T("The label becomes the separator's accessible name, so it is read once: the visible text is hidden from screen readers to avoid reading it twice.", "La etiqueta se vuelve el nombre accesible del separador, así se lee una sola vez: el texto visible está oculto para los lectores de pantalla para no leerlo dos veces.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@L.T("A vertical divider outside a flex row has no height to stretch to: it shows as a short line of one text line.", "Un divisor vertical fuera de una fila flex no tiene altura a la cual estirarse: se ve como una línea corta del alto de una línea de texto.")</li>
+        <li>@L.T("Using a labeled divider as the only title of a section: assistive technology does not list it as a heading.", "Usar un divisor con etiqueta como único título de una sección: la tecnología de asistencia no lo lista como encabezado.")</li>
+    </ul>
+
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
+    private string? _name;
+    private string? _bank;
+    private string? _account;
+
+    private string N(string name) => !F.IsReact ? name : char.ToLowerInvariant(name[0]) + name[1..];
+
     private const string Code = """
         <Divider />
         <Divider Label="Deductions" />
@@ -33,11 +80,28 @@
         </div>
         """;
 
+    private const string FormCode = """
+        <TextInput Label="Full name" @bind-Value="_name" />
+        <Divider Label="Payment" />
+        <TextInput Label="Bank" @bind-Value="_bank" />
+        <TextInput Label="Account number" @bind-Value="_account" />
+        """;
+
     private IReadOnlyList<ApiParam> Params =>
     [
         new("Label", "string?", null, L.T("Text in the middle of a horizontal divider. Also its accessible name.", "Texto en medio de un divisor horizontal. También es su nombre accesible.")),
         new("Vertical", "bool", "false", L.T("Separates items in a row.", "Separa elementos en una fila.")),
         new("Dashed", "bool", "false", L.T("Dashed line.", "Línea punteada.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("label", "string", null, L.T("Text in the middle of a horizontal divider. Also its accessible name.", "Texto en medio de un divisor horizontal. También es su nombre accesible.")),
+        new("vertical", "boolean", "false", L.T("Separates items in a row. Ignores label.", "Separa elementos en una fila. Ignora label.")),
+        new("dashed", "boolean", "false", L.T("Dashed line.", "Línea punteada.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other div attribute, including ref.", "Cualquier otro atributo de div, incluido ref.")),
     ];
 }

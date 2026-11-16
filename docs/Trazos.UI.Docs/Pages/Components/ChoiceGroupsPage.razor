@@ -1,9 +1,10 @@
 @page "/components/choice-groups"
+@using System.ComponentModel.DataAnnotations
 
 <DocPage Title="RadioGroup & CheckboxGroup" Category="@L.T("Forms", "Formularios")"
-         Lead="@L.T("Compact lists of native radios and checkboxes built from typed options. RadioGroup binds one value; CheckboxGroup binds a List of the selected values, in option order.", "Listas compactas de radios y casillas nativas construidas con opciones tipadas. RadioGroup enlaza un valor; CheckboxGroup enlaza una List con los valores elegidos, en el orden de las opciones.")">
+         Lead="@F.Pick(L.T("Compact lists of native radios and checkboxes built from typed options. RadioGroup binds one value; CheckboxGroup binds a List of the selected values, in option order.", "Listas compactas de radios y casillas nativas construidas con opciones tipadas. RadioGroup enlaza un valor; CheckboxGroup enlaza una List con los valores elegidos, en el orden de las opciones."), L.T("Compact lists of native radios and checkboxes built from typed options. RadioGroup holds one value; CheckboxGroup holds an array of the selected values, in option order.", "Listas compactas de radios y casillas nativas construidas con opciones tipadas. RadioGroup guarda un valor; CheckboxGroup guarda un arreglo con los valores elegidos, en el orden de las opciones."))">
 
-    <DemoBlock Code="@Code">
+    <DemoBlock Title="@L.T("Basic usage", "Uso básico")" Code="@Code" React="choice-groups/basic">
         <div class="docs-stack">
         <div class="docs-grid-2">
             <RadioGroup Label="@L.T("Contract type", "Tipo de contrato")" Options="_contracts" @bind-Value="_contract" />
@@ -14,13 +15,108 @@
         </div>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <DemoBlock Title="@L.T("Validation", "Validación")"
+               Description="@F.Pick(L.T("Submit the empty form: inside an EditForm each group reads its message from DataAnnotations.", "Envía el formulario vacío: dentro de un EditForm cada grupo lee su mensaje de DataAnnotations."), L.T("Submit the empty form: the error prop shows the message, flags the group with aria-invalid and links it with aria-describedby.", "Envía el formulario vacío: la prop error muestra el mensaje, marca el grupo con aria-invalid y lo vincula con aria-describedby."))"
+               Code="@ValidationCode" React="choice-groups/validation">
+        <EditForm Model="_form" OnValidSubmit="() => _saved = true" class="docs-stack">
+            <DataAnnotationsValidator />
+            <RadioGroup Label="@L.T("Shift", "Turno")" Required="true" Inline="true"
+                        HelperText="@L.T("You can change it every month.", "Puedes cambiarlo cada mes.")"
+                        Options="_formShifts" @bind-Value="_form.Shift" />
+            <CheckboxGroup Label="@L.T("Benefits", "Beneficios")" Required="true" Options="_formBenefits" @bind-Value="_form.Benefits" />
+            <div>
+                <Button Type="submit">@L.T("Save", "Guardar")</Button>
+            </div>
+            @if (_saved)
+            {
+                <p class="docs-demo-output">@L.T("Saved.", "Guardado.")</p>
+            }
+        </EditForm>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <ul>
+        <li>@L.T("RadioGroup: the user must pick exactly one of two to about six options, and seeing every option at once helps the decision (contract type, shift, pay frequency).", "RadioGroup: el usuario debe elegir exactamente una entre dos y unas seis opciones, y ver todas a la vez ayuda a decidir (tipo de contrato, turno, frecuencia de pago).")</li>
+        <li>@L.T("CheckboxGroup: the user can pick any number of options from a short list (benefits, notification channels, days of the week).", "CheckboxGroup: el usuario puede elegir cualquier cantidad de opciones de una lista corta (beneficios, canales de notificación, días de la semana).")</li>
+        <li>@L.T("Use SelectInput or Autocomplete instead when the list is long or comes from the server; use RadioCardGroup when each option needs a description; use a single Checkbox for one yes/no answer.", "Usa SelectInput o Autocomplete cuando la lista es larga o viene del servidor; usa RadioCardGroup cuando cada opción necesita una descripción; usa un solo Checkbox para una respuesta de sí o no.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    @if (F.IsReact)
+    {
+        <ol>
+            <li><Tr><En>Build the options as an array of <code>ChoiceOption&lt;T&gt;</code>: <code>{ value, label, disabled? }</code>. The value can be a string, a number or any object; it is compared with <code>Object.is</code>.</En><Es>Construye las opciones como un arreglo de <code>ChoiceOption&lt;T&gt;</code>: <code>{ value, label, disabled? }</code>. El valor puede ser un texto, un número o cualquier objeto; se compara con <code>Object.is</code>.</Es></Tr></li>
+            <li><Tr><En>Keep the value in state and pass <code>value</code> plus <code>onValueChange</code>. RadioGroup gives you one value (<code>null</code> while nothing is chosen); CheckboxGroup gives you a new array, always in option order.</En><Es>Guarda el valor en el estado y pasa <code>value</code> junto con <code>onValueChange</code>. RadioGroup te entrega un valor (<code>null</code> mientras no hay nada elegido); CheckboxGroup te entrega un arreglo nuevo, siempre en el orden de las opciones.</Es></Tr></li>
+            <li><Tr><En>For a form that does not need the value while typing, use <code>defaultValue</code> and read the value in <code>onValueChange</code>.</En><Es>Para un formulario que no necesita el valor mientras se edita, usa <code>defaultValue</code> y lee el valor en <code>onValueChange</code>.</Es></Tr></li>
+            <li><Tr><En>Pass <code>label</code> (the fieldset legend), and <code>required</code>, <code>helperText</code> or <code>inline</code> as needed.</En><Es>Pasa <code>label</code> (la leyenda del fieldset) y, según necesites, <code>required</code>, <code>helperText</code> o <code>inline</code>.</Es></Tr></li>
+        </ol>
+        <CodeBlock Language="tsx" Code="@ReactStepsCode" />
+    }
+    else
+    {
+        <ol>
+            <li><Tr><En>Build the options as <code>IReadOnlyList&lt;SelectOption&lt;T&gt;&gt;</code>: <code>new(value, text)</code>, with <code>Disabled: true</code> for an option that cannot be chosen.</En><Es>Construye las opciones como <code>IReadOnlyList&lt;SelectOption&lt;T&gt;&gt;</code>: <code>new(valor, texto)</code>, con <code>Disabled: true</code> para una opción que no se puede elegir.</Es></Tr></li>
+            <li><Tr><En>Bind the value with <code>@@bind-Value</code>. RadioGroup binds a <code>TValue</code> (use a nullable type such as <code>string?</code> or <code>int?</code> to start with nothing chosen); CheckboxGroup binds a <code>List&lt;TItem&gt;</code> and assigns a new list in option order on every change.</En><Es>Enlaza el valor con <code>@@bind-Value</code>. RadioGroup enlaza un <code>TValue</code> (usa un tipo anulable como <code>string?</code> o <code>int?</code> para empezar sin elección); CheckboxGroup enlaza una <code>List&lt;TItem&gt;</code> y asigna una lista nueva en el orden de las opciones en cada cambio.</Es></Tr></li>
+            <li><Tr><En>Inside an <code>EditForm</code>, add the rules to the model (<code>[Required]</code> for a radio choice, <code>[MinLength(1)]</code> for a list). The group shows the first message, adds the state classes and sets <code>aria-invalid</code>.</En><Es>Dentro de un <code>EditForm</code>, agrega las reglas al modelo (<code>[Required]</code> para una elección de radio, <code>[MinLength(1)]</code> para una lista). El grupo muestra el primer mensaje, agrega las clases de estado y pone <code>aria-invalid</code>.</Es></Tr></li>
+            <li><Tr><En>Pass <code>Label</code> (the fieldset legend), and <code>Required</code>, <code>HelperText</code> or <code>Inline</code> as needed.</En><Es>Pasa <code>Label</code> (la leyenda del fieldset) y, según necesites, <code>Required</code>, <code>HelperText</code> o <code>Inline</code>.</Es></Tr></li>
+        </ol>
+    }
+
+    <h3 class="docs-h3">@L.T("Validation", "Validación")</h3>
+    @if (F.IsReact)
+    {
+        <p><Tr><En>Pass the message in <code>error</code>. It replaces <code>helperText</code>, is announced with <code>role="alert"</code>, sets <code>aria-invalid="true"</code> on the fieldset and is linked with <code>aria-describedby</code>. Show it after the first submit, as in the validation demo, so the user is not warned before acting.</En><Es>Pasa el mensaje en <code>error</code>. Reemplaza a <code>helperText</code>, se anuncia con <code>role="alert"</code>, pone <code>aria-invalid="true"</code> en el fieldset y se vincula con <code>aria-describedby</code>. Muéstralo después del primer envío, como en la demostración de validación, para no advertir al usuario antes de que actúe.</Es></Tr></p>
+    }
+    else
+    {
+        <p><Tr><En>With <code>@@bind-Value</code> inside an <code>EditForm</code> the message comes from the <code>EditContext</code>. An explicit <code>Error</code> always wins, which is useful for server-side errors. Outside a form, set <code>Error</code> yourself.</En><Es>Con <code>@@bind-Value</code> dentro de un <code>EditForm</code> el mensaje viene del <code>EditContext</code>. Un <code>Error</code> explícito siempre gana, útil para errores del servidor. Fuera de un formulario, asigna <code>Error</code> tú mismo.</Es></Tr></p>
+    }
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li><Tr><En>The options are native inputs inside a <code>fieldset</code> with a <code>legend</code>, so screen readers announce the group name before each option.</En><Es>Las opciones son inputs nativos dentro de un <code>fieldset</code> con <code>legend</code>, así los lectores de pantalla anuncian el nombre del grupo antes de cada opción.</Es></Tr></li>
+        <li><Tr><En>RadioGroup has <code>role="radiogroup"</code> and shares one <code>name</code>: Tab enters the group once, and the arrow keys move and choose. <code>Required</code> adds <code>aria-required</code>.</En><Es>RadioGroup tiene <code>role="radiogroup"</code> y comparte un <code>name</code>: Tab entra una vez al grupo y las flechas mueven y eligen. <code>Required</code> agrega <code>aria-required</code>.</Es></Tr></li>
+        <li><Tr><En>CheckboxGroup has <code>role="group"</code>: Tab moves through each checkbox and Space toggles it.</En><Es>CheckboxGroup tiene <code>role="group"</code>: Tab recorre cada casilla y Espacio la marca o desmarca.</Es></Tr></li>
+        <li>@L.T("Disabled options stay visible and are skipped by the keyboard.", "Las opciones deshabilitadas siguen visibles y el teclado las salta.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        @if (F.IsReact)
+        {
+            <li><Tr><En>Option values that are new objects on every render never match the value. Use ids or keep the option objects stable.</En><Es>Valores de opción que son objetos nuevos en cada render nunca coinciden con el valor. Usa ids o mantén estables los objetos de las opciones.</Es></Tr></li>
+            <li><Tr><En>Passing <code>value</code> without updating it in <code>onValueChange</code> freezes the group: a controlled group only shows what you pass.</En><Es>Pasar <code>value</code> sin actualizarlo en <code>onValueChange</code> congela el grupo: un grupo controlado solo muestra lo que le pasas.</Es></Tr></li>
+            <li><Tr><En>Do not mutate the array you receive; CheckboxGroup already gives a new one, ready for <code>setState</code>.</En><Es>No mutes el arreglo que recibes; CheckboxGroup ya entrega uno nuevo, listo para <code>setState</code>.</Es></Tr></li>
+        }
+        else
+        {
+            <li><Tr><En>A non-nullable <code>int</code> or enum starts on its default value, which may match an option. Use <code>int?</code> or an enum with no zero option to force a choice.</En><Es>Un <code>int</code> o enum no anulable empieza en su valor por defecto, que puede coincidir con una opción. Usa <code>int?</code> o un enum sin opción cero para obligar a elegir.</Es></Tr></li>
+            <li><Tr><En>CheckboxGroup assigns a new list; code that kept a reference to the old list will not see the change.</En><Es>CheckboxGroup asigna una lista nueva; el código que guardó una referencia a la lista anterior no verá el cambio.</Es></Tr></li>
+        }
+        <li>@L.T("Too many options make the list hard to scan; past about seven, switch to a select or an autocomplete.", "Demasiadas opciones dificultan leer la lista; pasadas unas siete, cambia a un select o a un autocompletado.")</li>
+        <li>@L.T("Inline suits short labels only; long labels wrap awkwardly on phones.", "Inline sirve solo para etiquetas cortas; las etiquetas largas se ajustan mal en teléfonos.")</li>
+    </ul>
+
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
     private string? _contract;
     private List<int> _selected = [2];
     private int _shift = 1;
+    private readonly ChoicesModel _form = new();
+    private bool _saved;
+
+    private sealed class ChoicesModel
+    {
+        [Required(ErrorMessage = "Choose a shift.")]
+        public string? Shift { get; set; }
+
+        [MinLength(1, ErrorMessage = "Choose at least one benefit.")]
+        public List<string> Benefits { get; set; } = [];
+    }
 
     private IReadOnlyList<SelectOption<string?>> _contracts => [
         new("fixed", L.T("Fixed term", "Término fijo")),
@@ -38,6 +134,16 @@
         new(1, L.T("Morning", "Mañana")),
         new(2, L.T("Afternoon", "Tarde")),
         new(3, L.T("Night", "Noche")),
+    ];
+
+    private IReadOnlyList<SelectOption<string?>> _formShifts => [
+        new("am", L.T("Morning", "Mañana")),
+        new("pm", L.T("Afternoon", "Tarde")),
+    ];
+
+    private IReadOnlyList<SelectOption<string>> _formBenefits => [
+        new("food", L.T("Food allowance", "Auxilio de alimentación")),
+        new("transport", L.T("Transport allowance", "Auxilio de transporte")),
     ];
 
     private const string Code = """
@@ -64,6 +170,55 @@
         }
         """;
 
+    private const string ValidationCode = """
+        <EditForm Model="_form" OnValidSubmit="Save">
+            <DataAnnotationsValidator />
+            <RadioGroup Label="Shift" Required="true" Inline="true" HelperText="You can change it every month."
+                        Options="_shifts" @bind-Value="_form.Shift" />
+            <CheckboxGroup Label="Benefits" Required="true" Options="_benefits" @bind-Value="_form.Benefits" />
+            <Button Type="submit">Save</Button>
+        </EditForm>
+
+        @code {
+            private sealed class ChoicesModel
+            {
+                [Required(ErrorMessage = "Choose a shift.")]
+                public string? Shift { get; set; }
+
+                [MinLength(1, ErrorMessage = "Choose at least one benefit.")]
+                public List<string> Benefits { get; set; } = [];
+            }
+        }
+        """;
+
+    private const string ReactStepsCode = """
+        import { useState } from 'react';
+        import { CheckboxGroup, RadioGroup, type ChoiceOption } from '@carandev/trazos-ui';
+
+        const shifts: ChoiceOption<string>[] = [
+          { value: 'am', label: 'Morning' },
+          { value: 'pm', label: 'Afternoon' },
+          { value: 'night', label: 'Night', disabled: true },
+        ];
+
+        export function ShiftFields() {
+          const [shift, setShift] = useState<string | null>(null);
+          return (
+            <>
+              <RadioGroup label="Shift" required options={shifts} value={shift} onValueChange={setShift} />
+              {/* Uncontrolled: starts with 'email' checked and reports every change. */}
+              <CheckboxGroup
+                label="Notify me by"
+                inline
+                options={[{ value: 'email', label: 'Email' }, { value: 'sms', label: 'SMS' }]}
+                defaultValue={['email']}
+                onValueChange={(channels) => console.log(channels)}
+              />
+            </>
+          );
+        }
+        """;
+
     private IReadOnlyList<ApiParam> Params =>
     [
         new("Options", "IReadOnlyList<SelectOption<T>>", "required", L.T("Value, Text and Disabled for each choice.", "Value, Text y Disabled de cada opción.")),
@@ -71,5 +226,26 @@
         new("Value (CheckboxGroup)", "List<TItem>", null, L.T("Chosen values, in option order. A new list on every change.", "Valores elegidos, en el orden de las opciones. Una lista nueva en cada cambio.")),
         new("Inline", "bool", "false", L.T("Lays the options out in a row that wraps.", "Ubica las opciones en una fila que se ajusta.")),
         new("Label, HelperText, Error, Required, Disabled", "", null, L.T("Same as the other fields. Label is the fieldset legend.", "Igual que en los demás campos. Label es la leyenda del fieldset.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("options", "readonly ChoiceOption<T>[]", "required", L.T("{ value, label, disabled? } for each choice. Values are compared with Object.is.", "{ value, label, disabled? } de cada opción. Los valores se comparan con Object.is.")),
+        new("value (RadioGroup)", "T | null", null, L.T("Controlled chosen value; null for none. Pair it with onValueChange.", "Valor elegido controlado; null si no hay ninguno. Úsalo junto con onValueChange.")),
+        new("defaultValue (RadioGroup)", "T | null", "null", L.T("Initial value for uncontrolled use.", "Valor inicial para uso no controlado.")),
+        new("onValueChange (RadioGroup)", "(value: T) => void", null, L.T("Called with the value of the option the user picks.", "Se llama con el valor de la opción que elige el usuario.")),
+        new("name (RadioGroup)", "string", "group id", L.T("Name shared by the radios.", "Nombre que comparten los radios.")),
+        new("value (CheckboxGroup)", "readonly T[]", null, L.T("Controlled chosen values.", "Valores elegidos controlados.")),
+        new("defaultValue (CheckboxGroup)", "readonly T[]", "[]", L.T("Initial values for uncontrolled use.", "Valores iniciales para uso no controlado.")),
+        new("onValueChange (CheckboxGroup)", "(value: T[]) => void", null, L.T("Called with a new array of the chosen values, in option order.", "Se llama con un arreglo nuevo de los valores elegidos, en el orden de las opciones.")),
+        new("inline", "boolean", "false", L.T("Lays the options out in a row that wraps.", "Ubica las opciones en una fila que se ajusta.")),
+        new("label", "string", null, L.T("Legend of the fieldset.", "Leyenda del fieldset.")),
+        new("helperText", "string", null, L.T("Hint below the options.", "Ayuda debajo de las opciones.")),
+        new("error", "string", null, L.T("Error message. Replaces the helper text and sets aria-invalid.", "Mensaje de error. Reemplaza la ayuda y agrega aria-invalid.")),
+        new("required", "boolean", "false", L.T("Shows the required marker. RadioGroup also sets aria-required.", "Muestra la marca de obligatorio. RadioGroup además agrega aria-required.")),
+        new("disabled", "boolean", "false", L.T("Disables every option.", "Deshabilita todas las opciones.")),
+        new("id", "string", "generated", L.T("Id of the fieldset; the inputs get id-0, id-1…", "Id del fieldset; los inputs reciben id-0, id-1…")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'fieldset'>", null, L.T("Any other fieldset attribute, including ref.", "Cualquier otro atributo de fieldset, incluido ref.")),
     ];
 }
