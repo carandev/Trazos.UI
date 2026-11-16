@@ -62,6 +62,7 @@ export * from './components/SiteHeader';
 export * from './components/AppShell';
 export * from './components/PageHeader';
 export * from './components/Breadcrumbs';
+export * from './components/Link';
 export * from './components/Divider';
 export * from './components/Ribbon';
 export * from './components/Print';

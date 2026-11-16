@@ -1,5 +1,6 @@
 import type { ComponentPropsWithRef, ReactNode } from 'react';
 import { cx } from '../../internal/cx';
+import { TrazosLink } from '../Link/TrazosLinkProvider';
 import './LinkList.css';
 
 export function LinkList({ className, ...rest }: ComponentPropsWithRef<'ul'>) {
@@ -24,11 +25,11 @@ const arrow = (
 export function LinkListItem({ meta, icon = arrow, className, children, ...rest }: LinkListItemProps) {
   return (
     <li className="trazos-link-list-item">
-      <a {...rest} className={cx('trazos-link-list-link', className)}>
+      <TrazosLink {...rest} className={cx('trazos-link-list-link', className)}>
         <span className="trazos-link-list-name">{children}</span>
         {meta != null && <span className="trazos-link-list-meta">{meta}</span>}
         <span className="trazos-link-list-icon">{icon}</span>
-      </a>
+      </TrazosLink>
     </li>
   );
 }

@@ -52,6 +52,21 @@ import { ConfirmDialogProvider, ToastProvider } from '@carandev/trazos-ui';
 </ToastProvider>
 ```
 
+### Router links
+
+In a single-page app, render the library's links through the router so they navigate without reloading the page. `Breadcrumbs`, `PageHeader` (breadcrumbs and back link), `LinkButton` and `LinkListItem` use the provided component, passing `href`, `className`, `aria-current`, `children`, `ref` and the other anchor attributes:
+
+```tsx
+import { TrazosLinkProvider } from '@carandev/trazos-ui';
+import { Link } from 'react-router';
+
+<TrazosLinkProvider component={({ href, ...rest }) => <Link to={href} {...rest} />}>
+  <App />
+</TrazosLinkProvider>
+```
+
+Without the provider they render a plain `<a>`. Links that leave the app (`target="_blank"`, `download`, a `mailto:` or absolute URL) always stay plain anchors.
+
 ## Use
 
 ```tsx
@@ -131,6 +146,7 @@ export function RenameFlow() {
 | `LinkList` + `LinkListItem` | Compact link rows: `href`, `meta`, `icon` |
 | `ThemeToggle`, `useTheme()`, `createThemeScript()` | Light and dark switching; see [Dark mode](#dark-mode) |
 | `SiteHeader`, `useScrollSpy(ids)` | Top bar for public sites: `links`, `navLabel`, `openMenuLabel`, `closeMenuLabel` (all required), `logo`, `actions`, `activeHref`, `currentType` |
+| `TrazosLinkProvider` | `component` renders the library's navigational links, such as a router's `Link`; see [Router links](#router-links) |
 | `PageHeader`, `Breadcrumbs`, `Divider` | Page title with breadcrumbs or back link and actions; trail with `aria-current`; separator with optional `label` |
 | `Ribbon`, `NoPrint`, `PrintOnly` | Corner status band; print helpers. Printed pages always use the light tokens |
 | `AppShell` | `brand`, `sidebar`, `topBar`, `drawerHeader`, `drawerContent`, `isDevelopment`, `environmentName`, `showEnvironmentBadge` |
