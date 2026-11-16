@@ -172,6 +172,12 @@ The choice is stored in `localStorage` under `trazos-theme`. Pass the same `stor
 
 Override any `--trazos-*` token after importing `styles.css`. Light values go in `:root`, dark values in `[data-theme="dark"]`. See [`packages/tokens`](../tokens/README.md) for the full list.
 
+## Upgrading to 3.0
+
+- `SelectInput` with `options` only renders its own themed list instead of a native `<select>`: `ref`, `name` and `form` go to a hidden select, and `onChange` does not fire (use `onValueChange`). With `<option>` children it stays native.
+- `TextInput` takes text `prefix` / `suffix`, so the native RDFa `prefix` attribute is no longer accepted.
+- `DescriptionList` shows each item as a tile by default. Use `variant="plain"` for the previous label/value grid; `bordered` only applies to `plain`.
+
 ## License
 
 MIT
