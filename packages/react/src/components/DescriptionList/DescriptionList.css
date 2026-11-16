@@ -1,42 +1,59 @@
 /* ========================================
    DESCRIPTION LIST - Trazos UI (ported from Components/DescriptionList/*.razor.css)
-   Label/value grid for read-only detail views.
+   Read-only detail views: tiles (default) or a plain label/value grid.
    ======================================== */
 
+/* Items auto-fit by --trazos-dl-min; --trazos-dl-cols caps the count, so the
+   track minimum is the larger of the min width and an even share of the row.
+   The list is a size container so items can widen their span only when the
+   list itself is wide enough, wherever it is placed. */
 .trazos-dl {
+    /* A size container has no intrinsic width, so fill the parent explicitly
+       or a flex row would shrink the list to a sliver. */
+    box-sizing: border-box;
+    width: 100%;
+    --trazos-dl-cols: 2;
+    --trazos-dl-gap: 0.875rem;
+    container: trazos-dl / inline-size;
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1.125rem 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, max(var(--trazos-dl-min, 12rem), (100% - (var(--trazos-dl-cols) - 1) * var(--trazos-dl-gap)) / var(--trazos-dl-cols))), 1fr));
+    gap: var(--trazos-dl-gap);
     margin: 0;
 }
 
-@media (min-width: 640px) {
-    .trazos-dl-cols-2,
-    .trazos-dl-cols-3,
-    .trazos-dl-cols-4 {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+.trazos-dl-cols-1 {
+    --trazos-dl-cols: 1;
 }
 
-@media (min-width: 1024px) {
-    .trazos-dl-cols-3 {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .trazos-dl-cols-4 {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
+.trazos-dl-cols-2 {
+    --trazos-dl-cols: 2;
 }
 
-.trazos-dl-bordered .trazos-dl-item {
+.trazos-dl-cols-3 {
+    --trazos-dl-cols: 3;
+}
+
+.trazos-dl-cols-4 {
+    --trazos-dl-cols: 4;
+}
+
+.trazos-dl-plain {
+    --trazos-dl-gap: 1.5rem;
+    row-gap: 1.125rem;
+}
+
+.trazos-dl-plain.trazos-dl-bordered .trazos-dl-item {
     padding-bottom: 0.875rem;
     border-bottom: 1px dashed var(--trazos-border-soft);
 }
 
+/* ---------- Item ---------- */
+
 .trazos-dl-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-content: start;
+    row-gap: 0.25rem;
     min-width: 0;
 }
 
@@ -45,26 +62,188 @@
 }
 
 .trazos-dl-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-width: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.3;
     color: var(--trazos-text-muted);
 }
 
+.trazos-dl-label-text {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.trazos-dl-icon {
+    display: inline-flex;
+    flex: none;
+    color: var(--trazos-olive);
+}
+
+.trazos-dl-icon svg {
+    width: 1rem;
+    height: 1rem;
+}
+
 .trazos-dl-value {
+    grid-column: 1;
+    grid-row: 2;
+    min-width: 0;
     margin: 0;
-    font-size: 0.9375rem;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.35;
     color: var(--trazos-text);
     overflow-wrap: anywhere;
 }
 
 .trazos-dl-value.trazos-dl-value-empty {
+    font-weight: 400;
+    font-style: italic;
     color: var(--trazos-text-subtle);
 }
 
 .trazos-dl-hint {
+    grid-column: 1 / -1;
+    grid-row: 3;
     margin: 0;
     font-size: 0.75rem;
     color: var(--trazos-text-muted);
+    overflow-wrap: anywhere;
+}
+
+/* After the value in the DOM, so keyboard focus reaches it after reading the value. */
+.trazos-dl-actions {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: start;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin: -0.25rem -0.25rem 0 0.5rem;
+}
+
+/* ---------- Tiles ---------- */
+
+.trazos-dl-tiles .trazos-dl-item {
+    padding: 0.875rem 1rem;
+    background: var(--trazos-surface-muted);
+    border: 1.5px solid var(--trazos-border-soft);
+    border-radius: var(--trazos-radius-sketch-sm);
+    box-shadow: 2px 2px 0 rgb(var(--trazos-shadow-rgb) / calc(0.05 * var(--trazos-shadow-strength)));
+}
+
+.trazos-dl-tiles .trazos-dl-highlight {
+    box-shadow: 2px 3px 0 rgb(var(--trazos-shadow-rgb) / calc(0.08 * var(--trazos-shadow-strength)));
+}
+
+.trazos-dl-highlight .trazos-dl-value {
+    font-size: 1.375rem;
+    font-weight: 700;
+}
+
+.trazos-dl-tiles .trazos-dl-tone-olive {
+    background: var(--trazos-olive-tint);
+    border-color: var(--trazos-olive-border);
+}
+
+.trazos-dl-tiles .trazos-dl-tone-gold {
+    background: var(--trazos-gold-tint);
+    border-color: var(--trazos-gold-border);
+}
+
+.trazos-dl-tiles .trazos-dl-tone-wine {
+    background: var(--trazos-wine-tint);
+    border-color: var(--trazos-wine-border);
+}
+
+.trazos-dl-tiles .trazos-dl-tone-sky {
+    background: var(--trazos-sky-tint);
+    border-color: var(--trazos-sky-border);
+}
+
+.trazos-dl-tone-olive .trazos-dl-label,
+.trazos-dl-tone-olive .trazos-dl-icon {
+    color: var(--trazos-olive-text);
+}
+
+.trazos-dl-tone-gold .trazos-dl-label,
+.trazos-dl-tone-gold .trazos-dl-icon {
+    color: var(--trazos-gold-text);
+}
+
+.trazos-dl-tone-wine .trazos-dl-label,
+.trazos-dl-tone-wine .trazos-dl-icon {
+    color: var(--trazos-wine-text);
+}
+
+.trazos-dl-tone-sky .trazos-dl-label,
+.trazos-dl-tone-sky .trazos-dl-icon {
+    color: var(--trazos-sky-text);
+}
+
+/* ---------- Plain ---------- */
+
+.trazos-dl-plain .trazos-dl-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.trazos-dl-plain .trazos-dl-value {
+    font-size: 0.9375rem;
+    font-weight: 400;
+}
+
+.trazos-dl-plain .trazos-dl-highlight .trazos-dl-value {
+    font-size: 1.0625rem;
+    font-weight: 700;
+}
+
+.trazos-dl-plain .trazos-dl-value.trazos-dl-value-empty {
+    font-style: normal;
+}
+
+/* ---------- Span ----------
+   Thresholds fit the default 12rem minimum width with either gap; an item
+   never spans more than the list's Columns, so it cannot add columns. */
+
+@container trazos-dl (min-width: 26rem) {
+    .trazos-dl-span-2,
+    .trazos-dl-span-3,
+    .trazos-dl-span-4 {
+        grid-column: span 2;
+    }
+
+    .trazos-dl-cols-1 .trazos-dl-item {
+        grid-column: auto;
+    }
+}
+
+@container trazos-dl (min-width: 40rem) {
+    .trazos-dl-span-3,
+    .trazos-dl-span-4 {
+        grid-column: span 3;
+    }
+
+    .trazos-dl-cols-2 .trazos-dl-span-3,
+    .trazos-dl-cols-2 .trazos-dl-span-4 {
+        grid-column: span 2;
+    }
+}
+
+@container trazos-dl (min-width: 53rem) {
+    .trazos-dl-span-4 {
+        grid-column: span 4;
+    }
+
+    .trazos-dl-cols-3 .trazos-dl-span-4 {
+        grid-column: span 3;
+    }
 }

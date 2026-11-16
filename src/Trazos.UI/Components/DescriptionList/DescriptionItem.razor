@@ -1,7 +1,13 @@
 @namespace Trazos.UI.Components
 
-<div class="trazos-dl-item @(FullWidth ? "is-full" : "") @Class" @attributes="AdditionalAttributes">
-    <dt class="trazos-dl-label">@Label</dt>
+<div class="trazos-dl-item @(FullWidth ? "is-full" : "") @SpanClass @(Highlight ? "trazos-dl-highlight" : "") @ToneClass @Class" @attributes="AdditionalAttributes">
+    <dt class="trazos-dl-label">
+        @if (Icon != null)
+        {
+            <span class="trazos-dl-icon" aria-hidden="true">@Icon</span>
+        }
+        <span class="trazos-dl-label-text">@Label</span>
+    </dt>
     <dd class="trazos-dl-value @(IsEmpty ? "is-empty" : "")">
         @if (ChildContent != null)
         {
@@ -19,6 +25,10 @@
     @if (!string.IsNullOrEmpty(Hint))
     {
         <dd class="trazos-dl-hint">@Hint</dd>
+    }
+    @if (Actions != null)
+    {
+        <dd class="trazos-dl-actions">@Actions</dd>
     }
 </div>
 
@@ -42,9 +52,29 @@
     [Parameter]
     public string? Hint { get; set; }
 
+    /// <summary>Decorative icon before the label. It is hidden from screen readers.</summary>
+    [Parameter]
+    public RenderFragment? Icon { get; set; }
+
+    /// <summary>Buttons or links for this value, such as a CopyButton. Shown in the top-right corner, focused after the value.</summary>
+    [Parameter]
+    public RenderFragment? Actions { get; set; }
+
+    /// <summary>Columns to span on wide lists, 1 to 4, never more than the list's Columns. Phones show one column.</summary>
+    [Parameter]
+    public int Span { get; set; } = 1;
+
     /// <summary>Spans every column.</summary>
     [Parameter]
     public bool FullWidth { get; set; }
+
+    /// <summary>Emphasizes a key value, such as net pay, with a larger value and an olive tint unless a Tone is set.</summary>
+    [Parameter]
+    public bool Highlight { get; set; }
+
+    /// <summary>Accent color, matching the Card tones.</summary>
+    [Parameter]
+    public DescriptionTone Tone { get; set; } = DescriptionTone.Default;
 
     [Parameter]
     public string? Class { get; set; }
@@ -53,4 +83,15 @@
     public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
     private bool IsEmpty => ChildContent is null && string.IsNullOrEmpty(Value);
+
+    private string? SpanClass => Math.Clamp(Span, 1, 4) is var span and > 1 ? $"trazos-dl-span-{span}" : null;
+
+    private string? ToneClass => (Tone == DescriptionTone.Default && Highlight ? DescriptionTone.Olive : Tone) switch
+    {
+        DescriptionTone.Olive => "trazos-dl-tone-olive",
+        DescriptionTone.Gold => "trazos-dl-tone-gold",
+        DescriptionTone.Wine => "trazos-dl-tone-wine",
+        DescriptionTone.Sky => "trazos-dl-tone-sky",
+        _ => null
+    };
 }

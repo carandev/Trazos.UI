@@ -8,7 +8,7 @@ export default function Demo() {
       <Card style={{ position: 'relative' }} className="trazos-print-avoid-break">
         <Ribbon text={t('Paid', 'Pagado')} />
         <h3 className="trazos-heading">{t('Payslip · November 2026', 'Desprendible · Noviembre 2026')}</h3>
-        <DescriptionList columns={2}>
+        <DescriptionList columns={2} variant="plain">
           <DescriptionItem label={t('Employee', 'Empleado')} value="Ana María Restrepo" />
           <DescriptionItem label={t('Net pay', 'Neto a pagar')} value="$ 3.210.000" />
         </DescriptionList>

@@ -1,15 +1,24 @@
 @namespace Trazos.UI.Components
+@using Trazos.UI.Internal
 
-<dl class="trazos-dl trazos-dl-cols-@Math.Clamp(Columns, 1, 4) @(Bordered ? "is-bordered" : "") @Class" @attributes="AdditionalAttributes">
+<dl class="trazos-dl @VariantClass trazos-dl-cols-@Math.Clamp(Columns, 1, 4) @(Bordered ? "is-bordered" : "") @Class" @attributes="AdditionalAttributes" style="@StyleValue">
     @ChildContent
 </dl>
 
 @code {
-    /// <summary>Columns on wide screens, 1 to 4. Phones show one column and tablets at most two.</summary>
+    /// <summary>Tiles (default) draws each item as its own small card; Plain is a compact label/value grid.</summary>
+    [Parameter]
+    public DescriptionListVariant Variant { get; set; } = DescriptionListVariant.Tiles;
+
+    /// <summary>Maximum columns, 1 to 4. Items auto-fit by <see cref="MinItemWidth"/>, so narrow screens show fewer and phones one.</summary>
     [Parameter]
     public int Columns { get; set; } = 2;
 
-    /// <summary>Draws a divider under each item, for dense detail pages.</summary>
+    /// <summary>Minimum width of an item before the grid drops a column, as a CSS length. Defaults to 12rem.</summary>
+    [Parameter]
+    public string? MinItemWidth { get; set; }
+
+    /// <summary>Draws a dashed divider under each item in the Plain variant, for dense detail pages.</summary>
     [Parameter]
     public bool Bordered { get; set; }
 
@@ -22,4 +31,10 @@
 
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string VariantClass => Variant == DescriptionListVariant.Plain ? "trazos-dl-plain" : "trazos-dl-tiles";
+
+    private string? StyleValue => StyleAttribute.Merge(
+        string.IsNullOrWhiteSpace(MinItemWidth) ? null : $"--trazos-dl-min: {MinItemWidth}",
+        AdditionalAttributes);
 }

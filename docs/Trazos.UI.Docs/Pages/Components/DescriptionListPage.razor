@@ -1,37 +1,82 @@
 @page "/components/description-list"
 
 <DocPage Title="DescriptionList" Category="@L.T("Display", "Visualización")"
-         Lead="@L.T("A label/value grid for read-only detail views, with responsive columns, full-width items, an empty placeholder and an optional hint per item.", "Una cuadrícula etiqueta/valor para vistas de detalle de solo lectura, con columnas adaptables, elementos de ancho completo, un texto para valores vacíos y una nota opcional por elemento.")">
+         Lead="@L.T("Read-only detail views where every value reads on its own: each item is a small tile with a label, an optional icon, a prominent value, a hint and its own actions. A Plain variant keeps a compact label/value grid for dense data.", "Vistas de detalle de solo lectura donde cada valor se lee por sí solo: cada elemento es una pequeña tarjeta con una etiqueta, un ícono opcional, un valor destacado, una nota y sus propias acciones. La variante Plain mantiene una cuadrícula compacta de etiqueta y valor para datos densos.")">
 
-    <DemoBlock Title="@L.T("Detail view", "Vista de detalle")"
-               Description="@L.T("Three columns on wide screens, two on tablets and one on phones. Resize the window to see it.", "Tres columnas en pantallas anchas, dos en tabletas y una en teléfonos. Cambia el tamaño de la ventana para verlo.")"
-               Code="@Code" React="description-list/detail">
+    <DemoBlock Title="@L.T("Employee detail", "Detalle de un empleado")"
+               Description="@L.T("Tiles with icons, a status badge, an email spanning two columns with a copy action, an empty bank account and the net pay highlighted.", "Tarjetas con íconos, una insignia de estado, un correo que ocupa dos columnas con una acción para copiar, una cuenta bancaria vacía y el neto a pagar destacado.")"
+               Code="@EmployeeCode" React="description-list/employee">
         <DescriptionList Columns="3">
-            <DescriptionItem Label="@L.T("Document", "Documento")" Value="CC 1.020.304.050" />
-            <DescriptionItem Label="@L.T("Position", "Cargo")" Value="@L.T("Payroll analyst", "Analista de nómina")" />
+            <DescriptionItem Label="@L.T("Full name", "Nombre completo")" Value="Ana María Restrepo">
+                <Icon>@Icons.User</Icon>
+            </DescriptionItem>
+            <DescriptionItem Label="@L.T("Position", "Cargo")" Value="@L.T("Payroll analyst", "Analista de nómina")" Hint="@L.T("Finance team", "Equipo de finanzas")" />
             <DescriptionItem Label="@L.T("Status", "Estado")"><Badge Variant="BadgeVariant.Success">@L.T("Active", "Activo")</Badge></DescriptionItem>
+            <DescriptionItem Label="@L.T("Work email", "Correo laboral")" Value="ana.restrepo@example.com" Span="2"
+                             Hint="@L.T("Payslips are sent to this address", "Los desprendibles se envían a esta dirección")">
+                <Icon>@Icons.Mail</Icon>
+                <Actions>
+                    <CopyButton Value="ana.restrepo@example.com" Label="@L.T("Copy email", "Copiar correo")" CopiedLabel="@L.T("Copied!", "¡Copiado!")" />
+                </Actions>
+            </DescriptionItem>
+            <DescriptionItem Label="@L.T("Start date", "Fecha de ingreso")" Value="2024-02-01">
+                <Icon>@Icons.Calendar</Icon>
+            </DescriptionItem>
             <DescriptionItem Label="@L.T("Base salary", "Salario base")" Value="$ 3.500.000" Hint="@L.T("Before deductions", "Antes de deducciones")" />
             <DescriptionItem Label="@L.T("Bank account", "Cuenta bancaria")" EmptyText="@L.T("Not registered", "Sin registrar")" />
-            <DescriptionItem Label="@L.T("Start date", "Fecha de ingreso")" Value="2024-02-01" />
-            <DescriptionItem Label="@L.T("Address", "Dirección")" Value="Carrera 7 # 72-41, Bogotá" FullWidth="true" />
+            <DescriptionItem Label="@L.T("Net pay", "Neto a pagar")" Value="$ 3.210.000" Hint="@L.T("November 2026", "Noviembre 2026")" Highlight="true" />
+            <DescriptionItem Label="@L.T("Address", "Dirección")" Value="Carrera 7 # 72-41, Bogotá" FullWidth="true">
+                <Icon>@Icons.Home</Icon>
+            </DescriptionItem>
         </DescriptionList>
     </DemoBlock>
 
-    <DemoBlock Title="@L.T("Bordered", "Con bordes")"
-               Description="@L.T("A dashed line under each item helps on dense pages. An item without a value shows an em dash.", "Una línea punteada debajo de cada elemento ayuda en páginas densas. Un elemento sin valor muestra una raya.")"
-               Code="@BorderedCode" React="description-list/bordered">
-        <DescriptionList Columns="2" Bordered="true">
+    <DemoBlock Title="@L.T("Layout control", "Control del diseño")"
+               Description="@L.T("Columns is a maximum: items auto-fit by MinItemWidth, so the grid drops columns as the space shrinks and phones show one. Long values wrap; Span and FullWidth give them room. Resize the window to see it.", "Columns es un máximo: los elementos se acomodan según MinItemWidth, así la cuadrícula quita columnas cuando falta espacio y los teléfonos muestran una. Los valores largos se ajustan; Span y FullWidth les dan espacio. Cambia el tamaño de la ventana para verlo.")"
+               Code="@LayoutCode" React="description-list/detail">
+        <DescriptionList Columns="4" MinItemWidth="10rem">
+            <DescriptionItem Label="@L.T("Document", "Documento")" Value="CC 1.020.304.050" />
+            <DescriptionItem Label="@L.T("Contract", "Contrato")" Value="@L.T("Open-ended", "Indefinido")" />
+            <DescriptionItem Label="@L.T("Schedule", "Jornada")" Value="@L.T("Full time", "Tiempo completo")" />
+            <DescriptionItem Label="@L.T("Cost center", "Centro de costo")" Value="FIN-204" />
+            <DescriptionItem Label="@L.T("Health insurer", "EPS")" Span="2"
+                             Value="@L.T("Health insurer with a very long registered name, S.A.S.", "Entidad promotora de salud con un nombre registrado muy largo S.A.S.")" />
+            <DescriptionItem Label="@L.T("Pension fund", "Fondo de pensiones")" Value="Protección" />
+            <DescriptionItem Label="@L.T("Risk class", "Clase de riesgo")" Value="I" />
+            <DescriptionItem Label="@L.T("Notes", "Notas")" FullWidth="true"
+                             Value="@L.T("Works remotely on Fridays. Approved by the finance manager in the January review.", "Trabaja en remoto los viernes. Aprobado por la gerencia financiera en la revisión de enero.")" />
+        </DescriptionList>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Tones", "Tonos")"
+               Description="@L.T("The same tones as Card. Use them for meaning, not decoration: one or two per list at most.", "Los mismos tonos de Card. Úsalos para dar significado, no como decoración: uno o dos por lista como máximo.")"
+               Code="@TonesCode" React="description-list/tones">
+        <DescriptionList Columns="4">
+            <DescriptionItem Label="@L.T("Earnings", "Devengados")" Value="$ 3.850.000" Tone="DescriptionTone.Olive" />
+            <DescriptionItem Label="@L.T("Deductions", "Deducciones")" Value="$ 640.000" Tone="DescriptionTone.Wine" />
+            <DescriptionItem Label="@L.T("Pending approval", "Pendiente de aprobación")" Value="$ 120.000" Tone="DescriptionTone.Gold" />
+            <DescriptionItem Label="@L.T("Vacation days", "Días de vacaciones")" Value="12" Tone="DescriptionTone.Sky" />
+        </DescriptionList>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Plain, for dense data", "Plain, para datos densos")"
+               Description="@L.T("Many short figures read better as a compact grid than as many tiles. Bordered adds a dashed line under each item; an item without a value shows an em dash.", "Muchas cifras cortas se leen mejor en una cuadrícula compacta que en muchas tarjetas. Bordered agrega una línea punteada debajo de cada elemento; un elemento sin valor muestra una raya.")"
+               Code="@PlainCode" React="description-list/plain">
+        <DescriptionList Variant="DescriptionListVariant.Plain" Columns="3" Bordered="true">
             <DescriptionItem Label="@L.T("Earnings", "Devengados")" Value="$ 3.850.000" />
             <DescriptionItem Label="@L.T("Deductions", "Deducciones")" Value="$ 640.000" />
             <DescriptionItem Label="@L.T("Health", "Salud")" Value="$ 140.000" Hint="4%" />
             <DescriptionItem Label="@L.T("Pension", "Pensión")" Value="$ 140.000" Hint="4%" />
-            <DescriptionItem Label="@L.T("Phone", "Teléfono")" />
-            <DescriptionItem Label="@L.T("Net pay", "Neto a pagar")" Value="$ 3.210.000" />
+            <DescriptionItem Label="@L.T("Solidarity fund", "Fondo de solidaridad")" Value="$ 35.000" Hint="1%" />
+            <DescriptionItem Label="@L.T("Withholding tax", "Retención en la fuente")" />
+            <DescriptionItem Label="@L.T("Overtime", "Horas extra")" Value="$ 210.000" />
+            <DescriptionItem Label="@L.T("Transport allowance", "Auxilio de transporte")" Value="$ 140.000" />
+            <DescriptionItem Label="@L.T("Net pay", "Neto a pagar")" Value="$ 3.210.000" Highlight="true" />
         </DescriptionList>
     </DemoBlock>
 
     <DemoBlock Title="@L.T("In a detail page", "En una página de detalle")"
-               Description="@L.T("PageHeader on top and one Card per group of fields.", "PageHeader arriba y una Card por cada grupo de campos.")"
+               Description="@L.T("PageHeader on top and one Card per group of fields. The tiles stand out from the card surface.", "PageHeader arriba y una Card por cada grupo de campos. Las tarjetas se distinguen sobre la superficie de la Card.")"
                Code="@CardCode" React="description-list/in-card">
         <div>
             <PageHeader Title="Ana María Restrepo" Level="3" BackHref="components/description-list" BackLabel="@L.T("Employees", "Empleados")">
@@ -56,29 +101,42 @@
     <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
     <ul>
         <li>@L.T("Read-only records: an employee, an invoice, a contract, the summary before confirming a form.", "Registros de solo lectura: un empleado, una factura, un contrato, el resumen antes de confirmar un formulario.")</li>
+        <li><Tr><En>Use the default tiles when each value matters on its own and people scan for one of them: a profile, a contract, the key figures of a payslip.</En><Es>Usa las tarjetas por defecto cuando cada valor importa por sí solo y las personas buscan uno de ellos: un perfil, un contrato, las cifras clave de un desprendible.</Es></Tr></li>
+        <li><Tr><En>Use <code>@N("Variant")="@V("Plain")"</code> for dense data with many short values (deductions, technical fields) and for printed documents, where many tiles would be noisy.</En><Es>Usa <code>@N("Variant")="@V("Plain")"</code> para datos densos con muchos valores cortos (deducciones, campos técnicos) y para documentos impresos, donde muchas tarjetas serían ruido.</Es></Tr></li>
         <li>@L.T("Not for many records with the same fields: use DataTable. Not for editable data: use a form.", "No para muchos registros con los mismos campos: usa DataTable. No para datos editables: usa un formulario.")</li>
     </ul>
 
     <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
     <ol>
-        <li><Tr><En>Wrap the items in a <code>DescriptionList</code> and choose <code>@N("Columns")</code> (1 to 4, default 2). Phones always show one column and tablets at most two.</En><Es>Envuelve los elementos en un <code>DescriptionList</code> y elige <code>@N("Columns")</code> (de 1 a 4, por defecto 2). Los teléfonos siempre muestran una columna y las tabletas como máximo dos.</Es></Tr></li>
-        <li><Tr><En>Add one <code>DescriptionItem</code> per field with a <code>@N("Label")</code> and a <code>@N("Value")</code>. Pass already formatted text: currency, dates and numbers in the user's locale.</En><Es>Agrega un <code>DescriptionItem</code> por campo con un <code>@N("Label")</code> y un <code>@N("Value")</code>. Pasa el texto ya formateado: moneda, fechas y números en la configuración regional del usuario.</Es></Tr></li>
-        <li><Tr><En>For rich values (a badge, a link, a phone number with a call button), use <code>@N("ChildContent")</code> instead of <code>@N("Value")</code>; it takes precedence.</En><Es>Para valores enriquecidos (una insignia, un enlace, un teléfono con botón para llamar), usa <code>@N("ChildContent")</code> en lugar de <code>@N("Value")</code>; tiene prioridad.</Es></Tr></li>
-        <li><Tr><En>Set <code>@N("EmptyText")</code> to say why a value is missing (default "—"), <code>@N("Hint")</code> for a short note, and <code>@N("FullWidth")</code> for long values such as addresses or notes.</En><Es>Usa <code>@N("EmptyText")</code> para decir por qué falta un valor (por defecto "—"), <code>@N("Hint")</code> para una nota corta y <code>@N("FullWidth")</code> para valores largos como direcciones o notas.</Es></Tr></li>
-        <li><Tr><En>Turn on <code>@N("Bordered")</code> on dense pages with many items.</En><Es>Activa <code>@N("Bordered")</code> en páginas densas con muchos elementos.</Es></Tr></li>
+        <li><Tr><En>Wrap the items in a <code>DescriptionList</code>. Add one <code>DescriptionItem</code> per field with a <code>@N("Label")</code> and a <code>@N("Value")</code>. Pass already formatted text: currency, dates and numbers in the user's locale.</En><Es>Envuelve los elementos en un <code>DescriptionList</code>. Agrega un <code>DescriptionItem</code> por campo con un <code>@N("Label")</code> y un <code>@N("Value")</code>. Pasa el texto ya formateado: moneda, fechas y números en la configuración regional del usuario.</Es></Tr></li>
+        <li><Tr><En>For rich values (a badge, a link), use <code>@N("ChildContent")</code> instead of <code>@N("Value")</code>; it takes precedence.</En><Es>Para valores enriquecidos (una insignia, un enlace), usa <code>@N("ChildContent")</code> en lugar de <code>@N("Value")</code>; tiene prioridad.</Es></Tr></li>
+        <li><Tr><En>Add an <code>@N("Icon")</code> when it helps people find a field faster, an <code>@N("Hint")</code> for a short note and <code>@N("Actions")</code> for what people do with the value, such as a CopyButton or a link.</En><Es>Agrega un <code>@N("Icon")</code> cuando ayude a encontrar un campo más rápido, un <code>@N("Hint")</code> para una nota corta y <code>@N("Actions")</code> para lo que las personas hacen con el valor, como un CopyButton o un enlace.</Es></Tr></li>
+        <li><Tr><En>Set <code>@N("EmptyText")</code> to say why a value is missing (default "—"). It is shown in a muted style so it does not read as data.</En><Es>Usa <code>@N("EmptyText")</code> para decir por qué falta un valor (por defecto "—"). Se muestra atenuado para que no se lea como un dato.</Es></Tr></li>
+        <li><Tr><En>Mark the one or two values people look for first with <code>@N("Highlight")</code> (an olive tile with a larger value), and use <code>@N("Tone")</code> only when the color carries meaning.</En><Es>Marca los uno o dos valores que las personas buscan primero con <code>@N("Highlight")</code> (una tarjeta oliva con un valor más grande) y usa <code>@N("Tone")</code> solo cuando el color tenga significado.</Es></Tr></li>
     </ol>
+
+    <h3 class="docs-h3">@L.T("Layout", "Diseño")</h3>
+    <ul>
+        <li><Tr><En><code>@N("Columns")</code> (1 to 4, default 2) is the maximum on wide screens. Items auto-fit by <code>@N("MinItemWidth")</code> (default 12rem), so a narrow container shows fewer columns and phones show one.</En><Es><code>@N("Columns")</code> (de 1 a 4, por defecto 2) es el máximo en pantallas anchas. Los elementos se acomodan según <code>@N("MinItemWidth")</code> (por defecto 12rem), así un contenedor angosto muestra menos columnas y los teléfonos muestran una.</Es></Tr></li>
+        <li><Tr><En>Give a long value room with <code>@N("Span")</code> (2 to 4 columns) or <code>@N("FullWidth")</code>. A span never exceeds <code>@N("Columns")</code> and falls back to one column when the list is narrow; it is tuned for the default minimum width.</En><Es>Dale espacio a un valor largo con <code>@N("Span")</code> (de 2 a 4 columnas) o <code>@N("FullWidth")</code>. Un span nunca supera <code>@N("Columns")</code> y vuelve a una columna cuando la lista es angosta; está ajustado para el ancho mínimo por defecto.</Es></Tr></li>
+        <li>@L.T("Long values wrap inside their tile instead of overflowing.", "Los valores largos se ajustan dentro de su tarjeta en lugar de desbordarse.")</li>
+        <li><Tr><En><code>@N("Bordered")</code> only applies to the Plain variant: tiles already have their own border.</En><Es><code>@N("Bordered")</code> solo aplica a la variante Plain: las tarjetas ya tienen su propio borde.</Es></Tr></li>
+    </ul>
 
     <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
     <ul>
-        <li><Tr><En>It renders a native <code>dl</code> with <code>dt</code>/<code>dd</code> pairs, so screen readers announce each label with its value. The hint is a second <code>dd</code> of the same term.</En><Es>Renderiza un <code>dl</code> nativo con pares <code>dt</code>/<code>dd</code>, así los lectores de pantalla anuncian cada etiqueta con su valor. La nota es un segundo <code>dd</code> del mismo término.</Es></Tr></li>
-        <li>@L.T("The list itself is not interactive; links or buttons inside values keep their normal keyboard behavior.", "La lista en sí no es interactiva; los enlaces o botones dentro de los valores mantienen su comportamiento normal con el teclado.")</li>
+        <li><Tr><En>It renders a native <code>dl</code> with <code>dt</code>/<code>dd</code> pairs in both variants, so screen readers announce each label with its value. The hint and the actions are extra <code>dd</code> elements of the same term.</En><Es>Renderiza un <code>dl</code> nativo con pares <code>dt</code>/<code>dd</code> en ambas variantes, así los lectores de pantalla anuncian cada etiqueta con su valor. La nota y las acciones son elementos <code>dd</code> adicionales del mismo término.</Es></Tr></li>
+        <li>@L.T("Icons are decorative and hidden from screen readers; the label carries the meaning.", "Los íconos son decorativos y están ocultos para los lectores de pantalla; la etiqueta lleva el significado.")</li>
+        <li>@L.T("Actions are drawn in the tile's top-right corner but come after the value in the document, so people hear the value before they reach its buttons with Tab. Give icon buttons a label that names the value, such as \"Copy email\".", "Las acciones se dibujan en la esquina superior derecha de la tarjeta, pero van después del valor en el documento, así las personas escuchan el valor antes de llegar a sus botones con Tab. Dale a los botones de ícono una etiqueta que nombre el valor, como \"Copiar correo\".")</li>
+        <li>@L.T("Tones and highlights are visual only: say in the label or hint what makes a value important.", "Los tonos y el resaltado son solo visuales: di en la etiqueta o en la nota qué hace importante un valor.")</li>
     </ul>
 
     <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
     <ul>
         <li><Tr><En>Putting anything other than <code>DescriptionItem</code> directly inside the list: a <code>dl</code> only allows term groups, so wrap other content outside it.</En><Es>Poner algo distinto de <code>DescriptionItem</code> directamente dentro de la lista: un <code>dl</code> solo admite grupos de términos, así que deja el resto del contenido por fuera.</Es></Tr></li>
         <li>@L.T("Leaving empty values blank: say why instead (\"Not registered\", \"No end date\").", "Dejar valores vacíos en blanco: mejor di por qué (\"Sin registrar\", \"Sin fecha de retiro\").")</li>
-        <li><Tr><En>Four columns with long values: they wrap into narrow columns. Use fewer columns or <code>@N("FullWidth")</code>.</En><Es>Cuatro columnas con valores largos: se parten en columnas angostas. Usa menos columnas o <code>@N("FullWidth")</code>.</Es></Tr></li>
+        <li>@L.T("Highlighting or toning every item: when everything stands out, nothing does.", "Resaltar o dar tono a todos los elementos: cuando todo destaca, nada destaca.")</li>
+        <li><Tr><En>Dozens of tiles for short figures: switch to <code>@N("Variant")="@V("Plain")"</code> or split the fields into Cards by group.</En><Es>Decenas de tarjetas para cifras cortas: cambia a <code>@N("Variant")="@V("Plain")"</code> o divide los campos en Cards por grupo.</Es></Tr></li>
     </ul>
 
     <ApiTable Title="@F.Pick(L.T("DescriptionList parameters", "Parámetros de DescriptionList"), L.T("DescriptionList props", "Props de DescriptionList"))" Params="Params" ReactParams="ReactParams" />
@@ -88,22 +146,51 @@
 @code {
     private string N(string name) => !F.IsReact ? name : name == "ChildContent" ? "children" : char.ToLowerInvariant(name[0]) + name[1..];
 
-    private const string Code = """
+    private string V(string name) => F.IsReact ? name.ToLowerInvariant() : $"DescriptionListVariant.{name}";
+
+    private const string EmployeeCode = """
         <DescriptionList Columns="3">
-            <DescriptionItem Label="Document" Value="CC 1.020.304.050" />
+            <DescriptionItem Label="Full name" Value="Ana María Restrepo">
+                <Icon>@Icons.User</Icon>
+            </DescriptionItem>
             <DescriptionItem Label="Status"><Badge Variant="BadgeVariant.Success">Active</Badge></DescriptionItem>
-            <DescriptionItem Label="Base salary" Value="$ 3.500.000" Hint="Before deductions" />
+            <DescriptionItem Label="Work email" Value="ana.restrepo@example.com" Span="2"
+                             Hint="Payslips are sent to this address">
+                <Icon>@Icons.Mail</Icon>
+                <Actions>
+                    <CopyButton Value="ana.restrepo@example.com" Label="Copy email" CopiedLabel="Copied!" />
+                </Actions>
+            </DescriptionItem>
             <DescriptionItem Label="Bank account" EmptyText="Not registered" />
+            <DescriptionItem Label="Net pay" Value="$ 3.210.000" Hint="November 2026" Highlight="true" />
             <DescriptionItem Label="Address" Value="Carrera 7 # 72-41, Bogotá" FullWidth="true" />
         </DescriptionList>
         """;
 
-    private const string BorderedCode = """
-        <DescriptionList Columns="2" Bordered="true">
+    private const string LayoutCode = """
+        <DescriptionList Columns="4" MinItemWidth="10rem">
+            <DescriptionItem Label="Document" Value="CC 1.020.304.050" />
+            <DescriptionItem Label="Cost center" Value="FIN-204" />
+            <DescriptionItem Label="Health insurer" Value="Health insurer with a very long registered name, S.A.S." Span="2" />
+            <DescriptionItem Label="Notes" Value="Works remotely on Fridays." FullWidth="true" />
+        </DescriptionList>
+        """;
+
+    private const string TonesCode = """
+        <DescriptionList Columns="4">
+            <DescriptionItem Label="Earnings" Value="$ 3.850.000" Tone="DescriptionTone.Olive" />
+            <DescriptionItem Label="Deductions" Value="$ 640.000" Tone="DescriptionTone.Wine" />
+            <DescriptionItem Label="Pending approval" Value="$ 120.000" Tone="DescriptionTone.Gold" />
+            <DescriptionItem Label="Vacation days" Value="12" Tone="DescriptionTone.Sky" />
+        </DescriptionList>
+        """;
+
+    private const string PlainCode = """
+        <DescriptionList Variant="DescriptionListVariant.Plain" Columns="3" Bordered="true">
             <DescriptionItem Label="Earnings" Value="$ 3.850.000" />
             <DescriptionItem Label="Health" Value="$ 140.000" Hint="4%" />
-            <DescriptionItem Label="Phone" />
-            <DescriptionItem Label="Net pay" Value="$ 3.210.000" />
+            <DescriptionItem Label="Withholding tax" />
+            <DescriptionItem Label="Net pay" Value="$ 3.210.000" Highlight="true" />
         </DescriptionList>
         """;
 
@@ -125,11 +212,13 @@
 
     private IReadOnlyList<ApiParam> Params =>
     [
-        new("Columns", "int", "2", L.T("Columns on wide screens, 1 to 4. Phones show one; tablets at most two.", "Columnas en pantallas anchas, de 1 a 4. Los teléfonos muestran una; las tabletas como máximo dos.")),
-        new("Bordered", "bool", "false", L.T("Dashed divider under each item.", "Divisor punteado debajo de cada elemento.")),
+        new("Variant", "DescriptionListVariant", "Tiles", L.T("Tiles draws each item as its own small card; Plain is a compact label/value grid for dense data.", "Tiles dibuja cada elemento como una pequeña tarjeta; Plain es una cuadrícula compacta de etiqueta y valor para datos densos.")),
+        new("Columns", "int", "2", L.T("Maximum columns on wide screens, 1 to 4. Items auto-fit by MinItemWidth; phones show one.", "Máximo de columnas en pantallas anchas, de 1 a 4. Los elementos se acomodan según MinItemWidth; los teléfonos muestran una.")),
+        new("MinItemWidth", "string?", "12rem", L.T("Minimum item width before the grid drops a column, as a CSS length. Sets --trazos-dl-min.", "Ancho mínimo de un elemento antes de que la cuadrícula quite una columna, como longitud CSS. Define --trazos-dl-min.")),
+        new("Bordered", "bool", "false", L.T("Dashed divider under each item. Plain variant only.", "Divisor punteado debajo de cada elemento. Solo en la variante Plain.")),
         new("ChildContent", "RenderFragment?", null, L.T("DescriptionItem elements.", "Elementos DescriptionItem.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
-        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes. A style attribute is merged after the component's own.", "Atributos HTML adicionales. Un atributo style se combina después del propio del componente.")),
     ];
 
     private IReadOnlyList<ApiParam> ItemParams =>
@@ -137,18 +226,26 @@
         new("Label", "string", "required", L.T("Term (dt).", "Término (dt).")),
         new("Value", "string?", null, L.T("Plain value. ChildContent takes precedence.", "Valor simple. ChildContent tiene prioridad.")),
         new("ChildContent", "RenderFragment?", null, L.T("Rich value, such as a badge or link.", "Valor enriquecido, como una insignia o un enlace.")),
-        new("EmptyText", "string", "\"—\"", L.T("Shown when there is no value.", "Se muestra cuando no hay valor.")),
+        new("EmptyText", "string", "\"—\"", L.T("Shown in a muted style when there is no value.", "Se muestra atenuado cuando no hay valor.")),
         new("Hint", "string?", null, L.T("Small note under the value.", "Nota pequeña debajo del valor.")),
+        new("Icon", "RenderFragment?", null, L.T("Decorative icon before the label, hidden from screen readers.", "Ícono decorativo antes de la etiqueta, oculto para lectores de pantalla.")),
+        new("Actions", "RenderFragment?", null, L.T("Buttons or links in the top-right corner, focused after the value.", "Botones o enlaces en la esquina superior derecha, enfocados después del valor.")),
+        new("Span", "int", "1", L.T("Columns to span on wide lists, 1 to 4, never more than Columns. One column on phones.", "Columnas que ocupa en listas anchas, de 1 a 4, nunca más que Columns. Una columna en teléfonos.")),
         new("FullWidth", "bool", "false", L.T("Spans every column.", "Ocupa todas las columnas.")),
+        new("Highlight", "bool", "false", L.T("Key value: larger value and an olive tile unless Tone is set.", "Valor clave: valor más grande y tarjeta oliva salvo que se defina Tone.")),
+        new("Tone", "DescriptionTone", "Default", L.T("Olive, Gold, Wine or Sky, as in Card.", "Olive, Gold, Wine o Sky, como en Card.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
     ];
 
     private IReadOnlyList<ApiParam> ReactParams =>
     [
-        new("columns", "number", "2", L.T("Columns on wide screens, clamped to 1..4. Phones show one; tablets at most two.", "Columnas en pantallas anchas, limitadas a 1..4. Los teléfonos muestran una; las tabletas como máximo dos.")),
-        new("bordered", "boolean", "false", L.T("Dashed divider under each item.", "Divisor punteado debajo de cada elemento.")),
+        new("variant", "'tiles' | 'plain'", "'tiles'", L.T("tiles draws each item as its own small card; plain is a compact label/value grid for dense data.", "tiles dibuja cada elemento como una pequeña tarjeta; plain es una cuadrícula compacta de etiqueta y valor para datos densos.")),
+        new("columns", "number", "2", L.T("Maximum columns on wide screens, clamped to 1..4. Items auto-fit by minItemWidth; phones show one.", "Máximo de columnas en pantallas anchas, limitado a 1..4. Los elementos se acomodan según minItemWidth; los teléfonos muestran una.")),
+        new("minItemWidth", "string", "'12rem'", L.T("Minimum item width before the grid drops a column, as a CSS length. Sets --trazos-dl-min.", "Ancho mínimo de un elemento antes de que la cuadrícula quite una columna, como longitud CSS. Define --trazos-dl-min.")),
+        new("bordered", "boolean", "false", L.T("Dashed divider under each item. plain variant only.", "Divisor punteado debajo de cada elemento. Solo en la variante plain.")),
         new("children", "ReactNode", null, L.T("DescriptionItem elements.", "Elementos DescriptionItem.")),
         new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("style", "CSSProperties", null, L.T("Merged after the component's own custom properties.", "Se combina después de las propiedades personalizadas del componente.")),
         new("...rest", "ComponentPropsWithRef<'dl'>", null, L.T("Any other dl attribute, including ref.", "Cualquier otro atributo de dl, incluido ref.")),
     ];
 
@@ -157,9 +254,14 @@
         new("label", "ReactNode", "required", L.T("Term (dt).", "Término (dt).")),
         new("value", "ReactNode", null, L.T("Plain value. children take precedence.", "Valor simple. children tiene prioridad.")),
         new("children", "ReactNode", null, L.T("Rich value, such as a badge or link.", "Valor enriquecido, como una insignia o un enlace.")),
-        new("emptyText", "ReactNode", "'—'", L.T("Shown when there is no value.", "Se muestra cuando no hay valor.")),
+        new("emptyText", "ReactNode", "'—'", L.T("Shown in a muted style when there is no value.", "Se muestra atenuado cuando no hay valor.")),
         new("hint", "ReactNode", null, L.T("Small note under the value.", "Nota pequeña debajo del valor.")),
+        new("icon", "ReactNode", null, L.T("Decorative icon before the label, hidden from screen readers.", "Ícono decorativo antes de la etiqueta, oculto para lectores de pantalla.")),
+        new("actions", "ReactNode", null, L.T("Buttons or links in the top-right corner, focused after the value.", "Botones o enlaces en la esquina superior derecha, enfocados después del valor.")),
+        new("span", "number", "1", L.T("Columns to span on wide lists, clamped to 1..4, never more than columns. One column on phones.", "Columnas que ocupa en listas anchas, limitado a 1..4, nunca más que columns. Una columna en teléfonos.")),
         new("fullWidth", "boolean", "false", L.T("Spans every column.", "Ocupa todas las columnas.")),
+        new("highlight", "boolean", "false", L.T("Key value: larger value and an olive tile unless tone is set.", "Valor clave: valor más grande y tarjeta oliva salvo que se defina tone.")),
+        new("tone", "'default' | 'olive' | 'gold' | 'wine' | 'sky'", "'default'", L.T("Accent color, as in Card.", "Color de acento, como en Card.")),
         new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
         new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other div attribute, including ref.", "Cualquier otro atributo de div, incluido ref.")),
     ];
