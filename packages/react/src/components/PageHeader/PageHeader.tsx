@@ -1,6 +1,7 @@
 import type { ComponentPropsWithRef, ReactNode } from 'react';
 import { cx } from '../../internal/cx';
 import { Breadcrumbs, type BreadcrumbItem } from '../Breadcrumbs';
+import { TrazosLink } from '../Link/TrazosLinkProvider';
 import './PageHeader.css';
 
 export interface PageHeaderProps extends Omit<ComponentPropsWithRef<'header'>, 'title'> {
@@ -50,12 +51,12 @@ export function PageHeader({
         <Breadcrumbs items={breadcrumbs} label={breadcrumbsLabel} className="trazos-page-header-breadcrumbs" />
       ) : (
         backHref && (
-          <a className="trazos-page-header-back" href={backHref}>
+          <TrazosLink className="trazos-page-header-back" href={backHref}>
             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
             </svg>
             {backLabel}
-          </a>
+          </TrazosLink>
         )
       )}
 
