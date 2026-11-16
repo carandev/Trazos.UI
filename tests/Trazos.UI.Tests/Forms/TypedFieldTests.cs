@@ -11,11 +11,12 @@ public class TypedFieldTests : BunitContext
         var model = new AssignmentModel();
         var cut = Render<AssignmentForm>(p => p.Add(x => x.Model, model));
 
-        var values = cut.FindAll("#frequency option").Select(o => o.GetAttribute("value")).ToList();
-        Assert.Equal(["", "Weekly", "Biweekly", "Monthly"], values);
-        Assert.Equal("Monthly", cut.FindAll("#frequency option")[3].TextContent);
+        Assert.Equal("Pick one", cut.Find("#frequency .trazos-select-value").TextContent.Trim());
+        cut.Find("#frequency").Click();
+        var texts = cut.FindAll("#frequency-listbox [role=option]").Select(o => o.TextContent.Trim()).ToList();
+        Assert.Equal(["Weekly", "Biweekly", "Monthly"], texts);
 
-        cut.Find("#frequency").Change("Biweekly");
+        Choose(cut, "frequency", 1);
 
         Assert.Equal(PayFrequency.Biweekly, model.Frequency);
     }
@@ -26,9 +27,10 @@ public class TypedFieldTests : BunitContext
         var model = new AssignmentModel();
         var cut = Render<AssignmentForm>(p => p.Add(x => x.Model, model));
 
-        Assert.NotNull(cut.FindAll("#company option")[3].GetAttribute("disabled"));
+        cut.Find("#company").Click();
+        Assert.Equal("true", cut.FindAll("#company-listbox [role=option]")[2].GetAttribute("aria-disabled"));
 
-        cut.Find("#company").Change("2");
+        Choose(cut, "company", 1);
         cut.Find("#manager").Change(AssignmentForm.ManagerGuid.ToString());
 
         Assert.Equal(2, model.CompanyId);
@@ -51,7 +53,8 @@ public class TypedFieldTests : BunitContext
         Assert.Equal("Choose a contract.", cut.Find(".trazos-radio-cards-error").TextContent);
         Assert.Equal("true", cut.Find(".trazos-radio-cards").GetAttribute("aria-invalid"));
 
-        cut.Find("#frequency").Change("Weekly");
+        cut.Find("#frequency").Click();
+        Choose(cut, "frequency", 0);
         cut.FindAll(".trazos-radio-card-input")[1].Change(true);
 
         Assert.Empty(cut.FindAll("#frequency-error"));
@@ -63,17 +66,21 @@ public class TypedFieldTests : BunitContext
     [Fact]
     public void Text_that_cannot_be_converted_shows_the_parse_error()
     {
-        var model = new AssignmentModel { CompanyId = 1 };
+        // Typed options cannot produce text, so the native select with option children is used here.
+        var model = new AssignmentModel { ManagerId = AssignmentForm.ManagerGuid };
         var cut = Render<AssignmentForm>(p => p.Add(x => x.Model, model));
 
-        cut.Find("#company").Change("not-a-number");
+        cut.Find("#manager").Change("not-a-guid");
 
-        Assert.Equal(1, model.CompanyId);
-        Assert.Equal("Enter a valid value.", cut.Find("#company-error").TextContent);
+        Assert.Equal(AssignmentForm.ManagerGuid, model.ManagerId);
+        Assert.Equal("Enter a valid value.", cut.Find("#manager-error").TextContent);
 
-        cut.Find("#company").Change("2");
-        Assert.Empty(cut.FindAll("#company-error"));
+        cut.Find("#manager").Change(AssignmentForm.ManagerGuid.ToString());
+        Assert.Empty(cut.FindAll("#manager-error"));
     }
+
+    private static void Choose(IRenderedComponent<AssignmentForm> cut, string id, int index) =>
+        cut.FindAll($"#{id}-listbox [role=option]")[index].MouseDown();
 
     [Fact]
     public void A_string_select_with_option_children_keeps_working_without_a_form()

@@ -39,7 +39,18 @@
     background: var(--trazos-field);
     border: 1.5px solid var(--trazos-border-input);
     border-radius: 10px 12px 9px 11px / 11px 9px 12px 10px;
+    color-scheme: inherit;
     cursor: pointer;
+}
+
+/* The native popup takes its colors from these rules, so it follows the theme. */
+.trazos-pagination-select option {
+    background: var(--trazos-surface);
+    color: var(--trazos-text);
+}
+
+.trazos-pagination-select option:disabled {
+    color: var(--trazos-text-disabled);
 }
 
 .trazos-pagination-select:focus-visible {
