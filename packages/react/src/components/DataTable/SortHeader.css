@@ -1,0 +1,51 @@
+/* SORT HEADER - ported from Components/Table/SortHeader.razor.css. Header cell padding and type come from DataTable; this styles the button. */
+.trazos-sort-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: -0.25rem -0.4rem;
+    padding: 0.25rem 0.4rem;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    border-radius: 8px 10px 7px 9px / 9px 7px 10px 8px;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.trazos-sort-header.trazos-cell-end .trazos-sort-button {
+    flex-direction: row-reverse;
+}
+
+.trazos-sort-button:hover {
+    color: var(--trazos-text);
+    background: var(--trazos-hover-tint-strong);
+}
+
+.trazos-sort-button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--trazos-focus-ring);
+}
+
+.trazos-sort-icon {
+    width: 0.85rem;
+    height: 0.85rem;
+    flex-shrink: 0;
+    transition: transform 0.15s ease;
+}
+
+.trazos-sort-icon.trazos-sort-icon-none {
+    opacity: 0.45;
+}
+
+.trazos-sort-icon.trazos-sort-icon-ascending,
+.trazos-sort-icon.trazos-sort-icon-descending {
+    color: var(--trazos-olive-text);
+}
+
+.trazos-sort-icon.trazos-sort-icon-descending {
+    transform: rotate(180deg);
+}

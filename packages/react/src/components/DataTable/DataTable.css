@@ -28,7 +28,7 @@
 
 .trazos-table-head th {
     padding: 0.875rem 1.25rem;
-    font-family: 'Marcellus', serif;
+    font-family: var(--trazos-font-display);
     font-size: 0.8125rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -57,6 +57,77 @@
 
 .trazos-table-row.trazos-table-row-interactive {
     cursor: pointer;
+}
+
+.trazos-table-row.trazos-table-row-interactive:focus-visible {
+    outline: none;
+    background-color: var(--trazos-surface-muted);
+    box-shadow: inset 3px 0 0 var(--trazos-focus);
+}
+
+.trazos-table-head th {
+    white-space: nowrap;
+}
+
+/* Footer / totals row. */
+.trazos-table-foot {
+    background-color: var(--trazos-surface-muted);
+    border-top: 1.5px solid var(--trazos-border-soft);
+}
+
+.trazos-table-foot td,
+.trazos-table-foot th {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--trazos-text);
+}
+
+/* Column alignment helpers for th and td. */
+.trazos-table .trazos-cell-end,
+.trazos-table .trazos-cell-numeric {
+    text-align: right;
+}
+
+.trazos-table .trazos-cell-center {
+    text-align: center;
+}
+
+.trazos-table .trazos-cell-numeric {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* Row actions column. */
+.trazos-table-actions-head {
+    width: 1%;
+}
+
+.trazos-table-body .trazos-table-actions {
+    width: 1%;
+    white-space: nowrap;
+    cursor: default;
+}
+
+.trazos-table-actions-inner {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.375rem;
+}
+
+/* Toolbar and pagination areas inside the frame. */
+.trazos-table-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.25rem;
+    border-bottom: 1.5px solid var(--trazos-border-soft);
+}
+
+.trazos-table-pagination {
+    padding: 0.75rem 1.25rem;
+    border-top: 1.5px solid var(--trazos-border-soft);
 }
 
 .trazos-table-empty {

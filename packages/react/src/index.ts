@@ -31,6 +31,7 @@ export * from './components/FormLayout';
 export * from './components/DataTable';
 export * from './components/Tabs';
 export * from './components/MonthCalendar';
+export * from './components/Pagination';
 export * from './components/DescriptionList';
 export * from './components/Stat';
 export * from './components/Progress';

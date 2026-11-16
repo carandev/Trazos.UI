@@ -23,28 +23,28 @@
         <p>
             <Tr>
                 <En>Wrap your app once in <code>&lt;ConfirmDialogProvider&gt;</code>; <code>AppShell</code> already includes it.
-                    Any component inside it can call <code>useConfirm()</code>. Outside a provider, <code>confirm()</code> resolves false.</En>
+                    Any component inside it can call <code>useConfirm()</code> and <code>usePrompt()</code>. Outside a provider, <code>confirm()</code> resolves false and <code>prompt()</code> resolves <code>{ confirmed: false, text: null }</code>.</En>
                 <Es>Envuelve tu app una sola vez en <code>&lt;ConfirmDialogProvider&gt;</code>; <code>AppShell</code> ya lo incluye.
-                    Cualquier componente dentro puede llamar a <code>useConfirm()</code>. Fuera de un proveedor, <code>confirm()</code> se resuelve en false.</Es>
+                    Cualquier componente dentro puede llamar a <code>useConfirm()</code> y <code>usePrompt()</code>. Fuera de un proveedor, <code>confirm()</code> se resuelve en false y <code>prompt()</code> en <code>{ confirmed: false, text: null }</code>.</Es>
             </Tr>
         </p>
-        <CodeBlock Code="@ReactSetupCode" />
+        <CodeBlock Language="tsx" Code="@ReactSetupCode" />
     }
     else
     {
         <p>
             <Tr>
-                <En><code>AddTrazosUI()</code> registers the service. <code>AppShell</code> already renders
+                <En><code>AddTrazosUI()</code> registers <code>IDialogService</code> and <code>IPromptDialogService</code> (the same instance). <code>AppShell</code> already renders
                     <code>&lt;ConfirmDialogContainer /&gt;</code>; with a custom layout, add it once.</En>
-                <Es><code>AddTrazosUI()</code> registra el servicio. <code>AppShell</code> ya renderiza
+                <Es><code>AddTrazosUI()</code> registra <code>IDialogService</code> e <code>IPromptDialogService</code> (la misma instancia). <code>AppShell</code> ya renderiza
                     <code>&lt;ConfirmDialogContainer /&gt;</code>; con un layout propio, agrégalo una sola vez.</Es>
             </Tr>
         </p>
     }
 
     <DemoBlock Title="@L.T("Ask for a reason", "Pedir un motivo")"
-               Description="@L.T("IPromptDialogService.PromptAsync requires typed text before confirming, with required and minimum-length checks. It is shown by the same ConfirmDialogContainer.", "IPromptDialogService.PromptAsync exige escribir un texto antes de confirmar, con validación de obligatorio y largo mínimo. Lo muestra el mismo ConfirmDialogContainer.")"
-               Code="@PromptCode">
+               Description="@F.Pick(L.T("IPromptDialogService.PromptAsync requires typed text before confirming, with required and minimum-length checks. It is shown by the same ConfirmDialogContainer.", "IPromptDialogService.PromptAsync exige escribir un texto antes de confirmar, con validación de obligatorio y largo mínimo. Lo muestra el mismo ConfirmDialogContainer."), L.T("usePrompt() returns prompt(options), which requires typed text before confirming, with required and minimum-length checks. Approve asks for an optional comment. It is shown by the same ConfirmDialogProvider.", "usePrompt() devuelve prompt(options), que exige escribir un texto antes de confirmar, con validación de obligatorio y largo mínimo. Aprobar pide un comentario opcional. Lo muestra el mismo ConfirmDialogProvider."))"
+               Code="@PromptCode" React="confirm-dialog/prompt">
         <div class="docs-stack">
             <div>
                 <Button Variant="ButtonVariant.Wine" OnClick="RejectAsync">@L.T("Reject payroll", "Rechazar nómina")</Button>
@@ -53,10 +53,51 @@
         </div>
     </DemoBlock>
 
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <ul>
+        <li>@L.T("Confirm: before an action that is destructive, expensive or hard to undo (delete, send, close a period). Do not ask for routine, reversible actions; an undo toast is friendlier.", "Confirmar: antes de una acción destructiva, costosa o difícil de deshacer (eliminar, enviar, cerrar un periodo). No preguntes por acciones rutinarias y reversibles; un toast con deshacer es más amable.")</li>
+        <li>@L.T("Prompt: when the decision must be justified or recorded, such as rejecting a request, cancelling an order or approving with a comment. The answer carries the typed text, ready to send to your API or audit log.", "Pedir texto: cuando la decisión debe justificarse o quedar registrada, como rechazar una solicitud, anular un pedido o aprobar con un comentario. La respuesta trae el texto escrito, listo para enviar a tu API o a la bitácora.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li>@F.Pick(L.T("Make sure the container is rendered once (AppShell already does) and inject IDialogService or IPromptDialogService in the page.", "Asegúrate de que el contenedor se renderice una vez (AppShell ya lo hace) e inyecta IDialogService o IPromptDialogService en la página."), L.T("Make sure a ConfirmDialogProvider wraps the app once (AppShell already does) and call useConfirm() or usePrompt() in the component.", "Asegúrate de que un ConfirmDialogProvider envuelva la app una vez (AppShell ya lo hace) y llama a useConfirm() o usePrompt() en el componente."))</li>
+        <li>@L.T("In the click handler, await the dialog. Write the message as the consequence (\"The payroll goes back to draft\"), the title as the question and the confirm button as the verb (\"Reject\"), never just \"OK\".", "En el manejador del clic, espera el diálogo. Escribe el mensaje como la consecuencia (\"La nómina vuelve a borrador\"), el título como la pregunta y el botón de confirmar como el verbo (\"Rechazar\"), nunca solo \"Aceptar\".")</li>
+        <li>@F.Pick(L.T("Use ButtonVariant.Wine for destructive or rejecting actions.", "Usa ButtonVariant.Wine para acciones destructivas o de rechazo."), L.T("Use confirmVariant: 'wine' for destructive or rejecting actions.", "Usa confirmVariant: 'wine' para acciones destructivas o de rechazo."))</li>
+        <li>@L.T("Run the action only when the answer is confirmed. A cancelled prompt returns no text.", "Ejecuta la acción solo si la respuesta está confirmada. Un prompt cancelado no devuelve texto.")</li>
+        <li>@L.T("Translate every text: the confirm dialog defaults are Spanish (\"Confirmar acción\", \"Confirmar\", \"Cancelar\") and the prompt defaults are English (\"Confirm action\", \"Reason\", \"Confirm\", \"Cancel\" and the error messages).", "Traduce todos los textos: los valores predeterminados de la confirmación están en español (\"Confirmar acción\", \"Confirmar\", \"Cancelar\") y los del prompt en inglés (\"Confirm action\", \"Reason\", \"Confirm\", \"Cancel\" y los mensajes de error).")</li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Approve and reject flows", "Flujos de aprobar y rechazar")</h3>
+    <p>
+        @L.T("A rejection usually needs a mandatory reason: keep Required on and set MinLength so a one-word answer is not enough. An approval can ask for an optional comment: turn Required off and treat an empty text (returned as null) as \"no comment\". Validation runs when the user presses confirm; once an error shows it updates as they type, and the text you get back is trimmed.",
+             "Un rechazo suele necesitar un motivo obligatorio: deja Required activo y define MinLength para que una sola palabra no alcance. Una aprobación puede pedir un comentario opcional: desactiva Required y trata el texto vacío (que llega como null) como \"sin comentario\". La validación corre cuando el usuario pulsa confirmar; cuando aparece un error, se actualiza mientras escribe, y el texto que recibes viene recortado.")
+    </p>
+    <CodeBlock Language="@F.Pick("razor", "tsx")" Code="@F.Pick(FlowCode, ReactFlowCode)" />
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li>@F.Pick(L.T("The dialog is a modal with role=\"dialog\" named by its title. Use the close button or Cancel to dismiss it.", "El diálogo es un modal con role=\"dialog\" nombrado por su título. Usa el botón de cerrar o Cancelar para descartarlo."), L.T("The dialog is a modal with role=\"dialog\" named by its title. Focus moves into it and stays there until it closes, then returns to the element that had it.", "El diálogo es un modal con role=\"dialog\" nombrado por su título. El foco entra en él y se queda allí hasta que se cierra; luego vuelve al elemento que lo tenía."))</li>
+        <li>@F.Pick(L.T("The close button cancels. Clicking the backdrop does nothing, so a stray click never answers for the user.", "El botón de cerrar cancela. Hacer clic en el fondo no hace nada, así un clic accidental nunca responde por el usuario."), L.T("Escape and the close button cancel. Clicking the backdrop does nothing, so a stray click never answers for the user.", "Escape y el botón de cerrar cancelan. Hacer clic en el fondo no hace nada, así un clic accidental nunca responde por el usuario."))</li>
+        <li>@L.T("In the prompt, the text field is labelled, marked required, and its error is announced (role=\"alert\") and linked with aria-describedby.", "En el prompt, el campo de texto tiene etiqueta, se marca como obligatorio y su error se anuncia (role=\"alert\") y se vincula con aria-describedby.")</li>
+        <li>@L.T("Cancel comes first and the confirm button last, the order people expect.", "Cancelar va primero y confirmar al final, el orden que las personas esperan.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@F.Pick(L.T("No container rendered: with a custom layout, add <ConfirmDialogContainer /> once or the dialog never shows.", "Sin contenedor renderizado: con un layout propio, agrega <ConfirmDialogContainer /> una vez o el diálogo nunca aparece."), L.T("Calling useConfirm() or usePrompt() outside a ConfirmDialogProvider: nothing shows and the answer is always \"cancelled\".", "Llamar a useConfirm() o usePrompt() fuera de un ConfirmDialogProvider: no aparece nada y la respuesta siempre es \"cancelado\"."))</li>
+        <li>@L.T("Opening a second dialog while one is open: the new request replaces the old one, which resolves as cancelled.", "Abrir un segundo diálogo mientras otro está abierto: la nueva petición reemplaza a la anterior, que se resuelve como cancelada.")</li>
+        <li>@L.T("Asking for confirmation on every click: people stop reading and confirm by habit. Reserve it for actions with real consequences.", "Pedir confirmación en cada clic: las personas dejan de leer y confirman por costumbre. Resérvalo para acciones con consecuencias reales.")</li>
+        <li>@L.T("Reading the text without checking Confirmed first: a cancelled prompt has no text.", "Leer el texto sin revisar antes Confirmed: un prompt cancelado no tiene texto.")</li>
+    </ul>
+
     <ApiTable Title="@F.Pick("IDialogService.ConfirmAsync", "useConfirm()")" Params="Params" ReactParams="ReactParams" />
     <ApiTable Title="ConfirmDialogOptions" Params="OptionParams" ReactParams="ReactOptionParams" />
     <ApiTable Title="ConfirmDialogProvider" ReactParams="ProviderParams" />
-    <ApiTable Title="PromptDialogOptions" Params="PromptParams" />
+    <ApiTable Title="@F.Pick("IPromptDialogService.PromptAsync", "usePrompt()")" Params="PromptMethodParams" ReactParams="ReactPromptMethodParams" />
+    <ApiTable Title="PromptDialogOptions" Params="PromptParams" ReactParams="ReactPromptParams" />
 </DocPage>
 
 @code {
@@ -110,6 +151,93 @@
         new("RequiredMessage, MinLengthMessage", "string", L.T("English", "inglés"), L.T("Error texts. {0} is MinLength.", "Textos de error. {0} es MinLength.")),
         new(L.T("Result", "Resultado"), "PromptResult(Confirmed, Text)", null, L.T("Text is null when cancelled.", "Text es null al cancelar.")),
     ];
+    private const string FlowCode = """
+        private async Task RejectAsync(Request request)
+        {
+            var result = await Prompts.PromptAsync(new PromptDialogOptions(
+                Message: "The request goes back to the employee.",
+                Title: "Reject request",
+                ConfirmText: "Reject",
+                ConfirmVariant: ButtonVariant.Wine,
+                MinLength: 10));
+            if (result.Confirmed)
+            {
+                await Api.RejectAsync(request.Id, reason: result.Text!);
+            }
+        }
+
+        private async Task ApproveAsync(Request request)
+        {
+            var result = await Prompts.PromptAsync(new PromptDialogOptions(
+                Message: "The request is approved.",
+                Title: "Approve request",
+                InputLabel: "Comment (optional)",
+                ConfirmText: "Approve",
+                Required: false));
+            if (result.Confirmed)
+            {
+                // Text is null when the comment was left empty.
+                await Api.ApproveAsync(request.Id, comment: result.Text);
+            }
+        }
+        """;
+
+    private const string ReactFlowCode = """
+        const prompt = usePrompt();
+
+        const reject = async (request: Request) => {
+          const { confirmed, text } = await prompt({
+            message: 'The request goes back to the employee.',
+            title: 'Reject request',
+            confirmText: 'Reject',
+            confirmVariant: 'wine',
+            minLength: 10,
+          });
+          if (confirmed) await api.reject(request.id, { reason: text });
+        };
+
+        const approve = async (request: Request) => {
+          const { confirmed, text } = await prompt({
+            message: 'The request is approved.',
+            title: 'Approve request',
+            inputLabel: 'Comment (optional)',
+            confirmText: 'Approve',
+            required: false,
+          });
+          // text is null when the comment was left empty.
+          if (confirmed) await api.approve(request.id, { comment: text });
+        };
+        """;
+
+    private IReadOnlyList<ApiParam> PromptMethodParams =>
+    [
+        new("PromptAsync(options)", "Task<PromptResult>", null, L.T("Shows the prompt. Completes when the user confirms with valid text or cancels.", "Muestra el diálogo. Termina cuando el usuario confirma con un texto válido o cancela.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactPromptMethodParams =>
+    [
+        new("prompt(options)", "Promise<PromptResult>", null, L.T("Shows the prompt. Resolves when the user confirms with valid text, or cancels, closes or presses Escape.", "Muestra el diálogo. Se resuelve cuando el usuario confirma con un texto válido, o cancela, cierra o presiona Escape.")),
+        new("PromptResult", "{ confirmed: boolean; text: string | null }", null, L.T("text is trimmed; null when cancelled or left empty.", "text viene recortado; es null al cancelar o si quedó vacío.")),
+        new("promptDialogDefaults", "object", null, L.T("The defaults below, exported for reuse.", "Los valores predeterminados de abajo, exportados para reutilizarlos.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactPromptParams =>
+    [
+        new("message", "string", "required", L.T("Explanation shown above the field.", "Explicación sobre el campo.")),
+        new("title", "string", "'Confirm action'", L.T("Dialog title.", "Título del diálogo.")),
+        new("inputLabel", "string", "'Reason'", L.T("Label of the text field.", "Etiqueta del campo de texto.")),
+        new("placeholder", "string", null, L.T("Placeholder of the text field.", "Marcador del campo de texto.")),
+        new("initialText", "string", "''", L.T("Text already in the field when the dialog opens.", "Texto que ya tiene el campo al abrir el diálogo.")),
+        new("confirmText, cancelText", "string", "'Confirm', 'Cancel'", L.T("Button labels.", "Textos de los botones.")),
+        new("confirmVariant", "ButtonVariant", "'primary'", L.T("Use 'wine' for a rejection.", "Usa 'wine' para un rechazo.")),
+        new("required", "boolean", "true", L.T("The text cannot be empty.", "El texto no puede quedar vacío.")),
+        new("minLength", "number", "0", L.T("Minimum length after trimming; 0 turns the check off.", "Largo mínimo después de recortar; 0 desactiva la validación.")),
+        new("maxLength", "number", "500", L.T("Maximum length, enforced by the field.", "Largo máximo, aplicado por el campo.")),
+        new("requiredMessage", "string", "'This field is required.'", L.T("Error when the text is empty and required.", "Error cuando el texto está vacío y es obligatorio.")),
+        new("minLengthMessage", "string", "'Write at least {0} characters.'", L.T("Error when the text is too short. {0} is minLength.", "Error cuando el texto es muy corto. {0} es minLength.")),
+        new("size", "ModalSize", "'small'", L.T("Modal size.", "Tamaño del modal.")),
+    ];
+
     private string _answer = "none";
 
     private string AnswerLabel => _answer switch
