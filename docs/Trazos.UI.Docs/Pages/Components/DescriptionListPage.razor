@@ -3,7 +3,9 @@
 <DocPage Title="DescriptionList" Category="@L.T("Display", "Visualización")"
          Lead="@L.T("A label/value grid for read-only detail views, with responsive columns, full-width items, an empty placeholder and an optional hint per item.", "Una cuadrícula etiqueta/valor para vistas de detalle de solo lectura, con columnas adaptables, elementos de ancho completo, un texto para valores vacíos y una nota opcional por elemento.")">
 
-    <DemoBlock Code="@Code">
+    <DemoBlock Title="@L.T("Detail view", "Vista de detalle")"
+               Description="@L.T("Three columns on wide screens, two on tablets and one on phones. Resize the window to see it.", "Tres columnas en pantallas anchas, dos en tabletas y una en teléfonos. Cambia el tamaño de la ventana para verlo.")"
+               Code="@Code" React="description-list/detail">
         <DescriptionList Columns="3">
             <DescriptionItem Label="@L.T("Document", "Documento")" Value="CC 1.020.304.050" />
             <DescriptionItem Label="@L.T("Position", "Cargo")" Value="@L.T("Payroll analyst", "Analista de nómina")" />
@@ -15,11 +17,77 @@
         </DescriptionList>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
-    <ApiTable Params="ItemParams" />
+    <DemoBlock Title="@L.T("Bordered", "Con bordes")"
+               Description="@L.T("A dashed line under each item helps on dense pages. An item without a value shows an em dash.", "Una línea punteada debajo de cada elemento ayuda en páginas densas. Un elemento sin valor muestra una raya.")"
+               Code="@BorderedCode" React="description-list/bordered">
+        <DescriptionList Columns="2" Bordered="true">
+            <DescriptionItem Label="@L.T("Earnings", "Devengados")" Value="$ 3.850.000" />
+            <DescriptionItem Label="@L.T("Deductions", "Deducciones")" Value="$ 640.000" />
+            <DescriptionItem Label="@L.T("Health", "Salud")" Value="$ 140.000" Hint="4%" />
+            <DescriptionItem Label="@L.T("Pension", "Pensión")" Value="$ 140.000" Hint="4%" />
+            <DescriptionItem Label="@L.T("Phone", "Teléfono")" />
+            <DescriptionItem Label="@L.T("Net pay", "Neto a pagar")" Value="$ 3.210.000" />
+        </DescriptionList>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("In a detail page", "En una página de detalle")"
+               Description="@L.T("PageHeader on top and one Card per group of fields.", "PageHeader arriba y una Card por cada grupo de campos.")"
+               Code="@CardCode" React="description-list/in-card">
+        <div>
+            <PageHeader Title="Ana María Restrepo" Level="3" BackHref="components/description-list" BackLabel="@L.T("Employees", "Empleados")">
+                <Actions><Button Variant="ButtonVariant.Outline">@L.T("Edit", "Editar")</Button></Actions>
+            </PageHeader>
+            <Card>
+                <Header><h4 class="trazos-heading">@L.T("Contract", "Contrato")</h4></Header>
+                <ChildContent>
+                    <DescriptionList Columns="2">
+                        <DescriptionItem Label="@L.T("Type", "Tipo")" Value="@L.T("Open-ended", "Indefinido")" />
+                        <DescriptionItem Label="@L.T("Start date", "Fecha de ingreso")" Value="2024-02-01" />
+                        <DescriptionItem Label="@L.T("End date", "Fecha de retiro")" EmptyText="@L.T("No end date", "Sin fecha de retiro")" />
+                        <DescriptionItem Label="@L.T("Schedule", "Jornada")" Value="@L.T("Full time", "Tiempo completo")" />
+                    </DescriptionList>
+                </ChildContent>
+            </Card>
+        </div>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <ul>
+        <li>@L.T("Read-only records: an employee, an invoice, a contract, the summary before confirming a form.", "Registros de solo lectura: un empleado, una factura, un contrato, el resumen antes de confirmar un formulario.")</li>
+        <li>@L.T("Not for many records with the same fields: use DataTable. Not for editable data: use a form.", "No para muchos registros con los mismos campos: usa DataTable. No para datos editables: usa un formulario.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li><Tr><En>Wrap the items in a <code>DescriptionList</code> and choose <code>@N("Columns")</code> (1 to 4, default 2). Phones always show one column and tablets at most two.</En><Es>Envuelve los elementos en un <code>DescriptionList</code> y elige <code>@N("Columns")</code> (de 1 a 4, por defecto 2). Los teléfonos siempre muestran una columna y las tabletas como máximo dos.</Es></Tr></li>
+        <li><Tr><En>Add one <code>DescriptionItem</code> per field with a <code>@N("Label")</code> and a <code>@N("Value")</code>. Pass already formatted text: currency, dates and numbers in the user's locale.</En><Es>Agrega un <code>DescriptionItem</code> por campo con un <code>@N("Label")</code> y un <code>@N("Value")</code>. Pasa el texto ya formateado: moneda, fechas y números en la configuración regional del usuario.</Es></Tr></li>
+        <li><Tr><En>For rich values (a badge, a link, a phone number with a call button), use <code>@N("ChildContent")</code> instead of <code>@N("Value")</code>; it takes precedence.</En><Es>Para valores enriquecidos (una insignia, un enlace, un teléfono con botón para llamar), usa <code>@N("ChildContent")</code> en lugar de <code>@N("Value")</code>; tiene prioridad.</Es></Tr></li>
+        <li><Tr><En>Set <code>@N("EmptyText")</code> to say why a value is missing (default "—"), <code>@N("Hint")</code> for a short note, and <code>@N("FullWidth")</code> for long values such as addresses or notes.</En><Es>Usa <code>@N("EmptyText")</code> para decir por qué falta un valor (por defecto "—"), <code>@N("Hint")</code> para una nota corta y <code>@N("FullWidth")</code> para valores largos como direcciones o notas.</Es></Tr></li>
+        <li><Tr><En>Turn on <code>@N("Bordered")</code> on dense pages with many items.</En><Es>Activa <code>@N("Bordered")</code> en páginas densas con muchos elementos.</Es></Tr></li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li><Tr><En>It renders a native <code>dl</code> with <code>dt</code>/<code>dd</code> pairs, so screen readers announce each label with its value. The hint is a second <code>dd</code> of the same term.</En><Es>Renderiza un <code>dl</code> nativo con pares <code>dt</code>/<code>dd</code>, así los lectores de pantalla anuncian cada etiqueta con su valor. La nota es un segundo <code>dd</code> del mismo término.</Es></Tr></li>
+        <li>@L.T("The list itself is not interactive; links or buttons inside values keep their normal keyboard behavior.", "La lista en sí no es interactiva; los enlaces o botones dentro de los valores mantienen su comportamiento normal con el teclado.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li><Tr><En>Putting anything other than <code>DescriptionItem</code> directly inside the list: a <code>dl</code> only allows term groups, so wrap other content outside it.</En><Es>Poner algo distinto de <code>DescriptionItem</code> directamente dentro de la lista: un <code>dl</code> solo admite grupos de términos, así que deja el resto del contenido por fuera.</Es></Tr></li>
+        <li>@L.T("Leaving empty values blank: say why instead (\"Not registered\", \"No end date\").", "Dejar valores vacíos en blanco: mejor di por qué (\"Sin registrar\", \"Sin fecha de retiro\").")</li>
+        <li><Tr><En>Four columns with long values: they wrap into narrow columns. Use fewer columns or <code>@N("FullWidth")</code>.</En><Es>Cuatro columnas con valores largos: se parten en columnas angostas. Usa menos columnas o <code>@N("FullWidth")</code>.</Es></Tr></li>
+    </ul>
+
+    <ApiTable Title="@F.Pick(L.T("DescriptionList parameters", "Parámetros de DescriptionList"), L.T("DescriptionList props", "Props de DescriptionList"))" Params="Params" ReactParams="ReactParams" />
+    <ApiTable Title="@F.Pick(L.T("DescriptionItem parameters", "Parámetros de DescriptionItem"), L.T("DescriptionItem props", "Props de DescriptionItem"))" Params="ItemParams" ReactParams="ReactItemParams" />
 </DocPage>
 
 @code {
+    private string N(string name) => !F.IsReact ? name : name == "ChildContent" ? "children" : char.ToLowerInvariant(name[0]) + name[1..];
+
     private const string Code = """
         <DescriptionList Columns="3">
             <DescriptionItem Label="Document" Value="CC 1.020.304.050" />
@@ -30,11 +98,38 @@
         </DescriptionList>
         """;
 
+    private const string BorderedCode = """
+        <DescriptionList Columns="2" Bordered="true">
+            <DescriptionItem Label="Earnings" Value="$ 3.850.000" />
+            <DescriptionItem Label="Health" Value="$ 140.000" Hint="4%" />
+            <DescriptionItem Label="Phone" />
+            <DescriptionItem Label="Net pay" Value="$ 3.210.000" />
+        </DescriptionList>
+        """;
+
+    private const string CardCode = """
+        <PageHeader Title="Ana María Restrepo" BackHref="/employees" BackLabel="Employees">
+            <Actions><Button Variant="ButtonVariant.Outline">Edit</Button></Actions>
+        </PageHeader>
+
+        <Card>
+            <Header><h2 class="trazos-heading">Contract</h2></Header>
+            <ChildContent>
+                <DescriptionList Columns="2">
+                    <DescriptionItem Label="Type" Value="Open-ended" />
+                    <DescriptionItem Label="End date" EmptyText="No end date" />
+                </DescriptionList>
+            </ChildContent>
+        </Card>
+        """;
+
     private IReadOnlyList<ApiParam> Params =>
     [
         new("Columns", "int", "2", L.T("Columns on wide screens, 1 to 4. Phones show one; tablets at most two.", "Columnas en pantallas anchas, de 1 a 4. Los teléfonos muestran una; las tabletas como máximo dos.")),
         new("Bordered", "bool", "false", L.T("Dashed divider under each item.", "Divisor punteado debajo de cada elemento.")),
         new("ChildContent", "RenderFragment?", null, L.T("DescriptionItem elements.", "Elementos DescriptionItem.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
     ];
 
     private IReadOnlyList<ApiParam> ItemParams =>
@@ -45,5 +140,27 @@
         new("EmptyText", "string", "\"—\"", L.T("Shown when there is no value.", "Se muestra cuando no hay valor.")),
         new("Hint", "string?", null, L.T("Small note under the value.", "Nota pequeña debajo del valor.")),
         new("FullWidth", "bool", "false", L.T("Spans every column.", "Ocupa todas las columnas.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("columns", "number", "2", L.T("Columns on wide screens, clamped to 1..4. Phones show one; tablets at most two.", "Columnas en pantallas anchas, limitadas a 1..4. Los teléfonos muestran una; las tabletas como máximo dos.")),
+        new("bordered", "boolean", "false", L.T("Dashed divider under each item.", "Divisor punteado debajo de cada elemento.")),
+        new("children", "ReactNode", null, L.T("DescriptionItem elements.", "Elementos DescriptionItem.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'dl'>", null, L.T("Any other dl attribute, including ref.", "Cualquier otro atributo de dl, incluido ref.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactItemParams =>
+    [
+        new("label", "ReactNode", "required", L.T("Term (dt).", "Término (dt).")),
+        new("value", "ReactNode", null, L.T("Plain value. children take precedence.", "Valor simple. children tiene prioridad.")),
+        new("children", "ReactNode", null, L.T("Rich value, such as a badge or link.", "Valor enriquecido, como una insignia o un enlace.")),
+        new("emptyText", "ReactNode", "'—'", L.T("Shown when there is no value.", "Se muestra cuando no hay valor.")),
+        new("hint", "ReactNode", null, L.T("Small note under the value.", "Nota pequeña debajo del valor.")),
+        new("fullWidth", "boolean", "false", L.T("Spans every column.", "Ocupa todas las columnas.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other div attribute, including ref.", "Cualquier otro atributo de div, incluido ref.")),
     ];
 }

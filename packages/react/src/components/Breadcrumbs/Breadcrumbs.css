@@ -1,0 +1,60 @@
+/* ========================================
+   BREADCRUMBS - Trazos UI (ported from Components/Breadcrumbs/Breadcrumbs.razor.css)
+   ======================================== */
+
+.trazos-breadcrumbs-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8125rem;
+}
+
+.trazos-breadcrumbs-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.trazos-breadcrumbs-link {
+    color: var(--trazos-text-muted);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: color 0.15s ease;
+}
+
+.trazos-breadcrumbs-link:hover {
+    color: var(--trazos-olive-text);
+    text-decoration: underline;
+    text-decoration-style: wavy;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+}
+
+.trazos-breadcrumbs-link:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--trazos-focus-ring);
+}
+
+.trazos-breadcrumbs-text {
+    color: var(--trazos-text-muted);
+}
+
+.trazos-breadcrumbs-current {
+    font-weight: 600;
+    color: var(--trazos-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.trazos-breadcrumbs-separator {
+    flex-shrink: 0;
+    width: 0.8rem;
+    height: 0.8rem;
+    color: var(--trazos-text-subtle);
+}

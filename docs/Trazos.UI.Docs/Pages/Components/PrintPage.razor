@@ -3,7 +3,9 @@
 <DocPage Title="@L.T("Print & Ribbon", "Impresión y Ribbon")" Category="@L.T("Page structure", "Estructura de página")"
          Lead="@L.T("Printable documents (receipts, payslips, reports) built from library components. Printed pages always use the light tokens, NoPrint hides controls, PrintOnly adds paper-only content, and Ribbon marks a status in a corner.", "Documentos imprimibles (recibos, desprendibles, reportes) hechos con componentes de la librería. Las páginas impresas siempre usan los tokens claros, NoPrint oculta controles, PrintOnly agrega contenido solo para papel y Ribbon marca un estado en una esquina.")">
 
-    <DemoBlock Code="@Code">
+    <DemoBlock Title="@L.T("Printable payslip", "Desprendible imprimible")"
+               Description="@L.T("Press Print: the button disappears, the signature line appears and the ribbon keeps its color on paper.", "Presiona Imprimir: el botón desaparece, aparece la línea de firma y la cinta conserva su color en el papel.")"
+               Code="@Code" React="print/payslip">
         <div class="docs-stack">
             <Card Style="position: relative;" Class="trazos-print-avoid-break">
                 <Ribbon Text="@L.T("Paid", "Pagado")" />
@@ -19,33 +21,97 @@
             <NoPrint>
                 <Button Variant="ButtonVariant.Outline" OnClick="PrintAsync">@L.T("Print", "Imprimir")</Button>
             </NoPrint>
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                @foreach (var tone in Enum.GetValues<RibbonTone>())
-                {
-                    <Card Style="position: relative; width: 11rem; height: 7rem;">
-                        <Ribbon Text="@tone.ToString()" Tone="tone" Position="RibbonPosition.TopLeft" />
-                    </Card>
-                }
-            </div>
+        </div>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Ribbon tones and corners", "Tonos y esquinas de Ribbon")" Code="@RibbonCode" React="print/ribbon-tones">
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            @foreach (var (tone, i) in Enum.GetValues<RibbonTone>().Select((t, i) => (t, i)))
+            {
+                <Card Style="position: relative; width: 11rem; height: 7rem;">
+                    <Ribbon Text="@tone.ToString().ToLowerInvariant()" Tone="tone" Position="@(i % 2 == 0 ? RibbonPosition.TopLeft : RibbonPosition.TopRight)" />
+                </Card>
+            }
         </div>
     </DemoBlock>
 
     <h2 class="docs-h2">@L.T("Print utilities", "Utilidades de impresión")</h2>
+    <p>@L.T("The components use these global classes. You can also put them on any element yourself.", "Los componentes usan estas clases globales. También puedes ponerlas tú mismo en cualquier elemento.")</p>
     <ul>
         <li><code>trazos-no-print</code> · @L.T("hidden on paper (NoPrint).", "oculto en papel (NoPrint).")</li>
-        <li><code>trazos-print-only</code> · @L.T("shown only on paper (PrintOnly).", "visible solo en papel (PrintOnly).")</li>
+        <li><code>trazos-print-only</code> · @L.T("hidden on screen, shown only on paper (PrintOnly).", "oculto en pantalla, visible solo en papel (PrintOnly).")</li>
         <li><code>trazos-print-break-before</code> · @L.T("starts a new page.", "empieza una página nueva.")</li>
         <li><code>trazos-print-avoid-break</code> · @L.T("keeps a block on one page.", "mantiene un bloque en una sola página.")</li>
-        <li><code>trazos-print-exact</code> · @L.T("keeps tinted fills when printing.", "conserva los rellenos de color al imprimir.")</li>
+        <li><code>trazos-print-exact</code> · @L.T("keeps tinted fills when printing. Ribbon adds it by itself.", "conserva los rellenos de color al imprimir. Ribbon la agrega por sí mismo.")</li>
     </ul>
 
-    <ApiTable Params="Params" />
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <ul>
+        <li>@L.T("Pages that people print or save as PDF from the browser: payslips, receipts, certificates, reports.", "Páginas que las personas imprimen o guardan como PDF desde el navegador: desprendibles, recibos, certificados, reportes.")</li>
+        <li>@L.T("Ribbon: one short status on a card or document (PAID, DRAFT, VOID). For several statuses, use Badge.", "Ribbon: un estado corto en una tarjeta o documento (PAGADO, BORRADOR, ANULADO). Para varios estados, usa Badge.")</li>
+        <li>@L.T("For documents that must look identical everywhere or be signed digitally, generate a PDF on the server instead.", "Para documentos que deben verse idénticos en todas partes o firmarse digitalmente, genera un PDF en el servidor.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step: printing a payslip", "Paso a paso: imprimir un desprendible")</h3>
+    <ol>
+        <li>@L.T("Build the document with normal components: a Card, a heading and a DescriptionList or DataTable. Printed pages switch to the light tokens automatically, even in dark mode.", "Arma el documento con componentes normales: una Card, un encabezado y un DescriptionList o DataTable. Las páginas impresas cambian a los tokens claros automáticamente, incluso en modo oscuro.")</li>
+        <li>@L.T("Wrap buttons, filters and navigation in NoPrint. Wrap the app chrome too (or print from a page without AppShell): it is not hidden for you.", "Envuelve los botones, filtros y la navegación en NoPrint. Envuelve también el marco de la app (o imprime desde una página sin AppShell): no se oculta por sí solo.")</li>
+        <li>@L.T("Put paper-only content in PrintOnly: a signature line, a legal note, the company header.", "Pon el contenido solo para papel en PrintOnly: una línea de firma, una nota legal, el encabezado de la empresa.")</li>
+        <li><Tr><En>Add <code>trazos-print-avoid-break</code> to blocks that must not split across pages and <code>trazos-print-break-before</code> to start each payslip on its own page.</En><Es>Agrega <code>trazos-print-avoid-break</code> a los bloques que no deben partirse entre páginas y <code>trazos-print-break-before</code> para que cada desprendible empiece en su propia página.</Es></Tr></li>
+        <li>
+            @if (F.IsReact)
+            {
+                <Tr><En>Call <code>window.print()</code> from a button.</En><Es>Llama a <code>window.print()</code> desde un botón.</Es></Tr>
+            }
+            else
+            {
+                <Tr><En>Call <code>window.print</code> through <code>IJSRuntime</code>: <code>await JS.InvokeVoidAsync("print")</code>.</En><Es>Llama a <code>window.print</code> a través de <code>IJSRuntime</code>: <code>await JS.InvokeVoidAsync("print")</code>.</Es></Tr>
+            }
+        </li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Step by step: Ribbon", "Paso a paso: Ribbon")</h3>
+    <ol>
+        <li>
+            @if (F.IsReact)
+            {
+                <Tr><En>Give the parent <code>position: relative</code>, such as <code>&lt;Card style=&#123;&#123; position: 'relative' &#125;&#125;&gt;</code>. The ribbon is absolutely positioned in its top corner.</En><Es>Dale al contenedor <code>position: relative</code>, por ejemplo <code>&lt;Card style=&#123;&#123; position: 'relative' &#125;&#125;&gt;</code>. La cinta se posiciona de forma absoluta en su esquina superior.</Es></Tr>
+            }
+            else
+            {
+                <Tr><En>Give the parent <code>position: relative</code>, such as <code>&lt;Card Style="position: relative;"&gt;</code>. The ribbon is absolutely positioned in its top corner.</En><Es>Dale al contenedor <code>position: relative</code>, por ejemplo <code>&lt;Card Style="position: relative;"&gt;</code>. La cinta se posiciona de forma absoluta en su esquina superior.</Es></Tr>
+            }
+        </li>
+        <li><Tr><En>Set a short <code>@N("Text")</code> (it is shown in capitals), a <code>@N("Tone")</code> by meaning (olive for paid, wine for void, gold for pending) and the corner with <code>@N("Position")</code>.</En><Es>Define un <code>@N("Text")</code> corto (se muestra en mayúsculas), un <code>@N("Tone")</code> según el significado (oliva para pagado, vino para anulado, dorado para pendiente) y la esquina con <code>@N("Position")</code>.</Es></Tr></li>
+        <li>@L.T("Leave some padding in that corner: the band covers about 7.5rem and ignores clicks, so content under it stays clickable.", "Deja algo de espacio en esa esquina: la cinta cubre unos 7.5rem e ignora los clics, así que el contenido debajo sigue siendo clicable.")</li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li>@L.T("The ribbon text is normal text: screen readers read it where the ribbon is in the markup, so place it first inside the card.", "El texto de la cinta es texto normal: los lectores de pantalla lo leen donde está la cinta en el marcado, así que ponla de primera dentro de la tarjeta.")</li>
+        <li><Tr><En>PrintOnly content is <code>display: none</code> on screen, so screen readers skip it there; NoPrint content stays fully accessible on screen.</En><Es>El contenido de PrintOnly tiene <code>display: none</code> en pantalla, así que los lectores de pantalla lo omiten; el contenido de NoPrint sigue siendo totalmente accesible en pantalla.</Es></Tr></li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@L.T("A Ribbon in a parent without position: relative: it jumps to the corner of the nearest positioned ancestor, often the whole page.", "Un Ribbon en un contenedor sin position: relative: salta a la esquina del ancestro posicionado más cercano, a menudo toda la página.")</li>
+        <li>@L.T("A parent with overflow: hidden and no rounded corners cuts the band differently: the ribbon already clips itself, so the parent does not need it.", "Un contenedor con overflow: hidden y sin bordes redondeados corta la cinta de otra forma: la cinta ya se recorta sola, así que el contenedor no lo necesita.")</li>
+        <li>@L.T("Toggling print content with your own screen/print CSS instead of NoPrint and PrintOnly: the utility classes use !important so they win over component styles.", "Alternar contenido de impresión con tu propio CSS de pantalla/impresión en vez de NoPrint y PrintOnly: las clases utilitarias usan !important para ganarle a los estilos de los componentes.")</li>
+        <li>@L.T("Forgetting that browsers drop background colors when printing: tinted blocks need trazos-print-exact.", "Olvidar que los navegadores quitan los colores de fondo al imprimir: los bloques con tinte necesitan trazos-print-exact.")</li>
+    </ul>
+
+    <ApiTable Title="@F.Pick(L.T("Ribbon parameters", "Parámetros de Ribbon"), L.T("Ribbon props", "Props de Ribbon"))" Params="Params" ReactParams="ReactRibbonParams" />
+    <ApiTable Title="@F.Pick(L.T("NoPrint and PrintOnly parameters", "Parámetros de NoPrint y PrintOnly"), L.T("NoPrint and PrintOnly props", "Props de NoPrint y PrintOnly"))" Params="PrintParams" ReactParams="ReactPrintParams" />
 </DocPage>
 
 @code {
     [Inject] private IJSRuntime JS { get; set; } = default!;
 
     private async Task PrintAsync() => await JS.InvokeVoidAsync("print");
+
+    private string N(string name) => !F.IsReact ? name : char.ToLowerInvariant(name[0]) + name[1..];
 
     private const string Code = """
         <Card Style="position: relative;" Class="trazos-print-avoid-break">
@@ -58,13 +124,49 @@
         <NoPrint>
             <Button OnClick="PrintAsync">Print</Button>
         </NoPrint>
+
+        @code {
+            [Inject] private IJSRuntime JS { get; set; } = default!;
+
+            private async Task PrintAsync() => await JS.InvokeVoidAsync("print");
+        }
+        """;
+
+    private const string RibbonCode = """
+        <Card Style="position: relative; width: 11rem; height: 7rem;">
+            <Ribbon Text="Void" Tone="RibbonTone.Wine" Position="RibbonPosition.TopLeft" />
+        </Card>
         """;
 
     private IReadOnlyList<ApiParam> Params =>
     [
-        new("Ribbon.Text", "string", "required", L.T("Short status, such as DRAFT or PAID.", "Estado corto, como BORRADOR o PAGADO.")),
-        new("Ribbon.Tone", "RibbonTone", "Olive", L.T("Olive, Wine, Gold, Sky or Neutral.", "Olive, Wine, Gold, Sky o Neutral.")),
-        new("Ribbon.Position", "RibbonPosition", "TopRight", L.T("TopRight or TopLeft. The parent needs position: relative.", "TopRight o TopLeft. El contenedor necesita position: relative.")),
-        new("NoPrint / PrintOnly", "ChildContent, Class", null, L.T("Wrappers with the print utility classes.", "Envoltorios con las clases de impresión.")),
+        new("Text", "string", "required", L.T("Short status, such as DRAFT or PAID.", "Estado corto, como BORRADOR o PAGADO.")),
+        new("Tone", "RibbonTone", "Olive", L.T("Olive, Wine, Gold, Sky or Neutral.", "Olive, Wine, Gold, Sky o Neutral.")),
+        new("Position", "RibbonPosition", "TopRight", L.T("TopRight or TopLeft. The parent needs position: relative.", "TopRight o TopLeft. El contenedor necesita position: relative.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> PrintParams =>
+    [
+        new("ChildContent", "RenderFragment?", null, L.T("Content hidden on paper (NoPrint) or shown only on paper (PrintOnly).", "Contenido oculto en papel (NoPrint) o visible solo en papel (PrintOnly).")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactRibbonParams =>
+    [
+        new("text", "string", "required", L.T("Short status, such as DRAFT or PAID.", "Estado corto, como BORRADOR o PAGADO.")),
+        new("tone", "RibbonTone", "'olive'", L.T("'olive', 'wine', 'gold', 'sky' or 'neutral'.", "'olive', 'wine', 'gold', 'sky' o 'neutral'.")),
+        new("position", "RibbonPosition", "'top-right'", L.T("'top-right' or 'top-left'. The parent needs position: relative.", "'top-right' o 'top-left'. El contenedor necesita position: relative.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'span'>", null, L.T("Any other span attribute, including ref.", "Cualquier otro atributo de span, incluido ref.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactPrintParams =>
+    [
+        new("children", "ReactNode", null, L.T("Content hidden on paper (NoPrint) or shown only on paper (PrintOnly).", "Contenido oculto en papel (NoPrint) o visible solo en papel (PrintOnly).")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other div attribute, including ref.", "Cualquier otro atributo de div, incluido ref.")),
     ];
 }

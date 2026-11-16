@@ -1,0 +1,70 @@
+/* ========================================
+   DESCRIPTION LIST - Trazos UI (ported from Components/DescriptionList/*.razor.css)
+   Label/value grid for read-only detail views.
+   ======================================== */
+
+.trazos-dl {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.125rem 1.5rem;
+    margin: 0;
+}
+
+@media (min-width: 640px) {
+    .trazos-dl-cols-2,
+    .trazos-dl-cols-3,
+    .trazos-dl-cols-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .trazos-dl-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .trazos-dl-cols-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+.trazos-dl-bordered .trazos-dl-item {
+    padding-bottom: 0.875rem;
+    border-bottom: 1px dashed var(--trazos-border-soft);
+}
+
+.trazos-dl-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.trazos-dl-item.trazos-dl-item-full {
+    grid-column: 1 / -1;
+}
+
+.trazos-dl-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--trazos-text-muted);
+}
+
+.trazos-dl-value {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--trazos-text);
+    overflow-wrap: anywhere;
+}
+
+.trazos-dl-value.trazos-dl-value-empty {
+    color: var(--trazos-text-subtle);
+}
+
+.trazos-dl-hint {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--trazos-text-muted);
+}

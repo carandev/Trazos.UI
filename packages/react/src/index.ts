@@ -31,12 +31,16 @@ export * from './components/FormLayout';
 export * from './components/DataTable';
 export * from './components/Tabs';
 export * from './components/MonthCalendar';
+export * from './components/DescriptionList';
+export * from './components/Stat';
+export * from './components/Progress';
 
 // Overlays and services
 export * from './components/Modal';
 export * from './components/Drawer';
 export * from './components/ConfirmDialog';
 export * from './components/Toast';
+export * from './components/Alert';
 
 // Decoration
 export * from './components/Sketch';
@@ -55,4 +59,8 @@ export * from './components/SiteHeader';
 
 // Layout and page structure
 export * from './components/AppShell';
+export * from './components/PageHeader';
+export * from './components/Breadcrumbs';
 export * from './components/Divider';
+export * from './components/Ribbon';
+export * from './components/Print';

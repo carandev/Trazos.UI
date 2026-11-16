@@ -3,7 +3,7 @@
 <DocPage Title="Alert" Category="@L.T("Overlays & feedback", "Superposiciones y avisos")"
          Lead="@L.T("An inline, persistent message with a tone, title, body, actions and an optional dismiss button. Use Toast for messages that disappear on their own.", "Un mensaje en línea y persistente con tono, título, cuerpo, acciones y un botón opcional para cerrarlo. Usa Toast para mensajes que desaparecen solos.")">
 
-    <DemoBlock Title="@L.T("Tones", "Tonos")" Code="@TonesCode">
+    <DemoBlock Title="@L.T("Tones", "Tonos")" Code="@TonesCode" React="alert/tones">
         <div class="docs-stack">
             <Alert Title="@L.T("Payroll period open", "Periodo de nómina abierto")">@L.T("You can add novelties until November 25.", "Puedes registrar novedades hasta el 25 de noviembre.")</Alert>
             <Alert Tone="AlertTone.Success" Title="@L.T("Payroll approved", "Nómina aprobada")">@L.T("42 payslips were generated.", "Se generaron 42 desprendibles.")</Alert>
@@ -13,8 +13,8 @@
     </DemoBlock>
 
     <DemoBlock Title="@L.T("Actions and dismiss", "Acciones y cierre")"
-               Description="@L.T("A dismissible alert hides itself and raises OnDismiss. Give DismissLabel a text in your app's language.", "Una alerta que se puede cerrar se oculta sola y dispara OnDismiss. Dale a DismissLabel un texto en el idioma de tu app.")"
-               Code="@ActionsCode">
+               Description="@F.Pick(L.T("A dismissible alert hides itself and raises OnDismiss. Give DismissLabel a text in your app's language.", "Una alerta que se puede cerrar se oculta sola y dispara OnDismiss. Dale a DismissLabel un texto en el idioma de tu app."), L.T("A dismissible alert hides itself and calls onDismiss. Give dismissLabel a text in your app's language. To show it again, remount it with a new key.", "Una alerta que se puede cerrar se oculta sola y llama a onDismiss. Dale a dismissLabel un texto en el idioma de tu app. Para mostrarla de nuevo, vuelve a montarla con un key nuevo."))"
+               Code="@ActionsCode" React="alert/actions-dismiss">
         <div class="docs-stack">
             @if (_showAlert)
             {
@@ -34,11 +34,86 @@
         </div>
     </DemoBlock>
 
-    <ApiTable Params="Params" />
+    <DemoBlock Title="@L.T("Custom icon and rich body", "Ícono propio y cuerpo enriquecido")"
+               Description="@F.Pick(L.T("Icon replaces the tone's icon. Paragraphs in the body get a small gap between them.", "Icon reemplaza el ícono del tono. Los párrafos del cuerpo quedan con un pequeño espacio entre ellos."), L.T("icon replaces the tone's icon. Paragraphs in the body get a small gap between them.", "icon reemplaza el ícono del tono. Los párrafos del cuerpo quedan con un pequeño espacio entre ellos."))"
+               Code="@IconCode" React="alert/custom-icon">
+        <Alert Title="@L.T("Closing date", "Fecha de cierre")">
+            <Icon>@Icons.Calendar</Icon>
+            <ChildContent>
+                <p>@L.T("Payroll closes on November 25 at 6:00 pm.", "La nómina cierra el 25 de noviembre a las 6:00 p. m.")</p>
+                <p>@L.T("Novelties added later go to the next period.", "Las novedades registradas después pasan al siguiente periodo.")</p>
+            </ChildContent>
+        </Alert>
+    </DemoBlock>
+
+    <DemoBlock Title="@L.T("Inside a Modal", "Dentro de un Modal")"
+               Description="@L.T("Warn about a destructive action before the user confirms it.", "Advierte sobre una acción destructiva antes de que el usuario la confirme.")"
+               Code="@ModalCode" React="alert/in-modal">
+        <Button Variant="ButtonVariant.Wine" OnClick="() => _modalOpen = true">@L.T("Delete employee", "Eliminar empleado")</Button>
+        <Modal @bind-IsOpen="_modalOpen" Title="@L.T("Delete Ana María Restrepo?", "¿Eliminar a Ana María Restrepo?")" Size="small">
+            <ChildContent>
+                <Alert Tone="AlertTone.Danger" Title="@L.T("This cannot be undone", "Esta acción no se puede deshacer")">
+                    @L.T("Her payslips and novelties will be deleted too.", "También se eliminarán sus desprendibles y novedades.")
+                </Alert>
+            </ChildContent>
+            <Footer>
+                <Button Variant="ButtonVariant.Ghost" OnClick="() => _modalOpen = false">@L.T("Cancel", "Cancelar")</Button>
+                <Button Variant="ButtonVariant.Wine" OnClick="() => _modalOpen = false">@L.T("Delete", "Eliminar")</Button>
+            </Footer>
+        </Modal>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <ul>
+        <li>@L.T("A message that must stay visible while the user works: an open period, missing data, a failed validation of a whole page.", "Un mensaje que debe seguir visible mientras el usuario trabaja: un periodo abierto, datos faltantes, una validación fallida de toda la página.")</li>
+        <li>@L.T("A warning inside a Modal or a form, right next to the action it talks about.", "Una advertencia dentro de un Modal o de un formulario, junto a la acción de la que habla.")</li>
+        <li>@L.T("Do not use it for a short confirmation such as \"Saved\": use Toast, which disappears on its own.", "No lo uses para una confirmación corta como \"Guardado\": usa Toast, que desaparece solo.")</li>
+        <li>@L.T("Do not use it for the error of a single field: give the field its own error text.", "No lo uses para el error de un solo campo: dale al campo su propio texto de error.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li><Tr><En>Pick the tone by meaning: <code>@N("Info")</code> for neutral notes, <code>@N("Success")</code> for completed work, <code>@N("Warning")</code> for something that needs attention, <code>@N("Danger")</code> for errors and destructive actions.</En><Es>Elige el tono por su significado: <code>@N("Info")</code> para notas neutras, <code>@N("Success")</code> para trabajo terminado, <code>@N("Warning")</code> para algo que requiere atención, <code>@N("Danger")</code> para errores y acciones destructivas.</Es></Tr></li>
+        <li><Tr><En>Write a short <code>@N("Title")</code> that says what happened, and put the detail or the next step in the body (<code>@N("ChildContent")</code>).</En><Es>Escribe un <code>@N("Title")</code> corto que diga qué pasó y pon el detalle o el siguiente paso en el cuerpo (<code>@N("ChildContent")</code>).</Es></Tr></li>
+        <li><Tr><En>Add buttons or links in <code>@N("Actions")</code> when the user can fix the problem from there. Use small buttons.</En><Es>Agrega botones o enlaces en <code>@N("Actions")</code> cuando el usuario pueda resolver el problema desde ahí. Usa botones pequeños.</Es></Tr></li>
+        <li><Tr><En>Set <code>@N("Dismissible")</code> only for messages the user can safely ignore, and translate <code>@N("DismissLabel")</code>.</En><Es>Activa <code>@N("Dismissible")</code> solo en mensajes que el usuario puede ignorar sin riesgo, y traduce <code>@N("DismissLabel")</code>.</Es></Tr></li>
+        <li>
+            @if (F.IsReact)
+            {
+                <Tr><En>The alert keeps its dismissed state while it stays mounted. Use <code>onDismiss</code> to remember the choice, and render it conditionally (or change its <code>key</code>) to show it again.</En><Es>La alerta conserva su estado de cerrada mientras sigue montada. Usa <code>onDismiss</code> para recordar la decisión y renderízala de forma condicional (o cambia su <code>key</code>) para mostrarla de nuevo.</Es></Tr>
+            }
+            else
+            {
+                <Tr><En>The alert keeps its dismissed state while the component lives. Use <code>OnDismiss</code> to remember the choice, and wrap it in an <code>@@if</code> to show it again.</En><Es>La alerta conserva su estado de cerrada mientras el componente existe. Usa <code>OnDismiss</code> para recordar la decisión y envuélvela en un <code>@@if</code> para mostrarla de nuevo.</Es></Tr>
+            }
+        </li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Keyboard and screen readers", "Teclado y lectores de pantalla")</h3>
+    <ul>
+        <li><Tr><En>Info and Success use <code>role="status"</code> (polite); Warning and Danger use <code>role="alert"</code> (assertive). A screen reader announces an alert when it is added to the page, so render it when the event happens instead of keeping it hidden with CSS.</En><Es>Info y Success usan <code>role="status"</code> (cortés); Warning y Danger usan <code>role="alert"</code> (inmediato). Un lector de pantalla anuncia la alerta cuando se agrega a la página, así que renderízala cuando ocurra el evento en vez de ocultarla con CSS.</Es></Tr></li>
+        <li>@L.T("The icon is decorative and hidden from assistive technology; the title and body carry the meaning, so never rely on color alone.", "El ícono es decorativo y está oculto para la tecnología de asistencia; el título y el cuerpo llevan el significado, así que no dependas solo del color.")</li>
+        <li>@L.T("The dismiss button is a real button: it is reached with Tab and pressed with Enter or Space. Its accessible name is the dismiss label.", "El botón de cierre es un botón real: se alcanza con Tab y se activa con Enter o Espacio. Su nombre accesible es la etiqueta de cierre.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@L.T("Too many alerts on one page: users stop reading them. Combine related messages in one alert.", "Demasiadas alertas en una página: los usuarios dejan de leerlas. Combina los mensajes relacionados en una sola alerta.")</li>
+        <li>@L.T("Danger for something that is not an error: it interrupts screen-reader users. Use Info or Warning.", "Danger para algo que no es un error: interrumpe a quienes usan lector de pantalla. Usa Info o Warning.")</li>
+        <li>@L.T("A dismissible alert for information the user still needs, such as why a button is disabled.", "Una alerta que se puede cerrar para información que el usuario todavía necesita, como por qué un botón está deshabilitado.")</li>
+    </ul>
+
+    <ApiTable Params="Params" ReactParams="ReactParams" />
 </DocPage>
 
 @code {
     private bool _showAlert = true;
+    private bool _modalOpen;
+
+    // Prop names in the current framework: React uses camelCase and children.
+    private string N(string name) => !F.IsReact ? name : name == "ChildContent" ? "children" : char.ToLowerInvariant(name[0]) + name[1..];
 
     private const string TonesCode = """
         <Alert Title="Payroll period open">You can add novelties until November 25.</Alert>
@@ -48,14 +123,41 @@
         """;
 
     private const string ActionsCode = """
-        <Alert Tone="AlertTone.Warning" Title="This will cancel the payroll run"
-               Dismissible="true" DismissLabel="Dismiss" OnDismiss="() => _showAlert = false">
-            <ChildContent>Payslips already sent will not be recalled.</ChildContent>
-            <Actions>
-                <Button Variant="ButtonVariant.Wine" Size="ButtonSize.Small">Cancel run</Button>
-                <Button Variant="ButtonVariant.Ghost" Size="ButtonSize.Small">Review first</Button>
-            </Actions>
+        @if (_showAlert)
+        {
+            <Alert Tone="AlertTone.Warning" Title="This will cancel the payroll run"
+                   Dismissible="true" DismissLabel="Dismiss" OnDismiss="() => _showAlert = false">
+                <ChildContent>Payslips already sent will not be recalled.</ChildContent>
+                <Actions>
+                    <Button Variant="ButtonVariant.Wine" Size="ButtonSize.Small">Cancel run</Button>
+                    <Button Variant="ButtonVariant.Ghost" Size="ButtonSize.Small">Review first</Button>
+                </Actions>
+            </Alert>
+        }
+        """;
+
+    private const string IconCode = """
+        <Alert Title="Closing date">
+            <Icon><svg>…</svg></Icon>
+            <ChildContent>
+                <p>Payroll closes on November 25 at 6:00 pm.</p>
+                <p>Novelties added later go to the next period.</p>
+            </ChildContent>
         </Alert>
+        """;
+
+    private const string ModalCode = """
+        <Modal @bind-IsOpen="_open" Title="Delete Ana María Restrepo?" Size="small">
+            <ChildContent>
+                <Alert Tone="AlertTone.Danger" Title="This cannot be undone">
+                    Her payslips and novelties will be deleted too.
+                </Alert>
+            </ChildContent>
+            <Footer>
+                <Button Variant="ButtonVariant.Ghost" OnClick="() => _open = false">Cancel</Button>
+                <Button Variant="ButtonVariant.Wine" OnClick="DeleteAsync">Delete</Button>
+            </Footer>
+        </Modal>
         """;
 
     private IReadOnlyList<ApiParam> Params =>
@@ -69,5 +171,20 @@
         new("DismissLabel", "string", "\"Dismiss\"", L.T("Accessible name of the close button.", "Nombre accesible del botón de cierre.")),
         new("OnDismiss", "EventCallback", null, L.T("Raised after the alert hides itself.", "Se dispara después de que la alerta se oculta.")),
         new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("tone", "AlertTone", "'info'", L.T("'info', 'success', 'warning' or 'danger'. 'warning' and 'danger' use role=\"alert\"; the others use role=\"status\".", "'info', 'success', 'warning' o 'danger'. 'warning' y 'danger' usan role=\"alert\"; los demás, role=\"status\".")),
+        new("title", "ReactNode", null, L.T("Bold first line.", "Primera línea en negrita.")),
+        new("children", "ReactNode", null, L.T("Body of the message.", "Cuerpo del mensaje.")),
+        new("actions", "ReactNode", null, L.T("Buttons or links below the body.", "Botones o enlaces debajo del cuerpo.")),
+        new("icon", "ReactNode", null, L.T("Replaces the tone's icon.", "Reemplaza el ícono del tono.")),
+        new("dismissible", "boolean", "false", L.T("Shows a close button.", "Muestra un botón para cerrar.")),
+        new("dismissLabel", "string", "'Dismiss'", L.T("Accessible name of the close button.", "Nombre accesible del botón de cierre.")),
+        new("onDismiss", "() => void", null, L.T("Called after the alert hides itself.", "Se llama después de que la alerta se oculta.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other div attribute, including ref.", "Cualquier otro atributo de div, incluido ref.")),
     ];
 }
