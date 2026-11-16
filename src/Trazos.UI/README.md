@@ -137,6 +137,13 @@ See `wwwroot/trazos.css` for the full token list.
 </Card>
 ```
 
+## Upgrading to 3.0
+
+- `SelectInput` is generic (`SelectInput<TValue>`). A select without `Value`, `ValueChanged` or `Options` can no longer infer its type: add `TValue="string"`.
+- `SelectInput` with `Options` only renders its own themed list instead of a native `<select>`. With `<option>` children it stays native. Host CSS that targeted the native element inside an Options-only select needs updating.
+- `DescriptionList` shows each item as a tile by default. Use `Variant="DescriptionListVariant.Plain"` for the previous label/value grid; `Bordered` only applies to `Plain`.
+- Fields bound with `@bind-Value` inside an `EditForm` now show the validation message on their own. An explicit `Error` still wins.
+
 ## License
 
 MIT
