@@ -8,34 +8,38 @@
         <p class="docs-demo-description">@Description</p>
     }
 
-    <div class="docs-demo-preview">
-        @if (!F.IsReact)
-        {
-            @ChildContent
-        }
-        else if (React is not null)
-        {
-            <ReactDemo @key="React" Id="@React" />
-        }
-        else
-        {
-            <p class="docs-muted">@L.T("This example is only available for Blazor.", "Este ejemplo solo está disponible para Blazor.")</p>
-        }
-    </div>
+    @* The search index needs only the title and description: no live demo, no code. *@
+    @if (!Indexing)
+    {
+        <div class="docs-demo-preview">
+            @if (!F.IsReact)
+            {
+                @ChildContent
+            }
+            else if (React is not null)
+            {
+                <ReactDemo @key="React" Id="@React" />
+            }
+            else
+            {
+                <p class="docs-muted">@L.T("This example is only available for Blazor.", "Este ejemplo solo está disponible para Blazor.")</p>
+            }
+        </div>
 
-    @if (F.IsReact && React is not null)
-    {
-        <details class="docs-demo-source" open="@ShowCode">
-            <summary>@L.T("Show code", "Ver código")</summary>
-            <ReactSource @key="React" Id="@React" />
-        </details>
-    }
-    else if (!F.IsReact && !string.IsNullOrEmpty(Code))
-    {
-        <details class="docs-demo-source" open="@ShowCode">
-            <summary>@L.T("Show code", "Ver código")</summary>
-            <CodeBlock Code="@Code" />
-        </details>
+        @if (F.IsReact && React is not null)
+        {
+            <details class="docs-demo-source" open="@ShowCode">
+                <summary>@L.T("Show code", "Ver código")</summary>
+                <ReactSource @key="React" Id="@React" />
+            </details>
+        }
+        else if (!F.IsReact && !string.IsNullOrEmpty(Code))
+        {
+            <details class="docs-demo-source" open="@ShowCode">
+                <summary>@L.T("Show code", "Ver código")</summary>
+                <CodeBlock Code="@Code" />
+            </details>
+        }
     }
 </section>
 
@@ -54,4 +58,6 @@
 
     [Parameter] public bool ShowCode { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [CascadingParameter(Name = SearchIndexHost.CascadeName)] public bool Indexing { get; set; }
 }

@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Trazos.UI.Docs;
 using Trazos.UI.Docs.Frameworks;
 using Trazos.UI.Docs.Localization;
+using Trazos.UI.Docs.Search;
 using Trazos.UI.Extensions;
 using Trazos.UI.Services;
 
@@ -21,6 +22,7 @@ builder.Services.AddTrazosUI(options =>
 builder.Services.AddSingleton<DocsLanguage>();
 builder.Services.AddSingleton<DocsFramework>();
 builder.Services.AddSingleton<ReactDemos>();
+builder.Services.AddScoped<DocsPageRenderer>();
 
 var host = builder.Build();
 await host.Services.GetRequiredService<DocsLanguage>().InitializeAsync();

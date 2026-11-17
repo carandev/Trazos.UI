@@ -13,6 +13,8 @@
 
     <TopBar>
         <div class="docs-topbar">
+            @* First, so it stays on screen on phones, where shortcuts are not available. *@
+            <DocsSearch />
             <nav class="docs-topbar-links" aria-label="@L.T("Project links", "Enlaces del proyecto")">
                 @if (F.IsReact)
                 {

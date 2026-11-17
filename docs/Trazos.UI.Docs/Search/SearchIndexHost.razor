@@ -1,0 +1,11 @@
+@* Renders one documentation page for the search index. DemoBlock reads the cascading flag and leaves its live demo and code out. *@
+<CascadingValue Name="@CascadeName" Value="true" IsFixed="true">
+    <DynamicComponent Type="Page" />
+</CascadingValue>
+
+@code {
+    /// <summary>Name of the cascading bool that is true while a page renders for the search index.</summary>
+    public const string CascadeName = "DocsSearchIndexing";
+
+    [Parameter, EditorRequired] public Type Page { get; set; } = default!;
+}
