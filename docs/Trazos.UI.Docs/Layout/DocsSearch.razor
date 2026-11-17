@@ -1,0 +1,285 @@
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+@inject DocsPageRenderer PageRenderer
+
+<button type="button"
+        class="docs-search-trigger"
+        aria-haspopup="dialog"
+        aria-keyshortcuts="Control+K Meta+K /"
+        @ref="_trigger"
+        @onclick="OpenAsync">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+    <span class="docs-search-trigger-label">@L.T("Search", "Buscar")</span>
+    <kbd class="docs-search-trigger-key" aria-hidden="true">@(_isApple ? "⌘K" : "Ctrl K")</kbd>
+</button>
+
+<dialog class="docs-search-dialog" aria-label="@L.T("Search the documentation", "Buscar en la documentación")" @ref="_dialog">
+    @* Always rendered, so the input exists when the dialog opens; a closed dialog hides it. *@
+    <div class="docs-search-panel" @onkeydown="OnKeyDown">
+        <div class="docs-search-bar">
+            <SearchInput Id="@InputId"
+                         Class="docs-search-field"
+                         Debounce="0"
+                         Value="@_query"
+                         ValueChanged="OnQueryChanged"
+                         AriaLabel="@L.T("Search the documentation", "Buscar en la documentación")"
+                         ClearLabel="@L.T("Clear search", "Borrar búsqueda")"
+                         Placeholder="@F.Pick(L.T("Component, parameter or topic…", "Componente, parámetro o tema…"), L.T("Component, prop or topic…", "Componente, prop o tema…"))"
+                         role="combobox"
+                         aria-expanded="@(_options.Count > 0 ? "true" : "false")"
+                         aria-controls="@ListId"
+                         aria-autocomplete="list"
+                         aria-activedescendant="@ActiveOptionId" />
+            <IconButton Label="@L.T("Close search", "Cerrar búsqueda")" Class="docs-search-close" OnClick="CloseAsync">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M6 6l12 12" /></svg>
+            </IconButton>
+        </div>
+
+        <div class="docs-search-results">
+            @if (_indexing)
+            {
+                <LoadingSpinner Message="@L.T("Preparing the search…", "Preparando la búsqueda…")" />
+            }
+            else if (string.IsNullOrWhiteSpace(_query))
+            {
+                <p class="docs-search-hint">
+                    @F.Pick(L.T("Type a component, a parameter or a topic such as validation, dark mode or print.",
+                                "Escribe un componente, un parámetro o un tema como validación, modo oscuro o impresión."),
+                            L.T("Type a component, a prop or a topic such as validation, dark mode or print.",
+                                "Escribe un componente, una prop o un tema como validación, modo oscuro o impresión."))
+                </p>
+            }
+            else if (_groups.Count == 0)
+            {
+                <EmptyState Compact="true"
+                            Title="@L.T("No results", "Sin resultados")"
+                            Description="@L.T($"Nothing in the docs matches “{_query.Trim()}”.", $"Nada en la documentación coincide con “{_query.Trim()}”.")" />
+            }
+
+            <div id="@ListId" role="listbox" class="docs-search-list" aria-label="@L.T("Results", "Resultados")" hidden="@(_options.Count == 0)">
+                @for (var g = 0; g < _groups.Count; g++)
+                {
+                    var group = _groups[g];
+                    var groupId = $"docs-search-group-{g}";
+                    <div role="group" class="docs-search-group" aria-labelledby="@groupId">
+                        <div role="presentation" class="docs-search-group-title" id="@groupId">
+                            <span>@group.Title</span>
+                            @if (!string.IsNullOrEmpty(group.Category))
+                            {
+                                <Badge Variant="BadgeVariant.Neutral" Class="docs-search-category">@group.Category</Badge>
+                            }
+                        </div>
+                        @foreach (var hit in group.Hits)
+                        {
+                            var option = OptionIndex(group, hit);
+                            <div role="option"
+                                 id="@OptionId(option)"
+                                 class="docs-search-option @(option == _active ? "is-active" : null)"
+                                 aria-selected="@(option == _active ? "true" : "false")"
+                                 @onclick="() => SelectAsync(group, hit)"
+                                 @onmousemove="() => _active = option">
+                                @if (hit.Section is not null)
+                                {
+                                    <span class="docs-search-option-section">@Segments(hit.Heading)</span>
+                                }
+                                <span class="docs-search-option-excerpt">@Segments(hit.Excerpt)</span>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+
+            <VisuallyHidden role="status">@StatusText</VisuallyHidden>
+        </div>
+
+        <p class="docs-search-keys" aria-hidden="true">
+            <span><kbd>↑</kbd><kbd>↓</kbd> @L.T("move", "moverse")</span>
+            <span><kbd>Enter</kbd> @L.T("open", "abrir")</span>
+            <span><kbd>Esc</kbd> @L.T("close", "cerrar")</span>
+        </p>
+    </div>
+</dialog>
+
+@code {
+    private const string InputId = "docs-search-input";
+    private const string ListId = "docs-search-list";
+
+    private ElementReference _trigger;
+    private ElementReference _dialog;
+    private DotNetObjectReference<DocsSearch>? _self;
+    private bool _isApple;
+    private bool _indexing;
+    private bool _scrollActive;
+    private string? _query;
+    private int _active;
+    private IReadOnlyList<SearchGroup> _groups = [];
+    private List<(SearchGroup Group, SearchHit Hit)> _options = [];
+    private Task? _indexTask;
+
+    // One index per language and framework: the pages render differently in each.
+    private string IndexKey => $"{L.Code}-{F.Code}";
+
+    private string? ActiveOptionId => _options.Count > 0 ? OptionId(_active) : null;
+
+    private string StatusText => _indexing || string.IsNullOrWhiteSpace(_query)
+        ? string.Empty
+        : L.T($"{_options.Count} results in {_groups.Count} pages.", $"{_options.Count} resultados en {_groups.Count} páginas.");
+
+    private static string OptionId(int index) => $"docs-search-option-{index}";
+
+    private int OptionIndex(SearchGroup group, SearchHit hit) => _options.FindIndex(o => o.Group == group && o.Hit == hit);
+
+    private static RenderFragment Segments(IEnumerable<SearchSegment> segments) => __builder =>
+    {
+        foreach (var segment in segments)
+        {
+            if (segment.M)
+            {
+                <mark>@segment.T</mark>
+            }
+            else
+            {
+                @segment.T
+            }
+        }
+    };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _self = DotNetObjectReference.Create(this);
+            try
+            {
+                _isApple = await JS.InvokeAsync<bool>("trazosDocsSearch.attach", _dialog, _trigger, _self);
+                if (_isApple) StateHasChanged();
+            }
+            catch (JSException)
+            {
+                // Without the script the trigger still opens the dialog.
+            }
+        }
+
+        if (_scrollActive)
+        {
+            _scrollActive = false;
+            if (ActiveOptionId is { } id) await JS.InvokeVoidAsync("trazosDocsSearch.scrollIntoView", id);
+        }
+    }
+
+    [JSInvokable]
+    public Task OpenFromShortcut() => InvokeAsync(OpenAsync);
+
+    private async Task OpenAsync()
+    {
+        await JS.InvokeVoidAsync("trazosDocsSearch.open", _dialog);
+        await EnsureIndexAsync();
+        await SearchAsync();
+    }
+
+    // Closing without a result returns focus to the trigger (see docs-search.js).
+    private async Task CloseAsync() => await JS.InvokeVoidAsync("trazosDocsSearch.close", _dialog);
+
+    private async Task EnsureIndexAsync()
+    {
+        try
+        {
+            await (_indexTask ??= BuildIndexAsync());
+        }
+        catch
+        {
+            _indexTask = null; // Try again on the next open.
+            throw;
+        }
+    }
+
+    private async Task BuildIndexAsync()
+    {
+        if (await JS.InvokeAsync<bool>("trazosDocsSearch.has", IndexKey)) return;
+
+        _indexing = true;
+        StateHasChanged();
+        try
+        {
+            var pages = await PageRenderer.RenderAllAsync();
+            await JS.InvokeAsync<int>("trazosDocsSearch.build", IndexKey, pages);
+        }
+        finally
+        {
+            _indexing = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task OnQueryChanged(string? query)
+    {
+        _query = query;
+        await SearchAsync();
+    }
+
+    private async Task SearchAsync()
+    {
+        if (_indexing) return;
+
+        var query = _query;
+        var groups = string.IsNullOrWhiteSpace(query)
+            ? []
+            : await JS.InvokeAsync<SearchGroup[]>("trazosDocsSearch.query", IndexKey, query);
+
+        // A newer keystroke already started its own search.
+        if (!string.Equals(query, _query, StringComparison.Ordinal)) return;
+
+        _groups = groups;
+        _options = groups.SelectMany(group => group.Hits.Select(hit => (group, hit))).ToList();
+        _active = 0;
+        StateHasChanged();
+    }
+
+    private async Task OnKeyDown(KeyboardEventArgs e)
+    {
+        if (_options.Count == 0) return;
+
+        switch (e.Key)
+        {
+            case "ArrowDown":
+                _active = (_active + 1) % _options.Count;
+                _scrollActive = true;
+                break;
+            case "ArrowUp":
+                _active = (_active - 1 + _options.Count) % _options.Count;
+                _scrollActive = true;
+                break;
+            case "Enter":
+                var (group, hit) = _options[_active];
+                await SelectAsync(group, hit);
+                break;
+        }
+    }
+
+    private async Task SelectAsync(SearchGroup group, SearchHit hit)
+    {
+        await JS.InvokeVoidAsync("trazosDocsSearch.closeForNavigation", _dialog);
+        Navigation.NavigateTo(group.Href);
+        if (hit.Section is not null)
+        {
+            await JS.InvokeVoidAsync("trazosDocsSearch.reveal", group.Title, hit.Section);
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("trazosDocsSearch.detach");
+        }
+        catch (JSDisconnectedException)
+        {
+        }
+        catch (JSException)
+        {
+        }
+
+        _self?.Dispose();
+    }
+}

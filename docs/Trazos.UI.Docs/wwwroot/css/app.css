@@ -202,6 +202,178 @@ svg.h-6 { height: 1.5rem; }
 }
 
 /* ----------------------------------------------------------------------------
+   Search
+   ------------------------------------------------------------------------- */
+
+.docs-search-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 2rem;
+    padding: 0 0.4rem 0 0.75rem;
+    border: 1px solid var(--trazos-color-parchment-300);
+    border-radius: 999px;
+    background: var(--trazos-color-parchment-50);
+    color: var(--trazos-color-ink-light);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.docs-search-trigger:hover {
+    color: var(--trazos-color-wine-600);
+}
+
+.docs-search-trigger:focus-visible {
+    outline: 2px solid var(--trazos-color-wine-600);
+    outline-offset: 2px;
+}
+
+.docs-search-trigger svg,
+.docs-search-close svg {
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.docs-search-trigger-key,
+.docs-search-keys kbd {
+    padding: 0.05rem 0.4rem;
+    border: 1px solid var(--trazos-color-parchment-300);
+    border-radius: 0.4rem;
+    background: var(--trazos-color-parchment-100);
+    color: var(--trazos-color-ink-muted);
+    font-family: var(--trazos-font-sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.docs-search-dialog {
+    width: min(40rem, calc(100vw - 2rem));
+    max-height: min(36rem, calc(100dvh - 4rem));
+    margin: 4rem auto auto;
+    padding: 0;
+    border: 1.5px solid var(--trazos-color-parchment-border);
+    border-radius: var(--trazos-radius-sketch-sm);
+    background: var(--trazos-color-parchment-50);
+    color: var(--trazos-color-ink);
+    box-shadow: 0 1.5rem 3rem rgb(0 0 0 / 0.2);
+    /* Only the result list scrolls. */
+    overflow: hidden;
+}
+
+.docs-search-dialog[open] {
+    display: flex;
+}
+
+.docs-search-dialog::backdrop {
+    background: rgb(0 0 0 / 0.35);
+}
+
+.docs-search-panel {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.docs-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--trazos-color-parchment-300);
+}
+
+.docs-search-field {
+    flex: 1;
+}
+
+.docs-search-results {
+    /* Contains the visually hidden status, which would otherwise stretch the dialog. */
+    position: relative;
+    flex: 1;
+    min-height: 6rem;
+    padding: 0.5rem 0.75rem;
+    overflow-y: auto;
+}
+
+.docs-search-hint {
+    margin: 1rem 0.25rem;
+    color: var(--trazos-color-ink-muted);
+    font-size: 0.9rem;
+}
+
+.docs-search-group + .docs-search-group {
+    margin-top: 0.75rem;
+}
+
+.docs-search-group-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    font-family: var(--trazos-font-display);
+    font-size: 1rem;
+}
+
+.docs-search-option {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--trazos-radius-sketch-sm);
+    cursor: pointer;
+}
+
+.docs-search-option.is-active {
+    background: var(--trazos-color-parchment-200);
+    box-shadow: inset 3px 0 0 var(--trazos-color-wine-600);
+}
+
+.docs-search-option-section {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.docs-search-option-excerpt {
+    color: var(--trazos-color-ink-light);
+    font-size: 0.85rem;
+    line-height: 1.45;
+}
+
+.docs-search-option mark {
+    padding: 0 0.1em;
+    border-radius: 0.2em;
+    background: color-mix(in srgb, var(--trazos-color-wine-500) 18%, transparent);
+    color: inherit;
+    font-weight: 700;
+}
+
+.docs-search-keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 0;
+    padding: 0.6rem 0.9rem;
+    border-top: 1px solid var(--trazos-color-parchment-300);
+    color: var(--trazos-color-ink-muted);
+    font-size: 0.75rem;
+}
+
+.docs-search-keys kbd {
+    margin-right: 0.15rem;
+}
+
+/* A result link scrolls its heading below the sticky top bar. */
+.docs-page :is(h2, h3) {
+    scroll-margin-top: 5rem;
+}
+
+/* ----------------------------------------------------------------------------
    Sidebar
    ------------------------------------------------------------------------- */
 
@@ -618,6 +790,32 @@ svg.h-6 { height: 1.5rem; }
 @media (max-width: 768px) {
     .docs-topbar-links {
         gap: 0.85rem;
+    }
+
+    /* The trigger keeps its accessible name; only the icon shows. */
+    .docs-search-trigger {
+        width: 2rem;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .docs-search-trigger-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    .docs-search-trigger-key,
+    .docs-search-keys {
+        display: none;
+    }
+
+    .docs-search-dialog {
+        margin-top: 1rem;
+        max-height: calc(100dvh - 2rem);
     }
 
     .docs-demo-preview {
