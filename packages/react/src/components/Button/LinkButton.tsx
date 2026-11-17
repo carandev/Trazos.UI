@@ -1,4 +1,5 @@
 import type { ComponentPropsWithRef, ReactNode } from 'react';
+import { TrazosLink } from '../Link/TrazosLinkProvider';
 import { buttonClasses, type ButtonSize, type ButtonVariant } from './Button';
 
 export interface LinkButtonProps extends ComponentPropsWithRef<'a'> {
@@ -20,10 +21,10 @@ export function LinkButton({
   ...rest
 }: LinkButtonProps) {
   return (
-    <a {...rest} className={buttonClasses(variant, size, className)}>
+    <TrazosLink {...rest} className={buttonClasses(variant, size, className)}>
       {leadingIcon != null && <span className="trazos-btn-leading-icon">{leadingIcon}</span>}
       <span className="trazos-btn-text">{children}</span>
       {trailingIcon != null && <span className="trazos-btn-trailing-icon">{trailingIcon}</span>}
-    </a>
+    </TrazosLink>
   );
 }

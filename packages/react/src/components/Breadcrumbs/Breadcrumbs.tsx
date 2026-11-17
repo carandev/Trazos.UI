@@ -1,5 +1,6 @@
 import type { ComponentPropsWithRef } from 'react';
 import { cx } from '../../internal/cx';
+import { TrazosLink } from '../Link/TrazosLinkProvider';
 import './Breadcrumbs.css';
 
 /** One step of a trail. Mirrors `Trazos.UI.Components.BreadcrumbItem`. */
@@ -30,9 +31,9 @@ export function Breadcrumbs({ items, label = 'Breadcrumb', className, ...rest }:
                   {item.text}
                 </span>
               ) : item.href ? (
-                <a className="trazos-breadcrumbs-link" href={item.href}>
+                <TrazosLink className="trazos-breadcrumbs-link" href={item.href}>
                   {item.text}
-                </a>
+                </TrazosLink>
               ) : (
                 <span className="trazos-breadcrumbs-text">{item.text}</span>
               )}

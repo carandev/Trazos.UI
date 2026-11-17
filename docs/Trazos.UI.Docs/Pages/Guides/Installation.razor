@@ -56,6 +56,17 @@
             </Tr>
         </p>
         <CodeBlock Language="tsx" Code="@ReactProvidersCode" />
+        <p>
+            <Tr>
+                <En>If the app uses a client-side router (React Router, TanStack Router, Next.js), add <code>TrazosLinkProvider</code> too.
+                    <code>Breadcrumbs</code>, <code>PageHeader</code>, <code>LinkButton</code> and <code>LinkListItem</code> then render their links through the router and navigate without reloading the page.
+                    Links that leave the app (<code>target="_blank"</code>, <code>download</code>, <code>mailto:</code> or an absolute URL) stay plain anchors.</En>
+                <Es>Si la app usa un enrutador del lado del cliente (React Router, TanStack Router, Next.js), agrega también <code>TrazosLinkProvider</code>.
+                    Así <code>Breadcrumbs</code>, <code>PageHeader</code>, <code>LinkButton</code> y <code>LinkListItem</code> renderizan sus enlaces con el enrutador y navegan sin recargar la página.
+                    Los enlaces que salen de la app (<code>target="_blank"</code>, <code>download</code>, <code>mailto:</code> o una URL absoluta) siguen siendo anclas normales.</Es>
+            </Tr>
+        </p>
+        <CodeBlock Language="tsx" Code="@ReactRouterLinkCode" />
 
         <h2 class="docs-h2">@L.T("5. Use a component", "5. Usa un componente")</h2>
         <p>
@@ -150,6 +161,15 @@
             <App />
           </ConfirmDialogProvider>
         </ToastProvider>
+        """;
+
+    private const string ReactRouterLinkCode = """
+        import { TrazosLinkProvider } from '@carandev/trazos-ui';
+        import { Link } from 'react-router';
+
+        <TrazosLinkProvider component={({ href, ...rest }) => <Link to={href} {...rest} />}>
+          <App />
+        </TrazosLinkProvider>
         """;
 
     private const string ReactUsageCode = """
