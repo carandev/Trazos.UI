@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createRef } from 'react';
 import { describe, expect, it } from 'vitest';
@@ -74,6 +74,31 @@ describe('AppShell', () => {
     expect(getDrawer(container)).toHaveClass('trazos-drawer-is-open');
     await userEvent.click(screen.getByRole('button', { name: 'Cerrar menú' }));
     expect(getDrawer(container)).not.toHaveClass('trazos-drawer-is-open');
+  });
+
+  it('closes the drawer when a link inside it is clicked', async () => {
+    const { container } = render(<AppShell sidebar={<a href="#a">A</a>}>Page</AppShell>);
+    const hamburger = container.querySelector('button.trazos-hamburger-btn');
+    if (!(hamburger instanceof HTMLElement)) throw new Error('hamburger missing');
+    await userEvent.click(hamburger);
+    expect(getDrawer(container)).toHaveClass('trazos-drawer-is-open');
+
+    await userEvent.click(within(getDrawer(container)).getByRole('link', { name: 'A' }));
+    expect(getDrawer(container)).not.toHaveClass('trazos-drawer-is-open');
+  });
+
+  it('keeps the drawer open on link click when closeDrawerOnNavigation is false', async () => {
+    const { container } = render(
+      <AppShell sidebar={<a href="#a">A</a>} closeDrawerOnNavigation={false}>
+        Page
+      </AppShell>,
+    );
+    const hamburger = container.querySelector('button.trazos-hamburger-btn');
+    if (!(hamburger instanceof HTMLElement)) throw new Error('hamburger missing');
+    await userEvent.click(hamburger);
+
+    await userEvent.click(within(getDrawer(container)).getByRole('link', { name: 'A' }));
+    expect(getDrawer(container)).toHaveClass('trazos-drawer-is-open');
   });
 
   it('hides the environment badge by default', () => {
