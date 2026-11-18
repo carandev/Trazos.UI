@@ -1,0 +1,22 @@
+@namespace Trazos.UI.Components
+
+<div class="trazos-sidebar-nav-section @Class" aria-label="@Title" @attributes="AdditionalAttributes">
+    <p class="trazos-sidebar-nav-section-title" aria-hidden="true">@Title</p>
+    @ChildContent
+</div>
+
+@code {
+    /// <summary>The section's heading; also used as its accessible name.</summary>
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = string.Empty;
+
+    /// <summary>The section's <see cref="SidebarNavItem"/>s.</summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}
