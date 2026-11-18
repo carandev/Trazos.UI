@@ -13,6 +13,7 @@ export * from './components/WhatsAppButton';
 // Composition
 export * from './components/EmptyState';
 export * from './components/FormSection';
+export * from './components/ActionCard';
 
 // Forms
 export * from './components/Input';
@@ -26,6 +27,7 @@ export * from './components/FileInput';
 export * from './components/ChoiceGroup';
 export * from './components/Repeater';
 export * from './components/FormLayout';
+export * from './components/Form';
 
 // Data and navigation
 export * from './components/DataTable';
@@ -60,7 +62,9 @@ export * from './components/SiteHeader';
 
 // Layout and page structure
 export * from './components/AppShell';
+export * from './components/AuthLayout';
 export * from './components/PageStack';
+export * from './components/SidebarNav';
 export * from './components/PageHeader';
 export * from './components/Breadcrumbs';
 export * from './components/Link';
