@@ -75,6 +75,7 @@ public static class DocsNav
         ]),
         new("Page structure", "Estructura de página",
         [
+            new("PageStack", "components/page-stack"),
             new("PageHeader", "components/page-header"),
             new("Divider", "components/divider"),
             new("Print & Ribbon", "components/print", "Impresión y Ribbon"),

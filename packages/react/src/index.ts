@@ -60,6 +60,7 @@ export * from './components/SiteHeader';
 
 // Layout and page structure
 export * from './components/AppShell';
+export * from './components/PageStack';
 export * from './components/PageHeader';
 export * from './components/Breadcrumbs';
 export * from './components/Link';

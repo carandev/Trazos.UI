@@ -1,0 +1,57 @@
+@page "/components/page-stack"
+
+<DocPage Title="PageStack" Category="@L.T("Page structure", "Estructura de página")"
+         Lead="@L.T("A vertical container for a page's sections (a PageHeader, cards, tables...) with consistent spacing between them, so pages do not each define their own margins.", "Un contenedor vertical para las secciones de una página (un PageHeader, tarjetas, tablas...) con un espaciado consistente entre ellas, así las páginas no definen cada una sus propios márgenes.")">
+
+    <DemoBlock Title="@L.T("Basic usage", "Uso básico")" Code="@Code" React="page-stack/basic">
+        <PageStack>
+            <PageHeader Title="@L.T("Employees", "Empleados")" />
+            <p>@L.T("Section one.", "Sección uno.")</p>
+            <p>@L.T("Section two.", "Sección dos.")</p>
+        </PageStack>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <ul>
+        <li>@L.T("As the outermost wrapper of an application page's content, inside AppShell's body, so every page gets the same vertical rhythm between its sections.", "Como el envoltorio más externo del contenido de una página de aplicación, dentro del cuerpo de AppShell, para que cada página tenga el mismo ritmo vertical entre sus secciones.")</li>
+        <li>@L.T("Not inside a card or a form section: those already manage their own internal spacing. PageStack is for page-level sections, not for fields.", "No dentro de una tarjeta o una sección de formulario: esas ya manejan su propio espaciado interno. PageStack es para secciones a nivel de página, no para campos.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li><Tr><En>Wrap a page's top-level sections in <code>PageStack</code> instead of a plain <code>div</code> with ad-hoc margins.</En><Es>Envuelve las secciones de nivel superior de una página en <code>PageStack</code> en lugar de un <code>div</code> plano con márgenes ad-hoc.</Es></Tr></li>
+        <li><Tr><En>Put a <code>PageHeader</code> first, then cards, tables or forms as direct children.</En><Es>Pon un <code>PageHeader</code> primero, luego tarjetas, tablas o formularios como hijos directos.</Es></Tr></li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@L.T("Nesting PageStack inside PageStack: the gap applies once, at the outer level. Use a plain div for an inner group that needs different spacing.", "Anidar PageStack dentro de PageStack: el espaciado se aplica una sola vez, en el nivel externo. Usa un div plano para un grupo interno que necesite un espaciado distinto.")</li>
+    </ul>
+
+    <ApiTable Params="Params" ReactParams="ReactParams" />
+</DocPage>
+
+@code {
+    private const string Code = """
+        <PageStack>
+            <PageHeader Title="Employees" />
+            <p>Section one.</p>
+            <p>Section two.</p>
+        </PageStack>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("ChildContent", "RenderFragment?", null, L.T("The page's sections.", "Las secciones de la página.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other div attribute, including ref.", "Cualquier otro atributo de div, incluido ref.")),
+    ];
+}
