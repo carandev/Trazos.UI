@@ -88,7 +88,10 @@ In your `index.html` or `App.razor`:
 
 ```html
 <link href="_content/Trazos.UI/trazos.css" rel="stylesheet" />
+<link href="{YOUR_APP_ASSEMBLY_NAME}.styles.css" rel="stylesheet" />
 ```
+
+`trazos.css` is only the design tokens and shared utilities. Every component's own layout and visuals (the `AppShell` sidebar, the `DataTable` borders, and so on) live in isolated `.razor.css` files, which Blazor bundles into your *host app's* own CSS-isolation file, not into `Trazos.UI`'s. Without that second link, components mount unstyled. Replace `{YOUR_APP_ASSEMBLY_NAME}` with your app's assembly name (e.g. a project called `MyApp` generates `MyApp.styles.css`); the Blazor project template already adds this link for a new app, but it is easy to miss when a library is added to an existing one.
 
 ## Dark Mode
 
