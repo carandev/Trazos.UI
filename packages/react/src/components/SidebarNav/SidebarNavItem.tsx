@@ -22,7 +22,7 @@ export function SidebarNavItem({ href, active = false, icon, children, className
     <TrazosLink
       href={href}
       aria-current={active ? 'page' : undefined}
-      className={cx('trazos-sidebar-nav-item', active && 'is-active', className)}
+      className={cx('trazos-sidebar-nav-item', active && 'trazos-sidebar-nav-item-active', className)}
     >
       {icon != null && (
         <span className="trazos-sidebar-nav-item-icon" aria-hidden="true">

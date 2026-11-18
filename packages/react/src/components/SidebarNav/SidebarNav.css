@@ -48,7 +48,7 @@
     outline-offset: 2px;
 }
 
-.trazos-sidebar-nav-item.is-active {
+.trazos-sidebar-nav-item.trazos-sidebar-nav-item-active {
     background-color: var(--trazos-olive-tint);
     color: var(--trazos-olive-text-strong);
     font-weight: 700;

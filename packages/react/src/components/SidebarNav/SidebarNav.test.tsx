@@ -31,11 +31,11 @@ describe('SidebarNavItem', () => {
     expect(screen.getByText('Employees')).toHaveClass('trazos-sidebar-nav-item-label');
   });
 
-  it('sets aria-current and the is-active class only when active', () => {
+  it('sets aria-current and the active class only when active', () => {
     const { rerender } = render(<SidebarNavItem href="/a">Alpha</SidebarNavItem>);
     const link = screen.getByRole('link', { name: 'Alpha' });
     expect(link).not.toHaveAttribute('aria-current');
-    expect(link).not.toHaveClass('is-active');
+    expect(link).not.toHaveClass('trazos-sidebar-nav-item-active');
 
     rerender(
       <SidebarNavItem href="/a" active>
@@ -43,7 +43,7 @@ describe('SidebarNavItem', () => {
       </SidebarNavItem>,
     );
     expect(link).toHaveAttribute('aria-current', 'page');
-    expect(link).toHaveClass('trazos-sidebar-nav-item', 'is-active');
+    expect(link).toHaveClass('trazos-sidebar-nav-item', 'trazos-sidebar-nav-item-active');
   });
 });
 
