@@ -1,0 +1,19 @@
+@namespace Trazos.UI.Components
+
+<a class="trazos-action-card @Class" href="@Href" @attributes="AdditionalAttributes">
+    @if (Icon != null)
+    {
+        <IconBox Variant="IconVariant" Size="IconBoxSize.Medium" Class="trazos-action-card-icon">
+            @Icon
+        </IconBox>
+    }
+
+    <div class="trazos-action-card-text">
+        <h3 class="trazos-heading trazos-action-card-title">@Title</h3>
+
+        @if (!string.IsNullOrEmpty(Description))
+        {
+            <p class="trazos-action-card-description">@Description</p>
+        }
+    </div>
+</a>

@@ -1,0 +1,80 @@
+@page "/components/action-card"
+
+<DocPage Title="ActionCard" Category="@L.T("Display", "Visualización")"
+         Lead="@L.T("A large clickable tile (icon, title, short description) for dashboard or home quick actions.", "Una ficha grande y clicable (ícono, título, descripción breve) para acciones rápidas de un panel o inicio.")">
+
+    <DemoBlock Title="@L.T("Quick actions grid", "Cuadrícula de acciones rápidas")" Code="@Code" React="action-card/basic">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1rem;">
+            <ActionCard Href="/employees/new" Title="@L.T("New employee", "Nuevo empleado")" Description="@L.T("Add someone to the roster.", "Agrega a alguien a la plantilla.")">
+                <Icon>@Icons.User</Icon>
+            </ActionCard>
+            <ActionCard Href="/payroll/run" Title="@L.T("Run payroll", "Procesar nómina")" Description="@L.T("Process this month's payroll.", "Procesa la nómina de este mes.")" IconVariant="IconBoxVariant.Lavender">
+                <Icon>@Icons.Calendar</Icon>
+            </ActionCard>
+            <ActionCard Href="/reports" Title="@L.T("View reports", "Ver reportes")" Description="@L.T("See attendance and payroll reports.", "Consulta reportes de asistencia y nómina.")" IconVariant="IconBoxVariant.Cream">
+                <Icon>@Icons.Layers</Icon>
+            </ActionCard>
+        </div>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <ul>
+        <li>@L.T("For a handful of frequent, named actions on a dashboard or home screen: 'New employee', 'Run payroll', 'View reports'.", "Para un puñado de acciones frecuentes y nombradas en un panel o pantalla de inicio: 'Nuevo empleado', 'Procesar nómina', 'Ver reportes'.")</li>
+        <li>@L.T("Not for a long or dynamic list of items: use LinkList or DataTable instead, ActionCard is a tile for a short, fixed set of flows.", "No para una lista larga o dinámica de elementos: usa LinkList o DataTable; ActionCard es una ficha para un conjunto corto y fijo de flujos.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li><Tr><En>ActionCard renders a single tile, not a grid. Lay several of them out with your own CSS grid, such as <code>grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr))</code>.</En><Es>ActionCard renderiza una sola ficha, no una cuadrícula. Organiza varias con tu propio CSS grid, por ejemplo <code>grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr))</code>.</Es></Tr></li>
+        <li><Tr><En>Pass a short, concrete <code>Title</code>/<code>title</code> naming the action, and an optional <code>Description</code>/<code>description</code> with one more sentence of context.</En><Es>Pasa un <code>Title</code>/<code>title</code> corto y concreto que nombre la acción, y una <code>Description</code>/<code>description</code> opcional con una frase más de contexto.</Es></Tr></li>
+        <li><Tr><En>In React, route navigation through your app's router by wrapping the page in a <code>TrazosLinkProvider</code>; without it, <code>ActionCard</code> renders a plain <code>&lt;a&gt;</code>.</En><Es>En React, enruta la navegación a través del router de tu aplicación envolviendo la página en un <code>TrazosLinkProvider</code>; sin él, <code>ActionCard</code> renderiza un <code>&lt;a&gt;</code> plano.</Es></Tr></li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@L.T("Building a second grid component around ActionCard: the grid is the consumer's layout concern, ActionCard only renders the tile.", "Construir un segundo componente de cuadrícula alrededor de ActionCard: la cuadrícula es responsabilidad de diseño del consumidor, ActionCard solo renderiza la ficha.")</li>
+        <li>@L.T("Leaving the description empty string instead of omitting it entirely: an empty string already renders no paragraph.", "Dejar la descripción como cadena vacía en lugar de omitirla por completo: una cadena vacía ya no renderiza ningún párrafo.")</li>
+    </ul>
+
+    <ApiTable Params="Params" ReactParams="ReactParams" />
+</DocPage>
+
+@code {
+    private const string Code = """
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1rem;">
+            <ActionCard Href="/employees/new" Title="New employee" Description="Add someone to the roster.">
+                <Icon><svg>…</svg></Icon>
+            </ActionCard>
+            <ActionCard Href="/payroll/run" Title="Run payroll" Description="Process this month's payroll." IconVariant="IconBoxVariant.Lavender">
+                <Icon><svg>…</svg></Icon>
+            </ActionCard>
+            <ActionCard Href="/reports" Title="View reports" Description="See attendance and payroll reports." IconVariant="IconBoxVariant.Cream">
+                <Icon><svg>…</svg></Icon>
+            </ActionCard>
+        </div>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Href", "string", "required", L.T("Target of the card.", "Destino de la ficha.")),
+        new("Icon", "RenderFragment?", null, L.T("Icon rendered inside an IconBox.", "Ícono que se renderiza dentro de un IconBox.")),
+        new("IconVariant", "IconBoxVariant", "Primary", L.T("Variant of the IconBox that frames the icon.", "Variante del IconBox que enmarca el ícono.")),
+        new("Title", "string", "required", L.T("Heading text.", "Texto del encabezado.")),
+        new("Description", "string?", null, L.T("Short explanation shown below the title.", "Explicación breve que se muestra debajo del título.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("href", "string", "required", L.T("Target of the card.", "Destino de la ficha.")),
+        new("icon", "ReactNode", null, L.T("Icon rendered inside an IconBox.", "Ícono que se renderiza dentro de un IconBox.")),
+        new("iconVariant", "IconBoxVariant", "'primary'", L.T("Variant of the IconBox that frames the icon.", "Variante del IconBox que enmarca el ícono.")),
+        new("title", "string", "required", L.T("Heading text.", "Texto del encabezado.")),
+        new("description", "string", null, L.T("Short explanation shown below the title.", "Explicación breve que se muestra debajo del título.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'a'>", null, L.T("Any other anchor attribute, including ref.", "Cualquier otro atributo de anchor, incluido ref.")),
+    ];
+}
