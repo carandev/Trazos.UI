@@ -1,0 +1,14 @@
+@namespace Trazos.UI.Components
+@using Microsoft.AspNetCore.Components.Forms
+
+<EditForm Model="Model" EditContext="EditContext" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit" OnSubmit="OnSubmit" class="@($"trazos-form {Class}")">
+    <DataAnnotationsValidator />
+    @if (ShowValidationSummary)
+    {
+        <ValidationSummary />
+    }
+    @if (ChildContent is not null)
+    {
+        @ChildContent(context)
+    }
+</EditForm>

@@ -1,0 +1,14 @@
+.trazos-sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 0.25rem;
+}
+
+.trazos-sidebar-nav-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1 1 auto;
+    overflow-y: auto;
+}

@@ -1,0 +1,43 @@
+/* ========================================
+   FORM - Trazos UI
+   Structural wrapper: vertical rhythm matching FormSection's stacked body,
+   plus an error-summary slot styled like Alert's danger tone.
+   ======================================== */
+
+.trazos-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.trazos-form-summary {
+    padding: 0.875rem 1rem;
+    color: var(--trazos-text);
+    background: var(--trazos-wine-soft);
+    border: 1.5px solid var(--trazos-wine-border);
+    border-left-width: 4px;
+    border-left-color: var(--trazos-danger);
+    border-radius: var(--trazos-radius-sketch-sm);
+    box-shadow: var(--trazos-shadow-sketch);
+}
+
+.trazos-form-summary-title {
+    margin: 0 0 0.35rem;
+    font-family: var(--trazos-font-display);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--trazos-text);
+}
+
+.trazos-form-summary ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--trazos-text-light);
+}
+
+.trazos-form-summary li + li {
+    margin-top: 0.25rem;
+}

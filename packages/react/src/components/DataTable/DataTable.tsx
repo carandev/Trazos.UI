@@ -39,6 +39,8 @@ export interface DataTableProps<T> extends ComponentPropsWithRef<'div'> {
   loadingRows?: number;
   /** Makes rows interactive (pointer cursor, focusable, Enter/Space activate). */
   onRowClick?: (item: T) => void;
+  /** Accessible name for each interactive row, e.g. `(item) => `Ver detalle de ${item.name}``. */
+  rowAriaLabel?: (item: T) => string;
   /** Row key; defaults to the row index. */
   getRowKey?: (item: T, index: number) => Key;
 }
@@ -68,6 +70,7 @@ export function DataTable<T>({
   loading = false,
   loadingRows = 3,
   onRowClick,
+  rowAriaLabel,
   getRowKey,
   className,
   ...rest
@@ -123,6 +126,7 @@ export function DataTable<T>({
         key={getRowKey ? getRowKey(item, index) : index}
         className={cx('trazos-table-row', interactive && 'trazos-table-row-interactive')}
         tabIndex={interactive ? 0 : undefined}
+        aria-label={interactive ? rowAriaLabel?.(item) : undefined}
         onClick={
           interactive
             ? (event) => {

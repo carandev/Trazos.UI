@@ -1,0 +1,39 @@
+.trazos-auth-layout {
+    box-sizing: border-box;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background-color: var(--trazos-page);
+    color: var(--trazos-text);
+}
+
+.trazos-auth-layout-brand {
+    display: flex;
+    justify-content: center;
+}
+
+.trazos-auth-layout-card {
+    width: 100%;
+    max-width: 26rem;
+}
+
+.trazos-auth-layout-title {
+    margin: 0 0 0.5rem;
+    font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+}
+
+.trazos-auth-layout-subtitle {
+    margin: 0 0 1rem;
+    font-size: 0.9375rem;
+    color: var(--trazos-text-muted);
+}
+
+.trazos-auth-layout-footer {
+    text-align: center;
+    font-size: 0.9375rem;
+    color: var(--trazos-text-muted);
+}

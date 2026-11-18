@@ -1,0 +1,38 @@
+@namespace Trazos.UI.Components
+@using Microsoft.AspNetCore.Components.Routing
+
+<NavLink href="@Href" Match="Match" class="@CssClass" ActiveClass="is-active" @attributes="AdditionalAttributes">
+    @if (Icon != null)
+    {
+        <span class="trazos-sidebar-nav-item-icon" aria-hidden="true">@Icon</span>
+    }
+    <span class="trazos-sidebar-nav-item-label">@ChildContent</span>
+</NavLink>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Href { get; set; } = string.Empty;
+
+    [Parameter]
+    public NavLinkMatch Match { get; set; } = NavLinkMatch.Prefix;
+
+    /// <summary>Replaces the default (no) icon.</summary>
+    [Parameter]
+    public RenderFragment? Icon { get; set; }
+
+    /// <summary>The link's label.</summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    // NavLink has no "class" parameter of its own: it is a component, so unlike a
+    // plain HTML element its attributes don't support mixed markup/C# content.
+    private string CssClass => string.IsNullOrEmpty(Class)
+        ? "trazos-sidebar-nav-item"
+        : $"trazos-sidebar-nav-item {Class}";
+}

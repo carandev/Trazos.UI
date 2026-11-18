@@ -1,0 +1,137 @@
+@page "/components/sidebar-nav"
+
+<DocPage Title="SidebarNav" Category="@L.T("Navigation", "Navegación")"
+         Lead="@L.T("A nav list for the AppShell sidebar with active-route highlighting, section headings, icons and a bottom-pinned area.", "Una lista de navegación para el sidebar de AppShell con resaltado de ruta activa, encabezados de sección, íconos y un área fija en la parte inferior.")">
+
+    <DemoBlock Title="@L.T("Sections, icons and a pinned footer", "Secciones, íconos y un pie fijo")" Code="@Code" React="sidebar-nav/basic">
+        <div style="width: 100%; max-width: 16rem; height: 20rem; border: 1.5px solid var(--trazos-border); border-radius: 8px; overflow: hidden;">
+            <SidebarNav>
+                <ChildContent>
+                    <SidebarNavSection Title="@L.T("Main", "Principal")">
+                        <SidebarNavItem Href="components/sidebar-nav" Match="NavLinkMatch.All">
+                            <Icon>@Icons.Home</Icon>
+                            <ChildContent>@L.T("Dashboard", "Panel")</ChildContent>
+                        </SidebarNavItem>
+                        <SidebarNavItem Href="components/sidebar-nav/employees">
+                            <Icon>@Icons.User</Icon>
+                            <ChildContent>@L.T("Employees", "Empleados")</ChildContent>
+                        </SidebarNavItem>
+                    </SidebarNavSection>
+                    <SidebarNavSection Title="@L.T("Reports", "Reportes")">
+                        <SidebarNavItem Href="components/sidebar-nav/activity">
+                            <Icon>@Icons.Layers</Icon>
+                            <ChildContent>@L.T("Activity", "Actividad")</ChildContent>
+                        </SidebarNavItem>
+                    </SidebarNavSection>
+                </ChildContent>
+                <Footer>
+                    <SidebarNavItem Href="components/sidebar-nav/settings">
+                        <Icon>@Icons.Pen</Icon>
+                        <ChildContent>@L.T("Settings", "Configuración")</ChildContent>
+                    </SidebarNavItem>
+                </Footer>
+            </SidebarNav>
+        </div>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <ul>
+        <li>@L.T("As the Sidebar content of AppShell, replacing raw NavLinks styled with ad-hoc app CSS.", "Como el contenido de Sidebar de AppShell, en lugar de NavLinks sin estilo con CSS ad-hoc de la app.")</li>
+        <li>@L.T("When items need active-route highlighting: SidebarNavItem wraps Blazor's own NavLink, so matching comes from the framework.", "Cuando los elementos necesitan resaltado de ruta activa: SidebarNavItem envuelve el NavLink de Blazor, así el coincidencia de ruta viene del framework.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li><Tr><En>Render a <code>SidebarNav</code> inside AppShell's <code>Sidebar</code>.</En><Es>Renderiza un <code>SidebarNav</code> dentro del <code>Sidebar</code> de AppShell.</Es></Tr></li>
+        <li><Tr><En>Group related links under a <code>SidebarNavSection</code> with a <code>Title</code>, or render <code>SidebarNavItem</code>s directly for a flat list.</En><Es>Agrupa enlaces relacionados bajo un <code>SidebarNavSection</code> con un <code>Title</code>, o renderiza <code>SidebarNavItem</code>s directamente para una lista plana.</Es></Tr></li>
+        <li><Tr><En>Pass a <code>Footer</code> for content pinned to the bottom, such as a settings link or a user menu.</En><Es>Pasa un <code>Footer</code> para contenido fijo en la parte inferior, como un enlace de configuración o un menú de usuario.</Es></Tr></li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li>@L.T("Setting a fixed height on an ancestor without letting SidebarNav fill it: the footer only pins to the bottom when SidebarNav has a definite height (100% of a flex or fixed-height sidebar).", "Fijar una altura en un ancestro sin dejar que SidebarNav la ocupe: el pie solo queda fijo cuando SidebarNav tiene una altura definida (100% de un sidebar flex o de altura fija).")</li>
+        <li>@L.T("Using NavLinkMatch.All on a parent route that should also highlight for its sub-routes: use the default Prefix matching instead.", "Usar NavLinkMatch.All en una ruta padre que también debería resaltarse en sus subrutas: usa el matching Prefix por defecto en su lugar.")</li>
+    </ul>
+
+    <ApiTable Title="SidebarNav" Params="NavParams" ReactParams="ReactNavParams" />
+    <ApiTable Title="SidebarNavSection" Params="SectionParams" ReactParams="ReactSectionParams" />
+    <ApiTable Title="SidebarNavItem" Params="ItemParams" ReactParams="ReactItemParams" />
+</DocPage>
+
+@code {
+    private const string Code = """
+        <SidebarNav>
+            <ChildContent>
+                <SidebarNavSection Title="Main">
+                    <SidebarNavItem Href="/" Match="NavLinkMatch.All">
+                        <Icon>@Icons.Home</Icon>
+                        <ChildContent>Dashboard</ChildContent>
+                    </SidebarNavItem>
+                    <SidebarNavItem Href="/employees">
+                        <Icon>@Icons.User</Icon>
+                        <ChildContent>Employees</ChildContent>
+                    </SidebarNavItem>
+                </SidebarNavSection>
+            </ChildContent>
+            <Footer>
+                <SidebarNavItem Href="/settings">
+                    <Icon>@Icons.Pen</Icon>
+                    <ChildContent>Settings</ChildContent>
+                </SidebarNavItem>
+            </Footer>
+        </SidebarNav>
+        """;
+
+    private IReadOnlyList<ApiParam> NavParams =>
+    [
+        new("ChildContent", "RenderFragment?", null, L.T("The sections/items.", "Las secciones/elementos.")),
+        new("Footer", "RenderFragment?", null, L.T("A bottom-pinned area rendered after the scrollable item list.", "Un área fija en la parte inferior, renderizada después de la lista de elementos.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> SectionParams =>
+    [
+        new("Title", "string", null, L.T("The section's heading. Required; also used as its accessible name.", "El encabezado de la sección. Obligatorio; también se usa como su nombre accesible.")),
+        new("ChildContent", "RenderFragment?", null, L.T("The section's SidebarNavItems.", "Los SidebarNavItem de la sección.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ItemParams =>
+    [
+        new("Href", "string", null, L.T("Link target. Required.", "Destino del enlace. Obligatorio.")),
+        new("Match", "NavLinkMatch", "Prefix", L.T("Blazor's own route-matching mode.", "El modo de coincidencia de ruta propio de Blazor.")),
+        new("Icon", "RenderFragment?", null, L.T("An icon shown before the label.", "Un ícono mostrado antes de la etiqueta.")),
+        new("ChildContent", "RenderFragment?", null, L.T("The label.", "La etiqueta.")),
+        new("Class", "string?", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes.", "Atributos HTML adicionales.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactNavParams =>
+    [
+        new("children", "ReactNode", null, L.T("The sections/items.", "Las secciones/elementos.")),
+        new("footer", "ReactNode", null, L.T("A bottom-pinned area rendered after the scrollable item list.", "Un área fija en la parte inferior, renderizada después de la lista de elementos.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'nav'>", null, L.T("Any other nav attribute, including ref.", "Cualquier otro atributo de nav, incluido ref.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactSectionParams =>
+    [
+        new("title", "string", null, L.T("The section's heading. Required; also used as its accessible name.", "El encabezado de la sección. Obligatorio; también se usa como su nombre accesible.")),
+        new("children", "ReactNode", null, L.T("The section's SidebarNavItems.", "Los SidebarNavItem de la sección.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other div attribute, including ref.", "Cualquier otro atributo de div, incluido ref.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactItemParams =>
+    [
+        new("href", "string", null, L.T("Link target. Required.", "Destino del enlace. Obligatorio.")),
+        new("active", "boolean", "false", L.T("Whether this item matches the app's current route. Set it from your own router (e.g. react-router's useLocation).", "Si este elemento coincide con la ruta actual de la app. Se obtiene de tu propio router (p. ej. useLocation de react-router).")),
+        new("icon", "ReactNode", null, L.T("An icon shown before the label.", "Un ícono mostrado antes de la etiqueta.")),
+        new("children", "ReactNode", null, L.T("The label.", "La etiqueta.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+    ];
+}

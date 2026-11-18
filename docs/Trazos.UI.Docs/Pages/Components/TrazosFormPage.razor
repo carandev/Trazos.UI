@@ -1,0 +1,117 @@
+@page "/components/trazos-form"
+@using System.ComponentModel.DataAnnotations
+
+<DocPage Title="TrazosForm" Category="@L.T("Forms", "Formularios")"
+         Lead="@F.Pick(L.T("A thin EditForm wrapper that auto-wires DataAnnotationsValidator, and by default a ValidationSummary, so forms do not repeat that boilerplate.", "Un envoltorio ligero de EditForm que conecta automáticamente DataAnnotationsValidator y, por defecto, un ValidationSummary, para que los formularios no repitan ese código repetitivo."), L.T("A structural form wrapper: it prevents the native page reload on submit and renders an optional validation-summary slot above the fields. It wires no validation of its own.", "Un envoltorio estructural de formulario: evita la recarga nativa de la página al enviar y muestra una franja opcional de resumen de validación encima de los campos. No conecta ninguna validación propia."))">
+
+    <DemoBlock Title="@L.T("Basic usage", "Uso básico")" Code="@Code" React="trazos-form/basic">
+        <TrazosForm Model="_contact" OnValidSubmit="Save" class="docs-stack">
+            <TextInput Label="@L.T("Full name", "Nombre completo")" @bind-Value="_contact.Name" />
+            <TextInput Label="@L.T("Email", "Correo electrónico")" Type="email" @bind-Value="_contact.Email" />
+            <div>
+                <Button Type="submit">@L.T("Save", "Guardar")</Button>
+            </div>
+            @if (_saved)
+            {
+                <p class="docs-demo-output">@L.T("Saved:", "Guardado:") <strong>@_contact.Name</strong></p>
+            }
+        </TrazosForm>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <ul>
+        <li><Tr><En>As the default way to start any form, instead of a raw <code>EditForm</code> (Blazor) or a plain <code>&lt;form&gt;</code> (React): it gives you the wiring every form needs without repeating it.</En><Es>Como la forma predeterminada de empezar cualquier formulario, en lugar de un <code>EditForm</code> sin envolver (Blazor) o un <code>&lt;form&gt;</code> plano (React): te da la conexión que todo formulario necesita sin repetirla.</Es></Tr></li>
+        <li>@L.T("Whether or not you show the summary: ShowValidationSummary / errors only controls the top banner, so you can still show each field's own message inline.", "Esté o no visible el resumen: ShowValidationSummary / errors solo controla la franja superior, así que igual puedes mostrar el mensaje propio de cada campo en línea.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        @if (!F.IsReact)
+        {
+            <li><Tr><En>Replace <code>&lt;EditForm Model="..." OnValidSubmit="..."&gt;</code> with <code>&lt;TrazosForm Model="..." OnValidSubmit="..."&gt;</code> and remove the <code>&lt;DataAnnotationsValidator /&gt;</code> you had: <code>TrazosForm</code> adds it for you, as its first child.</En><Es>Cambia <code>&lt;EditForm Model="..." OnValidSubmit="..."&gt;</code> por <code>&lt;TrazosForm Model="..." OnValidSubmit="..."&gt;</code> y quita el <code>&lt;DataAnnotationsValidator /&gt;</code> que tenías: <code>TrazosForm</code> lo agrega por ti, como su primer hijo.</Es></Tr></li>
+            <li><Tr><En>Leave <code>ShowValidationSummary</code> at its default (<code>true</code>) to show every message at the top too, or set it to <code>false</code> when each field's inline message is already enough.</En><Es>Deja <code>ShowValidationSummary</code> en su valor por defecto (<code>true</code>) para mostrar también todos los mensajes arriba, o ponlo en <code>false</code> cuando el mensaje en línea de cada campo ya es suficiente.</Es></Tr></li>
+            <li><Tr><En>Use <code>Class</code> for extra layout classes on the rendered <code>&lt;form&gt;</code>, the same way other wrapped components forward a <code>Class</code>.</En><Es>Usa <code>Class</code> para clases de diseño adicionales en el <code>&lt;form&gt;</code> renderizado, igual que otros componentes envueltos reenvían un <code>Class</code>.</Es></Tr></li>
+            <li>@L.T("Bind fields with @bind-Value as usual; they read the EditContext TrazosForm cascades, exactly as they would inside a raw EditForm.", "Enlaza los campos con @bind-Value como siempre; leen el EditContext que TrazosForm propaga en cascada, igual que lo harían dentro de un EditForm sin envolver.")</li>
+        }
+        else
+        {
+            <li>@L.T("Replace your <form onSubmit> with TrazosForm: it already calls event.preventDefault() before your onSubmit runs.", "Cambia tu <form onSubmit> por TrazosForm: ya llama a event.preventDefault() antes de ejecutar tu onSubmit.")</li>
+            <li><Tr><En>Keep your own validation exactly as it is (a <code>validate</code> function, react-hook-form, Zod...) and pass its messages as the <code>errors</code> array.</En><Es>Conserva tu propia validación tal cual está (una función <code>validate</code>, react-hook-form, Zod...) y pasa sus mensajes como el arreglo <code>errors</code>.</Es></Tr></li>
+            <li><Tr><En>Pass <code>errors</code> only after the first submit attempt, the same way the plain <code>&lt;form&gt;</code> guide on <a href="/forms">Forms and validation</a> recomputes messages on every change.</En><Es>Pasa <code>errors</code> solo después del primer intento de envío, igual que la guía de <code>&lt;form&gt;</code> plano en <a href="/forms">Formularios y validación</a> recalcula los mensajes con cada cambio.</Es></Tr></li>
+        }
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li><Tr><En><strong>The React version does not validate anything.</strong> There is no DataAnnotations/EditContext equivalent in React: <code>errors</code> is a plain prop you fill from your own validation (react-hook-form, Zod, hand-rolled). <code>TrazosForm</code> only renders the messages you give it; passing <code>undefined</code> or <code>[]</code> hides the summary.</En><Es><strong>La versión de React no valida nada.</strong> No existe un equivalente a DataAnnotations/EditContext en React: <code>errors</code> es una prop simple que llenas con tu propia validación (react-hook-form, Zod, manual). <code>TrazosForm</code> solo muestra los mensajes que le pasas; pasar <code>undefined</code> o <code>[]</code> oculta el resumen.</Es></Tr></li>
+        @if (!F.IsReact)
+        {
+            <li>@L.T("ValidationSummary lists every message already in the EditContext, including ones a field also shows inline below itself — expect the same text twice. Turn ShowValidationSummary off if that duplication is noisy for a short form.", "ValidationSummary enumera todos los mensajes que ya están en el EditContext, incluidos los que un campo también muestra en línea debajo de sí mismo; espera el mismo texto dos veces. Desactiva ShowValidationSummary si esa duplicación resulta ruidosa en un formulario corto.")</li>
+            <li><Tr><En><code>EditForm</code>'s own rules still apply: pass exactly one of <code>Model</code>/<code>EditContext</code>, and never both <code>OnSubmit</code> and <code>OnValidSubmit</code>/<code>OnInvalidSubmit</code> at once. <code>TrazosForm</code> forwards every parameter straight through and lets <code>EditForm</code> enforce them.</En><Es>Las reglas propias de <code>EditForm</code> siguen aplicando: pasa exactamente uno de <code>Model</code>/<code>EditContext</code>, y nunca <code>OnSubmit</code> junto con <code>OnValidSubmit</code>/<code>OnInvalidSubmit</code>. <code>TrazosForm</code> reenvía cada parámetro tal cual y deja que <code>EditForm</code> los valide.</Es></Tr></li>
+        }
+    </ul>
+
+    <ApiTable Params="Params" ReactParams="ReactParams" />
+</DocPage>
+
+@code {
+    private readonly ContactModel _contact = new();
+    private bool _saved;
+
+    private void Save() => _saved = true;
+
+    private sealed class ContactModel
+    {
+        [Required(ErrorMessage = "Enter the full name.")]
+        public string? Name { get; set; }
+
+        [Required(ErrorMessage = "Enter the email.")]
+        [EmailAddress(ErrorMessage = "Enter a valid email.")]
+        public string? Email { get; set; }
+    }
+
+    private const string Code = """
+        <TrazosForm Model="_contact" OnValidSubmit="Save">
+            <TextInput Label="Full name" @bind-Value="_contact.Name" />
+            <TextInput Label="Email" Type="email" @bind-Value="_contact.Email" />
+            <Button Type="submit">Save</Button>
+        </TrazosForm>
+
+        @code {
+            private readonly ContactModel _contact = new();
+
+            private sealed class ContactModel
+            {
+                [Required(ErrorMessage = "Enter the full name.")]
+                public string? Name { get; set; }
+
+                [Required(ErrorMessage = "Enter the email.")]
+                [EmailAddress(ErrorMessage = "Enter a valid email.")]
+                public string? Email { get; set; }
+            }
+        }
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Model", "object?", null, L.T("Forwarded to EditForm's Model.", "Se reenvía al Model de EditForm.")),
+        new("EditContext", "EditContext?", null, L.T("Forwarded to EditForm's EditContext.", "Se reenvía al EditContext de EditForm.")),
+        new("OnValidSubmit", "EventCallback<EditContext>", null, L.T("Raised after validation passes.", "Se dispara después de que la validación pasa.")),
+        new("OnInvalidSubmit", "EventCallback<EditContext>", null, L.T("Raised after validation fails.", "Se dispara después de que la validación falla.")),
+        new("OnSubmit", "EventCallback<EditContext>", null, L.T("Raised on every submit, before validation. Mutually exclusive with OnValidSubmit/OnInvalidSubmit.", "Se dispara en cada envío, antes de la validación. Es excluyente con OnValidSubmit/OnInvalidSubmit.")),
+        new("ShowValidationSummary", "bool", "true", L.T("Renders a ValidationSummary right after DataAnnotationsValidator, before ChildContent.", "Renderiza un ValidationSummary justo después de DataAnnotationsValidator, antes de ChildContent.")),
+        new("ChildContent", "RenderFragment<EditContext>?", null, L.T("The form's fields. Receives the EditContext, exactly like EditForm's own ChildContent.", "Los campos del formulario. Recibe el EditContext, igual que el propio ChildContent de EditForm.")),
+        new("Class", "string?", null, L.T("Extra CSS classes added to the rendered <form>.", "Clases CSS adicionales agregadas al <form> renderizado.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("onSubmit", "(event: FormEvent<HTMLFormElement>) => void", null, L.T("Called after the native submit is already prevented.", "Se llama después de que el envío nativo ya fue evitado.")),
+        new("errors", "readonly string[]", null, L.T("Messages shown above the fields. Omit or pass [] to hide the summary.", "Mensajes mostrados encima de los campos. Omítelo o pasa [] para ocultar el resumen.")),
+        new("errorSummaryLabel", "string", "\"Please fix the following:\"", L.T("Heading of the summary, shown only while errors is non-empty.", "Encabezado del resumen, mostrado solo mientras errors no está vacío.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'form'>", null, L.T("Any other form attribute, including ref.", "Cualquier otro atributo de form, incluido ref.")),
+    ];
+}

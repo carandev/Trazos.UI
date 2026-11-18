@@ -80,6 +80,31 @@ public class DataTableTests : BunitContext
     }
 
     [Fact]
+    public void Interactive_rows_get_their_accessible_name_from_RowAriaLabel()
+    {
+        var cut = Render<DataTable<string>>(p => p
+            .Add(x => x.Items, ["Ada", "Grace"])
+            .Add(x => x.RowTemplate, item => b => b.AddMarkupContent(0, $"<td>{item}</td>"))
+            .Add(x => x.OnRowClick, _ => { })
+            .Add(x => x.RowAriaLabel, item => $"Ver detalle de {item}"));
+
+        var rows = cut.FindAll("tr.trazos-table-row");
+        Assert.Equal("Ver detalle de Ada", rows[0].GetAttribute("aria-label"));
+        Assert.Equal("Ver detalle de Grace", rows[1].GetAttribute("aria-label"));
+    }
+
+    [Fact]
+    public void Non_interactive_rows_ignore_RowAriaLabel()
+    {
+        var cut = Render<DataTable<string>>(p => p
+            .Add(x => x.Items, ["Ada"])
+            .Add(x => x.RowTemplate, item => b => b.AddMarkupContent(0, $"<td>{item}</td>"))
+            .Add(x => x.RowAriaLabel, item => $"Ver detalle de {item}"));
+
+        Assert.Null(cut.Find("tr.trazos-table-row").GetAttribute("aria-label"));
+    }
+
+    [Fact]
     public void A_plain_table_keeps_its_previous_markup()
     {
         var cut = Render<DataTable<string>>(p => p

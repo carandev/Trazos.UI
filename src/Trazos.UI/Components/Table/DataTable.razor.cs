@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -68,6 +69,10 @@ public partial class DataTable<TItem> : IDataTableSortContext
     /// <summary>Makes rows clickable. Rows also become focusable and open with Enter.</summary>
     [Parameter]
     public EventCallback<TItem> OnRowClick { get; set; }
+
+    /// <summary>Accessible name for each interactive row, e.g. <c>item => $"Ver detalle de {item.Name}"</c>.</summary>
+    [Parameter]
+    public Func<TItem, string>? RowAriaLabel { get; set; }
 
     private bool IsInteractive => OnRowClick.HasDelegate;
 

@@ -57,6 +57,7 @@
                     {
                         <tr class="trazos-table-row @(IsInteractive ? "interactive" : "")"
                             tabindex="@(IsInteractive ? "0" : null)"
+                            aria-label="@(IsInteractive ? RowAriaLabel?.Invoke(item) : null)"
                             @onclick="() => HandleRowClick(item)"
                             @onkeydown="e => HandleRowKeyDown(e, item)">
                             @RowTemplate(item)

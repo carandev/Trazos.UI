@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { ComponentPropsWithRef, ReactNode } from 'react';
+import type { ComponentPropsWithRef, MouseEvent, ReactNode } from 'react';
 import { cx } from '../../internal/cx';
 import { ConfirmDialogProvider } from '../ConfirmDialog';
 import { Drawer } from '../Drawer';
@@ -29,6 +29,8 @@ export interface AppShellProps extends ComponentPropsWithRef<'div'> {
   showEnvironmentBadge?: boolean;
   sidebarAriaLabel?: string;
   hamburgerAriaLabel?: string;
+  /** Closes the mobile drawer when a link inside it is clicked. Defaults to true. */
+  closeDrawerOnNavigation?: boolean;
 }
 
 export function AppShell({
@@ -43,6 +45,7 @@ export function AppShell({
   showEnvironmentBadge = true,
   sidebarAriaLabel = 'Navegación principal',
   hamburgerAriaLabel = 'Abrir menú de navegación',
+  closeDrawerOnNavigation = true,
   className,
   children,
   ...rest
@@ -50,6 +53,12 @@ export function AppShell({
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const brandBlock = brand != null && <div className="trazos-shell-brand">{brand}</div>;
+
+  const handleDrawerClick = (event: MouseEvent<HTMLDivElement>) => {
+    if (closeDrawerOnNavigation && (event.target as HTMLElement).closest('a')) {
+      setDrawerOpen(false);
+    }
+  };
 
   return (
     <div {...rest} className={cx('trazos-app-shell', className)}>
@@ -106,7 +115,9 @@ export function AppShell({
           </div>
 
           <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} header={drawerHeader ?? (brandBlock || undefined)}>
-            {drawerContent ?? sidebar}
+            {/* Delegates clicks from the real links/buttons inside; it is not itself interactive. */}
+            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+            <div onClick={handleDrawerClick}>{drawerContent ?? sidebar}</div>
           </Drawer>
         </ToastProvider>
       </ConfirmDialogProvider>

@@ -106,6 +106,27 @@ describe('DataTable', () => {
     expect(onRowClick).toHaveBeenLastCalledWith(people[0]);
   });
 
+  it('sets the accessible name of interactive rows from rowAriaLabel', () => {
+    render(
+      <DataTable
+        items={people}
+        rowTemplate={row}
+        onRowClick={() => undefined}
+        rowAriaLabel={(p) => `Ver detalle de ${p.name}`}
+      />,
+    );
+    expect(screen.getByRole('row', { name: 'Ver detalle de Ana' })).toBeInTheDocument();
+    expect(screen.getByRole('row', { name: 'Ver detalle de Luis' })).toBeInTheDocument();
+  });
+
+  it('ignores rowAriaLabel on non-interactive rows', () => {
+    const { container } = render(
+      <DataTable items={people} rowTemplate={row} rowAriaLabel={(p) => `Ver detalle de ${p.name}`} />,
+    );
+    const rows = container.querySelectorAll<HTMLElement>('tbody tr');
+    expect(rows[0]).not.toHaveAttribute('aria-label');
+  });
+
   it('uses getRowKey for row keys without warnings', () => {
     const errors = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     render(<DataTable items={people} rowTemplate={row} getRowKey={(p) => p.id} />);

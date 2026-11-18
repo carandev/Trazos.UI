@@ -1,0 +1,60 @@
+/* ========================================
+   ACTION CARD - Trazos UI (ported from Components/ActionCard/ActionCard.razor.css)
+   ======================================== */
+
+.trazos-action-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: var(--trazos-surface);
+  border: 1.5px solid var(--trazos-border);
+  border-radius: 20px 24px 18px 22px / 22px 18px 24px 20px;
+  box-shadow: 2px 3px 0px rgb(var(--trazos-shadow-rgb) / calc(0.04 * var(--trazos-shadow-strength))), 0 6px 20px -4px rgb(var(--trazos-shadow-warm-rgb) / calc(0.05 * var(--trazos-shadow-strength)));
+  padding: 1.25rem;
+  color: var(--trazos-text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.trazos-action-card:hover {
+  border-color: var(--trazos-border-highlight);
+  transform: translateY(-2px);
+  box-shadow: 3px 5px 0px rgb(var(--trazos-shadow-rgb) / calc(0.07 * var(--trazos-shadow-strength))), 0 10px 25px -5px rgb(var(--trazos-shadow-warm-rgb) / calc(0.08 * var(--trazos-shadow-strength)));
+}
+
+.trazos-action-card:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--trazos-focus-ring);
+}
+
+.trazos-action-card-icon {
+  flex-shrink: 0;
+}
+
+.trazos-action-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.trazos-action-card-title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.trazos-action-card-description {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--trazos-text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trazos-action-card {
+    transition: none;
+  }
+
+  .trazos-action-card:hover {
+    transform: none;
+  }
+}

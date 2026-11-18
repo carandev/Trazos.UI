@@ -1,0 +1,15 @@
+.trazos-sidebar-nav-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.trazos-sidebar-nav-section-title {
+    margin: 0;
+    padding: 0.5rem 0.75rem 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--trazos-text-muted);
+}
