@@ -1,0 +1,32 @@
+@namespace Trazos.UI.Layout
+@using Trazos.UI.Components
+
+<div class="trazos-auth-layout @Class" @attributes="AdditionalAttributes">
+    @if (Brand != null)
+    {
+        <div class="trazos-auth-layout-brand">
+            @Brand
+        </div>
+    }
+
+    <div class="trazos-auth-layout-card">
+        <Card>
+            @if (!string.IsNullOrEmpty(Title))
+            {
+                <h1 class="trazos-heading trazos-auth-layout-title">@Title</h1>
+            }
+            @if (!string.IsNullOrEmpty(Subtitle))
+            {
+                <p class="trazos-auth-layout-subtitle">@Subtitle</p>
+            }
+            @ChildContent
+        </Card>
+    </div>
+
+    @if (Footer != null)
+    {
+        <div class="trazos-auth-layout-footer">
+            @Footer
+        </div>
+    }
+</div>

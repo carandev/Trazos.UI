@@ -1,0 +1,92 @@
+@page "/components/auth-layout"
+
+<DocPage Title="AuthLayout" Category="@L.T("Page structure", "Estructura de página")"
+         Lead="@L.T("A centered single-card layout for login, password-reset and similar auth pages: a full-height centered container around one Card, with an optional footer below it for links such as 'Forgot your password?'.", "Un layout centrado de una sola tarjeta para inicio de sesión, restablecimiento de contraseña y páginas similares: un contenedor centrado de altura completa alrededor de una Card, con un pie opcional debajo para enlaces como '¿Olvidaste tu contraseña?'.")">
+
+    <DemoBlock Title="@L.T("Basic usage", "Uso básico")" Code="@Code" React="auth-layout/basic">
+        <div style="width: 100%; height: 30rem; overflow: auto; transform: translateZ(0);">
+            <AuthLayout Title="@L.T("Sign in", "Iniciar sesión")"
+                        Subtitle="@L.T("Welcome back, please enter your details.", "Bienvenido de nuevo, ingresa tus datos.")">
+                <Brand>
+                    <strong>Trazos</strong>
+                </Brand>
+                <ChildContent>
+                    <div class="docs-stack">
+                        <TextInput Label="@L.T("Email", "Correo electrónico")" @bind-Value="_email" />
+                        <TextInput Label="@L.T("Password", "Contraseña")" Type="password" @bind-Value="_password" />
+                        <Button Type="submit">@L.T("Sign in", "Iniciar sesión")</Button>
+                    </div>
+                </ChildContent>
+                <Footer>
+                    <a href="#forgot-password">@L.T("Forgot your password?", "¿Olvidaste tu contraseña?")</a>
+                </Footer>
+            </AuthLayout>
+        </div>
+    </DemoBlock>
+
+    <h2 class="docs-h2">@L.T("How to use", "Cómo usarlo")</h2>
+
+    <h3 class="docs-h3">@L.T("When to use it", "Cuándo usarlo")</h3>
+    <ul>
+        <li><Tr><En>For login, sign-up, password-reset and similar single-purpose auth pages, instead of <code>AppShell</code>: there is no sidebar or top bar to navigate to while the user is not authenticated yet.</En><Es>Para páginas de inicio de sesión, registro, restablecimiento de contraseña y similares de un solo propósito, en lugar de <code>AppShell</code>: no hay barra lateral ni barra superior a la cual navegar mientras el usuario aún no está autenticado.</Es></Tr></li>
+        <li>@L.T("Not for pages behind authentication: those belong inside AppShell's Body.", "No para páginas detrás de la autenticación: esas van dentro del Body de AppShell.")</li>
+    </ul>
+
+    <h3 class="docs-h3">@L.T("Step by step", "Paso a paso")</h3>
+    <ol>
+        <li><Tr><En>Use <code>AuthLayout</code> as the page's layout, with <code>Brand</code> set to your logo or app name.</En><Es>Usa <code>AuthLayout</code> como el layout de la página, con <code>Brand</code> configurado con tu logo o el nombre de la app.</Es></Tr></li>
+        <li><Tr><En>Set <code>Title</code> and, optionally, <code>Subtitle</code> to describe the page, such as "Sign in" or "Reset your password".</En><Es>Configura <code>Title</code> y, opcionalmente, <code>Subtitle</code> para describir la página, como "Iniciar sesión" o "Restablece tu contraseña".</Es></Tr></li>
+        <li><Tr><En>Put the form fields and submit button as <code>ChildContent</code>, inside the card.</En><Es>Coloca los campos del formulario y el botón de envío como <code>ChildContent</code>, dentro de la tarjeta.</Es></Tr></li>
+        <li><Tr><En>Use <code>Footer</code> for links that belong below the card, such as "Forgot your password?" or "Don't have an account? Sign up".</En><Es>Usa <code>Footer</code> para enlaces que deben quedar debajo de la tarjeta, como "¿Olvidaste tu contraseña?" o "¿No tienes una cuenta? Regístrate".</Es></Tr></li>
+    </ol>
+
+    <h3 class="docs-h3">@L.T("Common pitfalls", "Errores comunes")</h3>
+    <ul>
+        <li><Tr><En>Putting a link meant to sit below the card, such as "Sign up", inside <code>ChildContent</code>: it renders inside the card instead. Use <code>Footer</code> for that.</En><Es>Poner un enlace que debe quedar debajo de la tarjeta, como "Regístrate", dentro de <code>ChildContent</code>: se renderiza dentro de la tarjeta en su lugar. Usa <code>Footer</code> para eso.</Es></Tr></li>
+    </ul>
+
+    <ApiTable Params="Params" ReactParams="ReactParams" />
+</DocPage>
+
+@code {
+    private string? _email;
+    private string? _password;
+
+    private const string Code = """
+        <AuthLayout Title="Sign in" Subtitle="Welcome back, please enter your details.">
+            <Brand>
+                <strong>Trazos</strong>
+            </Brand>
+            <ChildContent>
+                <TextInput Label="Email" @bind-Value="_email" />
+                <TextInput Label="Password" Type="password" @bind-Value="_password" />
+                <Button Type="submit">Sign in</Button>
+            </ChildContent>
+            <Footer>
+                <a href="/forgot-password">Forgot your password?</a>
+            </Footer>
+        </AuthLayout>
+        """;
+
+    private IReadOnlyList<ApiParam> Params =>
+    [
+        new("Brand", "RenderFragment?", null, L.T("Rendered above the card, such as a logo.", "Se renderiza arriba de la tarjeta, como un logo.")),
+        new("Title", "string?", null, L.T("Rendered as a heading inside the card, above the content, when non-empty.", "Se renderiza como un encabezado dentro de la tarjeta, arriba del contenido, cuando no está vacío.")),
+        new("Subtitle", "string?", null, L.T("Rendered under the title, inside the card, when non-empty.", "Se renderiza debajo del título, dentro de la tarjeta, cuando no está vacío.")),
+        new("ChildContent", "RenderFragment?", null, L.T("The form or content inside the card.", "El formulario o contenido dentro de la tarjeta.")),
+        new("Footer", "RenderFragment?", null, L.T("Rendered below the card, outside it.", "Se renderiza debajo de la tarjeta, fuera de ella.")),
+        new("Class", "string?", null, L.T("Extra CSS classes for the outer container.", "Clases CSS adicionales para el contenedor externo.")),
+        new("AdditionalAttributes", "Dictionary<string, object>?", null, L.T("Extra HTML attributes for the outer container.", "Atributos HTML adicionales para el contenedor externo.")),
+    ];
+
+    private IReadOnlyList<ApiParam> ReactParams =>
+    [
+        new("brand", "ReactNode", null, L.T("Rendered above the card, such as a logo.", "Se renderiza arriba de la tarjeta, como un logo.")),
+        new("title", "string", null, L.T("Rendered as a heading inside the card, above the content, when non-empty.", "Se renderiza como un encabezado dentro de la tarjeta, arriba del contenido, cuando no está vacío.")),
+        new("subtitle", "string", null, L.T("Rendered under the title, inside the card, when non-empty.", "Se renderiza debajo del título, dentro de la tarjeta, cuando no está vacío.")),
+        new("children", "ReactNode", null, L.T("The form or content inside the card.", "El formulario o contenido dentro de la tarjeta.")),
+        new("footer", "ReactNode", null, L.T("Rendered below the card, outside it.", "Se renderiza debajo de la tarjeta, fuera de ella.")),
+        new("className", "string", null, L.T("Extra CSS classes.", "Clases CSS adicionales.")),
+        new("...rest", "ComponentPropsWithRef<'div'>", null, L.T("Any other div attribute, including ref.", "Cualquier otro atributo de div, incluido ref.")),
+    ];
+}
